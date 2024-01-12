@@ -1,8 +1,20 @@
+.div-header,
 .div-footer {
   padding-bottom: 10px;
   background: #812A71;
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   font-size: large;  
+}
+.img-logos {
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+}
+
+.encabezado {
+  font-size: x-large;
+  font-family:'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  color: #ffffff;
 }
 
 @font-face {
