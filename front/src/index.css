@@ -33,9 +33,16 @@
   outline: 3px solid #FBBFAF;
 }*/
 .buscador{
-  min-width: 400px;
+  min-width: 500px;
   font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
   margin-top: 3px;
+  margin-left: 70px;
+}
+
+.icono{
+  color: white;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .btn-buscar {

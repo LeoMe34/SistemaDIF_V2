@@ -10,7 +10,7 @@ export function NavBarBusqueda() {
                 </div>
 
                 <form className="d-flex" role="search">
-                    <div className="input-group buscador">                        
+                    <div className="input-group buscador">
                         <input type="text" className="form-control" placeholder="Ingrese el nombre o número de expediente" aria-label="Input group example" aria-describedby="basic-addon1" />
                         <button className="input-group-text btn-buscar" id="basic-addon1">
                             <i className="bi bi-search"></i>
@@ -23,6 +23,11 @@ export function NavBarBusqueda() {
                     </button>
                     <button className="btn-buscar" type="submit">Buscar</button>*/}
                 </form>
+
+                <div>
+                    <i class="icono bi bi-bell-fill  fs-2"></i>
+                    <i class="icono bi bi-person-circle fs-2"></i>
+                </div>
 
             </div>
         </nav>

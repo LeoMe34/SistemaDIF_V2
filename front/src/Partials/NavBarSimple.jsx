@@ -9,6 +9,10 @@ export function NavBarSimple() {
                     <img src="../Logos/LOGO-AYUNTAMIENTO-22-25.webp" alt="Logo del Ayuntamiento de Coatzacoalcos" className="img-logos mx-2" />
                     DIF MUNICIPAL
                 </div>
+                <div>
+                    <i class="icono bi bi-bell-fill  fs-2"></i>
+                    <i class="icono bi bi-person-circle fs-2"></i>
+                </div>
             </div>
         </nav>
     );
