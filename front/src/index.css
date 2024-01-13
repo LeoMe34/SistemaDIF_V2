@@ -16,6 +16,45 @@
   font-family:'Ubuntu-Bold', Arial, Helvetica, sans-serif;
   color: #ffffff;
 }
+/*
+.buscador {
+  background-color: #ffffff;
+  border-color: #ffffff;  
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+  min-height: 40px;
+}
+
+.buscador:focus{
+  outline: 3px solid #FBBFAF;
+}*/
+.buscador{
+  min-width: 400px;
+}
+
+.btn-buscar {
+  background-color: #26c2ff;
+  border-color: #26c2ff;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-buscar:hover {
+  background-color: #00adf1;
+  border-color: #00adf1;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
 
 @font-face {
   font-family: 'Ubuntu-Bold';
