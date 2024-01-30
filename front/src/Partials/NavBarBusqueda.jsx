@@ -13,7 +13,10 @@ export function NavBarBusqueda() {
                     <div className="input-group buscador">
                         <input type="text" className="form-control" placeholder="Ingrese el nombre o número de expediente" aria-label="Input group example" aria-describedby="basic-addon1" />
                         <button className="input-group-text btn-buscar" id="basic-addon1">
-                            <i className="bi bi-search"></i>
+                            <i className="color_icono bi bi-search"></i>
+                            <div className="color_icono ml-10">
+                                Buscar
+                            </div>
                         </button>
                     </div>
 

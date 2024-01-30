@@ -154,6 +154,10 @@ label, input {
   margin-left: 10px;
 }
 
+.color_icono{
+  color: #1F1F1F;
+}
+
 @font-face {
   font-family: 'Ubuntu-Bold';
   /* Nombre que asignarás a la fuente */
