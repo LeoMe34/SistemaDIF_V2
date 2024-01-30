@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { FichaTecnicaEnfermeria } from '../Components/FormatoEnfermeria/FichaTecnicaEnfermeria'
+import { V_FichaTecnicaEnfermeria } from '../Views/FormatoEnfermeria/V_FichaTecnicaEnfermeria'
 
 export function Rutas() {
     return (
@@ -7,7 +7,7 @@ export function Rutas() {
             <BrowserRouter>
                 <div>
                     <Routes>
-                        <Route path='/ficha_tecnica_enfermeria' element={<FichaTecnicaEnfermeria />} />
+                        <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
                     </Routes>
                 </div>
             </BrowserRouter>
