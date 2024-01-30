@@ -7,6 +7,14 @@ label, input {
 
 }
 
+.subtitulo{
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: x-large;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .div-header,
 .div-footer {
   padding-bottom: 10px;
@@ -99,6 +107,51 @@ label, input {
   color: black;
   font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
   font-size: medium;
+}
+
+.etiqueta{
+  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: large;
+}
+
+.entrada{
+  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.entrada:read-only{
+  background-color: #f9c6d3;
+  border-color: #f9c6d3;
+}
+.opciones{
+  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+  margin-left: 20px;
+  height: 36px;
+  width: 200px;
+}
+
+.ml-10 {
+  margin-left: 10px;
 }
 
 @font-face {
