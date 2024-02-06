@@ -61,6 +61,69 @@ label, input {
   margin-left: 10px;
   margin-right: 10px;
 }
+/*Botones*/
+.btn-guardar,
+.btn-ver,
+.btn-editar {
+  background-color: transparent;
+  border-color: #812A71;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #812A71;
+}
+
+.btn-cancelar{
+  background-color: transparent;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #DF4D72;
+}
+/* Cuando se pasa el mouse por encima del botón*/
+.btn-guardar:hover,
+.btn-ver:hover,
+.btn-editar:hover {
+  background-color: #812A71;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+.btn-cancelar:hover{
+  background-color: #DF4D72;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-eliminar {
+  background-color: transparent;
+  border-color: #d40000;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #d40000;
+}
+
+.btn-eliminar:hover {
+  background-color: #d40000;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
 
 .btn-buscar {
   background-color: #26c2ff;
