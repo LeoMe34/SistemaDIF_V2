@@ -1,13 +1,14 @@
-label, input {
+label,
+input {
   width: 200px;
   /* Ancho de cada etiqueta */
-  
+
   margin-left: 20px;
   display: block;
 
 }
 
-.subtitulo{
+.subtitulo {
   font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
   font-size: x-large;
   margin-top: 20px;
@@ -15,13 +16,22 @@ label, input {
   text-align: center;
 }
 
+.titulo {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: x-large;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
 .div-header,
 .div-footer {
   padding-bottom: 10px;
   background: #812A71;
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
-  font-size: large;  
+  font-size: large;
 }
+
 .img-logos {
   width: 50px;
   height: 50px;
@@ -30,9 +40,10 @@ label, input {
 
 .encabezado {
   font-size: x-large;
-  font-family:'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
   color: #ffffff;
 }
+
 /*
 .buscador {
   background-color: #ffffff;
@@ -49,18 +60,19 @@ label, input {
 .buscador:focus{
   outline: 3px solid #FBBFAF;
 }*/
-.buscador{
+.buscador {
   min-width: 500px;
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   margin-top: 3px;
   margin-left: 70px;
 }
 
-.icono{
+.icono {
   color: white;
   margin-left: 10px;
   margin-right: 10px;
 }
+
 /*Botones*/
 .btn-guardar,
 .btn-ver,
@@ -75,7 +87,7 @@ label, input {
   color: #812A71;
 }
 
-.btn-cancelar{
+.btn-cancelar {
   background-color: transparent;
   border-color: #DF4D72;
   border-width: 1px;
@@ -85,6 +97,7 @@ label, input {
   font-family: Arial, Helvetica, sans-serif;
   color: #DF4D72;
 }
+
 /* Cuando se pasa el mouse por encima del botón*/
 .btn-guardar:hover,
 .btn-ver:hover,
@@ -96,7 +109,8 @@ label, input {
   font-family: Arial, Helvetica, sans-serif;
   color: #ffffff;
 }
-.btn-cancelar:hover{
+
+.btn-cancelar:hover {
   background-color: #DF4D72;
   border-radius: 10px;
   border-style: solid;
@@ -147,7 +161,7 @@ label, input {
 
 .datos-busqueda {
   font-size: large;
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   border: none;
   border-color: #DF4D72;
   border-width: 1px;
@@ -164,22 +178,22 @@ label, input {
   margin-bottom: 10px;
 }
 
-.datos_lectura{
+.datos_lectura {
   border: none;
   border-color: transparent;
   color: black;
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   font-size: medium;
 }
 
-.etiqueta{
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+.etiqueta {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   color: black;
   font-size: large;
 }
 
-.entrada{
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+.entrada {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   color: black;
   font-size: medium;
   border: none;
@@ -192,12 +206,13 @@ label, input {
   outline: none;
 }
 
-.entrada:read-only{
+.entrada:read-only {
   background-color: #f9c6d3;
   border-color: #f9c6d3;
 }
-.opciones{
-  font-family: 'Ubuntu-Regular',Arial, Helvetica, sans-serif;
+
+.opciones {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   color: black;
   font-size: medium;
   border: none;
@@ -217,7 +232,7 @@ label, input {
   margin-left: 10px;
 }
 
-.color_icono{
+.color_icono {
   color: #1F1F1F;
 }
 
