@@ -1,5 +1,6 @@
 label,
-input {
+input, 
+textarea{
   width: 200px;
   /* Ancho de cada etiqueta */
 
@@ -207,6 +208,25 @@ input {
 }
 
 .entrada:read-only {
+  background-color: #f9c6d3;
+  border-color: #f9c6d3;
+}
+
+.text-amplio {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.text-amplio:read-only {
   background-color: #f9c6d3;
   border-color: #f9c6d3;
 }
