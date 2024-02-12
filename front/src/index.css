@@ -1,6 +1,6 @@
 label,
-input, 
-textarea{
+input,
+textarea {
   width: 200px;
   /* Ancho de cada etiqueta */
 
@@ -247,6 +247,35 @@ textarea{
   height: 36px;
   width: 200px;
 }
+
+.caja_opciones {
+  position: relative;
+  border-color: #DF4D72;
+  border-width: 1.5px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.caja_opciones:checked{
+  background: transparent;
+  border-color: #DF4D72;
+  box-shadow: 0 0 0 1.5px #DF4D72;
+}
+
+.caja_opciones:checked::before {
+  content: '\2713'; /* Código de carácter para la palomita ✔ */  
+  color: #DF4D72;
+  font-size: 16px; /* Ajusta el tamaño de la palomita según tus preferencias */
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 
 .ml-10 {
   margin-left: 10px;
