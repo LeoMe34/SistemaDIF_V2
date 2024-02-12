@@ -120,6 +120,11 @@ export function FichaTecnicaEnfermeria() {
                         </div>
                     </div>
                 </div>
+                <div className="text-center">
+                    <button type="submit" className="btn-guardar mx-2">
+                        Guardar
+                    </button>
+                </div>
             </div>
         </div>
     )
