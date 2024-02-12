@@ -1,5 +1,5 @@
-import { NavBarSimple } from "../../Partials/NavBarSimple"
-import { CardPaciente } from "../Paciente/CardPaciente"
+import { NavBarSimple } from "./NavBarSimple"
+import { CardPaciente } from "../Components/Paciente/CardPaciente"
 export function FichaTecnicaMedico() {
 
     return (
@@ -9,6 +9,7 @@ export function FichaTecnicaMedico() {
             </header>
             <div className='m-2'>
                 <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
+                {/*Nutricion, medicina, odontologo */}
                 <CardPaciente />
             </div>
 
