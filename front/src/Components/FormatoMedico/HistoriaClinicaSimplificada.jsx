@@ -3,7 +3,7 @@ import { NavBarBusqueda } from '../../Partials/NavBarBusqueda';
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
 import { Interrogatorio } from './Interrogatorio';
 import { ExploracionFisica } from './ExploracionFisica';
-
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 export function HistoriaClinicaSimplificada() {
     return (
         <div>
@@ -106,6 +106,7 @@ export function HistoriaClinicaSimplificada() {
 
                 <div className='ml-10 container'>
                     <h3 className="subtitulo">Exploración física</h3>
+                    <CardFichaEnfermeria />
                     <ExploracionFisica />
                 </div>
 
@@ -120,8 +121,13 @@ export function HistoriaClinicaSimplificada() {
                         </div>
                     </div>
                 </div>
-                
+
+                <div className="text-center">
+                    <button type="submit" className="btn-guardar mx-2">
+                        Guardar
+                    </button>
+                </div>
             </div>
-        </div>
+        </div >
     )
 }
