@@ -2,6 +2,7 @@ import { CardPaciente } from '../Paciente/CardPaciente';
 import { NavBarBusqueda } from '../../Partials/NavBarBusqueda';
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
 import { Interrogatorio } from './Interrogatorio';
+import { ExploracionFisica } from './ExploracionFisica';
 
 export function HistoriaClinicaSimplificada() {
     return (
@@ -23,6 +24,10 @@ export function HistoriaClinicaSimplificada() {
                             para que ya no tenga que estar llenandolo */}
                             <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
                             <input className="entrada" id='num_consultorio' name='num_consultorio' type="text" />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="fecha">Fecha:</label>
+                            <input className="entrada" id='fecha' name='fecha' type="date" readOnly />
                         </div>
                     </div>
                 </div>
@@ -98,6 +103,24 @@ export function HistoriaClinicaSimplificada() {
 
                     <Interrogatorio />
                 </div>
+
+                <div className='ml-10 container'>
+                    <h3 className="subtitulo">Exploración física</h3>
+                    <ExploracionFisica />
+                </div>
+
+                <div className='ml-10 mb-5 container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="medico">Médico:</label>
+                            <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                            <label className='etiqueta' htmlFor="cedula">Cédula:</label>
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text" readOnly />
+                            <label className='etiqueta' htmlFor="firma">Firma:</label>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     )
