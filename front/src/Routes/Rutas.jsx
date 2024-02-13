@@ -6,6 +6,7 @@ import { V_CrearUsuario } from '../Views/Empleado/V_CrearUsuario'
 import { V_FichaTecnicaMedico } from '../Views/FormatosCompartidos/V_FichaTecnicaMedico'
 import { V_HistoriaClinica } from '../Views/FormatoMedico/V_HistoriaClinica'
 import { V_NotasMedicas } from '../Views/FormatoMedico/V_NotasMedicas'
+import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsicologia'
 
 export function Rutas() {
     return (
@@ -20,6 +21,7 @@ export function Rutas() {
                         <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />
                         <Route path='/historia_clinica_simplificada' element={<V_HistoriaClinica />} />
                         <Route path='/notas_medicas' element={<V_NotasMedicas />} />
+                        <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
                     </Routes>
                 </div>
             </BrowserRouter>

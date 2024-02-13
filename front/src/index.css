@@ -34,6 +34,15 @@ textarea {
   margin-left: 20px;
 }
 
+.subtitulo_3 {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: large;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-left: 20px;
+}
+
 .div-header,
 .div-footer {
   padding-bottom: 10px;
