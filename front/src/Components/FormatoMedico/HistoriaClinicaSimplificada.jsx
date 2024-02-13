@@ -1,6 +1,7 @@
 import { CardPaciente } from '../Paciente/CardPaciente';
 import { NavBarBusqueda } from '../../Partials/NavBarBusqueda';
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
+import { Interrogatorio } from './Interrogatorio';
 
 export function HistoriaClinicaSimplificada() {
     return (
@@ -89,7 +90,13 @@ export function HistoriaClinicaSimplificada() {
                 <div className='ml-10 container'>
                     <h3 className='subtitulo'>Antecedentes</h3>
 
-                    <Ginecobstetrico/>
+                    <Ginecobstetrico />
+                </div>
+
+                <div className='ml-10 container'>
+                    <h3 className='subtitulo'>Interrogatorio</h3>
+
+                    <Interrogatorio />
                 </div>
             </div>
         </div>
