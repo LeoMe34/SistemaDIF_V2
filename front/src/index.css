@@ -1,12 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ml-101 {
+  display: flex;
+  justify-content: center;
+
+}
+
 label,
-input, 
-textarea{
+input,
+textarea {
   width: 200px;
   /* Ancho de cada etiqueta */
-
   margin-left: 20px;
   display: block;
 
+}
+
+textarea {
+  resize: none;
+  width: 100%;
 }
 
 .subtitulo {
@@ -23,6 +39,7 @@ textarea{
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 20px;
+  text-align: center;
 }
 
 .div-header,
@@ -79,6 +96,7 @@ textarea{
 .btn-ver,
 .btn-editar {
   background-color: transparent;
+  margin-top: 20px;
   border-color: #812A71;
   border-width: 1px;
   border-radius: 10px;
@@ -249,7 +267,7 @@ textarea{
 }
 
 .ml-10 {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .color_icono {
@@ -270,4 +288,14 @@ textarea{
   src: url('Fuentes/Ubuntu-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+}
+
+.sidebarState {
+  display: grid;
+  grid-template-columns: 250px auto;
+}
+
+.menu {
+  background: #DE0E50;
+  color: #ffffff;
 }

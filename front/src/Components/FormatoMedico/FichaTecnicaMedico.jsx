@@ -1,12 +1,12 @@
-import { NavBarSimple } from "../../Partials/NavBarSimple"
+{/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 import { CardPaciente } from "../Paciente/CardPaciente"
 export function FichaTecnicaMedico() {
 
     return (
         <div>
-            <header>
+            {/*<header>
                 <NavBarSimple />
-            </header>
+    </header>*/}
             <div className='m-2'>
                 <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
                 <CardPaciente />
@@ -55,7 +55,7 @@ export function FichaTecnicaMedico() {
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly/>
+                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="text-center">

@@ -1,13 +1,14 @@
 import React from 'react';
 import { CardPaciente } from '../Paciente/CardPaciente';
-import { NavBarBusqueda } from '../../Partials/NavBarBusqueda';
+{/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
+
 
 export function FichaTecnicaEnfermeria() {
     return (
         <div>
-            <header>
-                <NavBarBusqueda />
-            </header>
+            {/*<header>
+                <NavBarSimple />
+    </header>*/}
             <div className='m-2'>
                 <CardPaciente />
             </div>

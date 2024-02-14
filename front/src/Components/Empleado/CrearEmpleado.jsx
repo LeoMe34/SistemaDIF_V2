@@ -1,9 +1,9 @@
-import { NavBarSimple } from "../../Partials/NavBarSimple"
+{/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 
 export function CrearEmpleado() {
     return (
         <div>
-            <NavBarSimple />
+            {/*<NavBarSimple />*/}
 
             <div className="ml-10 container mt-2">
                 <form>
