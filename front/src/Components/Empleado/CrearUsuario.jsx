@@ -1,8 +1,8 @@
-import { NavBarSimple } from "../../Partials/NavBarSimple"
+{/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 export function CrearUsuario() {
     return (
         <div>
-            <NavBarSimple />
+            {/*<NavBarSimple />*/}
             <div className="ml-10 container mt-3">
                 <form>
                     <h3 className="titulo">Registrar usuario</h3>

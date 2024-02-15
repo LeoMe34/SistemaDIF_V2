@@ -7,6 +7,10 @@ import { V_FichaTecnicaMedico } from '../Views/FormatosCompartidos/V_FichaTecnic
 import { V_HistoriaClinica } from '../Views/FormatoMedico/V_HistoriaClinica'
 import { V_NotasMedicas } from '../Views/FormatoMedico/V_NotasMedicas'
 import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsicologia'
+import { V_AntHerPat } from '../Views/FormatoOdonto/V_AntHerPat'
+import { V_AntPerPato } from '../Views/FormatoOdonto/V_AntPerPato'
+import { V_Antecedentes } from '../Views/FormatoOdonto/V_Antecedentes'
+import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
 
 export function Rutas() {
     return (
@@ -22,6 +26,10 @@ export function Rutas() {
                         <Route path='/historia_clinica_simplificada' element={<V_HistoriaClinica />} />
                         <Route path='/notas_medicas' element={<V_NotasMedicas />} />
                         <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
+                        <Route path='/ant_her_pat' element={<V_AntHerPat />} />
+                        <Route path='/ant_pers_pat' element={<V_AntPerPato />} />
+                        <Route path='/antecedente' element={<V_Antecedentes />} />
+                        <Route path='/hist_dent' element={<V_HistClinDent />} />
                     </Routes>
                 </div>
             </BrowserRouter>
