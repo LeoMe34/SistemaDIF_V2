@@ -5,10 +5,8 @@ export function HistorialClinicoDental() {
         <div>
 
             <div className="ml-10 container">
+                <h2 className="titulo">Historial clinico dental</h2>
                 <form className="row">
-                    <h2 className="titulo">Historial clinico dental</h2>
-
-
                     <div className="col">
                         <label className="etiqueta" htmlFor="ref">Referencia</label>
                         <select name="ref" id="ref" className="opciones">
@@ -33,10 +31,16 @@ export function HistorialClinicoDental() {
                         <input id="planiFami" type="text" placeholder="Planificación" className="entrada" />
                     </div>
 
-                    <div className="col">
-                        <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                        <input id="estGab" type="text" placeholder="Estudios" className="entrada" />
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
+                            <input id="estGab" type="text" placeholder="Estudios" className="entrada" />
+                        </div>
                     </div>
+                    <div className="row">
+
+                    </div>
+
 
                     <div className="">
                         <label className="etiqueta" htmlFor="padecimiento">Padecimiento actual</label>

@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box;  
 }
 
 .ml-101 {
@@ -11,8 +11,7 @@
 }
 
 label,
-input,
-textarea {
+input {
   width: 200px;
   /* Ancho de cada etiqueta */
   margin-left: 20px;
@@ -20,9 +19,11 @@ textarea {
 
 }
 
-textarea {
-  resize: none;
-  width: 100%;
+textarea {    
+  margin-left: 20px;
+  width: 90%;
+  display: block;
+
 }
 
 .subtitulo {
@@ -115,6 +116,7 @@ textarea {
 .btn-editar {
   background-color: transparent;
   margin-top: 20px;
+  margin-bottom: 20px;
   border-color: #812A71;
   border-width: 1px;
   border-radius: 10px;
