@@ -10,8 +10,8 @@ export function NavBarSimple() {
                     DIF MUNICIPAL
                 </div>
                 <div>
-                    <i class="icono bi bi-bell-fill  fs-2"></i>
-                    <i class="icono bi bi-person-circle fs-2"></i>
+                    <i className="icono bi bi-bell-fill  fs-2"></i>
+                    <i className="icono bi bi-person-circle fs-2"></i>
                 </div>
             </div>
         </nav>

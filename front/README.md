@@ -6,6 +6,7 @@
 5. npm i --save bootstrap @popperjs/core
 6. npm i bootstrap@5.3.2
 7. npm install bootstrap-icons
+8. npm install styled-components
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

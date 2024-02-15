@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { V_Login } from '../Views/Sesion/V_Login'
 import { V_FichaTecnicaEnfermeria } from '../Views/FormatoEnfermeria/V_FichaTecnicaEnfermeria'
 import { V_CrearEmpleado } from '../Views/Empleado/V_CrearEmpleado'
@@ -14,8 +14,7 @@ import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
 
 export function Rutas() {
     return (
-        <div>
-            <BrowserRouter>
+        <div>        
                 <div>
                     <Routes>
                         <Route path='/login' element={<V_Login />} />
@@ -31,8 +30,7 @@ export function Rutas() {
                         <Route path='/antecedente' element={<V_Antecedentes />} />
                         <Route path='/hist_dent' element={<V_HistClinDent />} />
                     </Routes>
-                </div>
-            </BrowserRouter>
+                </div>            
         </div>
     )
 }
