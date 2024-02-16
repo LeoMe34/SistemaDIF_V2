@@ -17,7 +17,7 @@ export function Rutas() {
         <div>        
                 <div>
                     <Routes>
-                        <Route path='/login' element={<V_Login />} />
+                        <Route path='/' element={<V_Login />} />
                         <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
                         <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                         <Route path='/crear_usuario' element={<V_CrearUsuario />} />

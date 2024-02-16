@@ -20,7 +20,7 @@ import { NavBarSimple } from "./Partials/NavBarSimple"
 
 function App() {
 
-  const isLoginPage = window.location.pathname === '/login'
+  const isLoginPage = window.location.pathname === '/'
   return (
     <>
       <BrowserRouter>

@@ -9,11 +9,11 @@ export function FichaTecnicaEnfermeria() {
             {/*<header>
                 <NavBarSimple />
     </header>*/}
-            <div className='m-2'>
+            <div className='ml-40 mt-2'>
                 <CardPaciente />
             </div>
 
-            <div className='ml-10 container'>
+            <div className='ml-10 mt-2 container'>
                 <div className='row'>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="peso">Peso: </label>
