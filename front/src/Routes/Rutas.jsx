@@ -11,6 +11,7 @@ import { V_AntHerPat } from '../Views/FormatoOdonto/V_AntHerPat'
 import { V_AntPerPato } from '../Views/FormatoOdonto/V_AntPerPato'
 import { V_Antecedentes } from '../Views/FormatoOdonto/V_Antecedentes'
 import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
+import { V_CrearPaciente } from '../Views/Paciente/V_CrearPaciente'
 
 export function Rutas() {
     return (
@@ -29,6 +30,7 @@ export function Rutas() {
                         <Route path='/ant_pers_pat' element={<V_AntPerPato />} />
                         <Route path='/antecedente' element={<V_Antecedentes />} />
                         <Route path='/hist_dent' element={<V_HistClinDent />} />
+                        <Route path='/crear_paciente' element={<V_CrearPaciente />} />
                     </Routes>
                 </div>            
         </div>
