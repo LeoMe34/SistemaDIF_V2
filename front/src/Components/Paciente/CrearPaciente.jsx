@@ -101,22 +101,22 @@ export function CrearPaciente() {
                     </div>
                 </div>
 
-                <div className="ml-10 mt-2">
-                    <label className="form-label etiqueta" htmlFor="colonia">Colonia</label>
-                    <textarea id="colonia" type="text" placeholder="Colonia" className="entrada" />
+                <div className="ml-10 mt-2 container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="form-label etiqueta" htmlFor="ocupacion">Ocupación</label>
+                            <textarea id="ocupacion" placeholder="Ocupación" className="text-amplio"></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="form-label etiqueta" htmlFor="colonia">Colonia</label>
+                            <textarea id="colonia" type="text" placeholder="Colonia" className="entrada" />
+                        </div>
+                        <div className="col">
+                            <label className="form-label etiqueta" htmlFor="direccion">Direccción</label>
+                            <textarea id="direccion" placeholder="Calle, No.Externo o Interno, CP" className="entrada" />
+                        </div>
+                    </div>
                 </div>
-
-                <div className="ml-10 mt-2">
-                    <label className="form-label etiqueta" htmlFor="direccion">Direccción</label>
-                    <textarea id="direccion" placeholder="Calle, No.Externo o Interno, CP" className="entrada" />
-                </div>
-
-                <div className="ml-10 mt-2">
-                    <label className="form-label etiqueta" htmlFor="ocupacion">Ocupación</label>
-                    <textarea id="ocupacion" placeholder="Ocupación" className="entrada"></textarea>
-                </div>
-
-
 
                 <div className="text-center">
                     <button type="submit" className="btn-guardar mx-2">
