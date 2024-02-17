@@ -7,13 +7,12 @@ export function FichaTecnicaMedico() {
             {/*<header>
                 <NavBarSimple />
     </header>*/}
-            <div className='m-2'>
-                <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
-                {/*Nutricion, medicina, odontologo */}
-                <CardPaciente />
-            </div>
-
+            <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
             <div className="ml-10 container">
+                <div className='ml-10'>
+                    {/*Nutricion, medicina, odontologo */}
+                    <CardPaciente />
+                </div>
                 <form>
                     <div className='row'>
                         <div className='mt-2 col'>
@@ -59,10 +58,8 @@ export function FichaTecnicaMedico() {
                     <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
 
                     {/*Seccion del boton*/}
-                    <div className="text-center">
-                        <button type="submit" className="btn-guardar mx-2">
-                            Siguiente
-                        </button>
+                    <div className="pt-1 mt-3 mb-3 text-center">
+                        <button className="btn btn-guardar btn-lg btn-block">Siguiente</button>
                     </div>
                 </form>
             </div>
