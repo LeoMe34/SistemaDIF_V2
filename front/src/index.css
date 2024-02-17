@@ -11,8 +11,7 @@
 }
 
 label,
-input,
-textarea {
+input {
   width: 200px;
   /* Ancho de cada etiqueta */
   margin-left: 20px;
@@ -21,8 +20,11 @@ textarea {
 }
 
 textarea {
+  margin-left: 20px;
+  width: 90%;
+  display: block;
   resize: none;
-  width: 100%;
+
 }
 
 .subtitulo {
@@ -40,6 +42,24 @@ textarea {
   margin-bottom: 10px;
   margin-left: 20px;
   text-align: center;
+}
+
+.subtitulo_2 {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: large;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.subtitulo_3 {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: large;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-left: 20px;
 }
 
 .div-header,
@@ -97,6 +117,7 @@ textarea {
 .btn-editar {
   background-color: transparent;
   margin-top: 20px;
+  margin-bottom: 20px;
   border-color: #812A71;
   border-width: 1px;
   border-radius: 10px;
@@ -266,12 +287,52 @@ textarea {
   width: 200px;
 }
 
+.caja_opciones {
+  position: relative;
+  border-color: #DF4D72;
+  border-width: 1.5px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.caja_opciones:checked {
+  background: transparent;
+  border-color: #DF4D72;
+  box-shadow: 0 0 0 1.5px #DF4D72;
+}
+
+.caja_opciones:checked::before {
+  content: '\2713';
+  /* Código de carácter para la palomita ✔ */
+  color: #DF4D72;
+  font-size: 16px;
+  /* Ajusta el tamaño de la palomita según tus preferencias */
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 .ml-10 {
   margin-left: 20px;
 }
 
+.ml-40 {
+  margin-left: 40px;
+  padding: 5px;
+}
+
 .color_icono {
   color: #1F1F1F;
+}
+
+.etiqueta-firma {
+  padding-bottom: 80px;
 }
 
 @font-face {
@@ -293,6 +354,7 @@ textarea {
 .sidebarState {
   display: grid;
   grid-template-columns: 250px auto;
+  min-height: 470px;
 }
 
 .menu {
