@@ -2,7 +2,7 @@
 export function CrearPaciente() {
     return (
         <div>
-            <h3 className="titulo">Paciente nuevo</h3>
+            <h3 className="mt-4 mb-4 titulo">Paciente nuevo</h3>
             <form >
                 <div className="ml-10 mt-2 container">
                     <div className="row">
@@ -118,11 +118,10 @@ export function CrearPaciente() {
                     </div>
                 </div>
 
-                <div className="text-center">
-                    <button type="submit" className="btn-guardar mx-2">
-                        Guardar
-                    </button>
+                <div className="pt-1 mt-3 mb-3 text-center">
+                    <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
                 </div>
+
             </form>
 
         </div>
