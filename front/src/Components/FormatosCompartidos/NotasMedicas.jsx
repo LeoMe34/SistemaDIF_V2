@@ -1,14 +1,14 @@
 import { CardPaciente } from "../Paciente/CardPaciente"
-import { NavBarSimple } from "../../Partials/NavBarSimple"
 export function NotasMedicas() {
     return (
         <div>
-            <header>
-                <NavBarSimple/>
-            </header>
             <h3 className='subtitulo'>Notas médicas</h3>
-            <CardPaciente />
+
             <div className='ml-10 mb-5 container'>
+                <div className="ml-10 mb-3">
+                    <CardPaciente />
+                </div>
+
                 <div className='row'>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="fecha">Fecha:</label>

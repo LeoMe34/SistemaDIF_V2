@@ -19,10 +19,11 @@ input {
 
 }
 
-textarea {    
+textarea {
   margin-left: 20px;
   width: 90%;
   display: block;
+  resize: none;
 
 }
 
@@ -297,16 +298,18 @@ textarea {
   outline: none;
 }
 
-.caja_opciones:checked{
+.caja_opciones:checked {
   background: transparent;
   border-color: #DF4D72;
   box-shadow: 0 0 0 1.5px #DF4D72;
 }
 
 .caja_opciones:checked::before {
-  content: '\2713'; /* Código de carácter para la palomita ✔ */  
+  content: '\2713';
+  /* Código de carácter para la palomita ✔ */
   color: #DF4D72;
-  font-size: 16px; /* Ajusta el tamaño de la palomita según tus preferencias */
+  font-size: 16px;
+  /* Ajusta el tamaño de la palomita según tus preferencias */
   font-weight: bold;
   position: absolute;
   top: 50%;
@@ -319,13 +322,17 @@ textarea {
   margin-left: 20px;
 }
 
-.ml-40{
+.ml-40 {
   margin-left: 40px;
   padding: 5px;
 }
 
 .color_icono {
   color: #1F1F1F;
+}
+
+.etiqueta-firma {
+  padding-bottom: 80px;
 }
 
 @font-face {
@@ -346,11 +353,103 @@ textarea {
 
 .sidebarState {
   display: grid;
-  grid-template-columns: 250px auto;
-  min-height: 470px;
+  grid-template-columns: 200px auto;
 }
 
 .menu {
-  background: #DE0E50;
-  color: #ffffff;
+  background: #f2e3c9;
+  color: #DF4D72;
+  padding-top: 10px;
+}
+
+.logoContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  border-bottom-right-radius: 21px;
+  padding: .5em 2ex;
+
+  .h2 {
+    display: block;
+  }
+
+  .imgContent {
+    display: flex;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    cursor: pointer;
+    transition: all 0.3s;
+    transform: scale(0.8);
+  }
+}
+
+
+.Collapsible {
+  margin: 8px 0;
+  padding: 0 15%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  border-bottom-right-radius: 21px;
+
+  :hover {
+    color: #812A71;
+    cursor: pointer;
+  }
+
+}
+
+.LinkContainer {
+  margin: 5px 0;
+  padding: 0 15%;
+  padding-top: 15px;
+
+  .Links {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: calc(6px) 0;
+    height: 55px;
+
+    :hover {
+      color: #812A71;
+      cursor: pointer;
+    }
+
+    .LinkIcon {
+      padding: 8px 16px;
+      display: flex;
+
+      span {
+        font-size: 15px;
+        color: #DF4D72;
+      }
+
+      svg {
+        font-size: 25px;
+        color: #DF4D72;
+      }
+    }
+
+    &.active {
+      .LinkIcon {
+        span {
+          color: #812A71;
+        }
+
+        svg {
+          color: #812A71;
+        }
+      }
+    }
+  }
 }
