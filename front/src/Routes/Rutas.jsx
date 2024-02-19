@@ -28,8 +28,6 @@ export function Rutas() {
                     <Route path='/historia_clinica_simplificada' element={<V_HistoriaClinica />} />
                     <Route path='/notas_medicas' element={<V_NotasMedicas />} />
                     <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
-                    <Route path='/ant_her_pat' element={<V_AntHerPat />} />
-                    <Route path='/ant_pers_pat' element={<V_AntPerPato />} />
                     <Route path='/antecedente' element={<V_Antecedentes />} />
                     <Route path='/hist_dent' element={<V_HistClinDent />} />
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
