@@ -3,13 +3,13 @@ import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria"
 export function NotaSubsecuente() {
     return (
         <div>
-            <div className='m-2'>
+            <div className='ml-10 container'>
                 <CardFichaEnfermeria />
             </div>
             <h3 className='subtitulo'>Nota subsecuente</h3>
 
 
-            <div className="col">
+            <div className="ml-10 mb-3 col">
                 <textarea id="habitos" placeholder="Notas subsecuente" className="text-amplio" rows="10" cols="30" />
             </div>
 

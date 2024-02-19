@@ -1,5 +1,4 @@
 import { CardPaciente } from '../Paciente/CardPaciente';
-import { NavBarBusqueda } from '../../Partials/NavBarBusqueda';
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
 import { Interrogatorio } from './Interrogatorio';
 import { ExploracionFisica } from './ExploracionFisica';
@@ -7,17 +6,14 @@ import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 export function HistoriaClinicaSimplificada() {
     return (
         <div>
-            <header>
-                <NavBarBusqueda />
-            </header>
-            <div className='m-2'>
-                <CardPaciente />
-            </div>
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
 
                 <div className='ml-10 container'>
+                    <div className='ml-10 mb-3'>
+                        <CardPaciente />
+                    </div>
                     <div className='row'>
                         <div className='col'>
                             {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 

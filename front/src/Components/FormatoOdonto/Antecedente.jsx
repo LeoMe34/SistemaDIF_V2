@@ -7,11 +7,12 @@ export function Antecedente() {
 
     return (
         <div>
+            <h2 className='subtitulo'>Antecedentes</h2>
 
-            <div className='m-2'>
+            <div className='ml-10 mt-3 mb-2 container'>
                 <CardPaciente />
             </div>
-            <h2 className='subtitulo'>Antecedentes</h2>
+
             <div className='ml-10 container'>
                 <h3 className="subtitulo">Antecedentes Hereditarios Patologicos</h3>
                 <AntHerediPat />

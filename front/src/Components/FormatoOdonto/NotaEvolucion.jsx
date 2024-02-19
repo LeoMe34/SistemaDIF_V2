@@ -3,18 +3,18 @@ import { CardPaciente } from "../Paciente/CardPaciente"
 export function NotaEvolucion() {
     return (
         <div>
-            <div className='m-2'>
+            <div className='ml-10 container'>
                 <CardPaciente />
             </div>
             <h2 className='subtitulo'>Nota Evolución</h2>
-            <div className="col">
+            <div className="ml-10 col">
                 <textarea id="habitos" placeholder="Notas" className="text-amplio" rows="10" cols="30" />
             </div>
-            <div className="col">
+            <div className="ml-10 col">
                 <label className="etiqueta" htmlFor="diagnostico">Diagnostico</label>
                 <textarea id="diagnostico" type="text" placeholder="diagnostico" className="entrada" rows="10" cols="30" />
             </div>
-            <div className="col">
+            <div className="ml-10 col">
                 <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
                 <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="10" cols="30" />
             </div>

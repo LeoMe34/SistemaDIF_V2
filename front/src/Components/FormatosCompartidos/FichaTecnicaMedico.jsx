@@ -10,10 +10,14 @@ export function FichaTecnicaMedico() {
             <div className='m-2'>
                 <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
                 {/*Nutricion, medicina, odontologo */}
-                <CardPaciente />
+
             </div>
 
             <div className="ml-10 container">
+                <div className="ml-10">
+                    <CardPaciente />
+                </div>
+
                 <form>
                     <div className='row'>
                         <div className='mt-2 col'>
