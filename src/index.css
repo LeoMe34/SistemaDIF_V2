@@ -1,0 +1,455 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ml-101 {
+  display: flex;
+  justify-content: center;
+
+}
+
+label,
+input {
+  width: 200px;
+  /* Ancho de cada etiqueta */
+  margin-left: 20px;
+  display: block;
+
+}
+
+textarea {
+  margin-left: 20px;
+  width: 90%;
+  display: block;
+  resize: none;
+
+}
+
+.subtitulo {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: x-large;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.titulo {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: x-large;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  text-align: center;
+}
+
+.subtitulo_2 {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: large;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.subtitulo_3 {
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  font-size: large;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-left: 20px;
+}
+
+.div-header,
+.div-footer {
+  padding-bottom: 10px;
+  background: #812A71;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  font-size: large;
+}
+
+.img-logos {
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+}
+
+.encabezado {
+  font-size: x-large;
+  font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+/*
+.buscador {
+  background-color: #ffffff;
+  border-color: #ffffff;  
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+  min-height: 40px;
+}
+
+.buscador:focus{
+  outline: 3px solid #FBBFAF;
+}*/
+.buscador {
+  min-width: 500px;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  margin-top: 3px;
+  margin-left: 70px;
+}
+
+.icono {
+  color: white;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/*Botones*/
+.btn-guardar,
+.btn-ver,
+.btn-editar {
+  background-color: transparent;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-color: #812A71;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #812A71;
+}
+
+.btn-cancelar {
+  background-color: transparent;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #DF4D72;
+}
+
+/* Cuando se pasa el mouse por encima del botón*/
+.btn-guardar:hover,
+.btn-ver:hover,
+.btn-editar:hover {
+  background-color: #812A71;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-cancelar:hover {
+  background-color: #DF4D72;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-eliminar {
+  background-color: transparent;
+  border-color: #d40000;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #d40000;
+}
+
+.btn-eliminar:hover {
+  background-color: #d40000;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-buscar {
+  background-color: #26c2ff;
+  border-color: #26c2ff;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.btn-buscar:hover {
+  background-color: #00adf1;
+  border-color: #00adf1;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+.datos-busqueda {
+  font-size: large;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.form-campos {
+  display: inline-block;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.datos_lectura {
+  border: none;
+  border-color: transparent;
+  color: black;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  font-size: medium;
+}
+
+.etiqueta {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: large;
+}
+
+.entrada {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.entrada:read-only {
+  background-color: #f9c6d3;
+  border-color: #f9c6d3;
+}
+
+.text-amplio {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.text-amplio:read-only {
+  background-color: #f9c6d3;
+  border-color: #f9c6d3;
+}
+
+.opciones {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: black;
+  font-size: medium;
+  border: none;
+  border-color: #DF4D72;
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+  margin-left: 20px;
+  height: 36px;
+  width: 200px;
+}
+
+.caja_opciones {
+  position: relative;
+  border-color: #DF4D72;
+  border-width: 1.5px;
+  border-radius: 10px;
+  border-style: solid;
+  background: transparent;
+  padding: 5px;
+  outline: none;
+}
+
+.caja_opciones:checked {
+  background: transparent;
+  border-color: #DF4D72;
+  box-shadow: 0 0 0 1.5px #DF4D72;
+}
+
+.caja_opciones:checked::before {
+  content: '\2713';
+  /* Código de carácter para la palomita ✔ */
+  color: #DF4D72;
+  font-size: 16px;
+  /* Ajusta el tamaño de la palomita según tus preferencias */
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.ml-10 {
+  margin-left: 20px;
+}
+
+.ml-40 {
+  margin-left: 40px;
+  padding: 5px;
+}
+
+.color_icono {
+  color: #1F1F1F;
+}
+
+.etiqueta-firma {
+  padding-bottom: 80px;
+}
+
+@font-face {
+  font-family: 'Ubuntu-Bold';
+  /* Nombre que asignarás a la fuente */
+  src: url('Fuentes/Ubuntu-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu-Regular';
+  /* Nombre que asignarás a la fuente */
+  src: url('Fuentes/Ubuntu-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.sidebarState {
+  display: grid;
+  grid-template-columns: 200px auto;
+}
+
+.menu {
+  background: #f2e3c9;
+  color: #DF4D72;
+  padding-top: 10px;
+}
+
+.logoContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  border-bottom-right-radius: 21px;
+  padding: .5em 2ex;
+
+  .h2 {
+    display: block;
+  }
+
+  .imgContent {
+    display: flex;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    cursor: pointer;
+    transition: all 0.3s;
+    transform: scale(0.8);
+  }
+}
+
+
+.Collapsible {
+  margin: 8px 0;
+  padding: 0 15%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  border-bottom-right-radius: 21px;
+
+  :hover {
+    color: #812A71;
+    cursor: pointer;
+  }
+
+}
+
+.LinkContainer {
+  margin: 5px 0;
+  padding: 0 15%;
+  padding-top: 15px;
+
+  .Links {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: calc(6px) 0;
+    height: 55px;
+
+    :hover {
+      color: #812A71;
+      cursor: pointer;
+    }
+
+    .LinkIcon {
+      padding: 8px 16px;
+      display: flex;
+
+      span {
+        font-size: 15px;
+        color: #DF4D72;
+      }
+
+      svg {
+        font-size: 25px;
+        color: #DF4D72;
+      }
+    }
+
+    &.active {
+      .LinkIcon {
+        span {
+          color: #812A71;
+        }
+
+        svg {
+          color: #812A71;
+        }
+      }
+    }
+  }
+}
