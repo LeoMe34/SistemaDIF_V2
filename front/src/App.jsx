@@ -19,13 +19,18 @@ import { NavBarSimple } from "./Partials/NavBarSimple"
 
 
 function App() {
+
+  const isLoginPage = window.location.pathname === '/'
   return (
     <>
       <BrowserRouter>
-        <NavBarSimple />
-        <main className='sidebarState'>
-          <MenuNave />
-          <Rutas />
+
+        <main>
+          {!isLoginPage && <NavBarSimple />}
+          <div className={isLoginPage ? '' : 'sidebarState'}>
+            {!isLoginPage && <MenuNave />}
+            <Rutas />
+          </div>
         </main>
         <footer>
           <Footer />

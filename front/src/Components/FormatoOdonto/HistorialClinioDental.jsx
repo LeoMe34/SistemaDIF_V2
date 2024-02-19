@@ -1,9 +1,12 @@
+{/*import { NavBarBusqueda } from "../../Partials/NavBarBusqueda"*/ }
 
 export function HistorialClinicoDental() {
 
     return (
         <div>
-
+            {/*<header>
+                <NavBarBusqueda />
+    </header>*/}
             <div className="ml-10 container">
                 <h2 className="titulo">Historial clinico dental</h2>
                 <form className="row">
