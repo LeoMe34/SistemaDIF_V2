@@ -19,7 +19,7 @@ export function NotaEvolucion() {
                 <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="10" cols="30" />
             </div>
 
-            <div className='ml-10 mb-5 container'>
+            <div className='ml-10 mb-2 container'>
                 <div className='row'>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="medico">Médico:</label>
@@ -29,6 +29,10 @@ export function NotaEvolucion() {
                         <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                     </div>
                 </div>
+            </div>
+
+            <div className="mb-3 text-center">
+                <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
             </div>
         </div>
     )

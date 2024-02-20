@@ -63,7 +63,7 @@ export function FichaTecnicaMedico() {
                     <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
 
                     {/*Seccion del boton*/}
-                    <div className="pt-1 mt-3 mb-3 text-center">
+                    <div className="pt-1 mb-3 text-center">
                         <button className="btn btn-guardar btn-lg btn-block">Siguiente</button>
                     </div>
                 </form>

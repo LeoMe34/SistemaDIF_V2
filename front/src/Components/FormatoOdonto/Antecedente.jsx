@@ -27,10 +27,8 @@ export function Antecedente() {
             </div>
 
             {/*Seccion del boton*/}
-            <div className="text-center">
-                <button type="submit" className="btn-guardar mx-2">
-                    Guardar
-                </button>
+            <div className="pt-1 mb-3 text-center">
+                <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
             </div>
         </div >
     )
