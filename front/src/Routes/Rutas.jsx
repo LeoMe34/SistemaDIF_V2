@@ -12,6 +12,11 @@ import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
 import { V_CrearPaciente } from '../Views/Paciente/V_CrearPaciente'
 import { V_NotaSubsecuente } from '../Views/FormatoOdonto/V_NotaSubsecuente'
 import { V_NotaEvolucion } from '../Views/FormatoOdonto/V_NotaEvolucion'
+import { V_HomeAdmin } from '../Views/Homes/V_HomeAdmin'
+import { V_HomeEnfermeria } from '../Views/Homes/V_HomeEnfermeria'
+import { V_HomeMedico } from '../Views/Homes/V_HomeMedico'
+import { V_HomeOdonto } from '../Views/Homes/V_HomeOdonto'
+import { V_HomePsico } from '../Views/Homes/V_HomePsico'
 
 export function Rutas() {
     return (
@@ -31,6 +36,12 @@ export function Rutas() {
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
                     <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
+
+                    <Route path='/home_administrador' element={<V_HomeAdmin />} />
+                    <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />
+                    <Route path='/home_medico' element={<V_HomeMedico />} />
+                    <Route path='/home_odontologo' element={<V_HomeOdonto />} />
+                    <Route path='/home_psicologia' element={<V_HomePsico />} />
 
 
                 </Routes>
