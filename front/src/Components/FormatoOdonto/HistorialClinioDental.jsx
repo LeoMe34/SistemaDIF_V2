@@ -1,6 +1,14 @@
 {/*import { NavBarBusqueda } from "../../Partials/NavBarBusqueda"*/ }
+import React, { useState } from 'react';
 
 export function HistorialClinicoDental() {
+    const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+
+    const handleFileChange = (event) => {
+        const archivos = event.target.files;
+        const nombresArchivos = Array.from(archivos).map((archivo) => archivo.name);
+        setArchivosSeleccionados(nombresArchivos);
+    }
 
     return (
         <div>
@@ -34,14 +42,24 @@ export function HistorialClinicoDental() {
                         <input id="planiFami" type="text" placeholder="Planificación" className="entrada" />
                     </div>
 
-                    <div className="row">
+                    <div className="mt-3 mb-3 row">
                         <div className="col">
                             <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                            <input id="estGab" type="text" placeholder="Estudios" className="entrada" />
-                        </div>
-                    </div>
-                    <div className="row">
+                            <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios  en formato PDF</span>
+                            <label htmlFor="fileInput" className="btn btn-cargar">
+                                Elegir archivo(s)
+                            </label>
+                            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple />
 
+                            {archivosSeleccionados.length > 0 && (
+                                <div>
+                                    {archivosSeleccionados.map((nombreArchivo, index) => (
+                                        <label key={index}>{nombreArchivo}</label>
+                                    ))}
+                                </div>
+                            )}
+
+                        </div>
                     </div>
 
 

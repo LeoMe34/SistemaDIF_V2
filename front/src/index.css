@@ -199,6 +199,28 @@ textarea {
   color: #ffffff;
 }
 
+.btn-cargar{
+  background-color: #812A71;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.btn-cargar:hover{
+  background-color: #813a74;
+  border-radius: 10px;
+  border-style: solid;
+  font-size: medium;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
 .datos-busqueda {
   font-size: large;
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
