@@ -63,6 +63,7 @@ export function FichaTecnicaEnfermeria() {
                                 <option value="2">Curación</option>
                                 <option value="3">Retiro de puntos</option>
                                 <option value="4">Aplicación de medicamentos</option>
+                                <option value="5">DxTx</option>
                             </select>
                         </div>
                         <div className='col'>
