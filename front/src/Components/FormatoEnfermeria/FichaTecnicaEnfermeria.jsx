@@ -69,8 +69,8 @@ export function FichaTecnicaEnfermeria() {
                         </div>
 
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="glucemia">Glucemia capilar: </label>
-                            <input className="entrada" id='glucemia' name='glucemia' type="text" />
+                            <label className='etiqueta' htmlFor="glicemia">Glicemia capilar: </label>
+                            <input className="entrada" id='glicemia' name='glicemia' type="text" />
                         </div>
                     </div>
                 </div>
