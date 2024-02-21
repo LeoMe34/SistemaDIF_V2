@@ -12,6 +12,22 @@ export function FichaTecnicaEnfermeria() {
             <div className='ml-40 mt-2'>
                 <CardPaciente />
             </div>
+            <div className='ml-10 mt-2 container'>
+                <div className='row'>
+                    <div className='col'>
+                        <label className='etiqueta' htmlFor="fecha_actual">Fecha: </label>
+                        <input className="entrada" id='fecha_actual' name='fecha_actual' type="date" readOnly />
+                    </div>
+                    <div className="col">
+                        <label className='mt-2 etiqueta' htmlFor="visita">Visita: </label>
+                        <select className="opciones" id='visita' name='visita' type="">
+                            <option value="" selected disabled>Elija una opción</option>
+                            <option value="1">Primera vez</option>
+                            <option value="2">Subsecuente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             <div className='ml-10 mt-2 container'>
                 <div className='row'>
@@ -40,10 +56,15 @@ export function FichaTecnicaEnfermeria() {
                 <div className='ml-10 mb-5 container'>
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="fecha_actual">Fecha: </label>
-                            <input className="entrada" id='fecha_actual' name='fecha_actual' type="date" readOnly />
+                            <label className='etiqueta' htmlFor="tipo_atencion">Tipo de atención</label>
+                            <select className="opciones" id='tipo_atencion' name='tipo_atencion' type="">
+                                <option value="" selected disabled>Elija una opción</option>
+                                <option value="1">Consulta general</option>
+                                <option value="2">Curación</option>
+                                <option value="3">Retiro de puntos</option>
+                                <option value="4">Aplicación de medicamentos</option>
+                            </select>
                         </div>
-
                         <div className='col'>
                             <label className='etiqueta' htmlFor="presion">T/A: </label>
                             <input className="entrada" id='presion' name='presion' type="text" />
@@ -77,16 +98,6 @@ export function FichaTecnicaEnfermeria() {
 
                 <div className='ml-10 mb-5 container'>
                     <div className='row'>
-                        <div className='col'>
-                            <label className='etiqueta' htmlFor="tipo_atencion">Tipo de atención</label>
-                            <select className="opciones" id='tipo_atencion' name='tipo_atencion' type="">
-                                <option value="" selected disabled>Elija una opción</option>
-                                <option value="1">Consulta general</option>
-                                <option value="2">Curación</option>
-                                <option value="3">Retiro de puntos</option>
-                                <option value="4">Aplicación de medicamentos</option>
-                            </select>
-                        </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tipo_poblacion">Tipo de población</label>
