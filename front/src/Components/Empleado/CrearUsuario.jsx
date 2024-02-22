@@ -2,6 +2,25 @@
 export function CrearUsuario() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_recepcion">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\crear_empleado">
+                                Crear empleado
+                            </a>
+
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Registrar usuario</li>
+                    </ol>
+                </nav>
+            </div>
+
             {/*<NavBarSimple />*/}
             <div className="ml-10 container mt-3">
                 <form>
@@ -31,10 +50,8 @@ export function CrearUsuario() {
                         </div>
                     </div>
 
-                    <div className="text-center">
-                        <button type="submit" className="btn-guardar mt-5 mb-4">
-                            Guardar
-                        </button>
+                    <div className="pt-1 mb-3 text-center">
+                        <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
                     </div>
                 </form>
             </div >

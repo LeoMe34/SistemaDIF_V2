@@ -1,34 +1,22 @@
 import { CardPaciente } from "../Paciente/CardPaciente"
-import { NavBarSimple } from "../../Partials/NavBarSimple"
 export function NotasMedicas() {
     return (
         <div>
-            <header>
-<<<<<<< HEAD
-                <NavBarSimple />
-=======
-                <NavBarSimple/>
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
-            </header>
             <h3 className='subtitulo'>Notas médicas</h3>
-            <CardPaciente />
+
             <div className='ml-10 mb-5 container'>
+                <div className="ml-10 mb-3">
+                    <CardPaciente />
+                </div>
+
                 <div className='row'>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-<<<<<<< HEAD
-                        <input className="entrada" id='fecha' name='fecha' type="date" readOnly />
-                    </div>
-                    <div className='col'>
-                        <label className='etiqueta' htmlFor="hora">Hora:</label>
-                        <input className="entrada" id='hora' name='hora' type="time" readOnly />
-=======
                         <input className="entrada" id='fecha' name='fecha' type="text" />
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="hora">Hora:</label>
                         <input className="entrada" id='hora' name='hora' type="text" />
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="servicio">Servicio:</label>
@@ -58,10 +46,8 @@ export function NotasMedicas() {
                 </div>
             </div>
 
-            <div className="text-center">
-                <button type="submit" className="btn-guardar mx-2">
-                    Guardar
-                </button>
+            <div className="pt-1 mb-3 text-center">
+                <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
             </div>
         </div>
     )

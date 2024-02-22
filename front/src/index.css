@@ -27,6 +27,22 @@ textarea {
 
 }
 
+.custom-link a {
+  text-decoration: none;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: #812A71;
+}
+
+.pag-actual {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: #DF4D72;
+}
+
+.color-icono {
+  color: #812A71;
+}
+
+
 .subtitulo {
   font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
   font-size: x-large;
@@ -435,6 +451,8 @@ textarea {
   padding: 0 15%;
   padding-top: 15px;
 
+
+
   .Links {
     display: flex;
     align-items: center;
@@ -442,14 +460,14 @@ textarea {
     padding: calc(6px) 0;
     height: 55px;
 
-    :hover {
-      color: #812A71;
-      cursor: pointer;
-    }
-
     .LinkIcon {
       padding: 8px 16px;
       display: flex;
+
+      :hover {
+        color: #812A71;
+        cursor: pointer;
+      }
 
       span {
         font-size: 15px;

@@ -7,24 +7,24 @@ import { V_FichaTecnicaMedico } from '../Views/FormatosCompartidos/V_FichaTecnic
 import { V_HistoriaClinica } from '../Views/FormatoMedico/V_HistoriaClinica'
 import { V_NotasMedicas } from '../Views/FormatoMedico/V_NotasMedicas'
 import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsicologia'
-import { V_AntHerPat } from '../Views/FormatoOdonto/V_AntHerPat'
-import { V_AntPerPato } from '../Views/FormatoOdonto/V_AntPerPato'
 import { V_Antecedentes } from '../Views/FormatoOdonto/V_Antecedentes'
 import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
 import { V_CrearPaciente } from '../Views/Paciente/V_CrearPaciente'
 import { V_NotaSubsecuente } from '../Views/FormatoOdonto/V_NotaSubsecuente'
 import { V_NotaEvolucion } from '../Views/FormatoOdonto/V_NotaEvolucion'
+import { V_HomeAdmin } from '../Views/Homes/V_HomeAdmin'
+import { V_HomeEnfermeria } from '../Views/Homes/V_HomeEnfermeria'
+import { V_HomeMedico } from '../Views/Homes/V_HomeMedico'
+import { V_HomeOdonto } from '../Views/Homes/V_HomeOdonto'
+import { V_HomePsico } from '../Views/Homes/V_HomePsico'
+import { V_HomeRecepcion } from '../Views/Homes/V_HomeRecepcion'
 
 export function Rutas() {
     return (
         <div>
             <div>
                 <Routes>
-<<<<<<< HEAD
                     <Route path='/login' element={<V_Login />} />
-=======
-                    <Route path='/' element={<V_Login />} />
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                     <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
                     <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                     <Route path='/crear_usuario' element={<V_CrearUsuario />} />
@@ -37,11 +37,15 @@ export function Rutas() {
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
                     <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
-<<<<<<< HEAD
-=======
+
+                    <Route path='/home_administrador' element={<V_HomeAdmin />} />
+                    <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />
+                    <Route path='/home_medico' element={<V_HomeMedico />} />
+                    <Route path='/home_odontologo' element={<V_HomeOdonto />} />
+                    <Route path='/home_psicologia' element={<V_HomePsico />} />
+                    <Route path='/home_recepcion' element={<V_HomeRecepcion />} />
 
 
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                 </Routes>
             </div>
         </div>

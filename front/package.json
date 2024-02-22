@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-<<<<<<< HEAD
     "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
@@ -21,12 +20,6 @@
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.22.0",
     "styled-components": "^6.1.8"
-=======
-    "bootstrap": "^5.3.2",
-    "bootstrap-icons": "^1.11.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
@@ -36,11 +29,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-<<<<<<< HEAD
     "sass": "^1.70.0",
     "vite": "^5.1.1"
-=======
-    "vite": "^5.0.8"
->>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
   }
 }
