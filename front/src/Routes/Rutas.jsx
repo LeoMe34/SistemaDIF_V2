@@ -17,6 +17,7 @@ import { V_HomeEnfermeria } from '../Views/Homes/V_HomeEnfermeria'
 import { V_HomeMedico } from '../Views/Homes/V_HomeMedico'
 import { V_HomeOdonto } from '../Views/Homes/V_HomeOdonto'
 import { V_HomePsico } from '../Views/Homes/V_HomePsico'
+import { V_HomeRecepcion } from '../Views/Homes/V_HomeRecepcion'
 
 export function Rutas() {
     return (
@@ -42,6 +43,7 @@ export function Rutas() {
                     <Route path='/home_medico' element={<V_HomeMedico />} />
                     <Route path='/home_odontologo' element={<V_HomeOdonto />} />
                     <Route path='/home_psicologia' element={<V_HomePsico />} />
+                    <Route path='/home_recepcion' element={<V_HomeRecepcion />} />
 
 
                 </Routes>
