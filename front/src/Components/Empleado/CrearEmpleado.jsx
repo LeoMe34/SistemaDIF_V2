@@ -3,6 +3,19 @@
 export function CrearEmpleado() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_administrador">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Crear empleado</li>
+                    </ol>
+                </nav>
+            </div>
+
             {/*<NavBarSimple />*/}
 
             <div className="ml-10 container mt-2">
@@ -66,7 +79,7 @@ export function CrearEmpleado() {
 
                     <div className="pt-1 mb-3 text-center">
                         <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
-                    </div>                    
+                    </div>
                 </form>
             </div >
         </div >
