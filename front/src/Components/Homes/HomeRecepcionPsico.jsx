@@ -1,5 +1,5 @@
 
-export function HomeRecepcion() {
+export function HomeRecepcionPsico() {
     return (
         <div>
             <div className="mt-3 ml-10 container">
