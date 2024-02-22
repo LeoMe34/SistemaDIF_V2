@@ -14,7 +14,6 @@ export function CrearUsuario() {
                             <a href="\crear_empleado">
                                 Crear empleado
                             </a>
-
                         </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Registrar usuario</li>
                     </ol>
