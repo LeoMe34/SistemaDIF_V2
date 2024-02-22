@@ -187,6 +187,12 @@ const linkArray04 = [
         to: "/nota_evo"
 
     },
+    {
+        label: "Receta",
+        icon: <FaFileMedical />,
+        to: "/receta"
+
+    },
 
 ]
 
