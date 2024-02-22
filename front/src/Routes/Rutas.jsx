@@ -17,7 +17,9 @@ import { V_HomeEnfermeria } from '../Views/Homes/V_HomeEnfermeria'
 import { V_HomeMedico } from '../Views/Homes/V_HomeMedico'
 import { V_HomeOdonto } from '../Views/Homes/V_HomeOdonto'
 import { V_HomePsico } from '../Views/Homes/V_HomePsico'
-import { V_HomeRecepcion } from '../Views/Homes/V_HomeRecepcion'
+import { V_HomeRecepcionGral } from '../Views/Homes/V_HomeRecepcionGral'
+import { V_HomeRecepcionPsico } from '../Views/Homes/V_HomeRecepcionPsico'
+import { V_HomeNutricion } from '../Views/Homes/V_HomeNutricion'
 
 export function Rutas() {
     return (
@@ -43,7 +45,9 @@ export function Rutas() {
                     <Route path='/home_medico' element={<V_HomeMedico />} />
                     <Route path='/home_odontologo' element={<V_HomeOdonto />} />
                     <Route path='/home_psicologia' element={<V_HomePsico />} />
-                    <Route path='/home_recepcion' element={<V_HomeRecepcion />} />
+                    <Route path='/home_recepcion_medica' element={<V_HomeRecepcionGral />} />
+                    <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />
+                    <Route path='/home_nutricion' element={<V_HomeNutricion />} />
 
 
                 </Routes>
