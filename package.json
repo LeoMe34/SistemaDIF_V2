@@ -13,10 +13,15 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.4",
     "bootstrap": "^5.3.2",
+<<<<<<< HEAD
     "react-collapsible": "^2.10.0",
     "react-hook-form": "^7.49.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.0.1",
+=======
+    "react-hook-form": "^7.49.2",
+    "react-hot-toast": "^2.4.1",
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {

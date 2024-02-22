@@ -199,6 +199,7 @@ textarea {
   color: #ffffff;
 }
 
+<<<<<<< HEAD
 .btn-cargar {
   background-color: #812A71;
   border-radius: 10px;
@@ -221,6 +222,8 @@ textarea {
   margin-bottom: 20px;
 }
 
+=======
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
 .datos-busqueda {
   font-size: large;
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
@@ -474,6 +477,7 @@ textarea {
       }
     }
   }
+<<<<<<< HEAD
 }
 
 .odontoContent {
@@ -488,4 +492,6 @@ textarea {
     height: auto;
 
   }
+=======
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
 }

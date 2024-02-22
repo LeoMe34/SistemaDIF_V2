@@ -64,8 +64,15 @@ export function CrearEmpleado() {
                         {errors.cedula_profesional && <span>Es necesario este campo</span>}
     </div>*/}
 
+<<<<<<< HEAD
                     <div className="pt-1 mb-3 text-center">
                         <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
+=======
+                    <div className="text-center">
+                        <button type="submit" className="btn-guardar mt-5 mb-5">
+                            Guardar
+                        </button>
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                     </div>
                 </form>
             </div >

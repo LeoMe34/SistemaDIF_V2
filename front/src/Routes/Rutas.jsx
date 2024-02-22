@@ -20,7 +20,11 @@ export function Rutas() {
         <div>
             <div>
                 <Routes>
+<<<<<<< HEAD
                     <Route path='/login' element={<V_Login />} />
+=======
+                    <Route path='/' element={<V_Login />} />
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                     <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
                     <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                     <Route path='/crear_usuario' element={<V_CrearUsuario />} />
@@ -33,6 +37,11 @@ export function Rutas() {
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
                     <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e20854e26730605aecd55f0a552a082b4e2f3de5
                 </Routes>
             </div>
         </div>
