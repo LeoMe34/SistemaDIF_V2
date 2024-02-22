@@ -6,6 +6,19 @@ import { CardPaciente } from '../Paciente/CardPaciente';
 export function FichaTecnicaEnfermeria() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_enfermeria">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de enfermería</li>
+                    </ol>
+                </nav>
+            </div>
+            <h3 className='subtitulo'>Ficha técnica de enfermería</h3>
             {/*<header>
                 <NavBarSimple />
     </header>*/}
