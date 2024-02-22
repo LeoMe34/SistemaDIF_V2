@@ -3,6 +3,19 @@ export function FichaTecnicaPsicologia() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_psicologia">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de psicología</li>
+                    </ol>
+                </nav>
+            </div>
+
             <div className='m-2'>
                 <h3 className="mt-4 mb-4 subtitulo">Ficha técnica de psicología</h3>
             </div>
@@ -52,7 +65,7 @@ export function FichaTecnicaPsicologia() {
                                 <option value="1">Primera vez</option>
                                 <option value="2">Subsecuente</option>
                             </select>
-                        </div>                        
+                        </div>
                     </div>
 
                     <div className="mt-2 mb-3 row">
