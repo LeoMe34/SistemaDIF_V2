@@ -7,6 +7,19 @@ export function Antecedente() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Antecedentes</li>
+                    </ol>
+                </nav>
+            </div>
+
             <h2 className='subtitulo'>Antecedentes</h2>
 
             <div className='ml-10 mt-3 mb-2 container'>

@@ -12,11 +12,29 @@ export function HistorialClinicoDental() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\antecedente">
+                                Antecedentes
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Historial clínico dental</li>
+                    </ol>
+                </nav>
+            </div>
+
             {/*<header>
                 <NavBarBusqueda />
     </header>*/}
             <div className="ml-10 container">
-                <h2 className="titulo">Historial clinico dental</h2>
+                <h2 className="titulo">Historial clínico dental</h2>
                 <form className="row">
                     <div className="col">
                         <label className="etiqueta" htmlFor="ref">Referencia</label>
