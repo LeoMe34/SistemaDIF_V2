@@ -409,21 +409,43 @@ textarea {
   border-bottom-right-radius: 21px;
   padding: .5em 2ex;
 
-  .h2 {
-    display: block;
-  }
 
-  .imgContent {
+  .Link {
     display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: calc(6px) 0;
+    height: 55px;
 
-    img {
-      max-width: 100%;
-      height: auto;
+    .imgContent {
+      padding: 8px 16px;
+      display: flex;
+
+      img {
+        max-width: 120%;
+        height: auto;
+      }
+    }
+
+    span {
+      font-size: 25px;
+      color: #DF4D72;
+      display: block;
+    }
+
+    :hover {
+      color: #812A71;
+      cursor: pointer;
+    }
+
+    &.active {
+      span {
+        color: #812A71;
+      }
     }
 
     cursor: pointer;
-    transition: all 0.3s;
-    transform: scale(0.8);
+    transform: scale(1);
   }
 }
 
@@ -507,3 +529,79 @@ textarea {
 
   }
 }
+
+.card {
+  align-items: center;
+  justify-content: center;
+  width: 1250px;
+  height: 640px;
+  background: #fff;
+  margin-bottom: 200px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 2%;
+  width: 98%;
+  height: 180px;
+  z-index: 1;
+  border-radius: 10px 10px 0 0;
+  background: #ff9472;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
+}
+
+
+.card .img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  z-index: 10;
+  transform: translateY(50px);
+  border: 10px solid #fff;
+  overflow: hidden;
+  position: absolute;
+  margin-top: -400px;
+  background: #fff;
+}
+
+.card .img img {
+  width: 110%;
+  height: 110%;
+  transform: translate(-8%, -8%);
+
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  transform: translateY(170px);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  align-items: center;
+  margin-top: 75px;
+}
+
+.content p {
+  margin: 0 0;
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/*
+.box {
+  padding: 10px 30px;
+  border-radius: 10px;
+  text-align: center;
+}*/

@@ -19,6 +19,7 @@ import { V_HomeOdonto } from '../Views/Homes/V_HomeOdonto'
 import { V_HomePsico } from '../Views/Homes/V_HomePsico'
 import { V_HomeRecepcion } from '../Views/Homes/V_HomeRecepcion'
 import { V_Receta } from '../Views/FormatosCompartidos/V_Receta'
+import { V_Usuario } from '../Views/Empleado/V_Usuario'
 
 export function Rutas() {
     return (
@@ -39,6 +40,7 @@ export function Rutas() {
                     <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
                     <Route path='/receta' element={<V_Receta />} />
+                    <Route path='/usuario' element={<V_Usuario />} />
 
                     <Route path='/home_administrador' element={<V_HomeAdmin />} />
                     <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />

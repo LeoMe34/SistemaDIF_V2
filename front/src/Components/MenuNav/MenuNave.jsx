@@ -3,6 +3,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { FaFileMedical, FaRegUserCircle } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
+
 const isLoginPage = window.location.pathname === '/'
 
 
@@ -10,12 +11,27 @@ export function MenuNave() {
     return (
 
         <div className="menu">
+
+            {linkArrayUser.map(({ photo, label, to }) => (
+                <div className='logoContent' key={label}>
+                    <NavLink to={to} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
+                        <div className='imgContent'>
+                            {photo}
+                        </div>
+                        <div>
+                            <span>{label}</span>
+                        </div>
+                    </NavLink>
+                </div>
+            ))}
+
+            {/*
             <div className='logoContent'>
                 <div className='imgContent'>
                     <img src="../Logos/cuenta.png" alt="user" className="" />
                 </div>
                 <h2>Usuario</h2>
-            </div>
+            </div>*/}
 
             <Collapsible trigger="Crear" >
                 {linkArray.map(({ icon, label, to }) => (
@@ -77,7 +93,7 @@ export function MenuNave() {
                 ))}
             </Collapsible>
 
-            {linkArrayLogOut.map(({ icon, label, to }) => (
+            {/* {linkArrayLogOut.map(({ icon, label, to }) => (
                 <div className='LinkContainer' key={label}>
                     <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                         <div className='LinkIcon'>
@@ -88,13 +104,22 @@ export function MenuNave() {
                         </div>
                     </NavLink>
                 </div>
-            ))
+           ))*/
             }
 
 
         </div >
     )
 }
+
+const linkArrayUser = [
+    {
+        label: "Usuario",
+        photo: <img src="../Logos/cuenta.png" alt="user" />,
+        to: "/usuario"
+
+    },
+]
 
 
 const linkArray = [
@@ -195,7 +220,7 @@ const linkArray04 = [
     },
 
 ]
-
+/*
 const linkArrayLogOut = [
 
     {
@@ -205,5 +230,5 @@ const linkArrayLogOut = [
 
     },
 
-]
+]*/
 
