@@ -6,6 +6,23 @@ import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 export function HistoriaClinicaSimplificada() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_medico">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\ficha_tecnica_medico">
+                                Ficha técnica de consulta médica
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Historia Clínica Simplificada</li>
+                    </ol>
+                </nav>
+            </div>
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>

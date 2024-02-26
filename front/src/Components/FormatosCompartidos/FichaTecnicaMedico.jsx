@@ -4,6 +4,19 @@ export function FichaTecnicaMedico() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            {/*El home al que regrese dependera del tipo de  usuario, si es medico, odontologo o nutriologo*/}
+                            <a href="\">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de consulta médica</li>
+                    </ol>
+                </nav>
+            </div>
             {/*<header>
                 <NavBarSimple />
     </header>*/}

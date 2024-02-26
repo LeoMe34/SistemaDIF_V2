@@ -3,26 +3,44 @@ import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria"
 export function NotaSubsecuente() {
     return (
         <div>
-            <div className='ml-10 container'>
+            {/*Este debe cambiar sus migas */}
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\antecedente">
+                                Antecedentes
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\hist_dent">
+                                Historial clinico dental
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\nota_evo">
+                                Nota Evolución
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Nota subsecuente</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h3 className='subtitulo'>Nota subsecuente</h3>
+
+            <div className='ml-10 mb-3 container'>
                 <CardFichaEnfermeria />
             </div>
-            <h3 className='subtitulo'>Nota subsecuente</h3>
-            <div className='ml-10 mb-5 container'>
-                <div className='row'>
-                    <div className='col'>
-                        <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-                        <input className="entrada" id='fecha' name='fecha' type="date" readOnly />
-                    </div>
-                    <div className='col'>
-                        <label className='etiqueta' htmlFor="hora">Hora:</label>
-                        <input className="entrada" id='hora' name='hora' type="time" readOnly />
-                    </div>
-                </div>
-            </div>
-
 
             <div className="ml-10 mb-3 col">
-                <textarea id="habitos" placeholder="Notas subsecuente" className="text-amplio" rows="10" cols="30" />
+                <label htmlFor="descripcion" className="etiqueta mb-2">Descripción:</label>
+                <textarea id="descripcion" placeholder="Notas subsecuente" className="text-amplio" rows="10" cols="30" />
             </div>
 
             <div className='ml-10 mb-2 container'>

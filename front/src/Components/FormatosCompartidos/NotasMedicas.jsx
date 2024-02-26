@@ -2,6 +2,30 @@ import { CardPaciente } from "../Paciente/CardPaciente"
 export function NotasMedicas() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        {/*Cambiar dependiendo del si es doctor o nutri */}
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_medico">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\ficha_tecnica_medico">
+                                Ficha técnica de consulta médica
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\historia_clinica_simplificada">
+                                Historia Clínica Simplificada
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Notas médicas</li>
+                    </ol>
+                </nav>
+            </div>
+
             <h3 className='subtitulo'>Notas médicas</h3>
 
             <div className='ml-10 mb-5 container'>

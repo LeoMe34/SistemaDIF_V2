@@ -3,33 +3,45 @@ import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria"
 export function NotaEvolucion() {
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\antecedente">
+                                Antecedentes
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\hist_dent">
+                                Historial clinico dental
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Nota Evolución</li>
+                    </ol>
+                </nav>
+            </div>
+
             <h2 className='subtitulo'>Nota Evolución</h2>
 
             <div className='ml-10 mt-3 mb-3 container'>
                 <CardFichaEnfermeria />
             </div>
-            <div className='row'>
-                <div className='col'>
-                    <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-                    <input className="entrada" id='fecha' name='fecha' type="date" readOnly />
-                </div>
-                <div className='col'>
-                    <label className='etiqueta' htmlFor="hora">Hora:</label>
-                    <input className="entrada" id='hora' name='hora' type="time" readOnly />
-                </div>
-            </div>
-
-            <div className="mt-2 container">
+            <div className="container">
                 <div className="col">
-                    <textarea id="habitos" placeholder="Notas" className="text-amplio" rows="5" />
+                <label className="etiqueta mb-2" htmlFor="notas">Notas: </label>
+                    <textarea id="notas" placeholder="Notas" className="text-amplio" rows="5" />
                 </div>
-
                 <div className="mt-2 col">
-                    <label className="etiqueta" htmlFor="diagnostico">Diagnostico</label>
+                    <label className="etiqueta mb-2" htmlFor="diagnostico">Diagnóstico:</label>
                     <textarea id="diagnostico" type="text" placeholder="diagnostico" className="entrada" rows="5" />
                 </div>
                 <div className="mt-2 col">
-                    <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
+                    <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento:</label>
                     <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5" />
                 </div>
             </div>
@@ -50,5 +62,4 @@ export function NotaEvolucion() {
             </div>
         </div>
     )
-
 }
