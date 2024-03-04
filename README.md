@@ -1,4 +1,5 @@
 # SistemaDIF_V2
+
 ## Front
 1. npm install
 2. npm install react-router-dom react-hot-toast axios react-hook-form
@@ -19,6 +20,7 @@
 15. pip install virtualenv
 16. pip install django
 17. pip install djangorestframework
+17. pip install django-rest-knox
 18. pip install django-cors-headers
 19. pip install coreapi
 
