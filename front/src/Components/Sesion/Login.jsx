@@ -1,37 +1,29 @@
 import axios from 'axios';
-import { useForm } from "react-hook-form"
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 
 
 export function Login() {
-
+    const [usuario, setUsuario] = useState([])
+    const [contrasenia, setContrasenia] = useState('')
     const navegador = useNavigate()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
 
     const iniciarSesion = async () => {
         try {
             const url = "http://127.0.0.1:8000/api/login/"
-
             const resultado = await axios.post(url, {
                 username: usuario,
                 password: contrasenia
             })
+
             setUsuario(resultado.data)
+            navegador("/home_enfermeria")
             console.log("Usuario logueado correctamente")
         } catch (error) {
             console.error("Ocurrio un error", error)
         }
 
     }
-    const enviar = handleSubmit(async data => {
-        try {
-            await iniciarSesion
-            navegador("/home_enfermeria")
-        } catch (error) {
-            console.error("Error al crear empleado", error);
-        }
-    })
 
     return (
         <section className="vh-100" style={{ background: '#812A71' }}>
@@ -60,24 +52,22 @@ export function Login() {
 
                                             <div className="form-outline mb-3">
                                                 <input type="no_trabajador" id="no_trabajador" className="form-control form-control-lg entrada"
-                                                    placeholder="MRR009" {...register("username", { required: true })} />
-                                                {errors.username && <span>Es necesario este campo</span>}
+                                                    placeholder="MRR009" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                                                 <label className="form-label etiquetas" htmlFor="form2Example17">Número de trabajador</label>
                                             </div>
 
                                             <div className="form-outline mb-3">
                                                 <div className="input-group">
                                                     <input type="password" id="contrasenia" className="form-control form-control-lg entrada"
-                                                        placeholder="********" autoComplete="new-password"
-                                                        {...register("password", { required: true })} />
-                                                    {errors.password && <span>Es necesario este campo</span>}
+                                                        placeholder="********" value={contrasenia} autoComplete="new-password"
+                                                        onChange={(e) => setContrasenia(e.target.value)} />
                                                 </div>
                                                 <label className="form-label etiquetas" htmlFor="contrasenia">Contraseña</label>
                                             </div>
 
                                             {/*Editar el botón */}
                                             <div className="pt-1 mb-3">
-                                                <button className="btn btn-guardar btn-lg btn-block" type="submit" onClick={enviar}>Entrar</button>
+                                                <button className="btn btn-guardar btn-lg btn-block" onClick={iniciarSesion}>Entrar</button>
                                             </div>
                                             <a className=" etiquetas text-muted" href="#!" style={{ display: 'block' }}>¿Olvidaste tu contraseña?</a>
 
