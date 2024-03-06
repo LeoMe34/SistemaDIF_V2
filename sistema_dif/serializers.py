@@ -1,34 +1,60 @@
 # Importación del modelo de usuario proporcionado por Django
-from django.contrib.auth.models import User
+from .models import Usuario
 from rest_framework import serializers, validators
+from knox.models import AuthToken
+from django.contrib.auth import authenticate
+
+
+### class CustomAuthTokenSerializer(serializers.Serializer):
+# no_trabajador = serializers.CharField(required=True)
+#    password = serializers.CharField(required=True)
+#
+#   def validate(self, attrs):
+#        no_trabajador = attrs.get('no_trabajador')
+#        password = attrs.get('password')
+
+#        if no_trabajador and password:
+#            user = authenticate(request=self.context.get(
+#                'request'), no_trabajador=no_trabajador, password=password)
+
+#            if not user:
+#                raise serializers.ValidationError(
+#                    "No se encontró un usuario con estas credenciales")
+
+#            attrs['user'] = user
+#            return attrs
+
+#       raise serializers.ValidationError(
+#            "Se requieren 'no_trabajador' y 'password'")
 
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'password', 'email')
+        model = Usuario
+        fields = ('no_trabajador', 'nombreU', 'apellido_paternoU', 'apellido_maternoU',
+                  'cedula_profesional', 'telefono', 'correo', 'password', 'rol')
         extra_kwargs = {
             'password': {'write_only': True},
-            'email': {
+            'correo': {
                 'required': True,
                 'allow_blank': False,
                 # Validador para asegurar que no haya duplicados en el campo de correo electrónico
                 'validators': [
                     validators.UniqueValidator(
-                        User.objects.all(), "Ya existe un usuario con ese correo"
+                        Usuario.objects.all(), "Ya existe un usuario con ese correo"
                     )]
             }
         }
 
-    def crear(self, validated_data):
-        username = validated_data.get('username')
+    def create(self, validated_data):
+        no_trabajador = validated_data.get('no_trabajador')
         password = validated_data.get('password')
-        email = validated_data.get('email')
+        correo = validated_data.get('correo')
 
-        user = User.objects.create(
-            username=username,
+        usuario = Usuario.objects.create(
+            no_trabajador=no_trabajador,
             password=password,
-            email=email
+            correo=correo
         )
 
-        return user
+        return usuario

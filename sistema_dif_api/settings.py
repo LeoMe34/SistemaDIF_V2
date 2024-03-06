@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'sistema_dif',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'knox',    
-    'sistema_dif',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +132,5 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:5173",]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', )
 }
+
+AUTH_USER_MODEL = 'sistema_dif.Usuario'

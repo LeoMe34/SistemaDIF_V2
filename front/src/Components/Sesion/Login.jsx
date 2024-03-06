@@ -11,18 +11,37 @@ export function Login() {
     const iniciarSesion = async () => {
         try {
             const url = "http://127.0.0.1:8000/api/login/"
-            const resultado = await axios.post(url, {
-                username: usuario,
+            const respuesta = await axios.post(url, {
+                no_trabajador: usuario,
                 password: contrasenia
             })
+            const datosUsuario = respuesta.data.user_info;
 
-            setUsuario(resultado.data)
-            navegador("/home_enfermeria")
-            console.log("Usuario logueado correctamente")
+            if ('no_trabajador' in datosUsuario) {
+                console.log("Usuario logueado correctamente");
+                setUsuario(datosUsuario);
+                navegador("/home_enfermeria");
+            } else {
+                console.error("La respuesta del servidor no contiene el campo 'no_trabajador'");
+            }
         } catch (error) {
-            console.error("Ocurrio un error", error)
-        }
+            console.error("Ocurrió un error", error);
+            if (error.response) {
+                console.error('Código de estado:', error.response.status);
+                console.error('Respuesta del servidor:', error.response.data);
 
+                // Mostrar un mensaje de error al usuario
+                if (error.response.data && error.response.data.non_field_errors) {
+                    alert(error.response.data.non_field_errors[0]);
+                } else {
+                    alert('Error en la autenticación. Por favor, verifica tus credenciales.');
+                }
+            } else if (error.request) {
+                console.error('No se recibió respuesta del servidor');
+            } else {
+                console.error('Error de configuración de la solicitud:', error.message);
+            }
+        }
     }
 
     return (
