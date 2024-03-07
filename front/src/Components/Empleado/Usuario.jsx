@@ -2,7 +2,7 @@ export function Usuario() {
     return (
         <div className='container'>
             <h2 className="subtitulo">Perfil de usuario</h2>
-            <div className="card">
+            <div className="card-user">
                 <div className="img">
                     <img src="../Logos/LOGO DIF.jpeg" alt="Logo del DIF" className="img-logos mx-2" />
 

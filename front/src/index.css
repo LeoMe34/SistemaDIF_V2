@@ -529,8 +529,9 @@ textarea {
 
   }
 }
-/*
-.card {
+
+
+.card-user {
   align-items: center;
   justify-content: center;
   width: 1250px;
@@ -543,7 +544,7 @@ textarea {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.13);
 }
 
-.card::before {
+.card-user::before {
   content: "";
   position: absolute;
   top: 2%;
@@ -556,7 +557,7 @@ textarea {
 }
 
 
-.card .img {
+.card-user .img {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -569,13 +570,13 @@ textarea {
   background: #fff;
 }
 
-.card .img img {
+.card-user .img img {
   width: 110%;
   height: 110%;
   transform: translate(-8%, -8%);
 
 }
-*/
+
 .content {
   width: 100%;
   height: 100%;
@@ -584,7 +585,7 @@ textarea {
   flex-direction: column;
   z-index: 20;
   align-items: center;
-  margin-top: 75px;
+  margin-top: 135px;
 }
 
 .content p {

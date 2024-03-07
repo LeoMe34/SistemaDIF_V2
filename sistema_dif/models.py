@@ -1,25 +1,29 @@
 from typing import Any
 from django.db import models
 from django.db import models
-from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
 
 class ManejadorUsuario(BaseUserManager):
-    def create_user(self, no_trabajador, password=None, **kwargs):
+    def _create_user(self, no_trabajador, password, **kwargs):
         if not no_trabajador:
-            raise ValueError('Se requiere un nombre de usuario')
+            raise ValueError("Se requiere un nombre de usuario")
 
+        usuario = self.model(no_trabajador=no_trabajador, password=password, **kwargs)
         usuario = self.model(no_trabajador=no_trabajador, **kwargs)
         usuario.set_password(password)
         usuario.save(using=self._db)
         return usuario
 
+    def create_user(self, no_trabajador, password=None, **kwargs):
+        return self._create_user(no_trabajador, password, **kwargs)
+
     def create_superuser(self, no_trabajador, password=None, **kwargs):
-        kwargs.setdefault('rol', Usuario.ADMINISTRADOR)
-        kwargs.setdefault('active', True)
+        kwargs.setdefault("rol", Usuario.ADMINISTRADOR)
+        kwargs.setdefault("active", True)
 
         usuario = self.create_user(no_trabajador, password, **kwargs)
 
@@ -29,16 +33,13 @@ class ManejadorUsuario(BaseUserManager):
 class Usuario(AbstractBaseUser):
     no_trabajador = models.CharField(max_length=30, default="", unique=True)
     nombreU = models.CharField(max_length=50, default="", unique=False)
-    apellido_paternoU = models.CharField(
-        max_length=50, default="", unique=False)
-    apellido_maternoU = models.CharField(
-        max_length=50, default="", unique=False)
-    cedula_profesional = models.CharField(
-        max_length=30, default="", unique=True)
+    apellido_paternoU = models.CharField(max_length=50, default="", unique=False)
+    apellido_maternoU = models.CharField(max_length=50, default="", unique=False)
+    cedula_profesional = models.CharField(max_length=30, default="", unique=True)
     telefono = models.CharField(max_length=10, default="", unique=False)
     correo = models.EmailField(unique=True)
 
-    active = models.BooleanField(_('Activo'), default=True)
+    active = models.BooleanField(_("Activo"), default=True)
     staff = models.BooleanField(default=True)
     admin = models.BooleanField(default=False)
 
@@ -53,30 +54,37 @@ class Usuario(AbstractBaseUser):
     PSICOLOGO = 8
 
     ELECCION_ROLES = (
-        (ADMINISTRADOR, 'Administrador'),
-        (RECEPCIONISTAGRAL, 'Recepcionista General'),
-        (RECEPCIONISTAPSI, 'Recepcionista Psicologia'),
-        (ENFERMERO, 'Enfermero'),
-        (MEDICOGRAL, 'Medico General'),
-        (ODONTOLOGO, 'Odontologo'),
-        (PSICOLOGO, 'Psicologo'),
-        (NUTRIOLOGO, 'Nutriologo')
+        (ADMINISTRADOR, "Administrador"),
+        (RECEPCIONISTAGRAL, "Recepcionista General"),
+        (RECEPCIONISTAPSI, "Recepcionista Psicologia"),
+        (ENFERMERO, "Enfermero"),
+        (MEDICOGRAL, "Medico General"),
+        (ODONTOLOGO, "Odontologo"),
+        (PSICOLOGO, "Psicologo"),
+        (NUTRIOLOGO, "Nutriologo"),
     )
 
     rol = models.IntegerField(choices=ELECCION_ROLES)
 
     objects = ManejadorUsuario()
 
-    USERNAME_FIELD = 'no_trabajador'
-    REQUIRED_FIELDS = ['nombreU', 'apellido_paternoU',
-                       'apellido_maternoU', 'telefono', 'correo']
+    USERNAME_FIELD = "no_trabajador"
+    REQUIRED_FIELDS = [
+        "nombreU",
+        "apellido_paternoU",
+        "apellido_maternoU",
+        "telefono",
+        "correo",
+    ]
 
     class Meta:
-        verbose_name = ('usuario')
-        verbose_name_plural = ('usuarios')
+        verbose_name = "usuario"
+        verbose_name_plural = "usuarios"
 
     def get_full_name(self):
-        return self.nombreU + ' ' + self.apellido_paternoU + ' ' + self.apellido_maternoU
+        return (
+            self.nombreU + " " + self.apellido_paternoU + " " + self.apellido_maternoU
+        )
 
     def get_short_name(self):
         return self.nombreU
@@ -105,4 +113,4 @@ class Usuario(AbstractBaseUser):
         return self.active
 
     def __str__(self):
-        return self.nombreU + ' ' + self.apellido_paternoU + ' ' + self.no_trabajador
+        return self.nombreU + " " + self.apellido_paternoU + " " + self.no_trabajador
