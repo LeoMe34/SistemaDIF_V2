@@ -1,37 +1,48 @@
 import axios from 'axios';
-import { useForm } from "react-hook-form"
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 
 
 export function Login() {
-
+    const [usuario, setUsuario] = useState([])
+    const [contrasenia, setContrasenia] = useState('')
     const navegador = useNavigate()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
 
     const iniciarSesion = async () => {
         try {
             const url = "http://127.0.0.1:8000/api/login/"
-
-            const resultado = await axios.post(url, {
+            const respuesta = await axios.post(url, {
                 username: usuario,
                 password: contrasenia
             })
-            setUsuario(resultado.data)
-            console.log("Usuario logueado correctamente")
-        } catch (error) {
-            console.error("Ocurrio un error", error)
-        }
+            const datosUsuario = respuesta.data.user_info;
 
-    }
-    const enviar = handleSubmit(async data => {
-        try {
-            await iniciarSesion
-            navegador("/home_enfermeria")
+            if ('username' in datosUsuario) {
+                console.log("Usuario logueado correctamente");
+                setUsuario(datosUsuario);
+                navegador("/home_enfermeria");
+            } else {
+                console.error("La respuesta del servidor no contiene el campo 'username'");
+            }
         } catch (error) {
-            console.error("Error al crear empleado", error);
+            console.error("Ocurrió un error", error);
+            if (error.response) {
+                console.error('Código de estado:', error.response.status);
+                console.error('Respuesta del servidor:', error.response.data);
+
+                // Mostrar un mensaje de error al usuario
+                if (error.response.data && error.response.data.non_field_errors) {
+                    alert(error.response.data.non_field_errors[0]);
+                } else {
+                    alert('Error en la autenticación. Por favor, verifica tus credenciales.');
+                }
+            } else if (error.request) {
+                console.error('No se recibió respuesta del servidor');
+            } else {
+                console.error('Error de configuración de la solicitud:', error.message);
+            }
         }
-    })
+    }
 
     return (
         <section className="vh-100" style={{ background: '#812A71' }}>
@@ -59,25 +70,23 @@ export function Login() {
                                             <h5 className="etiquetas mb-2 pb-3" style={{ letterSpacing: '1px' }}>Iniciar sesión</h5>
 
                                             <div className="form-outline mb-3">
-                                                <input type="no_trabajador" id="no_trabajador" className="form-control form-control-lg entrada"
-                                                    placeholder="MRR009" {...register("username", { required: true })} />
-                                                {errors.username && <span>Es necesario este campo</span>}
+                                                <input type="text" id="username" className="form-control form-control-lg entrada"
+                                                    placeholder="MRR009" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                                                 <label className="form-label etiquetas" htmlFor="form2Example17">Número de trabajador</label>
                                             </div>
 
                                             <div className="form-outline mb-3">
                                                 <div className="input-group">
                                                     <input type="password" id="contrasenia" className="form-control form-control-lg entrada"
-                                                        placeholder="********" autoComplete="new-password"
-                                                        {...register("password", { required: true })} />
-                                                    {errors.password && <span>Es necesario este campo</span>}
+                                                        placeholder="********" value={contrasenia} autoComplete="new-password"
+                                                        onChange={(e) => setContrasenia(e.target.value)} />
                                                 </div>
                                                 <label className="form-label etiquetas" htmlFor="contrasenia">Contraseña</label>
                                             </div>
 
                                             {/*Editar el botón */}
                                             <div className="pt-1 mb-3">
-                                                <button className="btn btn-guardar btn-lg btn-block" type="submit" onClick={enviar}>Entrar</button>
+                                                <button className="btn btn-guardar btn-lg btn-block" onClick={iniciarSesion}>Entrar</button>
                                             </div>
                                             <a className=" etiquetas text-muted" href="#!" style={{ display: 'block' }}>¿Olvidaste tu contraseña?</a>
 
