@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.auth import AuthToken
+from knox.auth import AuthToken,timezone
 from .serializers import RegistroSerializer
 
 
@@ -15,6 +15,8 @@ def login_api(request):
 
     # Crear un token para el usuario y agregarlo al diccionario que se enviará como respuesta
     _, token = AuthToken.objects.create(user)
+    user.last_login = timezone.now()
+    user.save()
 
     return Response({
         'user_info': {
