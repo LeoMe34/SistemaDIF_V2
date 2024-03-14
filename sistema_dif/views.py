@@ -13,6 +13,8 @@ def login_api(request):
     # Obtener el usuario autenticado a partir de los datos validados del serializer
     user = serializer.validated_data['user']
 
+    AuthToken.objects.filter(user=user).delete()
+
     # Crear un token para el usuario y agregarlo al diccionario que se enviará como respuesta
     _, token = AuthToken.objects.create(user)
     user.last_login = timezone.now()
