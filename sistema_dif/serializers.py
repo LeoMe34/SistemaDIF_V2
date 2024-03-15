@@ -57,7 +57,7 @@ class FihaTecnicaPSerializer(serializers.ModelSerializer):
         model = FichaTecnicaPsicologia
         fields = "__all__"
 
-class AnezoDocumentosSerializer(serializers.ModelSerializer):
+class AnexoDocumentosSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnexoDocumentos
         fields = "__all__"

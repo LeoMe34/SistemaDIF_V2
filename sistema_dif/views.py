@@ -1,8 +1,19 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.auth import AuthToken,timezone
-from .serializers import RegistroSerializer
+from knox.auth import AuthToken, timezone
+from .serializers import (
+    RegistroSerializer, EmpleadoSerializer, AnexoDocumentosSerializer,
+    FichaTecnicaESerializer, FihaTecnicaPSerializer, HistorialMedicoSerializer,
+    HistorialOdontoSerializer, NotaEvolucionOdontoSerializer, NotaMedicaSerializer,
+    PacienteSerializer, RecetaSerializer)
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from .models import (
+    Empleado, AnexoDocumentos, FichaTecnicaEnfermeria,
+    FichaTecnicaPsicologia, HistorialMedico, HistorialOdonto,
+    NotaEvolucionOdonto, NotaMedica, Paciente, Receta)
+from rest_framework import status
 
 
 @api_view(['POST'])
@@ -31,6 +42,7 @@ def login_api(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_datos_usuario(request):
     # Obtener el usuario de la solicitud
     user = request.user
@@ -49,17 +61,18 @@ def get_datos_usuario(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def registrar_api(request):
-    #Crea una instancia del serializer RegistroSerializer con los datos de la solicitud
+    # Crea una instancia del serializer RegistroSerializer con los datos de la solicitud
     serializer = RegistroSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    
-    #Guarda al usuario utilizando el serializer
+
+    # Guarda al usuario utilizando el serializer
     user = serializer.save()
-    
+
     # Crear un nuevo token de autenticación para el usuario registrado utilizando Knox
     # Esto haria como si se  hubiera logueado por primera vez
-    #_, token = AuthToken.objects.create(user)
+    # _, token = AuthToken.objects.create(user)
 
     return Response({
         'user_info': {
@@ -67,5 +80,129 @@ def registrar_api(request):
             'username': user.username,
             'email': user.email
         },
-        #'token': token
+        # 'token': token
     })
+
+# EMPLEADO
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_empleados(request):
+    queryset = Empleado.objects.all()
+    serializer = EmpleadoSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def crear_empleado(request):
+    serializer = EmpleadoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def detalle_empleado(request, pk):
+    try:
+        empleado = Empleado.objects.get(pk=pk)
+    except Empleado.DoesNotExist:
+        return Response(status=404)
+
+    serializer = EmpleadoSerializer(empleado)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def modificar_empleado(request, pk):
+    try:
+        empleado = Empleado.objects.get(pk=pk)
+    except Empleado.DoesNotExist:
+        return Response(status=404)
+
+    serializer = EmpleadoSerializer(empleado, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def eliminar_empleado(request, pk):
+    try:
+        empleado = Empleado.objects.get(pk=pk)
+        user = empleado.usuario
+
+    except Empleado.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Actualizar el estado del usuario a inactivo
+    user.is_active = False
+    user.save()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+# FichaTecnicaEnfermeria
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_fichasTecnicasE(request):
+    queryset = FichaTecnicaEnfermeria.objects.all()
+    serializer = FichaTecnicaESerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def crear_FichaTecnicaE(request):
+    serializer = FichaTecnicaESerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaE(request, pk):
+    try:
+        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(pk=pk)
+    except FichaTecnicaEnfermeria.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaESerializer(fichaTecnicaE)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def modificar_fichaTecnicaE(request, pk):
+    try:
+        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(pk=pk)
+    except FichaTecnicaEnfermeria.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaESerializer(fichaTecnicaE, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def eliminar_fichaTecnicaE(request, pk):
+    try:
+        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(pk=pk)
+    except FichaTecnicaEnfermeria.DoesNotExist:
+        return Response(status=404)
+
+    fichaTecnicaE.delete()
+    return Response(status=204)
+
