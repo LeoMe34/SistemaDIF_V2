@@ -1,6 +1,10 @@
 # Importación del modelo de usuario proporcionado por Django
 from django.contrib.auth.models import User
 from rest_framework import serializers, validators
+from sistema_dif.models import (
+    Empleado, FichaTecnicaEnfermeria, FichaTecnicaPsicologia,
+    AnexoDocumentos, HistorialMedico, HistorialOdonto,
+    NotaEvolucionOdonto, NotaMedica, Paciente, Receta)
 
 
 class RegistroSerializer(serializers.ModelSerializer):
@@ -32,3 +36,53 @@ class RegistroSerializer(serializers.ModelSerializer):
         )
 
         return user
+
+class EmpleadoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Empleado
+        fields = "__all__"
+
+class PacienteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Paciente
+        fields = "__all__"
+
+class FichaTecnicaESerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FichaTecnicaEnfermeria
+        fields = "__all__"
+
+class FihaTecnicaPSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FichaTecnicaPsicologia
+        fields = "__all__"
+
+class AnezoDocumentosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AnexoDocumentos
+        fields = "__all__"
+
+class HistorialMedicoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistorialMedico
+        fields = "__all__"
+
+class HistorialOdontoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistorialOdonto
+        fields = "__all__"
+
+class NotaEvolucionOdontoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotaEvolucionOdonto
+        fields = "__all__"
+
+class NotaMedicaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotaMedica
+        fields = "__all__"
+
+class RecetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Receta
+        fields = "__all__"
