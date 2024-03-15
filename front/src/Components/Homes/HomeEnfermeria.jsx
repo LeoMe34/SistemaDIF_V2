@@ -1,9 +1,4 @@
-import { useHistory } from 'react-router-dom';
-import { mensajeCerrarSesion } from '../../Modales/MensajeCerrarSesion';
-import { useEffect } from 'react';
-
-export function HomeEnfermeria() {
-    
+export function HomeEnfermeria() {    
     return (
         <div>
             <div className="mt-3 ml-10 container">
