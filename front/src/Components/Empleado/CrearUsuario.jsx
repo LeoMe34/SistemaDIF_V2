@@ -2,44 +2,43 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
+import { useAuth } from '../../Contexto/AuthContext';
 
 export function CrearUsuario() {
-    const [usuario, setUsuario] = useState({ username: '', password: '', email: '' });
-    const navegador = useNavigate();
+    const [usuario, setUsuario] = useState('')
+    const [contrasenia, setContrasenia] = useState('')
+    const [correo, setCorreo] = useState('')
+    const navegador = useNavigate()
+    const { token } = useAuth()
 
     const registrarUsuario = async () => {
         try {
-            const url = "http://127.0.0.1:8000/api/registrar/";
+            const url = "http://127.0.0.1:8000/api/registrar/"
             const respuesta = await axios.post(url, {
-                username: usuario.username,
-                password: usuario.password,
-                email: usuario.email
-            });
+                username: usuario,
+                password: contrasenia,
+                email: correo
+            }, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
             const datosUsuario = respuesta.data.user_info;
             if ('username' in datosUsuario) {
-                console.log("Usuario duplicado");
-                // Aquí puedes manejar el caso de usuario duplicado
-            } else {
-                console.log("Usuario registrado correctamente");
+                console.error("Usuario registrado correctamente");
                 navegador("/crear_empleado");
+            } else {
+                console.log("Usuario duplicado");
             }
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
-    };
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        registrarUsuario();
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUsuario(prevUsuario => ({
-            ...prevUsuario,
-            [name]: value
-        }));
-    };
+        e.preventDefault()
+        registrarUsuario()
+    }
 
     return (
         <div>
@@ -67,29 +66,29 @@ export function CrearUsuario() {
                     <h3 className="titulo">Registrar usuario</h3>
                     <div className='row'>
                         <div className='mt-2 mb-2 col'>
+                            <label className="etiqueta" htmlFor="noTrabajador">Número de trabajador</label>
+                            <input id="noTrabajador" type="text" placeholder="No. de trabajador" className="entrada" readOnly />
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="usuario">Usuario</label>
                             <input id="usuario" type="text" className="entrada"
-                                name="username"
-                                value={usuario.username}
-                                onChange={handleChange} />
+                                onChange={(e) => setUsuario(e.target.value)} />
                         </div>
                     </div>
                     <div className='row'>
                         <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="email">Correo electrónico</label>
                             <input id="email" type="text" placeholder="Correo electrónico" className="entrada"
-                                name="email"
-                                value={usuario.email}
-                                onChange={handleChange} />
+                                onChange={(e) => setCorreo(e.target.value)} />
                         </div>
                     </div>
                     <div className='row'>
                         <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="contrasenia">Contraseña</label>
                             <input id="contrasenia" type="password" placeholder="Contraseña" className="entrada"
-                                name="password"
-                                value={usuario.password}
-                                onChange={handleChange} />
+                                onChange={(e) => setContrasenia(e.target.value)} />
                         </div>
                     </div>
 
