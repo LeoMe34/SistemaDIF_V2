@@ -16,6 +16,7 @@ import styled from "styled-components";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { MenuNave } from "./Components/MenuNav/MenuNave"
 import { NavBarSimple } from "./Partials/NavBarSimple"
+import { AuthProvider } from './Contexto/AuthContext';
 
 
 function App() {
@@ -23,20 +24,25 @@ function App() {
   const isLoginPage = window.location.pathname === '/'
   return (
     <>
-      <BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
 
-        <main>
-          {!isLoginPage && <NavBarSimple />}
-          <div className={isLoginPage ? '' : 'sidebarState'}>
-            {!isLoginPage && <MenuNave />}
-            <Rutas />
-          </div>
-        </main>
-        <footer>
-          <Footer />
-        </footer>
 
-      </BrowserRouter>
+          <main>
+            {!isLoginPage && <NavBarSimple />}
+            <div className={isLoginPage ? '' : 'sidebarState'}>
+              {!isLoginPage && <MenuNave />}
+              <Rutas />
+            </div>
+          </main>
+
+
+          <footer>
+            <Footer />
+          </footer>
+
+        </BrowserRouter>
+      </AuthProvider>
     </>
 
   )

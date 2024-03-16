@@ -1,5 +1,4 @@
-
-export function HomeEnfermeria() {
+export function HomeEnfermeria() {    
     return (
         <div>
             <div className="mt-3 ml-10 container">
