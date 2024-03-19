@@ -1,6 +1,12 @@
 {/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
+import { useAuth } from '../../Contexto/AuthContext';
 
-export function CrearEmpleado() {    
+export function CrearEmpleado() {
+    const navegador = useNavigate()
+    const { token } = useAuth()    
     return (
         <div>
             <div className="mt-3 ml-10 container">
