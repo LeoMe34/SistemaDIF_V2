@@ -235,3 +235,63 @@ def eliminar_fichaTecnicaE(request, pk):
 
     fichaTecnicaE.delete()
     return Response(status=204)
+
+
+# FichaTecnicaPsicologia
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasTecnicasP(request):
+    queryset = FichaTecnicaPsicologia.objects.all()
+    serializer = FihaTecnicaPSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_FichaTecnicaP(request):
+    serializer = FihaTecnicaPSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaP(request, pk):
+    try:
+        fichaTecnicaP = FichaTecnicaPsicologia.objects.get(pk=pk)
+    except FichaTecnicaPsicologia.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FihaTecnicaPSerializer(fichaTecnicaP)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_fichaTecnicaP(request, pk):
+    try:
+        fichaTecnicaP = FichaTecnicaPsicologia.objects.get(pk=pk)
+    except FichaTecnicaPsicologia.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaESerializer(fichaTecnicaP, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_fichaTecnicaP(request, pk):
+    try:
+        fichaTecnicaP = FichaTecnicaPsicologia.objects.get(pk=pk)
+    except FichaTecnicaPsicologia.DoesNotExist:
+        return Response(status=404)
+
+    fichaTecnicaP.delete()
+    return Response(status=204)
