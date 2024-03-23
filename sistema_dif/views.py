@@ -362,7 +362,7 @@ def eliminar_historialO(request, pk):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_notaEvolucionO(request):
+def get_notasEvolucionO(request):
     queryset = NotaEvolucionOdonto.objects.all()
     serializer = NotaEvolucionOdontoSerializer(queryset, many=True)
     return Response(serializer.data)
@@ -418,5 +418,178 @@ def eliminar_notaEvolucionO(request, pk):
 
 
 #HistorialMedico
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialesMedicos(request):
+    queryset = HistorialMedico.objects.all()
+    serializer = HistorialMedicoSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_historialMedico(request):
+    serializer = HistorialMedicoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_historialMedico(request, pk):
+    try:
+        historialMedico = HistorialMedico.objects.get(pk=pk)
+    except HistorialMedicoSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = HistorialMedicoSerializer(historialMedico)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_historialMedico(request, pk):
+    try:
+        historialMedico = HistorialMedico.objects.get(pk=pk)
+    except HistorialMedico.DoesNotExist:
+        return Response(status=404)
+
+    serializer = HistorialMedicoSerializer(historialMedico, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_historialMedico(request, pk):
+    try:
+        historialMedico = HistorialMedico.objects.get(pk=pk)
+    except HistorialMedico.DoesNotExist:
+        return Response(status=404)
+
+    historialMedico.delete()
+    return Response(status=204)
+
+
 #NotaMedica
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notasMedicas(request):
+    queryset = NotaMedica.objects.all()
+    serializer = NotaMedicaSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_notaMedica(request):
+    serializer = NotaMedicaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_notaMedica(request, pk):
+    try:
+        notaMedica = NotaMedica.objects.get(pk=pk)
+    except NotaMedicaSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaMedicaSerializer(notaMedica)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_notaMedica(request, pk):
+    try:
+        notaMedica = NotaMedica.objects.get(pk=pk)
+    except NotaMedica.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaMedicaSerializer(notaMedica, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_notaMedica(request, pk):
+    try:
+        notaMedica = NotaMedica.objects.get(pk=pk)
+    except NotaMedica.DoesNotExist:
+        return Response(status=404)
+
+    notaMedica.delete()
+    return Response(status=204)
+
+
 #Receta
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_recetas(request):
+    queryset = Receta.objects.all()
+    serializer = RecetaSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_receta(request):
+    serializer = RecetaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_receta(request, pk):
+    try:
+        receta = Receta.objects.get(pk=pk)
+    except RecetaSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = RecetaSerializer(receta)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_receta(request, pk):
+    try:
+        receta = Receta.objects.get(pk=pk)
+    except Receta.DoesNotExist:
+        return Response(status=404)
+
+    serializer = RecetaSerializer(receta, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_receta(request, pk):
+    try:
+        receta = Receta.objects.get(pk=pk)
+    except Receta.DoesNotExist:
+        return Response(status=404)
+
+    receta.delete()
+    return Response(status=204)
