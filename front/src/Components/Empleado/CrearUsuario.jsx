@@ -25,7 +25,7 @@ export function CrearUsuario() {
             })
             const datosUsuario = respuesta.data.user_info;
             if ('username' in datosUsuario) {
-                console.error("Usuario registrado correctamente");
+                console.log("Usuario registrado correctamente");
                 navegador("/crear_empleado");
             } else {
                 console.log("Usuario duplicado");
