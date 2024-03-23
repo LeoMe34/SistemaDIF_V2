@@ -295,3 +295,128 @@ def eliminar_fichaTecnicaP(request, pk):
 
     fichaTecnicaP.delete()
     return Response(status=204)
+
+
+#HistorialOdonto
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialesO(request):
+    queryset = HistorialOdonto.objects.all()
+    serializer = HistorialOdontoSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_historialO(request):
+    serializer = HistorialOdontoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_historialO(request, pk):
+    try:
+        historialO = HistorialOdonto.objects.get(pk=pk)
+    except HistorialOdontoSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = HistorialOdontoSerializer(historialO)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_historialO(request, pk):
+    try:
+        historialO = HistorialOdonto.objects.get(pk=pk)
+    except HistorialOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = HistorialOdontoSerializer(historialO, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_historialO(request, pk):
+    try:
+        historialO = HistorialOdonto.objects.get(pk=pk)
+    except HistorialOdonto.DoesNotExist:
+        return Response(status=404)
+
+    historialO.delete()
+    return Response(status=204)
+
+
+#NotaEvolucionOdonto
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notaEvolucionO(request):
+    queryset = NotaEvolucionOdonto.objects.all()
+    serializer = NotaEvolucionOdontoSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_notaEvolucionO(request):
+    serializer = NotaEvolucionOdontoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_notaEvolucionO(request, pk):
+    try:
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(pk=pk)
+    except NotaEvolucionOdontoSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_notaEvolucionO(request, pk):
+    try:
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(pk=pk)
+    except NotaEvolucionOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_notaEvolucionO(request, pk):
+    try:
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(pk=pk)
+    except NotaEvolucionOdonto.DoesNotExist:
+        return Response(status=404)
+
+    notaEvolucionO.delete()
+    return Response(status=204)
+
+
+#HistorialMedico
+#NotaMedica
+#Receta
