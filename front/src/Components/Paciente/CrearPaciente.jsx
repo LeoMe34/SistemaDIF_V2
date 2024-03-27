@@ -1,12 +1,25 @@
 import { useAuth } from '../../Contexto/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
+import { useState, useEffect } from 'react';
 
 export function CrearPaciente() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const location = useLocation();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        // Solo ejecutar el efecto una vez
+        if (!mounted) {
+            // Limpiar los parámetros de consulta de la URL al cargar la página
+            const urlSinParametros = location.pathname;
+            navegador(urlSinParametros);
+            setMounted(true);
+        }
+    }, [mounted, location, navegador]);
 
     const registrarPaciente = async (data) => {
         try {
@@ -40,14 +53,15 @@ export function CrearPaciente() {
             })
 
             console.log("Paciente registrado correctamente");
-            navegador("/crear_empleado");
 
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
     }
+
     const enviar = handleSubmit(async data => {
         registrarPaciente(data)
+        navegador("/crear_empleado")
     })
 
     return (
