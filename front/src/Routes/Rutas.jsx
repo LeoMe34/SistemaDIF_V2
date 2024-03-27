@@ -23,6 +23,8 @@ import { V_HomeRecepcionGral } from '../Views/Homes/V_HomeRecepcionGral'
 import { V_HomeRecepcionPsico } from '../Views/Homes/V_HomeRecepcionPsico'
 import { V_HomeNutricion } from '../Views/Homes/V_HomeNutricion'
 
+import { ListaPacientes } from '../Components/Paciente/ListaPacientes'
+
 export function Rutas() {
     return (
         <div>
@@ -52,6 +54,8 @@ export function Rutas() {
                     <Route path='/home_recepcion_medica' element={<V_HomeRecepcionGral />} />
                     <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />
                     <Route path='/home_nutricion' element={<V_HomeNutricion />} />
+
+                    <Route path='/pacientes' element={<ListaPacientes />} />
 
 
                 </Routes>
