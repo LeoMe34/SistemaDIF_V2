@@ -9,5 +9,5 @@ urlpatterns = [
     path('logout/', knox_views.LogoutView.as_view()),
     path('logoutall/', knox_views.LogoutAllView.as_view()),
 
-    path('registrar_empleado', views.crear_empleado)
+    path('registrar_empleado/', views.crear_empleado)
 ]
