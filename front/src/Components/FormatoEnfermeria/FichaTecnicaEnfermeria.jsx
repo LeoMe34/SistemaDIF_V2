@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardPaciente } from '../Paciente/CardPaciente';
 import { useAuth } from '../../Contexto/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 {/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
@@ -11,6 +11,7 @@ export function FichaTecnicaEnfermeria() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const parametros = useParams()
 
     const registrarFicha = async (data) => {
         try {
@@ -72,7 +73,7 @@ export function FichaTecnicaEnfermeria() {
                 <NavBarSimple />
     </header>*/}
             <div className='ml-40 mt-2'>
-                <CardPaciente />
+                <CardPaciente id={parametros.id}/>
             </div>
             <form onSubmit={enviar}>
                 <div className='ml-10 mt-2 container'>
