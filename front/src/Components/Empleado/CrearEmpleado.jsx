@@ -10,25 +10,27 @@ export function CrearEmpleado() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
 
-    const registrarEmpleado = async () => {
+    const registrarEmpleado = async (data) => {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_empleado/"
             const respuesta = await axios.post(url, {
                 "datos_personales": {
-                    //nombre,apellidopaterno y materno
+                    nombre: data.nombre,
+                    apellido_paterno: data.apellido_paterno,
+                    apellido_materno: data.apellido_materno
                 },
-                no_trabajador: no_trabajador,
-                cedula_profesional: cedula,
-                ocupacion: ocupacion,
-                telefono: telefono
+                no_trabajador: data.no_trabajador,
+                cedula_profesional: data.cedula,
+                ocupacion: data.ocupacion,
+                telefono: data.telefono                
             }, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
-            const datosEmpleado = respuesta.data;
+            const datosEmpleado = respuesta.data.no_trabajador;
             if ('no_trabajador' in datosEmpleado) {
-                console.log("Empleado creado correctamente");
+                console.log("Usuario registrado correctamente");
                 navegador("/crear_empleado");
             } else {
                 console.log("Usuario duplicado");
@@ -39,7 +41,7 @@ export function CrearEmpleado() {
     }
 
     const enviar = handleSubmit(async data => {        
-        registrarEmpleado()
+        registrarEmpleado(data)
     })
 
     return (
@@ -64,8 +66,9 @@ export function CrearEmpleado() {
                     <div className='row'>
                         <div className='mt-2 mb-2 col'>
                             {/*Realmente lo que agarra es el id del usuario, no el nombre del usuario/número de trabajador */}
-                            <label className="etiqueta" htmlFor="usuario">Usuario</label>
-                            <input id="usuario" type="text" placeholder="Número de trabajador" className="entrada" />
+                            <label className="etiqueta" htmlFor="usuario">No. de trabajador</label>
+                            <input id="no_trabajador" type="text" placeholder="Número de trabajador" className="entrada"
+                                {...register("no_trabajador", { required: true })} />
                         </div>
                         <div className='mt-2 mb-2 col'>
 
@@ -124,13 +127,13 @@ export function CrearEmpleado() {
                         </div>
                     </div>
 
-                    {/*mostrarCedula && <div className="mb-4">
+                    {/*mostrarCedula && */} <div className="mb-4">
                         <label className="etiquetas" htmlFor="cedula">Cédula profesional</label>
                         <input id="cedula" type="text" placeholder="Cedula profesional" className="entrada"
                             {...register("cedula_profesional")}
                         />
                         {errors.cedula_profesional && <span>Es necesario este campo</span>}
-    </div>*/}
+                    </div>{/**/}
 
                     <div className="pt-1 mb-3 text-center">
                         <button className="btn btn-guardar btn-lg btn-block">
