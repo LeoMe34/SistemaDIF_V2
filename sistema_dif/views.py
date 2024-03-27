@@ -177,6 +177,65 @@ def eliminar_empleado(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+#Paciente
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_pacientes(request):
+    queryset = Paciente.objects.all()
+    serializer = PacienteSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_paciente(request):
+    serializer = PacienteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_paciente(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    serializer = PacienteSerializer(paciente)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_paciente(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    serializer = PacienteSerializer(paciente, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_paciete(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    paciente.delete()
+    return Response(status=204)
+
+
 # FichaTecnicaEnfermeria
 
 

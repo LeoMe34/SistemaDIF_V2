@@ -10,5 +10,6 @@ urlpatterns = [
     path('logoutall/', knox_views.LogoutAllView.as_view()),
 
     path('registrar_empleado/', views.crear_empleado),
+    path('registrar_paciente/', views.crear_paciente),
     path('registrar_ficha_enfermeria/', views.crear_FichaTecnicaE)
 ]
