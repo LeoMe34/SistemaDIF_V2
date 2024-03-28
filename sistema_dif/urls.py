@@ -13,5 +13,6 @@ urlpatterns = [
     path('registrar_paciente/', views.crear_paciente),
     path('detalle_paciente/', views.detalle_paciente),
     path('pacientes/', views.get_pacientes),
+    path('buscar_paciente/', views.buscar_paciente),
     path('registrar_ficha_enfermeria/', views.crear_FichaTecnicaE)
 ]

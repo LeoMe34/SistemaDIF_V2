@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.auth import AuthToken, timezone
+from django.db.models import Q
 from .serializers import (
     RegistroSerializer,
     EmpleadoSerializer,
@@ -177,7 +178,7 @@ def eliminar_empleado(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#Paciente
+# Paciente
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -207,6 +208,26 @@ def detalle_paciente(request, pk):
 
     serializer = PacienteSerializer(paciente)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_paciente(request):
+    query = request.GET.get("q", "")
+
+    pacientes = Paciente.objects.filter(
+        Q(no_expediente__icontains=query)
+        | Q(datosContactoPacient__telefono__icontains=query)
+        | Q(curp__icontains=query)
+    )
+
+    if not pacientes.exists():
+        return Response(
+            {"error": "No se encontro un paciente con esos datos"},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = PacienteSerializer(pacientes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(["PUT"])
@@ -356,7 +377,7 @@ def eliminar_fichaTecnicaP(request, pk):
     return Response(status=204)
 
 
-#HistorialOdonto
+# HistorialOdonto
 
 
 @api_view(["GET"])
@@ -416,7 +437,7 @@ def eliminar_historialO(request, pk):
     return Response(status=204)
 
 
-#NotaEvolucionOdonto
+# NotaEvolucionOdonto
 
 
 @api_view(["GET"])
@@ -457,7 +478,8 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(
+        notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -476,7 +498,7 @@ def eliminar_notaEvolucionO(request, pk):
     return Response(status=204)
 
 
-#HistorialMedico
+# HistorialMedico
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -535,7 +557,7 @@ def eliminar_historialMedico(request, pk):
     return Response(status=204)
 
 
-#NotaMedica
+# NotaMedica
 
 
 @api_view(["GET"])
@@ -595,7 +617,7 @@ def eliminar_notaMedica(request, pk):
     return Response(status=204)
 
 
-#Receta
+# Receta
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

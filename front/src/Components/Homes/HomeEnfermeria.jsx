@@ -1,3 +1,5 @@
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
+
 export function HomeEnfermeria() {    
     return (
         <div>
@@ -6,6 +8,7 @@ export function HomeEnfermeria() {
                     <ol className="breadcrumb">
                         <i className="bi bi-house-fill color-icono"></i>&nbsp;
                         <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
+                        <BusquedaPaciente></BusquedaPaciente>
                     </ol>
                 </nav>
             </div>

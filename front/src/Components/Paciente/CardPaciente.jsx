@@ -1,14 +1,12 @@
 import React from 'react';
 import { useEffect } from "react";
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import axios from 'axios';
 
 export function CardPaciente({id}) {
     const { register, setValue } = useForm()
 
-    const parametros = useParams()
     // mostrar los datos en los recuadros
     useEffect(() => {
         async function cargarPaciente() {
@@ -17,15 +15,15 @@ export function CardPaciente({id}) {
                 const respuesta = await axios.get(url);
                 const paciente = respuesta.data; // Suponiendo que la respuesta es un objeto con los detalles del paciente
 
-                setValue('nombre', `${paciente.nombre} ${paciente.apellido_paterno} ${paciente.apellido_materno}`);
+                setValue('nombre', `${paciente.datosPersonalesPacient.nombre} ${paciente.datosPersonalesPacient.apellidoP} ${paciente.datosPersonalesPacient.apellidoM}`);
                 setValue('num_expediente', paciente.no_expediente);
                 setValue('fecha_nacimiento', paciente.fecha_nacimiento);
-                setValue('sexo', paciente.sexo);
-                setValue('edad', paciente.edad);
-                setValue('direccion', paciente.direccion);
-                setValue('ocupacion', paciente.ocupacion);
-                setValue('telefono', paciente.telefono);
-                setValue('nacionalidad', paciente.nacionalidad);
+                setValue('sexo', paciente.datosPersonalesPacient.fechaDeNacimiento);
+                setValue('edad', paciente.datosPersonalesPacient.edad);
+                setValue('direccion', paciente.datosDireccionPacient.direccion);
+                setValue('ocupacion', paciente.datosPersonalesPacient.ocupacion);
+                setValue('telefono', paciente.datosContactoPacient.telefono);
+                setValue('nacionalidad', paciente.datosPersonalesPacient.nacionalidad);
             } catch (error) {
                 console.error('Error al cargar el paciente:', error);
             }
