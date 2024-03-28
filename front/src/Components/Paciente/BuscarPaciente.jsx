@@ -34,14 +34,94 @@ function BusquedaPaciente() {
     };
 
     return (
-        <div>
+        <div>            
             <form onSubmit={handleSubmit}>
-                <input type="text" value={consulta} onChange={handleConsultaChange} />
-                <button type="submit">Buscar</button>
-            </form>
+                <div className="input-group buscador1">
+                    <input type="text" className="form-control" placeholder="Ingrese el nombre o número de expediente" 
+                    aria-label="Input group example" aria-describedby="basic-addon1" value={consulta} onChange={handleConsultaChange} />
+                    <button className="input-group-text btn-buscar" id="basic-addon1">
+                        <i className="color_icono bi bi-search"></i>
+                        <div className="color_icono ml-10">
+                            Buscar
+                        </div>
+                    </button>
+                </div>
 
 
-            <ul>
+                <ul className='mt-3 p-0'>
+                    {resultados.map((paciente) => (
+                        <ol key={paciente.no_expediente}>
+
+                            <div className='datos-busqueda'>
+                                <div className='mb-2 mt-3'>
+                                    <div className='form-campos'>
+                                        <label htmlFor="num_expediente">
+                                            N° Expediente:
+                                            <br />
+                                            {paciente.no_expediente}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="nombre">Nombre:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.nombre} {paciente.datosPersonalesPacient.apellidoP} {paciente.datosPersonalesPacient.apellidoM}</label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="fecha_nacimiento">Fecha de nacimiento:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.fechaDeNacimiento}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="direccion">Direccion:
+                                            <br />
+                                            {paciente.datosDireccionPacient.direccion}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="sexo">Sexo:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.sexo}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="edad">Edad:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.edad}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="ocupacion">Ocupación:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.ocupacion}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="telefono">Teléfono:
+                                            <br />
+                                            {paciente.datosContactoPacient.telefono}
+                                        </label>
+                                    </div>
+
+                                    <div className='form-campos'>
+                                        <label htmlFor="nacionalidad">Nacionalidad:
+                                            <br />
+                                            {paciente.datosPersonalesPacient.nacionalidad}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </ol>
+                    ))}
+                </ul>
+                {/*<ul>
                 {resultados.map((paciente) => (
                     <li key={paciente.no_expediente}>
                         {paciente.no_expediente} <br />
@@ -49,8 +129,8 @@ function BusquedaPaciente() {
                         {paciente.datosPersonalesPacient.nombre} {paciente.datosPersonalesPacient.apellidoP} {paciente.datosPersonalesPacient.apellidoM}
                     </li>
                 ))}
-            </ul>
-
+            </ul>*/}
+            </form>
         </div>
     );
 }

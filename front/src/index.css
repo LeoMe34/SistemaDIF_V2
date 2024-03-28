@@ -121,6 +121,12 @@ textarea {
   margin-left: 70px;
 }
 
+.buscador1 {
+  min-width: 500px;
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  margin-top: 3px;
+}
+
 .icono {
   color: white;
   margin-left: 10px;
