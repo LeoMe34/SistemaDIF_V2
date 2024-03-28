@@ -1,9 +1,10 @@
-import React from 'react';
-import { CardPaciente } from '../Paciente/CardPaciente';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Contexto/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 {/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 
 
@@ -11,35 +12,55 @@ export function FichaTecnicaEnfermeria() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const parametros = useParams()
+    const { noExpediente } = useNoExpediente()
+    const [idEmpleado, setIdEmpleado] = useState(null);
+
+    useEffect(() => {
+        const fetchEmpleadoId = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setIdEmpleado(response.data.id); // Suponiendo que el ID del empleado se encuentra en la respuesta de la API
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+
+        fetchEmpleadoId();
+    }, [token]);
 
     const registrarFicha = async (data) => {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_enfermeria/"
             const respuesta = await axios.post(url, {
                 fecha: data.fecha,
-                "signosVitales":{
+                "signosVitales": {
                     presion: data.presion,
                     frecuenciaC: data.frecuencia_cardiaca,
                     frecuenciaR: data.frecuencia_respiratoria,
                     temperatura: data.temperatura,
                     glicemia: data.glicemia
                 },
-                "datosFisicos":{
+                "datosFisicos": {
                     peso: data.peso,
                     talla: data.talla,
                     imc: data.imc
                 },
                 servicio_enfermeria: data.tipo_atencion,
                 trabajador: data.es_trabajador,
-                "datosDemograficos":{
+                "datosDemograficos": {
                     religion: data.religion,
                     escolaridad: data.escolaridad,
                     discapacitado: data.discapacitado,
                     adulto_mayor: data.adulto_mayor,
                     embarazada: data.embarazada,
                     ninguna: data.ninguno
-                }
+                },
+                paciente: noExpediente,
+                empleado: idEmpleado
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -51,7 +72,7 @@ export function FichaTecnicaEnfermeria() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarEmpleado(data)
+        registrarFicha(data)
     })
 
     return (
@@ -69,18 +90,15 @@ export function FichaTecnicaEnfermeria() {
                 </nav>
             </div>
             <h3 className='subtitulo'>Ficha técnica de enfermería</h3>
-            {/*<header>
-                <NavBarSimple />
-    </header>*/}
-            <div className='ml-40 mt-2'>
-                <CardPaciente id={parametros.id}/>
-            </div>
+
+            <BusquedaPaciente></BusquedaPaciente>
+
             <form onSubmit={enviar}>
                 <div className='ml-10 mt-2 container'>
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="fecha">Fecha: </label>
-                            <input className="entrada" id='fecha' name='fecha' type="date" readOnly
+                            <input className="entrada" id='fecha' name='fecha' type="date"
                                 {...register("fecha", { required: true })} />
                         </div>
 
@@ -89,8 +107,8 @@ export function FichaTecnicaEnfermeria() {
                             <select className="opciones" id='es_trabajador' name='es_trabajador' type=""
                                 {...register("es_trabajador", { required: true })}>
                                 <option value="" selected disabled>Elija una opción</option>
-                                <option value="si">Si</option>
-                                <option value="no">No</option>
+                                <option value={true}>Si</option>
+                                <option value={false}>No</option>
                             </select>
                         </div>
 

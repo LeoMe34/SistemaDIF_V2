@@ -1,4 +1,3 @@
-import BusquedaPaciente from "../Paciente/BuscarPaciente"
 
 export function HomeEnfermeria() {
     return (
@@ -8,8 +7,7 @@ export function HomeEnfermeria() {
                     <ol className="breadcrumb ml-10">
                         <i className="bi bi-house-fill color-icono"></i>&nbsp;
                         <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
-                    </ol>
-                    <BusquedaPaciente></BusquedaPaciente>
+                    </ol>                    
                 </nav>
             </div>
         </div>
