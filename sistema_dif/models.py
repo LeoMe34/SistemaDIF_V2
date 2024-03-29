@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
-class Empleado(models.Model):
-    datosPersonales = models.JSONField()  # nombre, apellidoPaterno, apellidoMaterno
+class Empleado(AbstractUser):
+    # datosPersonales = models.JSONField()  # nombre, apellidoPaterno, apellidoMaterno
+    nombre = models.CharField(max_length=30, default="", unique=False)
+    apellidoPaterno = models.CharField(max_length=30, default="", unique=False)
+    apellidoMaterno = models.CharField(max_length=30, default="", unique=False)
     cedula_profesional = models.CharField(max_length=30, default="", unique=False)
     no_trabajador = models.CharField(
         max_length=30, default="", primary_key=True, unique=True
@@ -12,14 +16,8 @@ class Empleado(models.Model):
     ocupacion = models.TextField(max_length=20, default="", unique=False)
     telefono = models.CharField(max_length=10, default="", unique=False)
 
-    objects = models.Manager()
-
-    usuario = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        null=False,
-        blank=False,
-    )
+    groups = None
+    user_permissions = None
 
 
 class Paciente(models.Model):

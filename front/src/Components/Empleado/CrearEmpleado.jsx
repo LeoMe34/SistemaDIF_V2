@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
 
+
 export function CrearEmpleado() {
     const navegador = useNavigate()
     const { token } = useAuth()
@@ -14,15 +15,14 @@ export function CrearEmpleado() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_empleado/"
             const respuesta = await axios.post(url, {
-                "datos_personales": {
-                    nombre: data.nombre,
-                    apellido_paterno: data.apellido_paterno,
-                    apellido_materno: data.apellido_materno
-                },
+                nombre: data.nombre,
+                apellidoPaterno: data.apellidoPaterno,
+                apellidoMaterno: data.apellidoMaterno,
                 no_trabajador: data.no_trabajador,
                 cedula_profesional: data.cedula,
                 ocupacion: data.ocupacion,
-                telefono: data.telefono                
+                telefono: data.telefono,
+                usuario: data.usuario
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -40,7 +40,11 @@ export function CrearEmpleado() {
         }
     }
 
-    const enviar = handleSubmit(async data => {        
+    const detectarUsuario = async () => {
+
+    }
+
+    const enviar = handleSubmit(async data => {
         registrarEmpleado(data)
     })
 
@@ -112,7 +116,7 @@ export function CrearEmpleado() {
                         <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="apellidoP">Apellido paterno</label>
                             <input id="apellidoP" type="text" placeholder="Apellido paterno" className="entrada"
-                                {...register("apellido_paterno", { required: true })} />
+                                {...register("apellidoPaterno", { required: true })} />
                             {errors.apellido_paterno && <span>Es necesario este campo</span>}
 
                         </div>
@@ -122,8 +126,17 @@ export function CrearEmpleado() {
                         <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="apellidoM">Apellido materno</label>
                             <input id="apellidoM" type="text" placeholder="Apellido materno" className="entrada"
-                                {...register("apellido_materno", { required: true })} />
+                                {...register("apellidoMaterno", { required: true })} />
                             {errors.apellido_materno && <span>Es necesario este campo</span>}
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className='mt-2 mb-2 col'>
+                            <label className="etiqueta" htmlFor="apellidoM">id</label>
+                            <input id="idEmpl" type="text" placeholder="ID empleado" className="entrada"
+                                {...register("usuario", { required: true })} />
+                            {errors.usuario && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 

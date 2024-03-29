@@ -17,7 +17,7 @@ from sistema_dif.models import (
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Empleado
         fields = ("username", "password", "email")
         extra_kwargs = {
             "password": {"write_only": True},
@@ -38,16 +38,40 @@ class RegistroSerializer(serializers.ModelSerializer):
         username = validated_data.get("username")
         password = validated_data.get("password")
         email = validated_data.get("email")
+        nombre = validated_data.get("nombre")
+        apellidoPaterno = validated_data.get("apellidoPaterno")
+        apellidoMaterno = validated_data.get("apellidoMaterno")
+        cedula_profesional = validated_data.get("cedula_profesional")
+        no_trabajador = validated_data.get("no_trabajador")
+        ocupacion = validated_data.get("ocupacion")
+        telefono = validated_data.get("telefono")
 
-        user = User.objects.create(username=username, password=password, email=email)
+        user = Empleado.objects.create(
+            username=username,
+            password=password,
+            email=email,
+            nombre=nombre,
+            apellidoPaterno=apellidoPaterno,
+            apellidoMaterno=apellidoMaterno,
+            cedula_profesional=cedula_profesional,
+            no_trabajador=no_trabajador,
+            ocupacion=ocupacion,
+            telefono=telefono,
+        )
 
         return user
 
 
-class EmpleadoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Empleado
-        fields = "__all__"
+"""
+ datosPersonales = models.JSONField()  # nombre, apellidoPaterno, apellidoMaterno
+    cedula_profesional = models.CharField(max_length=30, default="", unique=False)
+    no_trabajador = models.CharField(
+        max_length=30, default="", primary_key=True, unique=True
+    )
+    ocupacion = models.TextField(max_length=20, default="", unique=False)
+    telefono = models.CharField(max_length=10, default="", unique=False)
+
+"""
 
 
 class PacienteSerializer(serializers.ModelSerializer):

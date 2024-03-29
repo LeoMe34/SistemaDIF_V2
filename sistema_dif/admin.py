@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 
 baseDatos = (
     Empleado,
-    Paciente,
-    AnexoDocumentos,
-    FichaTecnicaEnfermeria,
-    FichaTecnicaPsicologia,
-    HistorialMedico,
-    HistorialOdonto,
-    NotaEvolucionOdonto,
-    NotaMedica,
-    Receta,
+    # Paciente,
+    # AnexoDocumentos,
+    # FichaTecnicaEnfermeria,
+    # FichaTecnicaPsicologia,
+    # HistorialMedico,
+    # HistorialOdonto,
+    # NotaEvolucionOdonto,
+    # NotaMedica,
+    # Receta,
 )
 
 admin.site.register(baseDatos)

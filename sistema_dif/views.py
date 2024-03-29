@@ -4,7 +4,6 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.auth import AuthToken, timezone
 from .serializers import (
     RegistroSerializer,
-    EmpleadoSerializer,
     AnexoDocumentosSerializer,
     FichaTecnicaESerializer,
     FihaTecnicaPSerializer,
@@ -114,7 +113,7 @@ def registrar_api(request):
 
 # EMPLEADO
 
-
+"""
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_empleados(request):
@@ -176,7 +175,7 @@ def eliminar_empleado(request, pk):
 
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+"""
 # FichaTecnicaEnfermeria
 
 
@@ -297,7 +296,7 @@ def eliminar_fichaTecnicaP(request, pk):
     return Response(status=204)
 
 
-#HistorialOdonto
+# HistorialOdonto
 
 
 @api_view(["GET"])
@@ -357,7 +356,7 @@ def eliminar_historialO(request, pk):
     return Response(status=204)
 
 
-#NotaEvolucionOdonto
+# NotaEvolucionOdonto
 
 
 @api_view(["GET"])
@@ -417,7 +416,8 @@ def eliminar_notaEvolucionO(request, pk):
     return Response(status=204)
 
 
-#HistorialMedico
+# HistorialMedico
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -476,7 +476,7 @@ def eliminar_historialMedico(request, pk):
     return Response(status=204)
 
 
-#NotaMedica
+# NotaMedica
 
 
 @api_view(["GET"])
@@ -536,7 +536,8 @@ def eliminar_notaMedica(request, pk):
     return Response(status=204)
 
 
-#Receta
+# Receta
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
