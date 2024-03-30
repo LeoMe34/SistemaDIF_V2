@@ -65,7 +65,7 @@ def login_api(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_datos_usuario(request):
     # Obtener el usuario de la solicitud
     user = request.user
@@ -297,7 +297,7 @@ def eliminar_fichaTecnicaP(request, pk):
     return Response(status=204)
 
 
-#HistorialOdonto
+# HistorialOdonto
 
 
 @api_view(["GET"])
@@ -357,7 +357,7 @@ def eliminar_historialO(request, pk):
     return Response(status=204)
 
 
-#NotaEvolucionOdonto
+# NotaEvolucionOdonto
 
 
 @api_view(["GET"])
@@ -417,7 +417,8 @@ def eliminar_notaEvolucionO(request, pk):
     return Response(status=204)
 
 
-#HistorialMedico
+# HistorialMedico
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -476,7 +477,7 @@ def eliminar_historialMedico(request, pk):
     return Response(status=204)
 
 
-#NotaMedica
+# NotaMedica
 
 
 @api_view(["GET"])
@@ -536,7 +537,8 @@ def eliminar_notaMedica(request, pk):
     return Response(status=204)
 
 
-#Receta
+# Receta
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
