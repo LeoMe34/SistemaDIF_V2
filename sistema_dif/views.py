@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.auth import AuthToken, timezone
+from django.db.models import Q
 from .serializers import (
     RegistroSerializer,
     EmpleadoSerializer,
@@ -175,6 +176,85 @@ def eliminar_empleado(request, pk):
     user.save()
 
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Paciente
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_pacientes(request):
+    queryset = Paciente.objects.all()
+    serializer = PacienteSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_paciente(request):
+    serializer = PacienteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_paciente(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    serializer = PacienteSerializer(paciente)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_paciente(request):
+    query = request.GET.get("q", "")
+
+    pacientes = Paciente.objects.filter(
+        Q(no_expediente__icontains=query)
+        | Q(datosContactoPacient__telefono__icontains=query)
+        | Q(curp__icontains=query)
+    )
+
+    if not pacientes.exists():
+        return Response(
+            {"error": "No se encontro un paciente con esos datos"},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = PacienteSerializer(pacientes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_paciente(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    serializer = PacienteSerializer(paciente, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_paciete(request, pk):
+    try:
+        paciente = Paciente.objects.get(pk=pk)
+    except Paciente.DoesNotExist:
+        return Response(status=404)
+
+    paciente.delete()
+    return Response(status=204)
 
 
 # FichaTecnicaEnfermeria
@@ -398,7 +478,8 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(
+        notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -418,7 +499,10 @@ def eliminar_notaEvolucionO(request, pk):
 
 
 # HistorialMedico
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3ac030c131c653746e591af734138dd06d45bb2
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -538,7 +622,10 @@ def eliminar_notaMedica(request, pk):
 
 
 # Receta
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3ac030c131c653746e591af734138dd06d45bb2
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

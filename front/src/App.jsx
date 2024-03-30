@@ -17,6 +17,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { MenuNave } from "./Components/MenuNav/MenuNave"
 import { NavBarSimple } from "./Partials/NavBarSimple"
 import { AuthProvider } from './Contexto/AuthContext';
+import { NoExpedienteProvider } from './Contexto/NoExpedienteContext';
 
 
 function App() {
@@ -26,21 +27,20 @@ function App() {
     <>
       <AuthProvider>
         <BrowserRouter>
+          <NoExpedienteProvider>
+            <main>
+              {!isLoginPage && <NavBarSimple />}
+              <div className={isLoginPage ? '' : 'sidebarState'}>
+                {!isLoginPage && <MenuNave />}
+                <Rutas />
+              </div>
+            </main>
 
 
-          <main>
-            {!isLoginPage && <NavBarSimple />}
-            <div className={isLoginPage ? '' : 'sidebarState'}>
-              {!isLoginPage && <MenuNave />}
-              <Rutas />
-            </div>
-          </main>
-
-
-          <footer>
-            <Footer />
-          </footer>
-
+            <footer>
+              <Footer />
+            </footer>
+          </NoExpedienteProvider>
         </BrowserRouter>
       </AuthProvider>
     </>
