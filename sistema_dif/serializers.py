@@ -1,6 +1,7 @@
 # Importación del modelo de usuario proporcionado por Django
 from django.contrib.auth.models import User
 from rest_framework import serializers, validators
+from django.contrib.auth import get_user_model
 from sistema_dif.models import (
     Empleado,
     FichaTecnicaEnfermeria,
@@ -18,7 +19,8 @@ from sistema_dif.models import (
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Empleado
-        fields = ("username", "password", "email", "nombre", "apellidoPaterno", "apellidoMaterno", "cedula_profesional", "no_trabajador", "ocupacion", "telefono")
+        fields = ("username", "password", "email", "nombre", "apellidoPaterno",
+                  "apellidoMaterno", "cedula_profesional", "no_trabajador", "ocupacion", "telefono")
         extra_kwargs = {
             "password": {"write_only": True},
             "email": {
@@ -27,7 +29,7 @@ class RegistroSerializer(serializers.ModelSerializer):
                 # Validador para asegurar que no haya duplicados en el campo de correo electrónico
                 "validators": [
                     validators.UniqueValidator(
-                        User.objects.all(), "Ya existe un usuario con ese correo"
+                        Empleado.objects.all(), "Ya existe un usuario con ese correo"
                     )
                 ],
             },
@@ -35,6 +37,8 @@ class RegistroSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Empleado.objects.create(**validated_data)
+
+
 """
         username = validated_data.get("username")
         password = validated_data.get("password")

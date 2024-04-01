@@ -102,7 +102,7 @@ def registrar_api(request):
     return Response(
         {
             "user_info": {
-                "id": user.id,
+                "no_trabajador": user.no_trabajador,
                 "username": user.username,
                 "email": user.email,
             },
