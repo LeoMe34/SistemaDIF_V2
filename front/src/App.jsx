@@ -18,7 +18,7 @@ import { MenuNave } from "./Components/MenuNav/MenuNave"
 import { NavBarSimple } from "./Partials/NavBarSimple"
 import { AuthProvider } from './Contexto/AuthContext';
 import { NoExpedienteProvider } from './Contexto/NoExpedienteContext';
-
+import { UsuarioIdProvider } from './Contexto/UsuarioIdContext';
 
 function App() {
 
@@ -27,20 +27,22 @@ function App() {
     <>
       <AuthProvider>
         <BrowserRouter>
-          <NoExpedienteProvider>
-            <main>
-              {!isLoginPage && <NavBarSimple />}
-              <div className={isLoginPage ? '' : 'sidebarState'}>
-                {!isLoginPage && <MenuNave />}
-                <Rutas />
-              </div>
-            </main>
+          <UsuarioIdProvider>
+            <NoExpedienteProvider>
+              <main>
+                {!isLoginPage && <NavBarSimple />}
+                <div className={isLoginPage ? '' : 'sidebarState'}>
+                  {!isLoginPage && <MenuNave />}
+                  <Rutas />
+                </div>
+              </main>
 
 
-            <footer>
-              <Footer />
-            </footer>
-          </NoExpedienteProvider>
+              <footer>
+                <Footer />
+              </footer>
+            </NoExpedienteProvider>
+          </UsuarioIdProvider>
         </BrowserRouter>
       </AuthProvider>
     </>

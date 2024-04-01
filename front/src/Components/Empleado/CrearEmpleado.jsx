@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
 import { CrearUsuario } from './CrearUsuario';
+import BuscarUsuario from './BuscarUsuario';
+import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
+
 
 
 
@@ -12,20 +15,8 @@ export function CrearEmpleado() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get('http://127.0.0.1:8000/api/usuario/');
-                setUser(response.data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        fetchUserData();
-    }, []);
+    /*const [, setUser] = useState(null);*/
+    const { idUsuario } = useUsuarioId();
 
 
     const registrarEmpleado = async (data) => {
@@ -39,7 +30,7 @@ export function CrearEmpleado() {
                 cedula_profesional: data.cedula,
                 ocupacion: data.ocupacion,
                 telefono: data.telefono,
-
+                usuario_id: idUsuario
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -58,7 +49,7 @@ export function CrearEmpleado() {
     }
 
     const enviar = handleSubmit(async data => {
-
+        console.log(data)
         registrarEmpleado(data)
     })
 
@@ -76,7 +67,7 @@ export function CrearEmpleado() {
                     </ol>
                 </nav>
             </div>
-
+            <BuscarUsuario></BuscarUsuario>
             {/*<NavBarSimple />*/}
 
             <div className="ml-10 container mt-2">
@@ -146,7 +137,6 @@ export function CrearEmpleado() {
                     </div>
 
 
-
                     {/*mostrarCedula && */} <div className="mb-4">
                         <label className="etiquetas" htmlFor="cedula">Cédula profesional</label>
                         <input id="cedula" type="text" placeholder="Cedula profesional" className="entrada"
@@ -154,6 +144,7 @@ export function CrearEmpleado() {
                         />
                         {errors.cedula_profesional && <span>Es necesario este campo</span>}
                     </div>{/**/}
+
 
                     <div className="pt-1 mb-3 text-center">
                         <button className="btn btn-guardar btn-lg btn-block">

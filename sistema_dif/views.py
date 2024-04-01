@@ -113,6 +113,36 @@ def registrar_api(request):
     )
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_usuario(request):
+    query = request.GET.get("q", "")
+
+    usuarios = User.objects.filter(
+        Q(id__icontains=query)
+        | Q(username__icontains=query)
+        | Q(email__icontains=query)
+    )
+
+    if not usuarios.exists():
+        return Response(
+            {"error": "No se encontró el usuario solicitado"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    # Serializar los datos manualmente
+    usuarios_serializados = []
+    for usuario in usuarios:
+        usuario_serializado = {
+            "id": usuario.id,
+            "username": usuario.username,
+            "email": usuario.email,
+        }
+        usuarios_serializados.append(usuario_serializado)
+
+    return Response(usuarios_serializados, status=status.HTTP_200_OK)
+
+
 # EMPLEADO
 
 
@@ -180,6 +210,7 @@ def eliminar_empleado(request, pk):
 
 # Paciente
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_pacientes(request):
@@ -224,7 +255,7 @@ def buscar_paciente(request):
     if not pacientes.exists():
         return Response(
             {"error": "No se encontro un paciente con esos datos"},
-            status=status.HTTP_404_NOT_FOUND
+            status=status.HTTP_404_NOT_FOUND,
         )
     serializer = PacienteSerializer(pacientes, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -478,8 +509,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -499,10 +529,7 @@ def eliminar_notaEvolucionO(request, pk):
 
 
 # HistorialMedico
-<<<<<<< HEAD
 
-=======
->>>>>>> c3ac030c131c653746e591af734138dd06d45bb2
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -622,10 +649,7 @@ def eliminar_notaMedica(request, pk):
 
 
 # Receta
-<<<<<<< HEAD
 
-=======
->>>>>>> c3ac030c131c653746e591af734138dd06d45bb2
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
