@@ -18,7 +18,7 @@ from sistema_dif.models import (
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
         model = Empleado
-        fields = ("username", "password", "email")
+        fields = ("username", "password", "email", "nombre", "apellidoPaterno", "apellidoMaterno", "cedula_profesional", "no_trabajador", "ocupacion", "telefono")
         extra_kwargs = {
             "password": {"write_only": True},
             "email": {
@@ -33,8 +33,9 @@ class RegistroSerializer(serializers.ModelSerializer):
             },
         }
 
-    def crear(self, validated_data):
-
+    def create(self, validated_data):
+        return Empleado.objects.create(**validated_data)
+"""
         username = validated_data.get("username")
         password = validated_data.get("password")
         email = validated_data.get("email")
@@ -61,7 +62,7 @@ class RegistroSerializer(serializers.ModelSerializer):
 
         return user
 
-
+"""
 """
  datosPersonales = models.JSONField()  # nombre, apellidoPaterno, apellidoMaterno
     cedula_profesional = models.CharField(max_length=30, default="", unique=False)

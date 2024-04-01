@@ -3,9 +3,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
-import { useHistory } from "react-router-dom";
 
 export function CrearUsuario() {
+    const [errors] = useState({});
     const [usuario, setUsuario] = useState('')
     const [contrasenia, setContrasenia] = useState('')
     const [correo, setCorreo] = useState('')
@@ -16,7 +16,7 @@ export function CrearUsuario() {
     const [cedula_profesional, setCedula] = useState('')
     const [ocupacion, setOcupacion] = useState('')
     const [telefono, setTelefono] = useState('')
-    const history = useHistory();
+    const navegador = useNavigate();
     const { token } = useAuth()
 
     const registrarUsuario = async () => {
@@ -41,7 +41,7 @@ export function CrearUsuario() {
             const datosUsuario = respuesta.data.user_info;
             if ('username' in datosUsuario) {
                 console.log("Usuario registrado correctamente");
-                history.push("/crear_paciente");
+                navegador("/crear_paciente");
             } else {
                 console.log("Usuario duplicado");
             }
@@ -78,13 +78,7 @@ export function CrearUsuario() {
             {/*<NavBarSimple />*/}
             <div className="ml-10 container mt-3">
                 <form onSubmit={handleSubmit}>
-                    <h3 className="titulo">Registrar usuario</h3>
-                    <div className='row'>
-                        <div className='mt-2 mb-2 col'>
-                            <label className="etiqueta" htmlFor="noTrabajador">Número de trabajador</label>
-                            <input id="noTrabajador" type="text" placeholder="No. de trabajador" className="entrada" readOnly />
-                        </div>
-                    </div>
+                    <h3 className="titulo">Registrar usuario</h3>                    
                     <div className='row'>
                         <div className='mt-2 mb-2 col'>
                             <label className="etiqueta" htmlFor="usuario">Usuario</label>
