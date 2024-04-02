@@ -73,12 +73,14 @@ def get_datos_usuario(request):
 
     # Verificar si el usuario esta autenticadp
     if user.is_authenticated:
+        empleado = Empleado.objects.filter(usuario=user).first()
         return Response(
             {
                 "user_info": {
                     "id": user.id,
                     "username": user.username,
                     "email": user.email,
+                    "no_trabajador": empleado.no_trabajador if empleado else None
                 },
             }
         )

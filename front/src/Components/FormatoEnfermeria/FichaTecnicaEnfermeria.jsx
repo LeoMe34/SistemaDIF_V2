@@ -13,23 +13,26 @@ export function FichaTecnicaEnfermeria() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
-    const [idEmpleado, setIdEmpleado] = useState(null);
+    const [noEmpleado, setNoEmpleado] = useState(null);
 
     useEffect(() => {
-        const fetchEmpleadoId = async () => {
+        const getNoEmpleado = async () => {
             try {
+                
                 const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 });
-                setIdEmpleado(response.data.id); // Suponiendo que el ID del empleado se encuentra en la respuesta de la API
+                const no_Empleado = response.data.user_info.no_trabajador
+                setNoEmpleado(no_Empleado)
+                console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
 
-        fetchEmpleadoId();
+        getNoEmpleado();
     }, [token]);
 
     const registrarFicha = async (data) => {
@@ -59,13 +62,14 @@ export function FichaTecnicaEnfermeria() {
                     embarazada: data.embarazada,
                     ninguna: data.ninguno
                 },
-                paciente: noExpediente,
-                empleado: idEmpleado
+                paciente: noExpediente,            
+                empleado: noEmpleado
             }, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
+            console.log(data)
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
