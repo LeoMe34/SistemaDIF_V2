@@ -16,10 +16,11 @@ export function CrearEmpleado() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     /*const [, setUser] = useState(null);*/
-    const { idUsuario } = useUsuarioId();
+    const { usuarioId } = useUsuarioId();
 
 
     const registrarEmpleado = async (data) => {
+        console.log(usuarioId)
         try {
             const url = "http://127.0.0.1:8000/api/registrar_empleado/"
             const respuesta = await axios.post(url, {
@@ -30,14 +31,14 @@ export function CrearEmpleado() {
                 cedula_profesional: data.cedula,
                 ocupacion: data.ocupacion,
                 telefono: data.telefono,
-                usuario_id: idUsuario
+                usuario: usuarioId
             }, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
-            const datosEmpleado = respuesta.data.no_trabajador;
-            if ('no_trabajador' in datosEmpleado) {
+            const noTrabajadorRegistrado = respuesta.data
+            if (noTrabajadorRegistrado) {
                 console.log("Usuario registrado correctamente");
                 navegador("/crear_empleado");
             } else {
