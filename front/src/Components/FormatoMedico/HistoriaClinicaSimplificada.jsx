@@ -21,6 +21,7 @@ export function HistoriaClinicaSimplificada() {
     const [ginecoData, setGinecoData] = useState({})
     const [interrogatorioData, setInterrogatorioData] = useState({})
     const [exploracionData, setExploracionData] = useState({})
+    const [hereditariosData, setHereditariosData] = useState({})
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
@@ -32,6 +33,10 @@ export function HistoriaClinicaSimplificada() {
 
     const handleExploracionData = (data) => {
         setExploracionData(data)
+    }
+
+    const handleHereditariosData = (data) => {
+        setHereditariosData(data)
     }
 
     useEffect(() => {
@@ -59,6 +64,7 @@ export function HistoriaClinicaSimplificada() {
             const url = "http://127.0.0.1:8000/api/crear_historial_medico/"
             const respuesta = await axios.post(url, {
                 fecha_elaboracion: data.fecha,
+                informante: data.informante,
                 "referenciaMed": {
                     num_consultorio: data.no_consultorio,
                     referencia: data.referencia,
@@ -68,9 +74,19 @@ export function HistoriaClinicaSimplificada() {
                     tipo_familia: data.tipo_familia,
                     rol_madre: data.rol_madre,
                     familia: data.familia,
-                    disfuncional: data.disfuncional,                    
+                    disfuncional: data.disfuncional,
                 },
-                informante: data.informante,
+                "antHerediPatM": {
+                    diabetes: data.diabetes,
+                    hipertension: data.hipertension,
+                    cancer: data.cancer,
+                    cardiopatia: data.cardiopatia,
+                    par_diabetes: data.par_diabetes,
+                    par_hipertension: data.par_hipertension,
+                    par_cancer: data.par_cancer,
+                    par_cardiopatia: data.par_cardiopatia,
+                    otros: data.otros
+                },
                 "ginecobMed": {
                     menarca: data.menarca,
                     vida_sexual: data.vida_sexual,
@@ -111,7 +127,7 @@ export function HistoriaClinicaSimplificada() {
                 "diagnostico": {
                     diagnostico: data.diagnostico,
                     tratamiento_integral: data.tratamiento_integral,
-                    pronostico: data.pronostico            
+                    pronostico: data.pronostico
                 },
                 paciente: noExpediente,
                 empleado: noEmpleado
@@ -127,7 +143,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData });
+        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData });
     })
 
     return (
@@ -249,8 +265,8 @@ export function HistoriaClinicaSimplificada() {
 
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Antecedentes</h3>
-                        <AntecedentesHereditarios/>
-                        <AntecedentesPersonales/>
+                        <AntecedentesHereditarios getHereditariosData={handleHereditariosData} />
+                        <AntecedentesPersonales />
                         <Ginecobstetrico getGinecoData={handleGinecoData} />
                     </div>
 
