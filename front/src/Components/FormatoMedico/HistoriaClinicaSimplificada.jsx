@@ -18,13 +18,18 @@ export function HistoriaClinicaSimplificada() {
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [ginecoData, setGinecoData] = useState({})
     const [interrogatorioData, setInterrogatorioData] = useState({})
+    const [exploracionData, setExploracionData] = useState({})
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
     }
 
-    const handleInterrogatorioData= (data) => {
+    const handleInterrogatorioData = (data) => {
         setInterrogatorioData(data)
+    }
+
+    const handleExploracionData = (data) => {
+        setExploracionData(data)
     }
 
     useEffect(() => {
@@ -61,9 +66,9 @@ export function HistoriaClinicaSimplificada() {
                     tipo_familia: data.tipo_familia,
                     rol_madre: data.rol_madre,
                     familia: data.familia,
-                    disfuncional: data.disfuncional,
-                    informante: data.informante
+                    disfuncional: data.disfuncional,                    
                 },
+                informante: data.informante,
                 "ginecobMed": {
                     menarca: data.menarca,
                     vida_sexual: data.vida_sexual,
@@ -82,14 +87,29 @@ export function HistoriaClinicaSimplificada() {
                     bisexuales: data.bisexuales,
                     diu: data.diu,
                     hormonales: data.hormonales,
-                    quirurgico: data-quirurgico,
+                    quirurgico: data - quirurgico,
                     otros: data.otros
                 },
-                "interrogatorio":{
+                "interrogatorio": {
                     padecimiento: data.padecimiento,
                     aparatos_sistemas: data.aparatos_sistemas,
                     auxiliares: data.auxiliares,
                     tratamientos_previos: data.tratamientos_previos
+                },
+                "exploracionFisica": {
+                    inspeccion_gral: data.inspeccion_gral,
+                    cabeza: data.cabeza,
+                    cuello: data.cuello,
+                    torax: data.torax,
+                    abdomen: data.abdomen,
+                    columna_vertical: data.columna_vertical,
+                    genitales_externos: data.genitales_externos,
+                    extremidades: data.extremidades
+                },
+                "diagnostico": {
+                    diagnostico: data.diagnostico,
+                    tratamiento_integral: data.tratamiento_integral,
+                    pronostico: data.pronostico            
                 },
                 paciente: noExpediente,
                 empleado: noEmpleado
@@ -105,7 +125,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData });
+        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData });
     })
 
     return (
@@ -234,13 +254,13 @@ export function HistoriaClinicaSimplificada() {
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Interrogatorio</h3>
 
-                        <Interrogatorio getInterrogatorioData={handleInterrogatorioData}/>
+                        <Interrogatorio getInterrogatorioData={handleInterrogatorioData} />
                     </div>
 
                     <div className='ml-10 container'>
                         <h3 className="subtitulo">Exploración física</h3>
                         <CardFichaEnfermeria />
-                        <ExploracionFisica />
+                        <ExploracionFisica getExploracionData={handleExploracionData} />
                     </div>
 
                     <div className='ml-10 mb-5 container'>
