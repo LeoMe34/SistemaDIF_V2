@@ -17,7 +17,7 @@ export function Interrogatorio({ getInterrogatorioData }) {
     useEffect(() => {
         const data = getDatos();
         getInterrogatorioData(data);
-    }, [])
+    }, [getValues])
 
     return (
         <div>

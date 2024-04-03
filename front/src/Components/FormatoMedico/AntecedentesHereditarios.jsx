@@ -23,7 +23,7 @@ export function AntecedentesHereditarios({ getHereditariosData }) {
     useEffect(() => {
         const data = getDatos();
         getHereditariosData(data);
-    }, [])
+    }, [getValues])
 
     return (
         <div>

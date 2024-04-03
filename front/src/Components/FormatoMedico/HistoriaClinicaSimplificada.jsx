@@ -22,6 +22,7 @@ export function HistoriaClinicaSimplificada() {
     const [interrogatorioData, setInterrogatorioData] = useState({})
     const [exploracionData, setExploracionData] = useState({})
     const [hereditariosData, setHereditariosData] = useState({})
+    const [personalesData, setPersonalesData] = useState({})
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
@@ -37,6 +38,9 @@ export function HistoriaClinicaSimplificada() {
 
     const handleHereditariosData = (data) => {
         setHereditariosData(data)
+    }
+    const handlePersonalesData = (data) => {
+        setPersonalesData(data)
     }
 
     useEffect(() => {
@@ -87,6 +91,17 @@ export function HistoriaClinicaSimplificada() {
                     par_cardiopatia: data.par_cardiopatia,
                     otros: data.otros
                 },
+                "antPersoPatM": {
+                    medicosQT: data.medicosQT,
+                    tabaquismoAA: data.tabaquismoAA,
+                    tendenciaDM: data.tendenciaDM,
+                    otros: data.otros
+                },
+                "antPersoNoPatM": {
+                    alimentacion: data.alimentacion,
+                    habitacion: data.habitacion,
+                    higiene: data.higiene
+                },
                 "ginecobMed": {
                     menarca: data.menarca,
                     vida_sexual: data.vida_sexual,
@@ -105,7 +120,7 @@ export function HistoriaClinicaSimplificada() {
                     bisexuales: data.bisexuales,
                     diu: data.diu,
                     hormonales: data.hormonales,
-                    quirurgico: data - quirurgico,
+                    quirurgico: data.quirurgico,
                     otros: data.otros
                 },
                 "interrogatorio": {
@@ -129,6 +144,9 @@ export function HistoriaClinicaSimplificada() {
                     tratamiento_integral: data.tratamiento_integral,
                     pronostico: data.pronostico
                 },
+                "estudiosExter":{
+                    estudios:data.estudios
+                },
                 paciente: noExpediente,
                 empleado: noEmpleado
             }, {
@@ -143,7 +161,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData });
+        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData, ...personalesData });
     })
 
     return (
@@ -259,14 +277,28 @@ export function HistoriaClinicaSimplificada() {
                                 <input className="entrada" id='informante' name='informante' type="text"
                                     {...register("informante", { required: true })} />
                             </div>
+
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
+                                <select className="opciones" id='estudios' name='estudios' type=""
+                                    {...register("estudios", { required: true })}>
+                                    <option value="" selected disabled>Elija una opción</option>
+                                    <option value="0">Ninguno</option>
+                                    <option value="1">Laboratorios</option>
+                                    <option value="2">Ultrasonido</option>
+                                    <option value="3">Tomografia</option>
+                                    <option value="4">Rayos X</option>
+                                </select>
+                            </div>
                         </div>
+                        
 
                     </div>
 
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Antecedentes</h3>
                         <AntecedentesHereditarios getHereditariosData={handleHereditariosData} />
-                        <AntecedentesPersonales />
+                        <AntecedentesPersonales getPersonalesData={handlePersonalesData} />
                         <Ginecobstetrico getGinecoData={handleGinecoData} />
                     </div>
 

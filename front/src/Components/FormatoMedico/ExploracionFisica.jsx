@@ -24,7 +24,7 @@ export function ExploracionFisica({ getExploracionData }) {
     useEffect(() => {
         const data = getDatos();
         getExploracionData(data);
-    }, [])
+    }, [getValues])
 
     return (
         <div>
