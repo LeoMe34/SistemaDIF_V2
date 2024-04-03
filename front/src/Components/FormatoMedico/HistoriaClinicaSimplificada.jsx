@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form"
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
 import { Interrogatorio } from './Interrogatorio';
 import { ExploracionFisica } from './ExploracionFisica';
+import { AntecedentesHereditarios } from './AntecedentesHereditarios';
+import { AntecedentesPersonales } from './AntecedentesPersonales';
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 
@@ -247,7 +249,8 @@ export function HistoriaClinicaSimplificada() {
 
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Antecedentes</h3>
-
+                        <AntecedentesHereditarios/>
+                        <AntecedentesPersonales/>
                         <Ginecobstetrico getGinecoData={handleGinecoData} />
                     </div>
 
