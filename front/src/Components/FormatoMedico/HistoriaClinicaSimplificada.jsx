@@ -17,9 +17,14 @@ export function HistoriaClinicaSimplificada() {
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [ginecoData, setGinecoData] = useState({})
+    const [interrogatorioData, setInterrogatorioData] = useState({})
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
+    }
+
+    const handleInterrogatorioData= (data) => {
+        setInterrogatorioData(data)
     }
 
     useEffect(() => {
@@ -80,6 +85,12 @@ export function HistoriaClinicaSimplificada() {
                     quirurgico: data-quirurgico,
                     otros: data.otros
                 },
+                "interrogatorio":{
+                    padecimiento: data.padecimiento,
+                    aparatos_sistemas: data.aparatos_sistemas,
+                    auxiliares: data.auxiliares,
+                    tratamientos_previos: data.tratamientos_previos
+                },
                 paciente: noExpediente,
                 empleado: noEmpleado
             }, {
@@ -94,7 +105,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData });
+        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData });
     })
 
     return (
@@ -223,7 +234,7 @@ export function HistoriaClinicaSimplificada() {
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Interrogatorio</h3>
 
-                        <Interrogatorio />
+                        <Interrogatorio getInterrogatorioData={handleInterrogatorioData}/>
                     </div>
 
                     <div className='ml-10 container'>
