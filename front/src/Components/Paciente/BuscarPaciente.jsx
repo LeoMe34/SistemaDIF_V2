@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
-function BusquedaPaciente() {
+function BusquedaPaciente({getIdHistorialMedico}) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const [error, setError] = useState('');
@@ -35,6 +35,8 @@ function BusquedaPaciente() {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         setNoExpediente(noExpediente);
+        
+        getIdHistorialMedico(noExpediente);
     };
 
     return (

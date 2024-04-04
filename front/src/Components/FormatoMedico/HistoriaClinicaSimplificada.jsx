@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form"
 import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
 import { Interrogatorio } from './Interrogatorio';
 import { ExploracionFisica } from './ExploracionFisica';
+import { AntecedentesHereditarios } from './AntecedentesHereditarios';
+import { AntecedentesPersonales } from './AntecedentesPersonales';
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 
@@ -17,9 +19,28 @@ export function HistoriaClinicaSimplificada() {
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [ginecoData, setGinecoData] = useState({})
+    const [interrogatorioData, setInterrogatorioData] = useState({})
+    const [exploracionData, setExploracionData] = useState({})
+    const [hereditariosData, setHereditariosData] = useState({})
+    const [personalesData, setPersonalesData] = useState({})
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
+    }
+
+    const handleInterrogatorioData = (data) => {
+        setInterrogatorioData(data)
+    }
+
+    const handleExploracionData = (data) => {
+        setExploracionData(data)
+    }
+
+    const handleHereditariosData = (data) => {
+        setHereditariosData(data)
+    }
+    const handlePersonalesData = (data) => {
+        setPersonalesData(data)
     }
 
     useEffect(() => {
@@ -47,6 +68,7 @@ export function HistoriaClinicaSimplificada() {
             const url = "http://127.0.0.1:8000/api/crear_historial_medico/"
             const respuesta = await axios.post(url, {
                 fecha_elaboracion: data.fecha,
+                informante: data.informante,
                 "referenciaMed": {
                     num_consultorio: data.no_consultorio,
                     referencia: data.referencia,
@@ -57,7 +79,28 @@ export function HistoriaClinicaSimplificada() {
                     rol_madre: data.rol_madre,
                     familia: data.familia,
                     disfuncional: data.disfuncional,
-                    informante: data.informante
+                },
+                "antHerediPatM": {
+                    diabetes: data.diabetes,
+                    hipertension: data.hipertension,
+                    cancer: data.cancer,
+                    cardiopatia: data.cardiopatia,
+                    par_diabetes: data.par_diabetes,
+                    par_hipertension: data.par_hipertension,
+                    par_cancer: data.par_cancer,
+                    par_cardiopatia: data.par_cardiopatia,
+                    otros: data.otros
+                },
+                "antPersoPatM": {
+                    medicosQT: data.medicosQT,
+                    tabaquismoAA: data.tabaquismoAA,
+                    tendenciaDM: data.tendenciaDM,
+                    otros: data.otros
+                },
+                "antPersoNoPatM": {
+                    alimentacion: data.alimentacion,
+                    habitacion: data.habitacion,
+                    higiene: data.higiene
                 },
                 "ginecobMed": {
                     menarca: data.menarca,
@@ -77,8 +120,32 @@ export function HistoriaClinicaSimplificada() {
                     bisexuales: data.bisexuales,
                     diu: data.diu,
                     hormonales: data.hormonales,
-                    quirurgico: data-quirurgico,
+                    quirurgico: data.quirurgico,
                     otros: data.otros
+                },
+                "interrogatorio": {
+                    padecimiento: data.padecimiento,
+                    aparatos_sistemas: data.aparatos_sistemas,
+                    auxiliares: data.auxiliares,
+                    tratamientos_previos: data.tratamientos_previos
+                },
+                "exploracionFisica": {
+                    inspeccion_gral: data.inspeccion_gral,
+                    cabeza: data.cabeza,
+                    cuello: data.cuello,
+                    torax: data.torax,
+                    abdomen: data.abdomen,
+                    columna_vertical: data.columna_vertical,
+                    genitales_externos: data.genitales_externos,
+                    extremidades: data.extremidades
+                },
+                "diagnostico": {
+                    diagnostico: data.diagnostico,
+                    tratamiento_integral: data.tratamiento_integral,
+                    pronostico: data.pronostico
+                },
+                "estudiosExter":{
+                    estudios:data.estudios
                 },
                 paciente: noExpediente,
                 empleado: noEmpleado
@@ -94,7 +161,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData });
+        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData, ...personalesData });
     })
 
     return (
@@ -210,26 +277,41 @@ export function HistoriaClinicaSimplificada() {
                                 <input className="entrada" id='informante' name='informante' type="text"
                                     {...register("informante", { required: true })} />
                             </div>
+
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
+                                <select className="opciones" id='estudios' name='estudios' type=""
+                                    {...register("estudios", { required: true })}>
+                                    <option value="" selected disabled>Elija una opción</option>
+                                    <option value="0">Ninguno</option>
+                                    <option value="1">Laboratorios</option>
+                                    <option value="2">Ultrasonido</option>
+                                    <option value="3">Tomografia</option>
+                                    <option value="4">Rayos X</option>
+                                </select>
+                            </div>
                         </div>
+                        
 
                     </div>
 
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Antecedentes</h3>
-
+                        <AntecedentesHereditarios getHereditariosData={handleHereditariosData} />
+                        <AntecedentesPersonales getPersonalesData={handlePersonalesData} />
                         <Ginecobstetrico getGinecoData={handleGinecoData} />
                     </div>
 
                     <div className='ml-10 container'>
                         <h3 className='subtitulo'>Interrogatorio</h3>
 
-                        <Interrogatorio />
+                        <Interrogatorio getInterrogatorioData={handleInterrogatorioData} />
                     </div>
 
                     <div className='ml-10 container'>
                         <h3 className="subtitulo">Exploración física</h3>
                         <CardFichaEnfermeria />
-                        <ExploracionFisica />
+                        <ExploracionFisica getExploracionData={handleExploracionData} />
                     </div>
 
                     <div className='ml-10 mb-5 container'>

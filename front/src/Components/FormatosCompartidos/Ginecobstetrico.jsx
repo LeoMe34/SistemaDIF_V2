@@ -27,12 +27,11 @@ export function Ginecobstetrico({ getGinecoData }) {
             otros: getValues("otros")
         }
         return ginecoData
-    }
-
+    }    
     useEffect(() => {
         const data = getDatos();
         getGinecoData(data);
-    }, [])
+    }, [getValues])
 
     return (
         <div>
