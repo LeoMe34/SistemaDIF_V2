@@ -1,6 +1,10 @@
 {/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 import { MenuNave } from "../MenuNav/MenuNave"
+import { useForm } from "react-hook-form"
+import { useEffect } from "react"
+
 export function AntHerediPat() {
+    const { register, handleSubmit, formState: { errors }, getValues } = useForm()
 
     return (
         <div>
