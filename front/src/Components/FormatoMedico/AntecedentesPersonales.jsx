@@ -5,23 +5,19 @@ import { useEffect } from "react"
 export function AntecedentesPersonales({ getPersonalesData }) {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
 
-    const getDatos = () => {
-        const personalesData = {
+    useEffect(() => {
+        const data = {
             alimentacion: getValues("alimentacion"),
             habitacion: getValues("habitacion"),
             higiene: getValues("higiene"),
             medicosQT: getValues("medicosQT"),
             tabaquismoAA: getValues("tabaquismoAA"),
             tendenciaDM: getValues("tendenciaDM"),
-            otros: getValues("otros")         
+            otros: getValues("otros")
         }
-        return personalesData
-    }
-
-    useEffect(() => {
-        const data = getDatos();
         getPersonalesData(data);
-    }, [getValues])
+    }, [getValues("alimentacion"), getValues("habitacion"), getValues("higiene"), getValues("medicosQT"),
+    getValues("tabaquismoAA"), getValues("tendenciaDM"), getValues("otros")])
 
     return (
         <div>
@@ -32,17 +28,20 @@ export function AntecedentesPersonales({ getPersonalesData }) {
                     <div className="col">
                         <label className="etiqueta" htmlFor="alimentacion">Alimentación</label>
                         <textarea name="alimentacion" id="alimentacion" className="text-amplio"
-                            {...register("alimentacion", { required: true })}></textarea>
+                            {...register("alimentacion", { required: true })}
+                            onChange={(e) => getPersonalesData({ alimentacion: e.target.value })}></textarea>
                     </div>
                     <div className="col">
                         <label className="etiqueta" htmlFor="habitacion">Habitación</label>
                         <textarea name="habitacion" id="habitacion" className="text-amplio"
-                            {...register("habitacion", { required: true })}></textarea>
+                            {...register("habitacion", { required: true })}
+                            onChange={(e) => getPersonalesData({ habitacion: e.target.value })}></textarea>
                     </div>
                     <div className="col">
                         <label className="etiqueta" htmlFor="higiene">Higiene personal</label>
                         <textarea name="higiene" id="higiene" className="text-amplio"
-                            {...register("higiene", { required: true })}></textarea>
+                            {...register("higiene", { getPersonalesData: true })}
+                            onChange={(e) => getPersonalesData({ higiene: e.target.value })}></textarea>
                     </div>
                 </div>
             </div>
@@ -54,22 +53,26 @@ export function AntecedentesPersonales({ getPersonalesData }) {
                     <div className="col">
                         <label className="etiqueta" htmlFor="medicosQT">Médicos,quirúrgicos,transfusiones</label>
                         <textarea name="medicosQT" id="medicosQT" className="text-amplio"
-                        {...register("medicosQT", { required: true })}></textarea>
+                            {...register("medicosQT", { required: true })}
+                            onChange={(e) => getPersonalesData({ medicosQT: e.target.value })}></textarea>
                     </div>
                     <div className="col">
                         <label className="etiqueta" htmlFor="tabaquismoAA">Tabaquismo,alcoholismo,alérgicos</label>
                         <textarea name="tabaquismoAA" id="tabaquismoAA" className="text-amplio"
-                        {...register("tabaquismoAA", { required: true })}></textarea>
+                            {...register("tabaquismoAA", { required: true })}
+                            onChange={(e) => getPersonalesData({ tabaquismoAA: e.target.value })}></textarea>
                     </div>
                     <div className="col">
                         <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos</label>
                         <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
-                        {...register("tendenciaDM", { required: true })}></textarea>
+                            {...register("tendenciaDM", { required: true })}
+                            onChange={(e) => getPersonalesData({ tendenciaDM: e.target.value })}></textarea>
                     </div>
                     <div className="col">
                         <label className="etiqueta" htmlFor="otros">Otros</label>
                         <textarea name="otros" id="otros" className="text-amplio"
-                        {...register("otros", { required: false })}></textarea>
+                            {...register("otros", { required: false })}
+                            onChange={(e) => getPersonalesData({ otros: e.target.value })}></textarea>
                     </div>
                 </div>
             </div>
