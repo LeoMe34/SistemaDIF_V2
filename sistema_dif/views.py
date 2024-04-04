@@ -511,7 +511,8 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(
+        notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -536,8 +537,11 @@ def eliminar_notaEvolucionO(request, pk):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historialesMedicos(request):
-    queryset = HistorialMedico.objects.all()
-    serializer = HistorialMedicoSerializer(queryset, many=True)
+    # Obtener los historiales médicos que no tienen una nota médica relacionada
+    historiales_sin_nota = HistorialMedico.objects.exclude(
+        id__in=NotaMedica.objects.values_list('histMedic_id', flat=True)
+    )
+    serializer = HistorialMedicoSerializer(historiales_sin_nota, many=True)
     return Response(serializer.data)
 
 

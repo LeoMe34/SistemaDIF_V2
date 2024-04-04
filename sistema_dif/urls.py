@@ -16,4 +16,7 @@ urlpatterns = [
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
     path("buscar_usuario/", views.buscar_usuario),
     path("crear_historial_medico/", views.crear_historialMedico),
+    path("crear_nota_medica/", views.crear_notaMedica),
+    path("getHistorialM/", views.get_historialesMedicos),
+    
 ]
