@@ -144,8 +144,8 @@ export function HistoriaClinicaSimplificada() {
                     tratamiento_integral: data.tratamiento_integral,
                     pronostico: data.pronostico
                 },
-                "estudiosExter":{
-                    estudios:data.estudios
+                "estudiosExter": {
+                    estudios: data.estudios
                 },
                 paciente: noExpediente,
                 empleado: noEmpleado
@@ -291,7 +291,7 @@ export function HistoriaClinicaSimplificada() {
                                 </select>
                             </div>
                         </div>
-                        
+
 
                     </div>
 
@@ -312,6 +312,29 @@ export function HistoriaClinicaSimplificada() {
                         <h3 className="subtitulo">Exploración física</h3>
                         <CardFichaEnfermeria />
                         <ExploracionFisica getExploracionData={handleExploracionData} />
+                    </div>
+                    <div className='container'>
+                        <div className='row'>
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
+                                <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                    {...register("diagnostico", { required: true })}
+                                />
+                            </div>
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral:</label>
+                                <textarea id="tratamiento_integral" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                    {...register("tratamiento_integral", { required: true })}
+                                />
+                            </div>
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
+                                <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                    {...register("pronostico", { required: true })}
+                                />
+                            </div>
+                        </div>
+
                     </div>
 
                     <div className='ml-10 mb-5 container'>
