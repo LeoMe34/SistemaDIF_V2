@@ -18,11 +18,11 @@ export function HistoriaClinicaSimplificada() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
-    const [ginecoData, setGinecoData] = useState({})
-    const [interrogatorioData, setInterrogatorioData] = useState({})
-    const [exploracionData, setExploracionData] = useState({})
-    const [hereditariosData, setHereditariosData] = useState({})
-    const [personalesData, setPersonalesData] = useState({})
+    const [ginecoData, setGinecoData] = useState(null)
+    const [interrogatorioData, setInterrogatorioData] = useState(null)
+    const [exploracionData, setExploracionData] = useState(null)
+    const [hereditariosData, setHereditariosData] = useState(null)
+    const [personalesData, setPersonalesData] = useState(null)
 
     const handleGinecoData = (data) => {
         setGinecoData(data)
