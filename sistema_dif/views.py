@@ -225,10 +225,19 @@ def get_pacientes(request):
 @permission_classes([IsAuthenticated])
 def crear_paciente(request):
     serializer = PacienteSerializer(data=request.data)
+
     if serializer.is_valid():
+        empleado = Empleado.objects.get(usuario=request.user)
+
+        if empleado.ocupacion in ['recepcion_psico', 'psicologo']:
+            serializer.validated_data['area'] = 'psicologia'
+        else:
+            serializer.validated_data['area'] = 'medicina'
+            
         serializer.save()
         return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+    else:
+        return Response(serializer.errors, status=400)
 
 
 @api_view(["GET"])
@@ -482,7 +491,8 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list(
+                "histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -524,7 +534,8 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(
+        notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)

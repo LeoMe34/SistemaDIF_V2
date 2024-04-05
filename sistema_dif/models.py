@@ -32,6 +32,7 @@ class Paciente(models.Model):
     # nombre, apellidos, lugar y fecha nacimiento, edad, sexo, nacionalida, ocupacion, estado civil
     datosContactoPacient = models.JSONField()  # telefono, correo
     datosDireccionPacient = models.JSONField()  # direccion, colonia
+    area =  models.CharField(max_length=50, default="")
 
     objects = models.Manager()
 
