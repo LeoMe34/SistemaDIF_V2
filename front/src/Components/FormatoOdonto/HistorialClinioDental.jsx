@@ -6,20 +6,38 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+import { AntHerediPat } from './AntHerediPat';
+import { AntPersoPato } from './AntPersoPato';
+import { AntPPatologicos } from './AntPPatologicos';
 
 export function HistorialClinicoDental() {
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+    const navegador = useNavigate()
+    const { token } = useAuth()
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const { noExpediente } = useNoExpediente()
+    const [noEmpleado, setNoEmpleado] = useState(null);
+    const [antHerePatData, setAntHerePat] = useState(null);
+    const [antNoHerePatData, setAntNoHerePat] = useState(null);
+    const [antPatPersoData, setAntPatPerso] = useState(null);
+
 
     const handleFileChange = (event) => {
         const archivos = event.target.files;
         const nombresArchivos = Array.from(archivos).map((archivo) => archivo.name);
         setArchivosSeleccionados(nombresArchivos);
     }
-    const navegador = useNavigate()
-    const { token } = useAuth()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const { noExpediente } = useNoExpediente()
-    const [noEmpleado, setNoEmpleado] = useState(null);
+
+    const handleAntHerediPatData = (data) => {
+        setAntHerePat(data)
+    }
+    const handleNoAntHerediPatData = (data) => {
+        setAntNoHerePat(data)
+    }
+    const handleAntPatPersoData = (data) => {
+        setAntPatPerso(data)
+    }
+
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -75,13 +93,13 @@ export function HistorialClinicoDental() {
                     cardioH: data.cardioH,
                     asmaH: data.asmaH,
                     epilepsiaH: data.epilepsiaH,
-                    diabetes_parentesco: data.diabetesParentesco,
-                    hipert_parentesco: data.hipertParentesco,
-                    tuberculo_parentesco: data.tuberculoParentesco,
-                    cancer_parentesco: data.cancerParentesco,
-                    cardio_parentesco: data.cardioParentesco,
-                    asma_parentesco: data.asmaParentesco,
-                    epilepsia_parentesco: data.epilepsiaParentesco,
+                    diabetes_parentesco: data.diabetes_parentesco,
+                    hipert_parentesco: data.hipert_parentesco,
+                    tuberculo_parentesco: data.tuberculo_parentesco,
+                    cancer_parentesco: data.cancer_parentesco,
+                    cardio_parentesco: data.cardio_parentesco,
+                    asma_parentesco: data.asma_parentesco,
+                    epilepsia_parentesco: data.epilepsia_parentesco,
 
                 },
                 "antPersonPato": {
@@ -103,9 +121,9 @@ export function HistorialClinicoDental() {
                     adicciones: data.adicciones
                 },
                 "antGinecob": {
-                    fecha_ultima_regla: data.fechaUltRegla,
-                    fecha_ult_doc: data.fechaUltDoc,
-                    planificacion_fam: data.planiFami
+                    fecha_ultima_regla: data.fecha_ultima_regla,
+                    fecha_ult_doc: data.fecha_ult_doc,
+                    planificacion_fam: data.planificacion_fam
                 },
                 cuello_odont: data.cuello,
                 paciente: noExpediente,
@@ -122,7 +140,7 @@ export function HistorialClinicoDental() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistOdonto(data)
+        await registrarHistOdonto({ ...data, ...antHerePatData, ...antNoHerePatData, ...antPatPersoData });
     })
 
     return (
@@ -152,274 +170,22 @@ export function HistorialClinicoDental() {
     </header>*/}
             <div className="ml-10 container">
                 <form className="row" onSubmit={enviar}>
+
                     <div className='ml-10 container'>
                         <h3 className="subtitulo">Antecedentes Hereditarios Patologicos</h3>
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
-                                    <select name="diabetes" id="diabetes" className="opciones" type=""
-                                        {...register("diabetesH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
-                                    <select name="hipertension" id="hipertension" className="opciones" type=""
-                                        {...register("hipertH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="cancer">Cancer</label>
-                                    <select name="cancer" id="cancer" className="opciones" type=""
-                                        {...register("cancer", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="tubercolosis">Tubercolosis Pulmonar</label>
-                                    <select name="tubercolosis" id="tubercolosis" className="opciones" type=""
-                                        {...register("tuberculoH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
-                                    <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
-                                        {...register("diabetesParentesco", { required: true })}></textarea>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
-                                    <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
-                                        {...register("hipertParentesco", { required: true })}></textarea>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
-                                    <textarea name="par_cancer" id="par_cancer" className="text-amplio"
-                                        {...register("cancerParentesco", { required: true })}></textarea>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_tubercolosis">Parentesco</label>
-                                    <textarea name="par_tubercolosis" id="par_tubercolosis" className="text-amplio"
-                                        {...register("tuberculoParentesco", { required: true })}></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="asma">Asma</label>
-                                    <select name="asma" id="asma" className="opciones" type=""
-                                        {...register("asmaH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="cardiovascular">Cardiovasculares</label>
-                                    <select name="cardiovascular" id="cardiovascular" className="opciones" type=""
-                                        {...register("cardioH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="epilepsia">Epilepsia</label>
-                                    <select name="epilepsia" id="epilepsia" className="opciones" type=""
-                                        {...register("epilepsiaH", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_asma">Parentesco</label>
-                                    <textarea name="par_asma" id="par_asma" className="text-amplio"
-                                        {...register("asmaParentesco", { required: true })}></textarea>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_cardiovascular">Parentesco</label>
-                                    <textarea name="par_cardiovascular" id="par_cardiovascular" className="text-amplio"
-                                        {...register("cardioParentesco", { required: true })}></textarea>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="par_epilepsia">Parentesco</label>
-                                    <textarea name="par_epilepsia" id="par_epilepsia" className="text-amplio"
-                                        {...register("epilepsiaParentesco", { required: true })}></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        <AntHerediPat getAntPaHerediData={handleAntHerediPatData} />
                     </div>
-
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
 
                     <div className='ml-10 container'>
                         <h3 className="subtitulo">Antecedentes Personales Patologicos</h3>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
-                                    <select name="diabetes" id="diabetes" className="opciones"
-                                        {...register("diabetes", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
-                                    <select name="hipertension" id="hipertension" className="opciones"
-                                        {...register("hipert", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="cancer">Cancer</label>
-                                    <select name="cancer" id="cancer" className="opciones"
-                                        {...register("cancer", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="tubercolosis">Tubercolosis Pulmonar</label>
-                                    <select name="tubercolosis" id="tubercolosis" className="opciones"
-                                        {...register("tuberculo", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="transfusiones">Transfusiones</label>
-                                    <select name="transfusiones" id="transfusiones" className="opciones"
-                                        {...register("transfusion", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="quirurgicos">Quirurgicos</label>
-                                    <select name="quirurgicos" id="quirurgicos" className="opciones"
-                                        {...register("quirurgicos", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="anestesicos">Anestesicos</label>
-                                    <select name="anestesicos" id="anestesicos" className="opciones"
-                                        {...register("anestesicos", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="alergicos">Alergicos</label>
-                                    <select name="alergicos" id="alergicos" className="opciones"
-                                        {...register("alergicos", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="traumaticoss">Traumaticos</label>
-                                    <select name="traumaticos" id="traumaticos" className="opciones"
-                                        {...register("trauma", { required: true })}>
-                                        <option value="" disabled selected>Elija la opción</option>
-                                        <option value="Si">Si</option>
-                                        <option value="No">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        <AntPPatologicos getAntPaPersoData={handleAntPatPersoData} />
                     </div>
-
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
 
                     <div className='ml-10 container'>
                         <h3 className="subtitulo">Antecedentes Personales No Patologicos</h3>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="vacuna">Vacunas</label>
-                                    <input id="vacuna" type="text" placeholder="Vacunas aplicadas" className="entrada"
-                                        {...register("vacuna", { required: true })} />
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="alimentacion">Alimentación</label>
-                                    <input id="alimentacion" type="text" placeholder="Alimentación" className="entrada"
-                                        {...register("alimentacion", { required: true })} />
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="fauna">Fauna nociva</label>
-                                    <input id="fauna" type="text" placeholder="Fauna nociva" className="entrada"
-                                        {...register("fauna_nociva", { required: true })} />
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="vivienda">Vivienda</label>
-                                    <input id="vivienda" type="text" placeholder="Vivivenda" className="entrada"
-                                        {...register("vivienda", { required: true })} />
-                                </div>
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="higiene">Adicciones</label>
-                                    <input id="adicc" type="text" placeholder="Adicciones" className="entrada"
-                                        {...register("adicciones", { required: true })} />
-                                </div>
-
-                            </div>
-                        </div>
+                        <AntPersoPato getAntNoPersoPatData={handleNoAntHerediPatData} />
                     </div>
 
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
-                    {/*---------------------------------------------------------------------------------------*/}
                     <h3 className="subtitulo">Historial clinico dental</h3>
 
                     <div className="col">
@@ -444,16 +210,24 @@ export function HistorialClinicoDental() {
                         <input id="lugarRef" type="text" placeholder="Lugar de referencia" className="entrada"
                             {...register("referenciaLugar", { required: true })} />
                     </div>
-                    {/*
+
                     <div className="col">
                         <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
-                        <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada" />
+                        <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
+                            {...register("fecha_ult_doc", { required: true })} />
+                    </div>
+
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
+                        <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
+                            {...register("fecha_ultima_regla", { required: true })} />
                     </div>
 
                     <div className="col">
                         <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
-                        <input id="planiFami" type="text" placeholder="Planificación" className="entrada" />
-</div>*/}
+                        <input id="planiFami" type="text" placeholder="Planificación" className="entrada"
+                            {...register("planificacion_fam", { required: true })} />
+                    </div>
 
                     <div className="mt-3 mb-3 row">
                         <div className="col">

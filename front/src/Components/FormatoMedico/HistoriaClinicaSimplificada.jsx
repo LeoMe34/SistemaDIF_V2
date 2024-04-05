@@ -161,7 +161,7 @@ export function HistoriaClinicaSimplificada() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData, ...personalesData });
+        await registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData, ...personalesData });
     })
 
     return (
@@ -291,8 +291,6 @@ export function HistoriaClinicaSimplificada() {
                                 </select>
                             </div>
                         </div>
-
-
                     </div>
 
                     <div className='ml-10 container'>
@@ -313,29 +311,7 @@ export function HistoriaClinicaSimplificada() {
                         <CardFichaEnfermeria />
                         <ExploracionFisica getExploracionData={handleExploracionData} />
                     </div>
-                    <div className='container'>
-                        <div className='row'>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
-                                <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                    {...register("diagnostico", { required: true })}
-                                />
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral:</label>
-                                <textarea id="tratamiento_integral" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                    {...register("tratamiento_integral", { required: true })}
-                                />
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
-                                <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                    {...register("pronostico", { required: true })}
-                                />
-                            </div>
-                        </div>
 
-                    </div>
 
                     <div className='ml-10 mb-5 container'>
                         <div className='row'>

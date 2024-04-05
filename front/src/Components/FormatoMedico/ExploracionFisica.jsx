@@ -14,14 +14,15 @@ export function ExploracionFisica({ getExploracionData }) {
             columna_vertical: getValues("columna_vertical"),
             genitales_externos: getValues("genitales_externos"),
             extremidades: getValues("extremidades"),
-            /*
-                diagnostico: getValues("diagnostico"),
-                tratamiento_integral: getValues("tratamiento_integral"),
-                pronostico: getValues("pronostico")*/
+
+            diagnostico: getValues("diagnostico"),
+            tratamiento_integral: getValues("tratamiento_integral"),
+            pronostico: getValues("pronostico")
         }
         getExploracionData(data);
     }, [getValues("inspeccion_gral"), getValues("cabeza"), getValues("cuello"), getValues("torax"), getValues("abdomen"),
-    getValues("columna_vertical"), getValues("genitales_externos"), getValues("extremidades")])
+    getValues("columna_vertical"), getValues("genitales_externos"), getValues("extremidades"), getValues("diagnostico"),
+    getValues("tratamiento_integral"), getValues("pronostico")])
 
     return (
         <div>
@@ -84,7 +85,7 @@ export function ExploracionFisica({ getExploracionData }) {
                 </div>
 
             </div>
-            {/*
+
             <div className='container'>
                 <div className='row'>
                     <div className='col'>
@@ -107,7 +108,7 @@ export function ExploracionFisica({ getExploracionData }) {
                     </div>
                 </div>
 
-    </div>*/}
+            </div>
         </div>
     )
 }
