@@ -4,11 +4,31 @@ import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+
 
 export function NotaEvolucion() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const [idHistOdonto, setHistOdonto] = useState(null)
+    const { noExpediente } = useNoExpediente()
+
+    const getIdHistorialOdonto = async (noExpediente) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/getNotaEvo/?no_expediente=${noExpediente}`,
+                {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                })
+            setHistOdonto(response.data[0].id)
+            console.log(idHistOdonto)
+        } catch (error) {
+            console.error('Error al obtener ID del historial:', error);
+        }
+    }
 
     const registrarNotaEvoOdonto = async (data) => {
         try {
@@ -19,6 +39,7 @@ export function NotaEvolucion() {
                 notas: data.notas,
                 plan: data.plan,
                 resumen_consulta: data.resumen,
+                histlOdonto: idHistOdonto
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -30,9 +51,9 @@ export function NotaEvolucion() {
         }
     }
 
-    const enviar = handleSubmit(async data => {
-        registrarNotaEvoOdonto(data)
-    })
+    const enviar = async (data) => {
+        registrarNotaEvoOdonto(data, idHistOdonto);
+    }
     return (
         <div>
             <div className="mt-3 ml-10 container">
@@ -57,8 +78,13 @@ export function NotaEvolucion() {
                     </ol>
                 </nav>
             </div>
+            <div className='ml-10 mb-5 container'>
+                <div className="ml-10 mb-3">
+                    <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
+                </div>
+            </div>
 
-            <form className="row" onSubmit={enviar}>
+            <form className="row" onSubmit={handleSubmit(enviar)}>
                 <h2 className='subtitulo'>Nota Evolución</h2>
                 {/*
                 <div className='ml-10 mt-3 mb-3 container'>

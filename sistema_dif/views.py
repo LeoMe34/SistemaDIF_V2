@@ -80,7 +80,7 @@ def get_datos_usuario(request):
                     "id": user.id,
                     "username": user.username,
                     "email": user.email,
-                    "no_trabajador": empleado.no_trabajador if empleado else None
+                    "no_trabajador": empleado.no_trabajador if empleado else None,
                 },
             }
         )
@@ -476,9 +476,22 @@ def eliminar_historialO(request, pk):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_notasEvolucionO(request):
-    queryset = NotaEvolucionOdonto.objects.all()
-    serializer = NotaEvolucionOdontoSerializer(queryset, many=True)
-    return Response(serializer.data)
+    no_expediente = request.query_params.get("no_expediente")
+    if no_expediente:
+        historiales_paciente = HistorialOdonto.objects.filter(
+            paciente__no_expediente=no_expediente
+        )
+        historiales_sin_nota = historiales_paciente.exclude(
+            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
+        )
+        serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
+        return Response(serializer.data)
+    else:
+        # Si no se proporciona un número de expediente, devolver un error
+        return Response(
+            {"error": "Debe proporcionar un número de expediente del paciente"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @api_view(["POST"])
@@ -511,8 +524,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -538,19 +550,23 @@ def eliminar_notaEvolucionO(request, pk):
 @permission_classes([IsAuthenticated])
 def get_historialesMedicos(request):
 
-    no_expediente = request.query_params.get('no_expediente')
+    no_expediente = request.query_params.get("no_expediente")
     if no_expediente:
         historiales_paciente = HistorialMedico.objects.filter(
-            paciente__no_expediente=no_expediente)
+            paciente__no_expediente=no_expediente
+        )
         # Obtener los historiales médicos que no tienen una nota médica relacionada
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaMedica.objects.values_list('histMedic_id', flat=True)
+            id__in=NotaMedica.objects.values_list("histMedic_id", flat=True)
         )
         serializer = HistorialMedicoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
     else:
         # Si no se proporciona un número de expediente, devolver un error
-        return Response({"error": "Debe proporcionar un número de expediente del paciente"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Debe proporcionar un número de expediente del paciente"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @api_view(["POST"])

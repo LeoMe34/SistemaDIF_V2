@@ -20,5 +20,5 @@ urlpatterns = [
     path("registrar_notaEvoOdont/", views.crear_notaEvolucionO),
     path("crear_nota_medica/", views.crear_notaMedica),
     path("getHistorialM/", views.get_historialesMedicos),
-    
+    path("getNotaEvo/", views.get_notasEvolucionO),
 ]
