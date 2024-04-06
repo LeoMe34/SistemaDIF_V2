@@ -260,7 +260,8 @@ def buscar_paciente(request):
     pacientes = Paciente.objects.filter(
         Q(no_expediente__icontains=query)
         | Q(datosContactoPacient__telefono__icontains=query)
-        | Q(curp__icontains=query)
+        | Q(curp__icontains=query),
+        area="medicina"
     )
 
     if not pacientes.exists():
