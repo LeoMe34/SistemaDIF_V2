@@ -27,6 +27,8 @@ import { Parte1 } from '../Components/FormatoMedico/Parte1'
 import { Parte2 } from '../Components/FormatoMedico/Parte2'
 import { Parte3 } from '../Components/FormatoMedico/Parte3'
 
+import { V_CrearPacientePsico } from '../Views/Paciente/V_CrearPacientePsico'
+
 import { ListaPacientes } from '../Components/Paciente/ListaPacientes'
 
 export function Rutas() {
@@ -64,6 +66,7 @@ export function Rutas() {
                     <Route path='/parte2' element={<Parte2 />} />
                     <Route path='/parte3' element={<Parte3 />} />
 
+                    <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />
 
                 </Routes>
             </div>
