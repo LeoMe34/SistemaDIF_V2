@@ -271,6 +271,26 @@ def buscar_paciente(request):
     serializer = PacienteSerializer(pacientes, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_paciente_psico(request):
+    query = request.GET.get("q", "")
+
+    pacientes = Paciente.objects.filter(
+        Q(no_expediente__icontains=query)
+        | Q(datosContactoPacient__telefono__icontains=query)
+        | Q(curp__icontains=query),
+        area="psicologia"
+    )
+
+    if not pacientes.exists():
+        return Response(
+            {"error": "No se encontro un paciente con esos datos"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    serializer = PacienteSerializer(pacientes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
