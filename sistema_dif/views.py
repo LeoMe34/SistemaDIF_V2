@@ -1,3 +1,6 @@
+from django.shortcuts import get_object_or_404
+
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -233,7 +236,7 @@ def crear_paciente(request):
             serializer.validated_data['area'] = 'psicologia'
         else:
             serializer.validated_data['area'] = 'medicina'
-            
+
         serializer.save()
         return Response(serializer.data, status=201)
     else:
@@ -271,6 +274,7 @@ def buscar_paciente(request):
         )
     serializer = PacienteSerializer(pacientes, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -329,6 +333,23 @@ def get_fichasTecnicasE(request):
     queryset = FichaTecnicaEnfermeria.objects.all()
     serializer = FichaTecnicaESerializer(queryset, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasE_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(
+            empleado=empleado)
+        serializer = FichaTecnicaESerializer(ficha_tecnica, many=True)
+        return Response(serializer.data)
+    except FichaTecnicaEnfermeria.DoesNotExist:
+        return Response(status=404)
 
 
 @api_view(["POST"])

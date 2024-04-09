@@ -10,7 +10,7 @@ urlpatterns = [
     path("logoutall/", knox_views.LogoutAllView.as_view()),
     path("registrar_empleado/", views.crear_empleado),
     path("registrar_paciente/", views.crear_paciente),
-    path("detalle_paciente/", views.detalle_paciente),
+    path("detalle_paciente/<str:pk>", views.detalle_paciente),
     path("pacientes/", views.get_pacientes),
 
     path("buscar_paciente/", views.buscar_paciente),
@@ -25,4 +25,6 @@ urlpatterns = [
     path("getHistorialM/", views.get_historialesMedicos),
     path("getNotaEvo/", views.get_notasEvolucionO),
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
+
+    path("fichas_home/", views.get_fichasE_relacionadas),
 ]

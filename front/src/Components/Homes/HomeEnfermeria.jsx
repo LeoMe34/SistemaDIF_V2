@@ -1,4 +1,4 @@
-
+import { TablaEnfermeria } from "../FormatoEnfermeria/TablaEnfermeria"
 export function HomeEnfermeria() {
     return (
         <div>
@@ -7,9 +7,12 @@ export function HomeEnfermeria() {
                     <ol className="breadcrumb ml-10">
                         <i className="bi bi-house-fill color-icono"></i>&nbsp;
                         <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
-                    </ol>                    
+                    </ol>
                 </nav>
             </div>
+
+            <TablaEnfermeria></TablaEnfermeria>
+
         </div>
     )
 }
