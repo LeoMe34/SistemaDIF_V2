@@ -1,3 +1,4 @@
+import { TablaMedicina } from "../FormatoMedico/TablaMedicina"
 
 export function HomeMedico() {
     return (
@@ -10,6 +11,8 @@ export function HomeMedico() {
                     </ol>
                 </nav>
             </div>
+
+            <TablaMedicina></TablaMedicina>
         </div>
     )
 }
