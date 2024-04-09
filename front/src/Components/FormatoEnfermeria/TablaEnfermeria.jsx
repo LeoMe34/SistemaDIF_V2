@@ -57,7 +57,8 @@ export function TablaEnfermeria() {
                     const pacienteData = response.data; // Ajustar según la estructura de los datos de tu API
                     return {
                         ...fichasTecnicas.find(ficha => ficha.paciente === expediente), // Mantener las propiedades anteriores
-                        nombre: pacienteData.datosPersonalesPacient.nombre,
+                        nombre: pacienteData.datosPersonalesPacient.nombre + " " + pacienteData.datosPersonalesPacient.apellidoP 
+                        + " " + pacienteData.datosPersonalesPacient.apellidoM,
                         nacionalidad: pacienteData.datosPersonalesPacient.nacionalidad,
                         edad: pacienteData.datosPersonalesPacient.edad
                     };
