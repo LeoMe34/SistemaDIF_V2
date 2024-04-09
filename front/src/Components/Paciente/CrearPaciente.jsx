@@ -157,8 +157,8 @@ export function CrearPaciente() {
                             <select name="nacionalidad" id="nacionalidad" className="opciones"
                                 {...register("nacionalidad", { required: true })}>
                                 <option value="" disabled selected>Elija la opción</option>
-                                <option value="mexico">Mexicana</option>
-                                <option value="otra">Otra</option>
+                                <option value="Mexicana">Mexicana</option>
+                                <option value="Extranjero">Otra</option>
                             </select>
                             {errors.nacionalidad && <span>Es necesario este campo</span>}
 

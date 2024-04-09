@@ -58,7 +58,8 @@ export function TablaEnfermeria() {
                     return {
                         ...fichasTecnicas.find(ficha => ficha.paciente === expediente), // Mantener las propiedades anteriores
                         nombre: pacienteData.datosPersonalesPacient.nombre,
-                        nacionalidad: pacienteData.datosPersonalesPacient.nacionalidad
+                        nacionalidad: pacienteData.datosPersonalesPacient.nacionalidad,
+                        edad: pacienteData.datosPersonalesPacient.edad
                     };
                 })
             );
@@ -66,6 +67,36 @@ export function TablaEnfermeria() {
         } catch (error) {
             console.error('Error al obtener detalles del paciente:', error);
         }
+    }
+
+    const convertirServicio = (numeroServicio) => {        
+        switch (numeroServicio) {
+            case "1":
+                return "Consulta general";
+            case "2":
+                return "Curación";
+            case "3":
+                return "Retiro de puntos";
+            case "4":
+                return "Aplicación de medicamentos";
+            case "5":
+                return "DxTx";
+        }
+    }
+
+    const convertirPoblacion = (ficha) => {
+        if (ficha.datosDemograficos.embarazada){
+            return "Embarazada"
+        }
+        else if(ficha.datosDemograficos.discapacitado){
+            return "Discapacitado"
+        }
+        else if(ficha.datosDemograficos.adulto_mayor){
+            return "Adulto mayor"
+        }
+        else{
+            return "Ninguna"
+        }            
     }
 
     useEffect(() => {
@@ -90,8 +121,8 @@ export function TablaEnfermeria() {
                         <tr className="">
                             <th className="">No.Expediente</th>
                             <th className="">Nombre</th>
-                            <th className="">Servicio</th>
-                            <th className="">Atención</th>
+                            <th className="">Edad</th>
+                            <th className="">Servicio</th>                            
                             <th className="">Población</th>
                             <th className="">Nacionalidad</th>
                         </tr>
@@ -102,9 +133,9 @@ export function TablaEnfermeria() {
                             <tr key={ficha.id}>
                                 <td className="">{ficha.paciente}</td>
                                 <td className="">{ficha.nombre}</td>
-                                <td className="">{ficha.servicio_enfermeria}</td>
-                                <td className="">{ficha.datosDemograficos.embarazada}</td>
-                                <td className="">{ficha.poblacion}</td>
+                                <td className="">{ficha.edad}</td>
+                                <td className="">{convertirServicio(ficha.servicio_enfermeria)}</td>                                
+                                <td className="">{convertirPoblacion(ficha)}</td>
                                 <td className="">{ficha.nacionalidad}</td>
                             </tr>
                         ))}
