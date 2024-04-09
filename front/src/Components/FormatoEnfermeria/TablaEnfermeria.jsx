@@ -7,7 +7,7 @@ export function TablaEnfermeria() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [fichasTecnicas, setFichasTenicas] = useState([])
-    const [noExpediente, setNoExpediente] = useState([])    
+    const [noExpediente, setNoExpediente] = useState([])
 
     const getNoEmpleado = async () => {
         try {
@@ -33,11 +33,11 @@ export function TablaEnfermeria() {
                 }
             })
             console.log(response.data)
+            setFichasTenicas(response.data)
 
             const fichas = response.data
             const numExp = fichas.map(ficha => ficha.paciente)
 
-            setFichasTenicas(response.data)
             setNoExpediente(numExp)
 
         } catch (error) {
@@ -47,18 +47,26 @@ export function TablaEnfermeria() {
 
     const getDetallesPaciente = async () => {
         try {
-            for (let i = 0; i < noExpediente.length; i++) {
-                const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${noExpediente[i]}`, {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                });
-                console.log(response.data);
-            }
+            const updatedFichasTecnicas = await Promise.all(
+                noExpediente.map(async expediente => {
+                    const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${expediente}`, {
+                        headers: {
+                            Authorization: `Token ${token}`
+                        }
+                    });
+                    const pacienteData = response.data; // Ajustar según la estructura de los datos de tu API
+                    return {
+                        ...fichasTecnicas.find(ficha => ficha.paciente === expediente), // Mantener las propiedades anteriores
+                        nombre: pacienteData.datosPersonalesPacient.nombre,
+                        nacionalidad: pacienteData.datosPersonalesPacient.nacionalidad
+                    };
+                })
+            );
+            setFichasTenicas(updatedFichasTecnicas);
         } catch (error) {
             console.error('Error al obtener detalles del paciente:', error);
         }
-    };
+    }
 
     useEffect(() => {
         getNoEmpleado();
@@ -66,8 +74,10 @@ export function TablaEnfermeria() {
     }, [token, noEmpleado]);
 
     useEffect(() => {
-        getDetallesPaciente()
-    }, [noExpediente])
+        if (noExpediente.length > 0) {
+            getDetallesPaciente();
+        }
+    }, [noExpediente]);
 
     return (
         <div className="container">
