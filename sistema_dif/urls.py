@@ -27,4 +27,5 @@ urlpatterns = [
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
 
     path("fichas_home/", views.get_fichasE_relacionadas),
+    path("historial_clinico_home/", views.get_historiales_relacionadas),
 ]

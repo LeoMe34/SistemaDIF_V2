@@ -621,6 +621,21 @@ def get_historialesMedicos(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historiales_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        historial_clinico = HistorialMedico.objects.filter(
+            empleado=empleado)
+        serializer = HistorialMedicoSerializer(historial_clinico, many=True)
+        return Response(serializer.data)
+    except HistorialMedico.DoesNotExist:
+        return Response(status=404)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
