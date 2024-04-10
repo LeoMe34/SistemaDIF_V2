@@ -67,6 +67,8 @@ export function HistorialClinicoDental() {
                 "referencia": {
                     referencia: data.referencia,
                     referencia_lugar: data.referenciaLugar,
+                    subsecuente: data.subsecuente,
+                    citado: data.citado
                 },
                 "aparatosSistemas": {
                     respiratorio: data.respiratorio,
@@ -209,6 +211,26 @@ export function HistorialClinicoDental() {
                         <label className="etiqueta" htmlFor="lugarRef">Lugar de referencia</label>
                         <input id="lugarRef" type="text" placeholder="Lugar de referencia" className="entrada"
                             {...register("referenciaLugar", { required: true })} />
+                    </div>
+
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="subsecuente">Subsecuente</label>
+                        <select name="subsecuente" id="subsecuente" className="opciones"
+                            {...register("subsecuente", { required: true })} >
+                            <option value="" disabled selected>Elija la opción</option>
+                            <option value={true}>Si</option>
+                            <option value={false}>No</option>
+                        </select>
+                    </div>
+
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="citado">Citado</label>
+                        <select name="citado" id="citado" className="opciones"
+                            {...register("citado", { required: true })} >
+                            <option value="" disabled selected>Elija la opción</option>
+                            <option value={true}>Si</option>
+                            <option value={false}>No</option>
+                        </select>
                     </div>
 
                     <div className="col">
