@@ -28,4 +28,5 @@ urlpatterns = [
 
     path("fichas_home/", views.get_fichasE_relacionadas),
     path("historial_clinico_home/", views.get_historiales_relacionadas),
+    path("historial_odonto_home/", views.get_historialesO_relacionadas),
 ]

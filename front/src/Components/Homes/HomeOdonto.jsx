@@ -1,4 +1,4 @@
-
+import { TablaOdontologia } from "../FormatoOdonto/TablaOdontologia"
 export function HomeOdonto() {
     return (
         <div>
@@ -10,6 +10,7 @@ export function HomeOdonto() {
                     </ol>
                 </nav>
             </div>
+            <TablaOdontologia></TablaOdontologia>
         </div>
     )
 }

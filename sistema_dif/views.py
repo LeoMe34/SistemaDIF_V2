@@ -471,6 +471,21 @@ def get_historialesO(request):
     serializer = HistorialOdontoSerializer(queryset, many=True)
     return Response(serializer.data)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialesO_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        historial_odonto = HistorialOdonto.objects.filter(
+            empleado=empleado)
+        serializer = HistorialOdontoSerializer(historial_odonto, many=True)
+        return Response(serializer.data)
+    except HistorialOdonto.DoesNotExist:
+        return Response(status=404)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
