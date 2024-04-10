@@ -145,8 +145,8 @@ export function CrearPaciente() {
                             <select name="sexo" id="sexo" className="opciones"
                                 {...register("sexo", { required: true })}>
                                 <option value="" disabled selected>Elija la opción</option>
-                                <option value="hombre">Masculino</option>
-                                <option value="mujer">Femenino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
                             </select>
                             {errors.sexo && <span>Es necesario este campo</span>}
                         </div>
