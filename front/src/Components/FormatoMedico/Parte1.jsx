@@ -138,7 +138,7 @@ export function Parte1() {
                                     <option value="0">Ninguno</option>
                                     <option value="1">Laboratorios</option>
                                     <option value="2">Ultrasonido</option>
-                                    <option value="3">Tomografia</option>
+                                    <option value="3">Tomografía</option>
                                     <option value="4">Rayos X</option>
                                 </select>
                             </div>

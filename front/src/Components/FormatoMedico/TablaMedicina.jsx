@@ -7,11 +7,10 @@ export function TablaMedicina() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [historialClinico, setHistorialCLinico] = useState([])
-    const [noExpediente, setNoExpediente] = useState([])
+    const [detallesPacientes, setDetallesPacientes] = useState([])
 
     const getNoEmpleado = async () => {
         try {
-
             const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
                 headers: {
                     Authorization: `Token ${token}`
@@ -35,51 +34,62 @@ export function TablaMedicina() {
             console.log(response.data)
             setHistorialCLinico(response.data)
 
-            const historial = response.data
-            const numExp = historial.map(historial => historial.paciente)
-
-            setNoExpediente(numExp)
+            const numExp = response.data.map(historial => historial.paciente)
+            setDetallesPacientes([]) // Limpiar detalles de pacientes
+            getDetallesPaciente(numExp)
 
         } catch (error) {
             console.error('Error al obtener las fichas técnicas:', error);
         }
     }
 
-    const getDetallesPaciente = async () => {
+    const getDetallesPaciente = async (numExpedientes) => {
         try {
-            const updatedHistorialClinico = await Promise.all(
-                noExpediente.map(async expediente => {
-                    const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${expediente}`, {
-                        headers: {
-                            Authorization: `Token ${token}`
-                        }
-                    });
-                    const pacienteData = response.data; // Ajustar según la estructura de los datos de tu API
-                    return {
-                        ...historialClinico.find(historial => historial.paciente === expediente), // Mantener las propiedades anteriores
-                        nombre: pacienteData.datosPersonalesPacient.nombre + " " + pacienteData.datosPersonalesPacient.apellidoP
-                            + " " + pacienteData.datosPersonalesPacient.apellidoM,
-                        edad: pacienteData.datosPersonalesPacient.edad,
-                        sexo: pacienteData.datosPersonalesPacient.sexo
-                    };
-                })
-            );
-            setHistorialCLinico(updatedHistorialClinico);
+            const detallesPromises = numExpedientes.map(async expediente => {
+                const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${expediente}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                return response.data;
+            });
+
+            const detalles = await Promise.all(detallesPromises);
+            setDetallesPacientes(detalles);
         } catch (error) {
             console.error('Error al obtener detalles del paciente:', error);
         }
     }
 
-    useEffect(() => {
-        getNoEmpleado();
-        getHistorialClinico()
-    }, [token, noEmpleado]);
+    const convertirReferencia = (referencia) => {
+        if (referencia.referenciaMed.referencia) {
+            return "Sí"
+        } else {
+            return "No"
+        }
+    }
+
+    const convertirEstudios= (estudio) => {
+        switch (estudio) {
+            case "0":
+                return "Ninguno";
+            case "1":
+                return "Laboratorios";
+            case "2":
+                return "Ultrasonido";
+            case "3":
+                return "Tomografía";
+            case "4":
+                return "Rayos X";
+            default:
+                return "Ninguno";
+        }
+    }
 
     useEffect(() => {
-        if (noExpediente.length > 0) {
-            getDetallesPaciente();
-        }
-    }, [noExpediente]);
+        getNoEmpleado();
+        getHistorialClinico();
+    }, [token, noEmpleado]);
 
     return (
         <div className="container">
@@ -107,14 +117,14 @@ export function TablaMedicina() {
                     </thead>
 
                     <tbody>
-                        {historialClinico.map(historial => (
-                            <tr key={historial.id}>
-                                <td className="">{historial.nombre}</td>
+                        {historialClinico.map((historial, index) => (
+                            <tr key={index}>
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
                                 <td className="">{historial.paciente}</td>
-                                <td className="">{historial.sexo}</td>
-                                <td className="">{historial.edad}</td>
-                                <td className="">{historial.referenciaMed.referencia}</td>
-                                <td className="">{historial.estudiosExter.estudios}</td>
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="">{convertirReferencia(historial)}</td>
+                                <td className="">{convertirEstudios(historial.estudiosExter.estudios)}</td>
                                 <td className="">{historial.diagnostico.diagnostico}</td>
                             </tr>
                         ))}
