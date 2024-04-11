@@ -68,7 +68,8 @@ export function HistorialClinicoDental() {
                     referencia: data.referencia,
                     referencia_lugar: data.referenciaLugar,
                     subsecuente: data.subsecuente,
-                    citado: data.citado
+                    citado: data.citado,
+                    estudios: data.estudios
                 },
                 "aparatosSistemas": {
                     respiratorio: data.respiratorio,
@@ -252,6 +253,17 @@ export function HistorialClinicoDental() {
                     </div>
 
                     <div className="mt-3 mb-3 row">
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="estudios">Estudios externos</label>
+                            <select name="estudios" id="estudios" className="opciones"
+                                {...register("estudios", { required: true })} >
+                                <option value="" disabled selected>Elija la opción</option>
+                                <option value={true}>Si</option>
+                                <option value={false}>No</option>
+                            </select>
+                        </div>
+
                         <div className="col">
                             <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
                             <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios  en formato PDF</span>

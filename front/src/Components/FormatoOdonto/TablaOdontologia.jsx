@@ -91,6 +91,14 @@ export function TablaOdontologia() {
         }
     }
 
+    const convertirEstudios = (estudios) => {
+        if (estudios.referencia.estudios) {
+            return "Sí"
+        } else {
+            return "No"
+        }
+    }
+
     useEffect(() => {
         getNoEmpleado();
         getHistorialOdonto();
@@ -129,7 +137,7 @@ export function TablaOdontologia() {
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
                                 <td className="">{convertirReferencia(historial)}</td>
-                                <td className="">{ }</td>
+                                <td className="">{convertirEstudios(historial)}</td>
                                 <td className="">
                                     {diagnosticos[index]?.length > 0 ? diagnosticos[index][0].diagnostico : '-'}
                                 </td>
