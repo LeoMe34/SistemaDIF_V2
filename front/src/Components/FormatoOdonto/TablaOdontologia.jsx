@@ -8,6 +8,7 @@ export function TablaOdontologia() {
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [historialOdonto, setHistorialOdonto] = useState([])
     const [detallesPacientes, setDetallesPacientes] = useState([])
+    const [diagnosticos, setDiagnosticos] = useState([])
 
     const getNoEmpleado = async () => {
         try {
@@ -35,9 +36,30 @@ export function TablaOdontologia() {
             setHistorialOdonto(response.data)
 
             const numExp = response.data.map(historial => historial.paciente)
+            const idHistorial = response.data.map(historial => historial.id)
             setDetallesPacientes([]) // Limpiar detalles de pacientes
             getDetallesPaciente(numExp)
+            getNotaEvo(idHistorial)
 
+        } catch (error) {
+            console.error('Error al obtener las fichas técnicas:', error);
+        }
+    }
+
+    const getNotaEvo = async (idHistoriales) => {
+        try {
+            const dnotaPromises = idHistoriales.map(async idHistorial => {
+                const response = await axios.get(`http://127.0.0.1:8000/api/notas_evo_relacionadas/${idHistorial}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                })
+                return response.data;
+            })
+
+            const notas = await Promise.all(dnotaPromises);
+            setDiagnosticos(notas) // Actualizar el estado de diagnosticos
+            console.log(diagnosticos)
         } catch (error) {
             console.error('Error al obtener las fichas técnicas:', error);
         }
@@ -106,9 +128,12 @@ export function TablaOdontologia() {
                                 <td className="">{historial.paciente}</td>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
-                                <td className="">{ convertirReferencia(historial)}</td>
+                                <td className="">{convertirReferencia(historial)}</td>
                                 <td className="">{ }</td>
-                                <td className="">{ }</td>
+                                <td className="">
+                                    {diagnosticos[index]?.length > 0 ? diagnosticos[index][0].diagnostico : '-'}
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>

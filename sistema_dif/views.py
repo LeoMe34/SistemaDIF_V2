@@ -471,6 +471,7 @@ def get_historialesO(request):
     serializer = HistorialOdontoSerializer(queryset, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historialesO_relacionadas(request):
@@ -486,6 +487,7 @@ def get_historialesO_relacionadas(request):
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
         return Response(status=404)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -559,6 +561,22 @@ def get_notasEvolucionO(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notasEvolucionO_relacionada(request, pk):
+    try:
+        historial = HistorialOdonto.objects.get(id=pk)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
+        serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
+        return Response(serializer.data)
+    except HistorialOdonto.DoesNotExist:
+        return Response(
+            {"error": "El historial odontológico especificado no existe"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+
 
 
 @api_view(["POST"])
@@ -636,6 +654,7 @@ def get_historialesMedicos(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historiales_relacionadas(request):
@@ -651,6 +670,7 @@ def get_historiales_relacionadas(request):
         return Response(serializer.data)
     except HistorialMedico.DoesNotExist:
         return Response(status=404)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

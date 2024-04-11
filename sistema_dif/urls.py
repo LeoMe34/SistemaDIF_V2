@@ -24,6 +24,8 @@ urlpatterns = [
     path("crear_nota_medica/", views.crear_notaMedica),
     path("getHistorialM/", views.get_historialesMedicos),
     path("getNotaEvo/", views.get_notasEvolucionO),
+    path("notas_evo_relacionadas/<int:pk>", views.get_notasEvolucionO_relacionada),
+
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
 
     path("fichas_home/", views.get_fichasE_relacionadas),
