@@ -741,6 +741,38 @@ def crear_notaMedica(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_notaMedica(request):
+    query = request.GET.get("q", "")
+
+    # Filtrar notas médicas por número de expediente del paciente
+    notas_medicas = NotaMedica.objects.filter(
+        histMedic__paciente__no_expediente__icontains=query
+    )
+
+    # Obtener los datos del paciente asociado a cada nota médica
+    notas_medicas_data = []
+    for nota_medica in notas_medicas:
+        nota_medica_data = NotaMedicaSerializer(nota_medica).data
+        # Incluir los datos del paciente en la respuesta
+        nota_medica_data['paciente'] = {
+            'no_expediente': nota_medica.histMedic.paciente.no_expediente,
+            'nombre': nota_medica.histMedic.paciente.datosPersonalesPacient.get('nombre', ''),
+            'apellido_paterno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoP', ''),
+            'apellido_materno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoM', ''),
+            # Agrega otros campos del paciente si los necesitas
+        }
+        notas_medicas_data.append(nota_medica_data)
+
+    if not notas_medicas_data:
+        return Response(
+            {"error": "No se encontraron notas médicas relacionadas con ese número de expediente"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    return Response(notas_medicas_data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
