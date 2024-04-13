@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { MensajeReceta } from '../../Modales/MensajeReceta';
 
 export function NotasMedicas() {
     const navegador = useNavigate()
@@ -75,7 +76,7 @@ export function NotasMedicas() {
         registrarNota(data, idHistorial);
         localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
 
-        navegador('/receta');
+        MensajeReceta(navegador)
 
     }
 
