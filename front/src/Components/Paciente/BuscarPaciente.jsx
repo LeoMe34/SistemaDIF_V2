@@ -35,8 +35,9 @@ function BusquedaPaciente({getIdHistorialMedico}) {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         setNoExpediente(noExpediente);
-        
-        getIdHistorialMedico(noExpediente);
+        if(getIdHistorialMedico){
+            getIdHistorialMedico(noExpediente);
+        }        
     };
 
     return (

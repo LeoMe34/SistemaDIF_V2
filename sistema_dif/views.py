@@ -776,10 +776,10 @@ def buscar_notaMedica(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_notaMedica(request, pk):
+def detalle_notaMedica(request, id_historial):
     try:
-        notaMedica = NotaMedica.objects.get(pk=pk)
-    except NotaMedicaSerializer.DoesNotExist:
+        notaMedica = NotaMedica.objects.get(histMedic=id_historial)
+    except NotaMedica.DoesNotExist:
         return Response(status=404)
 
     serializer = NotaMedicaSerializer(notaMedica)

@@ -25,6 +25,7 @@ function BuscarNotaMedica({ getIdNotaMedica }) {
             setResultados(response.data);
             console.log(resultados)
             setError('');
+            localStorage.setItem('idNota', JSON.stringify(data.id));
         } catch (error) {
             setError('Ocurrió un error al buscar pacientes.');
             setResultados([]);
