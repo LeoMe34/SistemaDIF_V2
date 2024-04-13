@@ -100,7 +100,7 @@ class AnexoDocumentos(models.Model):
 
 class HistorialOdonto(models.Model):
     fecha_elaboracion = models.DateField(auto_now=False, auto_now_add=True)
-    referencia = models.JSONField()  # referencia y lugar ref
+    referencia = models.JSONField()  # referencia y lugar ref, subsecuente/citado
     aparatosSistemas = models.JSONField()
     # respiratorio, digestivo, neuro, cardio, muscoes
     padecimiento_actual = models.TextField(max_length=100, blank=True, default="")

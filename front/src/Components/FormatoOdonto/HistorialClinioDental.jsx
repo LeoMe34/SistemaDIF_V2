@@ -67,6 +67,9 @@ export function HistorialClinicoDental() {
                 "referencia": {
                     referencia: data.referencia,
                     referencia_lugar: data.referenciaLugar,
+                    subsecuente: data.subsecuente,
+                    citado: data.citado,
+                    estudios: data.estudios
                 },
                 "aparatosSistemas": {
                     respiratorio: data.respiratorio,
@@ -212,6 +215,26 @@ export function HistorialClinicoDental() {
                     </div>
 
                     <div className="col">
+                        <label className="etiqueta" htmlFor="subsecuente">Subsecuente</label>
+                        <select name="subsecuente" id="subsecuente" className="opciones"
+                            {...register("subsecuente", { required: true })} >
+                            <option value="" disabled selected>Elija la opción</option>
+                            <option value={true}>Si</option>
+                            <option value={false}>No</option>
+                        </select>
+                    </div>
+
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="citado">Citado</label>
+                        <select name="citado" id="citado" className="opciones"
+                            {...register("citado", { required: true })} >
+                            <option value="" disabled selected>Elija la opción</option>
+                            <option value={true}>Si</option>
+                            <option value={false}>No</option>
+                        </select>
+                    </div>
+
+                    <div className="col">
                         <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
                         <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
                             {...register("fecha_ult_doc", { required: true })} />
@@ -230,6 +253,17 @@ export function HistorialClinicoDental() {
                     </div>
 
                     <div className="mt-3 mb-3 row">
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="estudios">Estudios externos</label>
+                            <select name="estudios" id="estudios" className="opciones"
+                                {...register("estudios", { required: true })} >
+                                <option value="" disabled selected>Elija la opción</option>
+                                <option value={true}>Si</option>
+                                <option value={false}>No</option>
+                            </select>
+                        </div>
+
                         <div className="col">
                             <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
                             <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios  en formato PDF</span>

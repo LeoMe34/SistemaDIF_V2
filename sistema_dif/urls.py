@@ -15,6 +15,7 @@ urlpatterns = [
 
     path("buscar_paciente/", views.buscar_paciente),
     path("buscar_paciente_psico/", views.buscar_paciente_psico),
+    path("buscar_nota_medica/", views.buscar_notaMedica),
 
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
     path("buscar_usuario/", views.buscar_usuario),
@@ -23,9 +24,15 @@ urlpatterns = [
     path("registrar_notaEvoOdont/", views.crear_notaEvolucionO),
     path("crear_nota_medica/", views.crear_notaMedica),
     path("getHistorialM/", views.get_historialesMedicos),
+    path("get_detalles_NM/<int:id_historial>", views.detalle_notaMedica),
+
     path("getNotaEvo/", views.get_notasEvolucionO),
+    path("notas_evo_relacionadas/<int:pk>", views.get_notasEvolucionO_relacionada),
+
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
 
     path("fichas_home/", views.get_fichasE_relacionadas),
     path("historial_clinico_home/", views.get_historiales_relacionadas),
+    path("historial_odonto_home/", views.get_historialesO_relacionadas),
+    path("crear_receta/", views.crear_receta),
 ]

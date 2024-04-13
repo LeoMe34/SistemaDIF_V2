@@ -471,6 +471,23 @@ def get_historialesO(request):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialesO_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        historial_odonto = HistorialOdonto.objects.filter(
+            empleado=empleado)
+        serializer = HistorialOdontoSerializer(historial_odonto, many=True)
+        return Response(serializer.data)
+    except HistorialOdonto.DoesNotExist:
+        return Response(status=404)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_historialO(request):
@@ -542,6 +559,22 @@ def get_notasEvolucionO(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notasEvolucionO_relacionada(request, pk):
+    try:
+        historial = HistorialOdonto.objects.get(id=pk)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
+        serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
+        return Response(serializer.data)
+    except HistorialOdonto.DoesNotExist:
+        return Response(
+            {"error": "El historial odontológico especificado no existe"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+
 
 
 @api_view(["POST"])
@@ -704,13 +737,45 @@ def crear_notaMedica(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def buscar_notaMedica(request):
+    query = request.GET.get("q", "")
+
+    # Filtrar notas médicas por número de expediente del paciente
+    notas_medicas = NotaMedica.objects.filter(
+        histMedic__paciente__no_expediente__icontains=query
+    )
+
+    # Obtener los datos del paciente asociado a cada nota médica
+    notas_medicas_data = []
+    for nota_medica in notas_medicas:
+        nota_medica_data = NotaMedicaSerializer(nota_medica).data
+        # Incluir los datos del paciente en la respuesta
+        nota_medica_data['paciente'] = {
+            'no_expediente': nota_medica.histMedic.paciente.no_expediente,
+            'nombre': nota_medica.histMedic.paciente.datosPersonalesPacient.get('nombre', ''),
+            'apellido_paterno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoP', ''),
+            'apellido_materno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoM', ''),
+            # Agrega otros campos del paciente si los necesitas
+        }
+        notas_medicas_data.append(nota_medica_data)
+
+    if not notas_medicas_data:
+        return Response(
+            {"error": "No se encontraron notas médicas relacionadas con ese número de expediente"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    return Response(notas_medicas_data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_notaMedica(request, pk):
+def detalle_notaMedica(request, id_historial):
     try:
-        notaMedica = NotaMedica.objects.get(pk=pk)
-    except NotaMedicaSerializer.DoesNotExist:
+        notaMedica = NotaMedica.objects.get(histMedic=id_historial)
+    except NotaMedica.DoesNotExist:
         return Response(status=404)
 
     serializer = NotaMedicaSerializer(notaMedica)

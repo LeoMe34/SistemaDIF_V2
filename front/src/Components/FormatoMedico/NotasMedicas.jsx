@@ -73,6 +73,9 @@ export function NotasMedicas() {
 
     const enviar = async (data) => {
         registrarNota(data, idHistorial);
+        localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+
+        navegador('/receta');
 
     }
 
