@@ -53,6 +53,7 @@ export function Receta() {
                 }
             })
             console.log(data)
+            localStorage.removeItem('idHistorial');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
