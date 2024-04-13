@@ -52,7 +52,15 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {showPDiabetes && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
+                                    <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
+                                        {...register("par_diabetes", { required: false })}></textarea>
+                                </div>
+                            )}
                         </div>
+
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
                             <select name="hipertension" id="hipertension" className="opciones" type=""
@@ -62,7 +70,15 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {showPHiper && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
+                                    <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
+                                        {...register("par_hipertension", { required: false })}></textarea>
+                                </div>
+                            )}
                         </div>
+
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <select name="cancer" id="cancer" className="opciones" type=""
@@ -72,7 +88,15 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {showPCancer && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
+                                    <textarea name="par_cancer" id="par_cancer" className="text-amplio"
+                                        {...register("par_cancer", { required: false })}></textarea>
+                                </div>
+                            )}
                         </div>
+
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <select name="cardiopatia" id="cardiopatia" className="opciones" type=""
@@ -82,41 +106,14 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {showPCardio && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
+                                    <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
+                                        {...register("par_cardiopatia", { required: false })}></textarea>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                </div>
-
-                <div className="container">
-                    <div className="row">
-                        {showPDiabetes && (
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
-                                <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
-                                    {...register("par_diabetes", { required: false })}></textarea>
-                            </div>
-                        )}
-                        {showPHiper && (
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
-                                <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
-                                    {...register("par_hipertension", { required: false })}></textarea>
-                            </div>
-                        )}
-                        {showPCancer && (
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
-                                <textarea name="par_cancer" id="par_cancer" className="text-amplio"
-                                    {...register("par_cancer", { required: false })}></textarea>
-                            </div>
-                        )}
-                        {showPCardio && (
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
-                                <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
-                                    {...register("par_cardiopatia", { required: false })}></textarea>
-                            </div>
-                        )}
-
                     </div>
                 </div>
 
