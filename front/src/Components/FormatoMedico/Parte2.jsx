@@ -1,12 +1,32 @@
 {/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
 
 export function Parte2() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
-    const navegador = useNavigate()    
+    const navegador = useNavigate()
+    const [showPDiabetes, setShowPDiabetes] = useState(false)
+    const [showPHiper, setShowPHiper] = useState(false)
+    const [showPCancer, setShowPCancer] = useState(false)
+    const [showPCardio, setShowPCardio] = useState(false)
 
-    const enviar = handleSubmit(async data => {        
+    const handleChangeDiabetes = (e) => {
+        setShowPDiabetes(e.target.value === "True");
+    };
+
+    const handleChangeHipertension = (e) => {
+        setShowPHiper(e.target.value === "True");
+    };
+
+    const handleChangeCancer = (e) => {
+        setShowPCancer(e.target.value === "True");
+    };
+
+    const handleChangeCardiopatia = (e) => {
+        setShowPCardio(e.target.value === "True");
+    };
+    const enviar = handleSubmit(async data => {
 
         localStorage.setItem('datos2', JSON.stringify(data));
 
@@ -26,7 +46,8 @@ export function Parte2() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
                             <select name="diabetes" id="diabetes" className="opciones" type=""
-                                {...register("diabetes", { required: true })}>
+                                {...register("diabetes", { required: true })}
+                                onChange={handleChangeDiabetes}>
                                 <option value="" disabled selected>Elija la opción</option>
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
@@ -35,7 +56,8 @@ export function Parte2() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
                             <select name="hipertension" id="hipertension" className="opciones" type=""
-                                {...register("hipertension", { required: true })}>
+                                {...register("hipertension", { required: true })}
+                                onChange={handleChangeHipertension}>
                                 <option value="" disabled selected>Elija la opción</option>
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
@@ -44,7 +66,8 @@ export function Parte2() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <select name="cancer" id="cancer" className="opciones" type=""
-                                {...register("cancer", { required: true })}>
+                                {...register("cancer", { required: true })}
+                                onChange={handleChangeCancer}>
                                 <option value="" disabled selected>Elija la opción</option>
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
@@ -53,7 +76,8 @@ export function Parte2() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <select name="cardiopatia" id="cardiopatia" className="opciones" type=""
-                                {...register("cardiopatia", { required: true })}>
+                                {...register("cardiopatia", { required: true })}
+                                onChange={handleChangeCardiopatia}>
                                 <option value="" disabled selected>Elija la opción</option>
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
@@ -64,26 +88,35 @@ export function Parte2() {
 
                 <div className="container">
                     <div className="row">
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
-                            <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
-                                {...register("par_diabetes", { required: false })}></textarea>
-                        </div>
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
-                            <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
-                                {...register("par_hipertension", { required: false })}></textarea>
-                        </div>
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
-                            <textarea name="par_cancer" id="par_cancer" className="text-amplio"
-                                {...register("par_cancer", { required: false })}></textarea>
-                        </div>
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
-                            <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
-                                {...register("par_cardiopatia", { required: false })}></textarea>
-                        </div>
+                        {showPDiabetes && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
+                                <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
+                                    {...register("par_diabetes", { required: false })}></textarea>
+                            </div>
+                        )}
+                        {showPHiper && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
+                                <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
+                                    {...register("par_hipertension", { required: false })}></textarea>
+                            </div>
+                        )}
+                        {showPCancer && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
+                                <textarea name="par_cancer" id="par_cancer" className="text-amplio"
+                                    {...register("par_cancer", { required: false })}></textarea>
+                            </div>
+                        )}
+                        {showPCardio && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
+                                <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
+                                    {...register("par_cardiopatia", { required: false })}></textarea>
+                            </div>
+                        )}
+
                     </div>
                 </div>
 
