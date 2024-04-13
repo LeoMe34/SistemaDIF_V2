@@ -18,7 +18,7 @@ export function FichaTecnicaEnfermeria() {
     useEffect(() => {
         const getNoEmpleado = async () => {
             try {
-                
+
                 const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
                     headers: {
                         Authorization: `Token ${token}`
@@ -62,7 +62,7 @@ export function FichaTecnicaEnfermeria() {
                     embarazada: data.embarazada,
                     ninguna: data.ninguno
                 },
-                paciente: noExpediente,            
+                paciente: noExpediente,
                 empleado: noEmpleado
             }, {
                 headers: {

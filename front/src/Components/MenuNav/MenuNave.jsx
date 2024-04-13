@@ -3,11 +3,13 @@ import { IoIosLogOut } from "react-icons/io";
 import { FaFileMedical, FaRegUserCircle } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
+import { useAuth } from '../../Contexto/AuthContext';
 
 const isLoginPage = window.location.pathname === '/'
 
 
 export function MenuNave() {
+
     return (
 
         <div className="menu">
@@ -32,21 +34,21 @@ export function MenuNave() {
                 </div>
                 <h2>Usuario</h2>
             </div>*/}
-
-            <Collapsible trigger="Crear" >
-                {linkArray.map(({ icon, label, to }) => (
-                    <div className='LinkContainer' key={label}>
-                        <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                            <div className='LinkIcon'>
-                                {icon}
-                                <div>
-                                    <span>{label}</span>
+            {
+                <Collapsible trigger="Crear" >
+                    {linkArray.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </NavLink>
-                    </div>
-                ))}
-            </Collapsible>
+                            </NavLink>
+                        </div>
+                    ))}
+                </Collapsible>}
 
             <Collapsible trigger="Fichas Tecnicas" >
                 {linkArray02.map(({ icon, label, to }) => (
