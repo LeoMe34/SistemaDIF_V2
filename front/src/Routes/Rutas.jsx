@@ -4,7 +4,7 @@ import { V_FichaTecnicaEnfermeria } from '../Views/FormatoEnfermeria/V_FichaTecn
 import { V_CrearEmpleado } from '../Views/Empleado/V_CrearEmpleado'
 import { V_CrearUsuario } from '../Views/Empleado/V_CrearUsuario'
 import { V_FichaTecnicaMedico } from '../Views/FormatosCompartidos/V_FichaTecnicaMedico'
-import { V_HistoriaClinica } from '../Views/FormatoMedico/V_HistoriaClinica'
+
 import { V_NotasMedicas } from '../Views/FormatoMedico/V_NotasMedicas'
 import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsicologia'
 import { V_Antecedentes } from '../Views/FormatoOdonto/V_Antecedentes'
@@ -23,9 +23,9 @@ import { V_HomeRecepcionGral } from '../Views/Homes/V_HomeRecepcionGral'
 import { V_HomeRecepcionPsico } from '../Views/Homes/V_HomeRecepcionPsico'
 import { V_HomeNutricion } from '../Views/Homes/V_HomeNutricion'
 
-import { Parte1 } from '../Components/FormatoMedico/Parte1'
-import { Parte2 } from '../Components/FormatoMedico/Parte2'
-import { Parte3 } from '../Components/FormatoMedico/Parte3'
+import { V_HistoriaClinica1 } from '../Views/FormatoMedico/V_HistoriaClinica1'
+import { V_HistoriaClinica2 } from '../Views/FormatoMedico/V_HistoriaClinica2'
+import { V_HistoriaClinica3 } from '../Views/FormatoMedico/V_HistoriaClinica3'
 
 import { V_CrearPacientePsico } from '../Views/Paciente/V_CrearPacientePsico'
 
@@ -41,7 +41,7 @@ export function Rutas() {
                     <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                     <Route path='/crear_usuario' element={<V_CrearUsuario />} />
                     <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />
-                    <Route path='/historia_clinica_simplificada' element={<V_HistoriaClinica />} />
+
                     <Route path='/notas_medicas' element={<V_NotasMedicas />} />
                     <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
                     <Route path='/antecedente' element={<V_Antecedentes />} />
@@ -62,9 +62,9 @@ export function Rutas() {
                     <Route path='/home_nutricion' element={<V_HomeNutricion />} />
 
                     <Route path='/pacientes' element={<ListaPacientes />} />
-                    <Route path='/parte1' element={<Parte1 />} />
-                    <Route path='/parte2' element={<Parte2 />} />
-                    <Route path='/parte3' element={<Parte3 />} />
+                    <Route path='/historial_clinico_p1' element={<V_HistoriaClinica1 />} />
+                    <Route path='/historial_clinico_p2' element={<V_HistoriaClinica2 />} />
+                    <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />
 
                     <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />
 

@@ -197,16 +197,10 @@ const linkArray03 = [
     {
         label: "Historial Clinico",
         icon: <FaFileMedical />,
-        to: "/historia_clinica_simplificada"
+        to: "/historial_clinico_p1"
 
     },
 
-    {
-        label: "Antecedente",
-        icon: <FaFileMedical />,
-        to: "/antecedente"
-
-    },
     {
         label: "Historial Dental",
         icon: <FaFileMedical />,
