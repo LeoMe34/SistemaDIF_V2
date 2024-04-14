@@ -1,13 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { FaFileMedical, FaRegUserCircle } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
+import { useAuth } from '../../Contexto/AuthContext';
+import axios from 'axios';
 
 const isLoginPage = window.location.pathname === '/'
 
 
 export function MenuNave() {
+    const { token } = useAuth()
+    const [idUser, setIdUser] = useState(null);
+
+    useEffect(() => {
+        const getIdUser = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                const id_usuario = response.data.user_info.is_superuser
+                setIdUser(id_usuario)
+                console.log(response)
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+        getIdUser();
+    }, [token]);
+
     return (
 
         <div className="menu">
@@ -32,21 +55,21 @@ export function MenuNave() {
                 </div>
                 <h2>Usuario</h2>
             </div>*/}
-
-            <Collapsible trigger="Crear" >
-                {linkArray.map(({ icon, label, to }) => (
-                    <div className='LinkContainer' key={label}>
-                        <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                            <div className='LinkIcon'>
-                                {icon}
-                                <div>
-                                    <span>{label}</span>
+            {idUser && (
+                <Collapsible trigger="Crear" >
+                    {linkArray.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label} >
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </NavLink>
-                    </div>
-                ))}
-            </Collapsible>
+                            </NavLink>
+                        </div>
+                    ))}
+                </Collapsible>)}
 
             <Collapsible trigger="Fichas Tecnicas" >
                 {linkArray02.map(({ icon, label, to }) => (
