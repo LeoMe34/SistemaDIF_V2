@@ -84,6 +84,7 @@ def get_datos_usuario(request):
                     "username": user.username,
                     "email": user.email,
                     "no_trabajador": empleado.no_trabajador if empleado else None,
+                    "is_superuser": user.is_superuser,
                 },
             }
         )
@@ -480,8 +481,7 @@ def get_historialesO_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        historial_odonto = HistorialOdonto.objects.filter(
-            empleado=empleado)
+        historial_odonto = HistorialOdonto.objects.filter(empleado=empleado)
         serializer = HistorialOdontoSerializer(historial_odonto, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -559,7 +559,8 @@ def get_notasEvolucionO(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
-    
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_notasEvolucionO_relacionada(request, pk):
@@ -573,8 +574,6 @@ def get_notasEvolucionO_relacionada(request, pk):
             {"error": "El historial odontológico especificado no existe"},
             status=status.HTTP_404_NOT_FOUND,
         )
-
-
 
 
 @api_view(["POST"])
@@ -737,6 +736,7 @@ def crear_notaMedica(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def buscar_notaMedica(request):
@@ -752,18 +752,26 @@ def buscar_notaMedica(request):
     for nota_medica in notas_medicas:
         nota_medica_data = NotaMedicaSerializer(nota_medica).data
         # Incluir los datos del paciente en la respuesta
-        nota_medica_data['paciente'] = {
-            'no_expediente': nota_medica.histMedic.paciente.no_expediente,
-            'nombre': nota_medica.histMedic.paciente.datosPersonalesPacient.get('nombre', ''),
-            'apellido_paterno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoP', ''),
-            'apellido_materno': nota_medica.histMedic.paciente.datosPersonalesPacient.get('apellidoM', ''),
+        nota_medica_data["paciente"] = {
+            "no_expediente": nota_medica.histMedic.paciente.no_expediente,
+            "nombre": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+                "nombre", ""
+            ),
+            "apellido_paterno": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+                "apellidoP", ""
+            ),
+            "apellido_materno": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+                "apellidoM", ""
+            ),
             # Agrega otros campos del paciente si los necesitas
         }
         notas_medicas_data.append(nota_medica_data)
 
     if not notas_medicas_data:
         return Response(
-            {"error": "No se encontraron notas médicas relacionadas con ese número de expediente"},
+            {
+                "error": "No se encontraron notas médicas relacionadas con ese número de expediente"
+            },
             status=status.HTTP_404_NOT_FOUND,
         )
 
