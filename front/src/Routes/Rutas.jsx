@@ -48,8 +48,8 @@ export function Rutas() {
 
                     <Route path='/notas_medicas' element={<V_NotasMedicas />} />
                     <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
-                    <Route path='/antecedente' element={<V_Antecedentes />} />
-                    <Route path='/hist_dent' element={<V_HistClinDent />} />
+                    {/*<Route path='/antecedente' element={<V_Antecedentes />} />
+                    <Route path='/hist_dent' element={<V_HistClinDent />} />*/}
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
                     <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
