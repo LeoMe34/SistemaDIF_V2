@@ -78,7 +78,7 @@ export function NotaSubsecuente1() {
                     </ol>
                 </nav>
             </div>
-            <div className='mt-3 mb-5 container'>
+            <div className='mt-3 mb-4 container'>
                 <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
             </div>
 

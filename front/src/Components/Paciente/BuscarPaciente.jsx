@@ -66,7 +66,7 @@ function BusquedaPaciente({ getIdHistorialMedico }) {
                     {resultados.map((paciente) => (
                         <ol key={paciente.no_expediente}>
 
-                            <div className='datos-busqueda'>
+                            <div className='mb-2 datos-busqueda'>
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
                                         onChange={() => handlePacienteSeleccionado(paciente.no_expediente)} />
