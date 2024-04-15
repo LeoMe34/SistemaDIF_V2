@@ -8,7 +8,7 @@ import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
 
-export function NotaEvolucion() {
+export function NotaSubsecuente1() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
@@ -74,7 +74,7 @@ export function NotaEvolucion() {
                                 Historial clinico dental
                             </a>
                         </li>
-                        <li className="breadcrumb-item pag-actual" aria-current="page">Nota Evolución</li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Diagnóstico</li>
                     </ol>
                 </nav>
             </div>
@@ -88,34 +88,26 @@ export function NotaEvolucion() {
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>
-                <h2 className='subtitulo'>Nota Evolución</h2>
 
                 <div className="mt-3 ml-10 container">
-                    <div className="col">
-                        <label className="etiqueta mb-2" htmlFor="notas">Notas: </label>
-                        <textarea id="notas" placeholder="Notas" className="text-amplio" rows="5"
-                            {...register("notas", { required: true })} />
-                    </div>
                     <div className="mt-2 col">
                         <label className="etiqueta mb-2" htmlFor="diagnostico">Diagnóstico:</label>
                         <textarea id="diagnostico" type="text" placeholder="diagnostico" className="entrada" rows="5"
                             {...register("diagnostico", { required: true })} />
                     </div>
-                    <div className="mt-2 col">
-                        <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento:</label>
-                        <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5"
-                            {...register("tratamiento", { required: true })} />
-                    </div>
+
                     <div className="mt-2 col">
                         <label className="etiqueta mb-2" htmlFor="plan">Plan a seguir:</label>
                         <textarea id="plan" type="text" placeholder="Plan" className="entrada" rows="5"
                             {...register("plan", { required: true })} />
                     </div>
+
                     <div className="mt-2 col">
-                        <label className="etiqueta mb-2" htmlFor="tratamiento">Resumen de la consulta:</label>
-                        <textarea id="resumen" type="text" placeholder="resumen" className="entrada" rows="5"
-                            {...register("resumen", { required: true })} />
+                        <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento:</label>
+                        <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5"
+                            {...register("tratamiento", { required: true })} />
                     </div>
+                    
                 </div>
 
 
