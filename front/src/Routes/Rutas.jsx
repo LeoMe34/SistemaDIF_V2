@@ -31,6 +31,10 @@ import { V_CrearPacientePsico } from '../Views/Paciente/V_CrearPacientePsico'
 
 import { ListaPacientes } from '../Components/Paciente/ListaPacientes'
 
+import { V_HistorialOdonto1 } from '../Views/FormatoOdonto/V_HistorialOdonto1'
+import { V_HistorialOdonto2 } from '../Views/FormatoOdonto/V_HistorialOdonto2'
+import { V_HistorialOdonto3 } from '../Views/FormatoOdonto/V_HistorialOdonto3'
+
 export function Rutas() {
     return (
         <div>
@@ -67,6 +71,10 @@ export function Rutas() {
                     <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />
 
                     <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />
+
+                    <Route path='/historial_odontologico_p1' element={<V_HistorialOdonto1 />} />
+                    <Route path='/historial_odontologico_p2' element={<V_HistorialOdonto2 />} />
+                    <Route path='/historial_odontologico_p3' element={<V_HistorialOdonto3 />} />
 
                 </Routes>
             </div>

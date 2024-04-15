@@ -204,7 +204,7 @@ const linkArray03 = [
     {
         label: "Historial Dental",
         icon: <FaFileMedical />,
-        to: "/hist_dent"
+        to: "/historial_odontologico_p1"
 
     },
 ]
