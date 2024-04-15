@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
-function BusquedaPaciente({getIdHistorialMedico}) {
+function BusquedaPaciente({ getIdHistorialMedico }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const [error, setError] = useState('');
@@ -35,13 +35,16 @@ function BusquedaPaciente({getIdHistorialMedico}) {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         setNoExpediente(noExpediente);
-        if(getIdHistorialMedico){
+        if (getIdHistorialMedico) {
             getIdHistorialMedico(noExpediente);
-        }        
+        }
     };
 
     return (
         <div>
+            <div className='mt-3 row form-campos'>
+                <label htmlFor="" className='etiqueta'>Ingrese el nombre o número de expediente:</label>
+            </div>
             <form onSubmit={handleSubmit}>
                 <div className="input-group buscador1">
                     <input type="text" className="form-control" placeholder="Ingrese el nombre o número de expediente"
@@ -53,18 +56,20 @@ function BusquedaPaciente({getIdHistorialMedico}) {
                         </div>
                     </button>
                 </div>
-                <div className='mt-3 ml-10 form-campos'>
-                    <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
-                </div>
+                {resultados.length > 0 && (
+                    <div className='mt-3 ml-10 form-campos'>
+                        <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
+                    </div>
+                )}
 
                 <ul className='mt-3 p-0'>
                     {resultados.map((paciente) => (
                         <ol key={paciente.no_expediente}>
 
-                            <div className='datos-busqueda'>                                
+                            <div className='datos-busqueda'>
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
-                                        onChange={() => handlePacienteSeleccionado(paciente.no_expediente)}/>
+                                        onChange={() => handlePacienteSeleccionado(paciente.no_expediente)} />
                                     <label className='form-check-label etiqueta' htmlFor="seleccionar">Seleccionar</label>
                                 </div>
                                 <div className='mb-2 mt-3'>
