@@ -6,7 +6,8 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 function BusquedaPaciente({ getIdHistorialMedico }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
-    const [error, setError] = useState('');
+    const { showResultados, setShowResultados } = useState(true);
+    const [ setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
 
@@ -26,6 +27,7 @@ function BusquedaPaciente({ getIdHistorialMedico }) {
             });
             setResultados(response.data);
             console.log(resultados)
+            setShowResultados(true)
             setError('');
         } catch (error) {
             setError('Ocurrió un error al buscar pacientes.');
@@ -38,7 +40,12 @@ function BusquedaPaciente({ getIdHistorialMedico }) {
         if (getIdHistorialMedico) {
             getIdHistorialMedico(noExpediente);
         }
+        // Filtrar los resultados para mantener solo al paciente seleccionado
+        const pacienteSeleccionado = resultados.find(paciente => paciente.no_expediente === noExpediente);
+        setResultados([pacienteSeleccionado]);
+        setShowResultados(false);
     };
+    
 
     return (
         <div>
@@ -56,7 +63,7 @@ function BusquedaPaciente({ getIdHistorialMedico }) {
                         </div>
                     </button>
                 </div>
-                {resultados.length > 0 && (
+                {resultados.length > 0 && showResultados && (
                     <div className='mt-3 ml-10 form-campos'>
                         <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
                     </div>
