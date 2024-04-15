@@ -220,7 +220,7 @@ const linkArray04 = [
     {
         label: "Nota Subsecuente",
         icon: <FaFileMedical />,
-        to: "/nota_subs"
+        to: "/nota_subs1"
 
     },
     {
