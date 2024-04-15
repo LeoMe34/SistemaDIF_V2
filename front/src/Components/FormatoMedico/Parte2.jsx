@@ -30,7 +30,7 @@ export function Parte2() {
 
         localStorage.setItem('datos2', JSON.stringify(data));
 
-        navegador('/parte3');
+        navegador('/historial_clinico_p3');
     });
 
     return (
