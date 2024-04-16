@@ -55,7 +55,7 @@ export function CrearEmpleado() {
     })
 
     return (
-        <div>
+        <div className='container'>
             <div className="mt-3 ml-10 container">
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">

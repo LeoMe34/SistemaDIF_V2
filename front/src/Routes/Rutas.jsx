@@ -10,7 +10,8 @@ import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsi
 import { V_Antecedentes } from '../Views/FormatoOdonto/V_Antecedentes'
 import { V_HistClinDent } from '../Views/FormatoOdonto/V_HistClinDent'
 import { V_CrearPaciente } from '../Views/Paciente/V_CrearPaciente'
-import { V_NotaSubsecuente } from '../Views/FormatoOdonto/V_NotaSubsecuente'
+import { V_NotaSubsecuente1 } from '../Views/FormatoOdonto/V_NotaSubsecuente1'
+import { V_NotaSubsecuente2 } from '../Views/FormatoOdonto/V_NotaSubsecuente2'
 import { V_NotaEvolucion } from '../Views/FormatoOdonto/V_NotaEvolucion'
 import { V_HomeAdmin } from '../Views/Homes/V_HomeAdmin'
 import { V_HomeEnfermeria } from '../Views/Homes/V_HomeEnfermeria'
@@ -51,7 +52,9 @@ export function Rutas() {
                     {/*<Route path='/antecedente' element={<V_Antecedentes />} />
                     <Route path='/hist_dent' element={<V_HistClinDent />} />*/}
                     <Route path='/crear_paciente' element={<V_CrearPaciente />} />
-                    <Route path='/nota_subs' element={<V_NotaSubsecuente />} />
+                    
+                    <Route path='/nota_subs1' element={<V_NotaSubsecuente1 />} />
+                    <Route path='/nota_subs2' element={<V_NotaSubsecuente2 />} />
                     <Route path='/nota_evo' element={<V_NotaEvolucion />} />
                     <Route path='/receta' element={<V_Receta />} />
                     <Route path='/usuario' element={<V_Usuario />} />

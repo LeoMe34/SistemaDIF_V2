@@ -1,6 +1,6 @@
 
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria"
-export function NotaSubsecuente() {
+export function NotaSubsecuente2() {
     return (
         <div>
             {/*Este debe cambiar sus migas */}

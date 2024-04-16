@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 
 # Create your models here.
@@ -134,6 +136,7 @@ class HistorialOdonto(models.Model):
 
 
 class NotaEvolucionOdonto(models.Model):
+    fecha = models.DateField(default=timezone.now)
     diagnostico = models.TextField(max_length=100, default="")
     tratamiento = models.TextField(max_length=100, default="")
     notas = models.TextField(max_length=100, default="")

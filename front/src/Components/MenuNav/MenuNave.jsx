@@ -353,7 +353,39 @@ const linkArray06 = [
     {
         label: "Ficha Medico",
         icon: <FaFileMedical />,
+<<<<<<< HEAD
         to: "/ficha_tecnica_medico"
+=======
+        to: "/historial_odontologico_p1"
+
+    },
+]
+
+const linkArray04 = [
+
+    {
+        label: "Notas Medicas",
+        icon: <FaFileMedical />,
+        to: "/notas_medicas"
+
+    },
+    {
+        label: "Nota Subsecuente",
+        icon: <FaFileMedical />,
+        to: "/nota_subs1"
+
+    },
+    {
+        label: "Nota Evolución",
+        icon: <FaFileMedical />,
+        to: "/nota_evo"
+
+    },
+    {
+        label: "Receta",
+        icon: <FaFileMedical />,
+        to: "/receta"
+>>>>>>> a3027ca082d8658718491d6e707b8288ce5051c7
 
     },
 
