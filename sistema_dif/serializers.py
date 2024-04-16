@@ -16,11 +16,11 @@ from sistema_dif.models import (
 
 
 class RegistroSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
         fields = ("username", "password", "email")
         extra_kwargs = {
-            "password": {"write_only": True},
             "email": {
                 "required": True,
                 "allow_blank": False,
@@ -33,13 +33,13 @@ class RegistroSerializer(serializers.ModelSerializer):
             },
         }
 
-    def crear(self, validated_data):
+    def create(self, validated_data):
 
         username = validated_data.get("username")
         password = validated_data.get("password")
         email = validated_data.get("email")
 
-        user = User.objects.create(username=username, password=password, email=email)
+        user = User.objects.create_user(username=username, password=password, email=email)
 
         return user
 

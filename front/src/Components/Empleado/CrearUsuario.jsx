@@ -23,6 +23,7 @@ export function CrearUsuario() {
                     Authorization: `Token ${token}`
                 }
             })
+            console.log(contrasenia)
             const datosUsuario = respuesta.data.user_info;
             if ('username' in datosUsuario) {
                 console.log("Usuario registrado correctamente");
