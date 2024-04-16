@@ -36,7 +36,7 @@ from .models import (
 from rest_framework import status
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-
+from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
 
 
@@ -77,6 +77,7 @@ def get_datos_usuario(request):
     # Verificar si el usuario esta autenticadp
     if user.is_authenticated:
         empleado = Empleado.objects.filter(usuario=user).first()
+        group = Group.objects.filter(user=user).first()
         return Response(
             {
                 "user_info": {
@@ -84,6 +85,7 @@ def get_datos_usuario(request):
                     "username": user.username,
                     "email": user.email,
                     "no_trabajador": empleado.no_trabajador if empleado else None,
+                    "name": group.name if group else None,
                     "is_superuser": user.is_superuser,
                 },
             }

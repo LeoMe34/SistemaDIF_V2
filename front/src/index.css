@@ -474,6 +474,18 @@ textarea {
 
 }
 
+.MenuNav {
+  margin: 8px 0;
+  padding: 0 15%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  border-bottom-right-radius: 21px;
+}
+
 .LinkContainer {
   margin: 5px 0;
   padding: 0 15%;
