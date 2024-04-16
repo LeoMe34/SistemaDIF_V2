@@ -24,30 +24,15 @@ export function MenuNave() {
                 });
                 const id_usuario = response.data.user_info.is_superuser
                 setIdUser(id_usuario)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
         getIdUser();
-    }, [token]);
 
-    useEffect(() => {
-        const getUserGroup = async () => {
-            try {
-                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                });
-                const group_usuario = response.data.user_info.name
-                setUserGroup(group_usuario)
-                console.log(response)
-            } catch (error) {
-                console.error('Error al obtener grupo del usuario:', error);
-            }
-        };
-        getUserGroup();
     }, [token]);
 
     return (
@@ -76,7 +61,7 @@ export function MenuNave() {
             </div>*/}
             {idUser && (
                 <Collapsible trigger="Crear" >
-                    {linkArray.map(({ icon, label, to }) => (
+                    {linkArrayAdmin.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label} >
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -93,7 +78,7 @@ export function MenuNave() {
             {userGroup == "Enfermero" && (
                 <div>
                     <h3 className="MenuNav">Enfermero</h3>
-                    {linkArray02.map(({ icon, label, to }) => (
+                    {linkArrayEnfermero.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -110,7 +95,7 @@ export function MenuNave() {
             {userGroup == "Odontologo" && (
                 <div >
                     <h3 className="MenuNav">Odontologo</h3>
-                    {linkArray03.map(({ icon, label, to }) => (
+                    {linkArrayOdontologo.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -129,7 +114,7 @@ export function MenuNave() {
             {userGroup == "Medico" && (
                 <div >
                     <h3 className="MenuNav">Medico</h3>
-                    {linkArray04.map(({ icon, label, to }) => (
+                    {linkArrayMedico.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -147,7 +132,7 @@ export function MenuNave() {
             {userGroup == "Psicologo" && (
                 <div >
                     <h3 className="MenuNav">Psicologo</h3>
-                    {linkArray05.map(({ icon, label, to }) => (
+                    {linkArrayPsico.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -166,7 +151,7 @@ export function MenuNave() {
             {userGroup == "Nutriologo" && (
                 <div >
                     <h3 className="MenuNav">Nutriologo</h3>
-                    {linkArray06.map(({ icon, label, to }) => (
+                    {linkArrayNutri.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                                 <div className='LinkIcon'>
@@ -181,6 +166,25 @@ export function MenuNave() {
                 </div>
 
             )}
+
+            {userGroup == "Recepcion" && (
+                <div >
+                    <h3 className="MenuNav">Recepcionista</h3>
+                    {linkArrayRecep.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
+                                </div>
+                            </NavLink>
+                        </div>
+                    ))}
+                </div>
+            )}
+
 
             {/* {linkArrayLogOut.map(({ icon, label, to }) => (
                 <div className='LinkContainer' key={label}>
@@ -211,7 +215,7 @@ const linkArrayUser = [
 ]
 
 
-const linkArray = [
+const linkArrayAdmin = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -240,7 +244,23 @@ const linkArray = [
 
 ]
 
-const linkArray02 = [
+const linkArrayRecep = [
+    {
+        label: "Home",
+        icon: <FaHome />,
+        to: "/home_recepcion_medica"
+
+    },
+
+    {
+        label: "Crear Paciente",
+        icon: <FaFileMedical />,
+        to: "/crear_paciente"
+
+    },
+
+]
+const linkArrayEnfermero = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -257,7 +277,7 @@ const linkArray02 = [
 
 ]
 
-const linkArray03 = [
+const linkArrayOdontologo = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -287,7 +307,7 @@ const linkArray03 = [
     },
 ]
 
-const linkArray04 = [
+const linkArrayMedico = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -325,7 +345,7 @@ const linkArray04 = [
 
 ]
 
-const linkArray05 = [
+const linkArrayPsico = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -342,7 +362,7 @@ const linkArray05 = [
 
 ]
 
-const linkArray06 = [
+const linkArrayNutri = [
     {
         label: "Home",
         icon: <FaHome />,
@@ -353,39 +373,7 @@ const linkArray06 = [
     {
         label: "Ficha Medico",
         icon: <FaFileMedical />,
-<<<<<<< HEAD
         to: "/ficha_tecnica_medico"
-=======
-        to: "/historial_odontologico_p1"
-
-    },
-]
-
-const linkArray04 = [
-
-    {
-        label: "Notas Medicas",
-        icon: <FaFileMedical />,
-        to: "/notas_medicas"
-
-    },
-    {
-        label: "Nota Subsecuente",
-        icon: <FaFileMedical />,
-        to: "/nota_subs1"
-
-    },
-    {
-        label: "Nota Evolución",
-        icon: <FaFileMedical />,
-        to: "/nota_evo"
-
-    },
-    {
-        label: "Receta",
-        icon: <FaFileMedical />,
-        to: "/receta"
->>>>>>> a3027ca082d8658718491d6e707b8288ce5051c7
 
     },
 

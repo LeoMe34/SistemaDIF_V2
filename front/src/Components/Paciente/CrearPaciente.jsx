@@ -45,7 +45,7 @@ export function CrearPaciente() {
                 "datosDireccionPacient": {
                     direccion: data.direccion,
                     colonia: data.colonia
-                }
+                },
             }, {
                 headers: {
                     Authorization: `Token ${token}`
