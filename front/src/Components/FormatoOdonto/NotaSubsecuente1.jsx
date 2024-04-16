@@ -36,9 +36,7 @@ export function NotaSubsecuente1() {
             const respuesta = await axios.post(url, {
                 diagnostico: data.diagnostico,
                 tratamiento: data.tratamiento,
-                notas: data.notas,
                 plan: data.plan,
-                resumen_consulta: data.resumen,
                 histlOdonto: idHistOdonto
             }, {
                 headers: {
@@ -53,6 +51,7 @@ export function NotaSubsecuente1() {
 
     const enviar = async (data) => {
         registrarNotaEvoOdonto(data, idHistOdonto);
+        navegador('/nota_evo')
     }
     return (
         <div>

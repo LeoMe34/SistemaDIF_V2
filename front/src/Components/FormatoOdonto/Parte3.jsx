@@ -128,6 +128,7 @@ export function Parte3() {
 
     const enviar = handleSubmit(async data => {
         registrarHistOdonto(data)
+        navegador('/nota_subs1')
     })
 
     return (
