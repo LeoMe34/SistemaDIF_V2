@@ -128,6 +128,8 @@ export function Parte3() {
 
     const enviar = handleSubmit(async data => {
         registrarHistOdonto(data)
+        localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+
         navegador('/nota_subs1')
     })
 
