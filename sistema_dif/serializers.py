@@ -13,10 +13,18 @@ from sistema_dif.models import (
     Paciente,
     Receta,
 )
+from django.contrib.auth.models import Group
+
+
+class GrupoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id", "name"]
 
 
 class RegistroSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = User
         fields = ("username", "password", "email")
@@ -39,7 +47,9 @@ class RegistroSerializer(serializers.ModelSerializer):
         password = validated_data.get("password")
         email = validated_data.get("email")
 
-        user = User.objects.create_user(username=username, password=password, email=email)
+        user = User.objects.create_user(
+            username=username, password=password, email=email
+        )
 
         return user
 

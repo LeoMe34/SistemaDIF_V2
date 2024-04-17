@@ -1,4 +1,5 @@
 import { TablaEnfermeria } from "../FormatoEnfermeria/TablaEnfermeria"
+
 export function HomeEnfermeria() {
     return (
         <div>

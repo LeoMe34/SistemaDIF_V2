@@ -41,6 +41,10 @@ export function CrearEmpleado() {
             if (noTrabajadorRegistrado) {
                 console.log("Usuario registrado correctamente");
                 navegador("/crear_empleado");
+                return {
+                    usuarioID: noTrabajadorRegistrado.usuarioId,
+                    ocupacionNombre: noTrabajadorRegistrado.ocupacion
+                }
             } else {
                 console.log("Usuario duplicado");
             }
@@ -49,9 +53,26 @@ export function CrearEmpleado() {
         }
     }
 
+    const unirUsuarioGrupo = (usuarioID, ocupacionNombre) => {
+        axios.post(`http://127.0.0.1:8000/api/unir_grupo/${usuarioID}/${ocupacionNombre}/`)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+
     const enviar = handleSubmit(async data => {
-        console.log(data)
-        registrarEmpleado(data)
+        try {
+            console.log(data);
+            const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
+            console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
+            await unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
+        } catch (error) {
+            console.error('Error al registrar empleado:', error);
+        }
     })
 
     return (
@@ -88,14 +109,15 @@ export function CrearEmpleado() {
                                 {...register("ocupacion", { required: true })}>
 
                                 <option value="" disabled selected>Elija la opción</option>
-                                <option value="medicogral">Médico general</option>
-                                <option value="odontologo">Odontólogo</option>
-                                <option value="nutriologo">Nutriólogo</option>
-                                <option value="psicologo">Psicólogo</option>
+                                <option value="Medico">Médico general</option>
+                                <option value="Enfermero">Enfermero</option>
+                                <option value="Odontologo">Odontólogo</option>
+                                <option value="Nutriologo">Nutriólogo</option>
+                                <option value="Psicologo">Psicólogo</option>
                                 <option value="audiologo">Audiólogo</option>
                                 <option value="oftalmologo">Oftalmólogo</option>
-                                <option value="recepcion_medicina">Recepcionista de medicina general</option>
-                                <option value="recepcion_odonto">Recepcionista de odontología</option>
+                                <option value="Recepcion">Recepcionista de medicina general</option>
+                                <option value="Recepcion">Recepcionista de odontología</option>
                                 <option value="recepcion_psico">Recepcionista de psicología</option>
                             </select>
                             {errors.ocupacion && <span>Es necesario este campo</span>}

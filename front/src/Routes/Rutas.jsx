@@ -36,49 +36,113 @@ import { V_HistorialOdonto1 } from '../Views/FormatoOdonto/V_HistorialOdonto1'
 import { V_HistorialOdonto2 } from '../Views/FormatoOdonto/V_HistorialOdonto2'
 import { V_HistorialOdonto3 } from '../Views/FormatoOdonto/V_HistorialOdonto3'
 
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useAuth } from '../Contexto/AuthContext';
+
 export function Rutas() {
+    const { token } = useAuth()
+    const [idUser, setIdUser] = useState(null);
+    const [userGroup, setUserGroup] = useState(null);
+
+    useEffect(() => {
+        const getIdUser = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                const id_usuario = response.data.user_info.is_superuser
+                setIdUser(id_usuario)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
+                console.log(response)
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+        getIdUser();
+
+    }, [token]);
+
     return (
         <div>
             <div>
                 <Routes>
                     <Route path='/' element={<V_Login />} />
-                    <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
-                    <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
-                    <Route path='/crear_usuario' element={<V_CrearUsuario />} />
-                    <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />
+                    <Route path='/usuario' element={<V_Usuario />} />
+                    <Route path='/pacientes' element={<ListaPacientes />} />
 
-                    <Route path='/notas_medicas' element={<V_NotasMedicas />} />
-                    <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
+                    {idUser && (
+                        <>
+                            <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
+                            <Route path='/crear_usuario' element={<V_CrearUsuario />} />
+                            <Route path='/home_administrador' element={<V_HomeAdmin />} />
+                        </>
+                    )}
+
+                    {userGroup == "Enfermero" && (
+                        <>
+                            <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />,
+                            <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
+                        </>
+                    )}
+
+                    {userGroup == "Odontologo" && (
+                        <>
+                            <Route path='/home_odontologo' element={<V_HomeOdonto />} />,
+                            <Route path='/historial_odontologico_p1' element={<V_HistorialOdonto1 />} />,
+                            <Route path='/historial_odontologico_p2' element={<V_HistorialOdonto2 />} />,
+                            <Route path='/historial_odontologico_p3' element={<V_HistorialOdonto3 />} />,
+                            <Route path='/nota_subs1' element={<V_NotaSubsecuente1 />} />,
+                            <Route path='/nota_subs2' element={<V_NotaSubsecuente2 />} />,
+                            <Route path='/nota_evo' element={<V_NotaEvolucion />} />
+                        </>
+                    )}
+
+                    {userGroup == "Medico" && (
+                        <>
+                            <Route path='/home_medico' element={<V_HomeMedico />} />,
+                            <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />,
+                            <Route path='/notas_medicas' element={<V_NotasMedicas />} />,
+                            <Route path='/historial_clinico_p1' element={<V_HistoriaClinica1 />} />,
+                            <Route path='/historial_clinico_p2' element={<V_HistoriaClinica2 />} />,
+                            <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />,
+                            <Route path='/receta' element={<V_Receta />} />
+                        </>
+                    )}
+
+                    {userGroup == "Psicologo" && (
+                        <>
+                            <Route path='/home_psicologia' element={<V_HomePsico />} />,
+                            <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />,
+                            <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
+                        </>
+                    )}
+
+                    {userGroup == "Nutriologo" && (
+                        <>
+                            <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />,
+                            <Route path='/home_nutricion' element={<V_HomeNutricion />} />
+                        </>
+                    )}
+
+                    {userGroup == "Recepcion" && (
+                        <>
+                            <Route path='/home_recepcion_medica' element={<V_HomeRecepcionGral />} />,
+                            <Route path='/crear_paciente' element={<V_CrearPaciente />} />
+                        </>
+                    )}
+
+                    {userGroup == "RecepcionPsico" && (
+                        <>
+                            <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />,
+                            <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />
+                        </>
+                    )}
                     {/*<Route path='/antecedente' element={<V_Antecedentes />} />
                     <Route path='/hist_dent' element={<V_HistClinDent />} />*/}
-                    <Route path='/crear_paciente' element={<V_CrearPaciente />} />
-                    
-                    <Route path='/nota_subs1' element={<V_NotaSubsecuente1 />} />
-                    <Route path='/nota_subs2' element={<V_NotaSubsecuente2 />} />
-                    <Route path='/nota_evo' element={<V_NotaEvolucion />} />
-                    <Route path='/receta' element={<V_Receta />} />
-                    <Route path='/usuario' element={<V_Usuario />} />
-
-                    <Route path='/home_administrador' element={<V_HomeAdmin />} />
-                    <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />
-                    <Route path='/home_medico' element={<V_HomeMedico />} />
-                    <Route path='/home_odontologo' element={<V_HomeOdonto />} />
-                    <Route path='/home_psicologia' element={<V_HomePsico />} />
-                    <Route path='/home_recepcion_medica' element={<V_HomeRecepcionGral />} />
-                    <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />
-                    <Route path='/home_nutricion' element={<V_HomeNutricion />} />
-
-                    <Route path='/pacientes' element={<ListaPacientes />} />
-                    <Route path='/historial_clinico_p1' element={<V_HistoriaClinica1 />} />
-                    <Route path='/historial_clinico_p2' element={<V_HistoriaClinica2 />} />
-                    <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />
-
-                    <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />
-
-                    <Route path='/historial_odontologico_p1' element={<V_HistorialOdonto1 />} />
-                    <Route path='/historial_odontologico_p2' element={<V_HistorialOdonto2 />} />
-                    <Route path='/historial_odontologico_p3' element={<V_HistorialOdonto3 />} />
-
                 </Routes>
             </div>
         </div>

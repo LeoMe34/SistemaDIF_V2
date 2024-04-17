@@ -18,6 +18,7 @@ from .serializers import (
     NotaMedicaSerializer,
     PacienteSerializer,
     RecetaSerializer,
+    GrupoSerializer,
 )
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
@@ -38,6 +39,36 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
+
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def agregar_grupo(request):
+    serializer = GrupoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+def unir_usuario_grupo(request, usuario_id, nombre_grupo):
+    try:
+        usuario = User.objects.get(id=usuario_id)
+        grupo = Group.objects.get(name=nombre_grupo)
+        usuario.groups.add(grupo)
+        return Response(
+            {"mensaje": "Usuario unido al grupo correctamente"},
+            status=status.HTTP_200_OK,
+        )
+    except User.DoesNotExist:
+        return Response(
+            {"error": "El usuario no existe"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    except Group.DoesNotExist:
+        return Response(
+            {"error": "El grupo no existe"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
