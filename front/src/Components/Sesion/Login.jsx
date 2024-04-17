@@ -9,7 +9,57 @@ export function Login() {
     const [contrasenia, setContrasenia] = useState('')
     const navegador = useNavigate()
     const { login } = useAuth()
+    const [userGroup, setUserGroup] = useState(null);
+    const { token } = useAuth();
 
+    useEffect(() => {
+        const getIdUser = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                const is_super = response.data.user_info.is_superuser;
+                if (is_super) {
+                    navegador('/home_administrador');
+                } else {
+                    const group_usuario = response.data.user_info.name;
+                    setUserGroup(group_usuario);
+                    const route = userRoutes[group_usuario];
+                    if (route) {
+                        navegador(route);
+                    }
+                }
+                console.log(response);
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+        getIdUser();
+    }, [token, navegador]);
+
+    const userRoutes = {
+        'Enfermero': '/home_enfermeria',
+        'Odontologo': '/home_odontologo',
+        'Medico': '/home_medico',
+        'Psicologo': '/home_psicologia',
+        'Nutriologo': '/home_nutricion',
+        'Recepcion': '/home_recepcion_medica',
+        'RecepcionPsico': '/home_recepcion_psicologia'
+    }
+    /*
+        const homes = () => {
+    
+            const route = userRoutes[userGroup];
+            if (idUser && userGroup === null) {
+                navegador('/home_administrador')
+            }
+            else if (route) {
+                navegador(route)
+            }
+        }
+    */
     const iniciarSesion = async () => {
         try {
             const url = "http://127.0.0.1:8000/api/login/"
@@ -22,7 +72,6 @@ export function Login() {
             if (token) {
                 console.log('Usuario logueado correctamente');
                 login(token);
-                navegador('/home_enfermeria');
             } else {
                 console.error("La respuesta del servidor no contiene el token");
             }

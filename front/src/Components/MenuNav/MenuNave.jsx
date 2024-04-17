@@ -35,6 +35,18 @@ export function MenuNave() {
 
     }, [token]);
 
+    const logout = async () => {
+        try {
+            await axios.post("http://127.0.0.1:8000/api/logout/", null, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        }
+    }
+
     return (
 
         <div className="menu">
@@ -204,6 +216,15 @@ export function MenuNave() {
                 </div>
             )}
 
+            <div className='logoContent'>
+                <NavLink to='/' onClick={logout} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
+                    <div className='imgContent'>
+                        <IoIosLogOut />
+                    </div>
+                    <span>Cerrar Sesión</span>
+                </NavLink>
+
+            </div>
 
             {/* {linkArrayLogOut.map(({ icon, label, to }) => (
                 <div className='LinkContainer' key={label}>
