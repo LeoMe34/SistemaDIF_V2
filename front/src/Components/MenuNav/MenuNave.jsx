@@ -60,7 +60,8 @@ export function MenuNave() {
                 <h2>Usuario</h2>
             </div>*/}
             {idUser && (
-                <Collapsible trigger="Crear" >
+                <div>
+                    <h3 className="MenuNav">Administrador</h3>
                     {linkArrayAdmin.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label} >
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
@@ -73,7 +74,7 @@ export function MenuNave() {
                             </NavLink>
                         </div>
                     ))}
-                </Collapsible>)}
+                </div>)}
 
             {userGroup == "Enfermero" && (
                 <div>
@@ -185,6 +186,24 @@ export function MenuNave() {
                 </div>
             )}
 
+            {userGroup == "RecepcionPsico" && (
+                <div >
+                    <h3 className="MenuNav">Recepcionista</h3>
+                    {linkArrayRecepPsico.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
+                                </div>
+                            </NavLink>
+                        </div>
+                    ))}
+                </div>
+            )}
+
 
             {/* {linkArrayLogOut.map(({ icon, label, to }) => (
                 <div className='LinkContainer' key={label}>
@@ -235,13 +254,6 @@ const linkArrayAdmin = [
         to: "/crear_usuario"
 
     },
-    {
-        label: "Crear Paciente",
-        icon: <FaFileMedical />,
-        to: "/crear_paciente"
-
-    },
-
 ]
 
 const linkArrayRecep = [
@@ -260,6 +272,24 @@ const linkArrayRecep = [
     },
 
 ]
+
+const linkArrayRecepPsico = [
+    {
+        label: "Home",
+        icon: <FaHome />,
+        to: "/home_recepcion_psicologia"
+
+    },
+
+    {
+        label: "Crear Paciente",
+        icon: <FaFileMedical />,
+        to: "/crear_paciente_psicologia"
+
+    },
+
+]
+
 const linkArrayEnfermero = [
     {
         label: "Home",
@@ -295,7 +325,7 @@ const linkArrayOdontologo = [
     {
         label: "Nota Subsecuente",
         icon: <FaFileMedical />,
-        to: "/nota_subs"
+        to: "/nota_subs1"
 
     },
 
