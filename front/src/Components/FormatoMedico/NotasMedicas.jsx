@@ -62,6 +62,7 @@ export function NotasMedicas() {
                 }
             })
             console.log(data)
+            localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
