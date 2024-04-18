@@ -25,7 +25,7 @@ export function Receta() {
 
     const getIdNota = async () => {
         try {
-//            const url = `http://127.0.0.1:8000/api/get_detalles_NM/?histMedic=${idHistorial}`
+            //            const url = `http://127.0.0.1:8000/api/get_detalles_NM/?histMedic=${idHistorial}`
             const respuesta = await axios.get(`http://127.0.0.1:8000/api/get_detalles_NM/${idHistorial}`, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -82,6 +82,35 @@ export function Receta() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        {/*Cambiar dependiendo del si es doctor o nutri */}
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_medico">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\ficha_tecnica_medico">
+                                Ficha técnica de consulta médica
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\historia_clinica_simplificada">
+                                Historia Clínica Simplificada
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\historia_clinica_simplificada">
+                                Notas médicas
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Receta</li>
+                    </ol>
+                </nav>
+            </div>
+
             <div className='m-2'>
                 <h3 className="subtitulo">Receta medica</h3>
             </div>
