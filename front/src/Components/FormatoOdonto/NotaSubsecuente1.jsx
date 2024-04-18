@@ -13,9 +13,26 @@ export function NotaSubsecuente1() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [idHistOdonto, setHistOdonto] = useState(null)
-    const { noExpediente } = useNoExpediente()
+    const [noExpediente, setNotExpediente] = useState(null)
 
-    const getIdHistorialOdonto = async (noExpediente) => {
+    const getExp = () => {
+        const storedData = localStorage.getItem('noExp')
+        if (storedData) {
+            setNotExpediente(JSON.parse(storedData))
+        } else {
+            setNotExpediente(null)
+        }
+        console.log(noExpediente)
+    }
+
+    const handlePacienteSeleccionado = (noExpediente) => {
+        console.log("ID de la nota médica seleccionada:", noExpediente);
+        setIdNota(noExpediente)
+
+        // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
+    };
+
+    const getIdHistorialOdonto = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/getNotaEvo/?no_expediente=${noExpediente}`,
                 {
@@ -44,10 +61,21 @@ export function NotaSubsecuente1() {
                 }
             })
             console.log(data)
+            localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
     }
+
+    useEffect(() => {
+        getExp();
+    }, []);
+
+    useEffect(() => {
+        if (noExpediente) {
+            getIdHistorialOdonto();
+        }
+    }, [noExpediente]);
 
     const enviar = async (data) => {
         registrarNotaEvoOdonto(data, idHistOdonto);
@@ -78,7 +106,9 @@ export function NotaSubsecuente1() {
                 </nav>
             </div>
             <div className='mt-3 mb-4 container'>
-                <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
+                {!noExpediente && (
+                    <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                )}
             </div>
 
             <div className="mt-3 ml-10 container">
@@ -106,7 +136,7 @@ export function NotaSubsecuente1() {
                         <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5"
                             {...register("tratamiento", { required: true })} />
                     </div>
-                    
+
                 </div>
 
 

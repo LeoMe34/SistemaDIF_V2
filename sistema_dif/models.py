@@ -136,7 +136,7 @@ class HistorialOdonto(models.Model):
 
 
 class NotaEvolucionOdonto(models.Model):
-    fecha = models.DateField(default=timezone.now)
+    fecha = models.DateField(auto_now=False, auto_now_add=True)
     diagnostico = models.TextField(max_length=100, default="")
     tratamiento = models.TextField(max_length=100, default="")
     notas = models.TextField(max_length=100, default="")
