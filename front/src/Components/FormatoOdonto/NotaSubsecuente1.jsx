@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
-
 
 export function NotaSubsecuente1() {
     const navegador = useNavigate()
@@ -26,7 +24,7 @@ export function NotaSubsecuente1() {
     }
 
     const handlePacienteSeleccionado = (noExpediente) => {
-        console.log("ID de la nota médica seleccionada:", noExpediente);
+        console.log("No exp", noExpediente);
         setIdNota(noExpediente)
 
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta

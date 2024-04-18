@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -9,6 +10,7 @@ export function Parte3() {
     const [datos2, setDatos2] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const { token } = useAuth()
+    const navegador = useNavigate()
 
 
     useEffect(() => {
@@ -138,11 +140,14 @@ export function Parte3() {
             console.log(data)
         } catch (error) {
             console.error("Ocurrió un error", error);
+
         }
     }
 
     const enviar = handleSubmit(async data => {
         registrarHistorial(data);
+        localStorage.setItem('noExp', JSON.stringify(datos.noExpediente));
+        navegador('/notas_medicas')
     })
     return (
         <div>

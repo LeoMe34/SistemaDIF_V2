@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Contexto/AuthContext';
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
@@ -11,31 +10,27 @@ export function NotasMedicas() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const { noExpediente } = useNoExpediente()
+    const [noExpediente, setNotExpediente] = useState(null)
     const [idHistorial, setIdHistorial] = useState(null)
-    //const [noEmpleado, setNoEmpleado] = useState(null);
-    /*
-        useEffect(() => {
-            const getNoEmpleado = async () => {
-                try {
-    
-                    const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
-                        headers: {
-                            Authorization: `Token ${token}`
-                        }
-                    });
-                    const no_Empleado = response.data.user_info.no_trabajador
-                    setNoEmpleado(no_Empleado)
-                    console.log(response)
-                } catch (error) {
-                    console.error('Error al obtener ID de empleado:', error);
-                }
-            };
-    
-            getNoEmpleado();
-        }, [token]);
-    */
-    const getIdHistorialM = async (noExpediente) => {
+
+    const getExp = () => {
+        const storedData = localStorage.getItem('noExp')
+        if (storedData) {
+            setNotExpediente(JSON.parse(storedData))
+        } else {
+            setNotExpediente(null)
+        }
+        console.log(noExpediente)
+    }
+
+    const handlePacienteSeleccionado = (noExpediente) => {
+        console.log("No exp", noExpediente);
+        setIdNota(noExpediente)
+
+        // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
+    };
+
+    const getIdHistorialM = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/getHistorialM/?no_expediente=${noExpediente}`,
                 {
@@ -71,6 +66,16 @@ export function NotasMedicas() {
             console.error("Ocurrió un error", error);
         }
     }
+
+    useEffect(() => {
+        getExp();
+    }, []);
+
+    useEffect(() => {
+        if (noExpediente) {
+            getIdHistorialM();
+        }
+    }, [noExpediente]);
 
     const enviar = async (data) => {
         registrarNota(data, idHistorial);
@@ -110,7 +115,9 @@ export function NotasMedicas() {
 
             <div className='ml-10 mb-5 container'>
                 <div className="ml-10 mb-3">
-                    <BusquedaPaciente getIdHistorialMedico={getIdHistorialM} />
+                    {!noExpediente && (
+                        <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                    )}
                 </div>
             </div>
             <form onSubmit={handleSubmit(enviar)}>
