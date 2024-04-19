@@ -3,7 +3,7 @@ import { V_Login } from '../Views/Sesion/V_Login'
 import { V_FichaTecnicaEnfermeria } from '../Views/FormatoEnfermeria/V_FichaTecnicaEnfermeria'
 import { V_CrearEmpleado } from '../Views/Empleado/V_CrearEmpleado'
 import { V_CrearUsuario } from '../Views/Empleado/V_CrearUsuario'
-import { V_FichaTecnicaMedico } from '../Views/FormatosCompartidos/V_FichaTecnicaMedico'
+import { V_FichaTecnicaMedico } from '../Views/FormatoMedico/V_FichaTecnicaMedico'
 
 import { V_NotasMedicas } from '../Views/FormatoMedico/V_NotasMedicas'
 import { V_FichaTecnicaPsiologia } from '../Views/FormatoPsico/V_FichaTecnicaPsicologia'
