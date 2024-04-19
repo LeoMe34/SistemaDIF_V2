@@ -25,7 +25,7 @@ export function NotasMedicas() {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
-        setIdNota(noExpediente)
+        setNotExpediente(noExpediente)
 
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
