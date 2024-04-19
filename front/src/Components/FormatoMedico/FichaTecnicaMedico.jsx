@@ -55,6 +55,7 @@ export function FichaTecnicaMedico() {
 
     const enviar = handleSubmit(async data => {
         registrarFicha(data)
+        navegador('/historial_clinico_p1')
     })
 
     return (
