@@ -12,6 +12,7 @@ from sistema_dif.models import (
     NotaMedica,
     Paciente,
     Receta,
+    FichaTecnicaMedica,
 )
 from django.contrib.auth.models import Group
 
@@ -81,6 +82,12 @@ class FihaTecnicaPSerializer(serializers.ModelSerializer):
 class AnexoDocumentosSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnexoDocumentos
+        fields = "__all__"
+
+
+class FichaTecnicaMedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FichaTecnicaMedica
         fields = "__all__"
 
 

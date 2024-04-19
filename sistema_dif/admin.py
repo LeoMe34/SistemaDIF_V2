@@ -13,6 +13,7 @@ baseDatos = (
     NotaEvolucionOdonto,
     NotaMedica,
     Receta,
+    FichaTecnicaMedica,
 )
 
 admin.site.register(baseDatos)

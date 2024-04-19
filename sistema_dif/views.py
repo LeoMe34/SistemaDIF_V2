@@ -19,6 +19,7 @@ from .serializers import (
     PacienteSerializer,
     RecetaSerializer,
     GrupoSerializer,
+    FichaTecnicaMedSerializer,
 )
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
@@ -33,6 +34,7 @@ from .models import (
     NotaMedica,
     Paciente,
     Receta,
+    FichaTecnicaMedica,
 )
 from rest_framework import status
 from django.contrib.auth.decorators import login_required, permission_required
@@ -491,6 +493,82 @@ def eliminar_fichaTecnicaP(request, pk):
         return Response(status=404)
 
     fichaTecnicaP.delete()
+    return Response(status=204)
+
+
+# FichaTecnicaMedicina
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasTecnicasMed(request):
+    queryset = FichaTecnicaMedica.objects.all()
+    serializer = FichaTecnicaMedSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasMed_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        ficha_tecnica = FichaTecnicaMedica.objects.filter(empleado=empleado)
+        serializer = FichaTecnicaMedSerializer(ficha_tecnica, many=True)
+        return Response(serializer.data)
+    except FichaTecnicaMedica.DoesNotExist:
+        return Response(status=404)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_FichaTecnicaMed(request):
+    serializer = FichaTecnicaMedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaMed(request, pk):
+    try:
+        fichaTecnicaE = FichaTecnicaMedica.objects.get(pk=pk)
+    except FichaTecnicaMedica.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedSerializer(fichaTecnicaE)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_fichaTecnicaMed(request, pk):
+    try:
+        fichaTecnicaM = FichaTecnicaMedica.objects.get(pk=pk)
+    except FichaTecnicaMedica.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedSerializer(fichaTecnicaM, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_fichaTecnicaMed(request, pk):
+    try:
+        fichaTecnicaM = FichaTecnicaMedica.objects.get(pk=pk)
+    except FichaTecnicaMedica.DoesNotExist:
+        return Response(status=404)
+
+    fichaTecnicaM.delete()
     return Response(status=204)
 
 

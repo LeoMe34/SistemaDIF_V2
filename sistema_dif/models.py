@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-
 # Create your models here.
 class Empleado(models.Model):
     # datosPersonales = models.JSONField()  # nombre, apellidoPaterno, apellidoMaterno
@@ -34,7 +33,7 @@ class Paciente(models.Model):
     # nombre, apellidos, lugar y fecha nacimiento, edad, sexo, nacionalida, ocupacion, estado civil
     datosContactoPacient = models.JSONField()  # telefono, correo
     datosDireccionPacient = models.JSONField()  # direccion, colonia
-    area =  models.CharField(max_length=50, default="")
+    area = models.CharField(max_length=50, default="")
 
     objects = models.Manager()
 
@@ -100,6 +99,27 @@ class AnexoDocumentos(models.Model):
     objects = models.Manager()
 
 
+class FichaTecnicaMedica(models.Model):
+    diagnostico = models.TextField(max_length=100, default="")
+    motivo_consulta = models.TextField(max_length=100, default="")
+    observacion = models.TextField(max_length=100, default="")
+
+    paciente = models.ForeignKey(
+        Paciente,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
+    empleado = models.ForeignKey(
+        Empleado,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
+
+    objects = models.Manager()
+
+
 class HistorialOdonto(models.Model):
     fecha_elaboracion = models.DateField(auto_now=False, auto_now_add=True)
     referencia = models.JSONField()  # referencia y lugar ref, subsecuente/citado
@@ -119,20 +139,14 @@ class HistorialOdonto(models.Model):
     # fecha ultima regla y ult doc, planificacion familiar
     odontograma = models.BinaryField(max_length=40, blank=True, null=True)
 
-    paciente = models.ForeignKey(
-        Paciente,
-        on_delete=models.DO_NOTHING,
-        null=False,
-        blank=False,
-    )
-    empleado = models.ForeignKey(
-        Empleado,
-        on_delete=models.DO_NOTHING,
-        null=False,
-        blank=False,
-    )
-
     objects = models.Manager()
+
+    fichaMed = models.ForeignKey(
+        FichaTecnicaMedica,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
 
 
 class NotaEvolucionOdonto(models.Model):
@@ -176,14 +190,8 @@ class HistorialMedico(models.Model):
     estudiosExter = models.JSONField()
     # rayosX, lab, ultrasonido, tomografia
 
-    paciente = models.ForeignKey(
-        Paciente,
-        on_delete=models.DO_NOTHING,
-        null=False,
-        blank=False,
-    )
-    empleado = models.ForeignKey(
-        Empleado,
+    fichaMed = models.ForeignKey(
+        FichaTecnicaMedica,
         on_delete=models.DO_NOTHING,
         null=False,
         blank=False,
