@@ -20,6 +20,7 @@ from .serializers import (
     RecetaSerializer,
     GrupoSerializer,
     FichaTecnicaMedSerializer,
+    FichaTecnicaMedOdontoSerializer,
 )
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
@@ -35,6 +36,7 @@ from .models import (
     Paciente,
     Receta,
     FichaTecnicaMedica,
+    FichaTecnicaMedOdonto,
 )
 from rest_framework import status
 from django.contrib.auth.decorators import login_required, permission_required
@@ -733,6 +735,82 @@ def eliminar_notaEvolucionO(request, pk):
         return Response(status=404)
 
     notaEvolucionO.delete()
+    return Response(status=204)
+
+
+# FichaTecnicaMedicinaOdonto
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasTecnicasMedOdonto(request):
+    queryset = FichaTecnicaMedOdonto.objects.all()
+    serializer = FichaTecnicaMedOdontoSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasMedOdonto_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        ficha_tecnica = FichaTecnicaMedOdonto.objects.filter(empleado=empleado)
+        serializer = FichaTecnicaMedOdontoSerializer(ficha_tecnica, many=True)
+        return Response(serializer.data)
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def crear_FichaTecnicaMedOdonto(request):
+    serializer = FichaTecnicaMedOdontoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaMedOdonto(request, pk):
+    try:
+        fichaTecnicaMO = FichaTecnicaMedOdonto.objects.get(pk=pk)
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_fichaTecnicaMedOdonto(request, pk):
+    try:
+        fichaTecnicaMO = FichaTecnicaMedOdonto.objects.get(pk=pk)
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_fichaTecnicaMedOdonto(request, pk):
+    try:
+        fichaTecnicaMO = FichaTecnicaMedOdonto.objects.get(pk=pk)
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+    fichaTecnicaMO.delete()
     return Response(status=204)
 
 

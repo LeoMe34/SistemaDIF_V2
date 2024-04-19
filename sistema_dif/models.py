@@ -141,8 +141,14 @@ class HistorialOdonto(models.Model):
 
     objects = models.Manager()
 
-    fichaMed = models.ForeignKey(
-        FichaTecnicaMedica,
+    paciente = models.ForeignKey(
+        Paciente,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
+    empleado = models.ForeignKey(
+        Empleado,
         on_delete=models.DO_NOTHING,
         null=False,
         blank=False,
@@ -163,6 +169,21 @@ class NotaEvolucionOdonto(models.Model):
         null=False,
         blank=False,
     )
+    objects = models.Manager()
+
+
+class FichaTecnicaMedOdonto(models.Model):
+    diagnostico = models.TextField(max_length=100, default="")
+    motivo_consulta = models.TextField(max_length=100, default="")
+    observacion = models.TextField(max_length=100, default="")
+
+    notaEvo = models.ForeignKey(
+        NotaEvolucionOdonto,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
+
     objects = models.Manager()
 
 

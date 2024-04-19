@@ -14,6 +14,7 @@ baseDatos = (
     NotaMedica,
     Receta,
     FichaTecnicaMedica,
+    FichaTecnicaMedOdonto,
 )
 
 admin.site.register(baseDatos)
