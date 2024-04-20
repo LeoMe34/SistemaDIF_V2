@@ -817,19 +817,18 @@ def eliminar_fichaTecnicaMedOdonto(request, pk):
 # HistorialMedico
 
 
+from django.db.models import Count
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historialesMedicos(request):
-
     no_expediente = request.query_params.get("no_expediente")
     if no_expediente:
         historiales_paciente = HistorialMedico.objects.filter(
-            paciente__no_expediente=no_expediente
+            fichaMed__paciente__no_expediente=no_expediente
         )
         # Obtener los historiales médicos que no tienen una nota médica relacionada
-        historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaMedica.objects.values_list("histMedic_id", flat=True)
-        )
+        historiales_sin_nota = historiales_paciente.annotate(num_notas=Count('notamedica')).filter(num_notas=0)
         serializer = HistorialMedicoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
     else:
@@ -838,6 +837,7 @@ def get_historialesMedicos(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
 
 
 @api_view(["GET"])
