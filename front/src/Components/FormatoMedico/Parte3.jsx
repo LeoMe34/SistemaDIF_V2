@@ -8,7 +8,8 @@ export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
     const [datos, setDatos] = useState(null);
     const [datos2, setDatos2] = useState(null);
-    const [noEmpleado, setNoEmpleado] = useState(null);
+    const [noExpediente, setNoExpediente] = useState(null)
+    const [fichaMedica, setFichaMedica] = useState(null);
     const { token } = useAuth()
     const navegador = useNavigate()
 
@@ -16,9 +17,11 @@ export function Parte3() {
     useEffect(() => {
         const storedData = localStorage.getItem('datos');
         const storeData2 = localStorage.getItem('datos2')
-        if (storedData && storeData2) {
+        const noExp = localStorage.getItem('noExp')
+        if (storedData && storeData2 && noExp) {
             setDatos(JSON.parse(storedData));
             setDatos2(JSON.parse(storeData2))
+            setNoExpediente(JSON.parse(noExp))
         }
     }, []);
 
@@ -26,24 +29,23 @@ export function Parte3() {
     //console.log(datos2);
 
     useEffect(() => {
-        const getNoEmpleado = async () => {
+        const getFichaMedica= async () => {
             try {
 
-                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                const response = await axios.get(`http://127.0.0.1:8000/api/getFichaMedica/?no_expediente=${noExpediente}`, {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 });
-                const no_Empleado = response.data.user_info.no_trabajador
-                setNoEmpleado(no_Empleado)
+                setFichaMedica(response.data[0].id)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
 
-        getNoEmpleado();
-    }, [token]);
+        getFichaMedica();
+    }, [noExpediente]);
 
 
     const registrarHistorial = async (data) => {
@@ -130,8 +132,7 @@ export function Parte3() {
                 "estudiosExter": {
                     estudios: datos.estudios
                 },
-                paciente: datos.noExpediente,
-                empleado: noEmpleado
+                fichaMed: fichaMedica
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -146,7 +147,6 @@ export function Parte3() {
 
     const enviar = handleSubmit(async data => {
         registrarHistorial(data);
-        localStorage.setItem('noExp', JSON.stringify(datos.noExpediente));
         navegador('/notas_medicas')
     })
     return (

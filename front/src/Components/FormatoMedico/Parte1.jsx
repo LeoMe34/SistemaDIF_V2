@@ -1,12 +1,31 @@
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import React, { useEffect, useState } from 'react';
 
 export function Parte1() {
-    const navegador = useNavigate()    
+    const navegador = useNavigate()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const { noExpediente } = useNoExpediente()    
+    const [noExpediente, setNotExpediente] = useState(null)
+
+    const getExp = () => {
+        const storedData = localStorage.getItem('noExp')
+        if (storedData) {
+            setNotExpediente(JSON.parse(storedData))
+        } else {
+            setNotExpediente(null)
+        }
+        console.log(noExpediente)
+    }
+
+    const handlePacienteSeleccionado = (noExpediente) => {
+        console.log("No exp", noExpediente);
+        setNotExpediente(noExpediente)
+    };
+
+    useEffect(() => {
+        getExp();
+    }, []);
 
     const enviar = handleSubmit(async data => {
         const datosCompletos = { ...data, noExpediente };
@@ -38,7 +57,9 @@ export function Parte1() {
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
-                <BusquedaPaciente></BusquedaPaciente>
+                {!noExpediente && (
+                    <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                )}
 
                 <form onSubmit={enviar}>
                     <div className='ml-10 container'>
@@ -143,7 +164,7 @@ export function Parte1() {
                                 </select>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div className="text-center">
