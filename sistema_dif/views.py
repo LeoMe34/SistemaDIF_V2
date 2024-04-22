@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 
 
@@ -382,7 +383,8 @@ def get_fichasE_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(empleado=empleado)
+        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(
+            empleado=empleado)
         serializer = FichaTecnicaESerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaEnfermeria.DoesNotExist:
@@ -662,7 +664,8 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list(
+                "histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -679,13 +682,35 @@ def get_notasEvolucionO(request):
 def get_notasEvolucionO_relacionada(request, pk):
     try:
         historial = HistorialOdonto.objects.get(id=pk)
-        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
+        notas_historial = NotaEvolucionOdonto.objects.filter(
+            histlOdonto=historial)
         serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
         return Response(
             {"error": "El historial odontológico especificado no existe"},
             status=status.HTTP_404_NOT_FOUND,
+        )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_ultima_nota_evolucion(request):
+    no_expediente = request.query_params.get("no_expediente")
+    if no_expediente:
+        ultima_nota = NotaEvolucionOdonto.objects.filter(
+            histlOdonto__paciente__no_expediente=no_expediente
+        )
+        if ultima_nota.exists():  # Verificar si hay resultados
+            serializer = NotaEvolucionOdontoSerializer(
+                ultima_nota.first())  # Obtener el primer resultado
+            return Response(serializer.data)
+        else:
+            return Response({"error": "No se encontró ninguna nota de evolución para este paciente"}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(
+            {"error": "Debe proporcionar un número de expediente del paciente"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
@@ -719,7 +744,8 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(
+        notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -795,7 +821,8 @@ def modificar_fichaTecnicaMedOdonto(request, pk):
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
+    serializer = FichaTecnicaMedOdontoSerializer(
+        fichaTecnicaMO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -817,8 +844,6 @@ def eliminar_fichaTecnicaMedOdonto(request, pk):
 # HistorialMedico
 
 
-from django.db.models import Count
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historialesMedicos(request):
@@ -828,7 +853,8 @@ def get_historialesMedicos(request):
             fichaMed__paciente__no_expediente=no_expediente
         )
         # Obtener los historiales médicos que no tienen una nota médica relacionada
-        historiales_sin_nota = historiales_paciente.annotate(num_notas=Count('notamedica')).filter(num_notas=0)
+        historiales_sin_nota = historiales_paciente.annotate(
+            num_notas=Count('notamedica')).filter(num_notas=0)
         serializer = HistorialMedicoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
     else:
@@ -837,7 +863,6 @@ def get_historialesMedicos(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
 
 
 @api_view(["GET"])

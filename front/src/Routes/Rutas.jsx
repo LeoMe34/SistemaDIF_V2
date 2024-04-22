@@ -35,6 +35,7 @@ import { ListaPacientes } from '../Components/Paciente/ListaPacientes'
 import { V_HistorialOdonto1 } from '../Views/FormatoOdonto/V_HistorialOdonto1'
 import { V_HistorialOdonto2 } from '../Views/FormatoOdonto/V_HistorialOdonto2'
 import { V_HistorialOdonto3 } from '../Views/FormatoOdonto/V_HistorialOdonto3'
+import { V_FichaMedicaO } from '../Views/FormatoOdonto/V_FichaMedicaO'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -97,6 +98,7 @@ export function Rutas() {
                             <Route path='/historial_odontologico_p3' element={<V_HistorialOdonto3 />} />,
                             <Route path='/nota_subs1' element={<V_NotaSubsecuente1 />} />,
                             <Route path='/nota_subs2' element={<V_NotaSubsecuente2 />} />,
+                            <Route path='/ficha_medica' element={<V_FichaMedicaO />} />,
                             <Route path='/nota_evo' element={<V_NotaEvolucion />} />
                         </>
                     )}

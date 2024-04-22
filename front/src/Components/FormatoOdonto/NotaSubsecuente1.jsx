@@ -59,7 +59,6 @@ export function NotaSubsecuente1() {
                 }
             })
             console.log(data)
-            localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -77,7 +76,7 @@ export function NotaSubsecuente1() {
 
     const enviar = async (data) => {
         registrarNotaEvoOdonto(data, idHistOdonto);
-        navegador('/nota_evo')
+        navegador('/ficha_medica')
     }
     return (
         <div>
