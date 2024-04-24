@@ -37,6 +37,7 @@ urlpatterns = [
     path("historial_clinico_home/", views.get_historiales_relacionadas),
     path("historial_odonto_home/", views.get_historialesO_relacionadas),
     path("ficha_psicologia_home/", views.get_fichasTecnicasP),
+    path("ficha_medica/", views.get_fichasMed_relacionadas),
 
     path("crear_receta/", views.crear_receta),
     path("registrar_ficha_medica/", views.crear_FichaTecnicaMed),

@@ -1,4 +1,4 @@
-
+import { TablaNutriologia } from "../FormatoNutriologo/TablaNutriologo"
 export function HomeNutricion() {
     return (
         <div>
@@ -10,6 +10,7 @@ export function HomeNutricion() {
                     </ol>
                 </nav>
             </div>
+            <TablaNutriologia></TablaNutriologia>
         </div>
     )
 }
