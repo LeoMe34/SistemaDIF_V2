@@ -10,7 +10,8 @@ urlpatterns = [
     path("logoutall/", knox_views.LogoutAllView.as_view()),
     path("registrar_empleado/", views.crear_empleado),
     path("crear_grupo/", views.agregar_grupo),
-    path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/", views.unir_usuario_grupo),
+    path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/",
+         views.unir_usuario_grupo),
     path("registrar_paciente/", views.crear_paciente),
     path("detalle_paciente/<str:pk>", views.detalle_paciente),
     path("pacientes/", views.get_pacientes),
@@ -27,12 +28,16 @@ urlpatterns = [
     path("get_detalles_NM/<int:id_historial>", views.detalle_notaMedica),
     path("getNotaEvo/", views.get_notasEvolucionO),
     path("get_ultima_notaEvo/", views.get_ultima_nota_evolucion),
-    
-    path("notas_evo_relacionadas/<int:pk>", views.get_notasEvolucionO_relacionada),
+
+    path("notas_evo_relacionadas/<int:pk>",
+         views.get_notasEvolucionO_relacionada),
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
+
     path("fichas_home/", views.get_fichasE_relacionadas),
     path("historial_clinico_home/", views.get_historiales_relacionadas),
     path("historial_odonto_home/", views.get_historialesO_relacionadas),
+    path("ficha_psicologia_home/", views.get_fichasTecnicasP),
+
     path("crear_receta/", views.crear_receta),
     path("registrar_ficha_medica/", views.crear_FichaTecnicaMed),
     path("getFichaMedica/", views.get_fichasTecnicasMed),

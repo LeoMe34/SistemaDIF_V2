@@ -450,6 +450,21 @@ def get_fichasTecnicasP(request):
     serializer = FihaTecnicaPSerializer(queryset, many=True)
     return Response(serializer.data)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichasTP_relacionadas(request):
+    try:
+        usuario = request.user
+        # Imprimir todos los empleados asociados al usuario
+        print(usuario.empleado_set.all())
+        # Obtener el primer empleado asociado al usuario
+        empleado = usuario.empleado_set.first()
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
+        serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
+        return Response(serializer.data)
+    except FichaTecnicaPsicologia.DoesNotExist:
+        return Response(status=404)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

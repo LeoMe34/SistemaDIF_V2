@@ -1,3 +1,4 @@
+import { TablaPsicologia } from "../FormatoPsico/TablaPsicologia"
 
 export function HomePsico() {
     return (
@@ -10,7 +11,7 @@ export function HomePsico() {
                     </ol>
                 </nav>
             </div>
-
+            <TablaPsicologia></TablaPsicologia>
         </div>
     )
 }
