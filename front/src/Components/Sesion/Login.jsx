@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
+import { showLoading } from '../../Modales/ModalLoading'
 
 
 export function Login() {
@@ -95,9 +96,10 @@ export function Login() {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        iniciarSesion()
+        await iniciarSesion()
+        showLoading()
     }
 
     return (

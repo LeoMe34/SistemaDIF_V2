@@ -1,6 +1,8 @@
 import { TablaEnfermeria } from "../FormatoEnfermeria/TablaEnfermeria"
+import { useEffect, useState } from "react";
 
 export function HomeEnfermeria() {
+
     return (
         <div>
             <div className="mt-3 container">
