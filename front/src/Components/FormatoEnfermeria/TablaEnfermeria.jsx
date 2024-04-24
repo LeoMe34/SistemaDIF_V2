@@ -8,6 +8,7 @@ export function TablaEnfermeria() {
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [fichasTecnicas, setFichasTenicas] = useState([])
     const [noExpediente, setNoExpediente] = useState([])
+    const [detallesPacientes, setDetallesPacientes] = useState([])
 
     const getNoEmpleado = async () => {
         try {
@@ -38,39 +39,33 @@ export function TablaEnfermeria() {
             const fichas = response.data
             const numExp = fichas.map(ficha => ficha.paciente)
 
-            setNoExpediente(numExp)
+            setDetallesPacientes([])
+            getDetallesPaciente(numExp)
 
         } catch (error) {
             console.error('Error al obtener las fichas técnicas:', error);
         }
     }
 
-    const getDetallesPaciente = async () => {
+    const getDetallesPaciente = async (numExpedientes) => {
         try {
-            const updatedFichasTecnicas = await Promise.all(
-                noExpediente.map(async expediente => {
-                    const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${expediente}`, {
-                        headers: {
-                            Authorization: `Token ${token}`
-                        }
-                    });
-                    const pacienteData = response.data; // Ajustar según la estructura de los datos de tu API
-                    return {
-                        ...fichasTecnicas.find(ficha => ficha.paciente === expediente), // Mantener las propiedades anteriores
-                        nombre: pacienteData.datosPersonalesPacient.nombre + " " + pacienteData.datosPersonalesPacient.apellidoP 
-                        + " " + pacienteData.datosPersonalesPacient.apellidoM,
-                        nacionalidad: pacienteData.datosPersonalesPacient.nacionalidad,
-                        edad: pacienteData.datosPersonalesPacient.edad
-                    };
-                })
-            );
-            setFichasTenicas(updatedFichasTecnicas);
+            const detallesPromises = numExpedientes.map(async expediente => {
+                const response = await axios.get(`http://127.0.0.1:8000/api/detalle_paciente/${expediente}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                return response.data;
+            });
+
+            const detalles = await Promise.all(detallesPromises);
+            setDetallesPacientes(detalles);
         } catch (error) {
             console.error('Error al obtener detalles del paciente:', error);
         }
     }
 
-    const convertirServicio = (numeroServicio) => {        
+    const convertirServicio = (numeroServicio) => {
         switch (numeroServicio) {
             case "1":
                 return "Consulta general";
@@ -86,30 +81,24 @@ export function TablaEnfermeria() {
     }
 
     const convertirPoblacion = (ficha) => {
-        if (ficha.datosDemograficos.embarazada){
+        if (ficha.datosDemograficos.embarazada) {
             return "Embarazada"
         }
-        else if(ficha.datosDemograficos.discapacitado){
+        else if (ficha.datosDemograficos.discapacitado) {
             return "Discapacitado"
         }
-        else if(ficha.datosDemograficos.adulto_mayor){
+        else if (ficha.datosDemograficos.adulto_mayor) {
             return "Adulto mayor"
         }
-        else{
+        else {
             return "Ninguna"
-        }            
+        }
     }
 
     useEffect(() => {
         getNoEmpleado();
         getFichasTecnicas()
     }, [token, noEmpleado]);
-
-    useEffect(() => {
-        if (noExpediente.length > 0) {
-            getDetallesPaciente();
-        }
-    }, [noExpediente]);
 
     return (
         <div className="container">
@@ -123,21 +112,21 @@ export function TablaEnfermeria() {
                             <th className="">No.Expediente</th>
                             <th className="">Nombre</th>
                             <th className="">Edad</th>
-                            <th className="">Servicio</th>                            
+                            <th className="">Servicio</th>
                             <th className="">Población</th>
                             <th className="">Nacionalidad</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {fichasTecnicas.map(ficha => (
-                            <tr key={ficha.id}>
+                        {fichasTecnicas.map((ficha, index) => (
+                            <tr key={index}>
                                 <td className="">{ficha.paciente}</td>
-                                <td className="">{ficha.nombre}</td>
-                                <td className="">{ficha.edad}</td>
-                                <td className="">{convertirServicio(ficha.servicio_enfermeria)}</td>                                
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="">{convertirServicio(ficha.servicio_enfermeria)}</td>
                                 <td className="">{convertirPoblacion(ficha)}</td>
-                                <td className="">{ficha.nacionalidad}</td>
+                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nacionalidad}</td>
                             </tr>
                         ))}
                     </tbody>
