@@ -9,6 +9,9 @@ export const AuthProvider = ({ children }) => {
     const login = (newToken) => {
         setToken(newToken);
         localStorage.setItem('token', newToken);
+        setTimeout(()=>{
+            window.location.reload()
+        },100)
     };
 
     const logout = () => {

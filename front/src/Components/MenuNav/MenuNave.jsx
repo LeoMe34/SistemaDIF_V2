@@ -417,7 +417,7 @@ const linkArrayNutri = [
     {
         label: "Home",
         icon: <FaHome />,
-        to: "//home_nutricion"
+        to: "/home_nutricion"
 
     },
 
