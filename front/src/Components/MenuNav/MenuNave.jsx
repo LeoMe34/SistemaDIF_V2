@@ -424,7 +424,7 @@ const linkArrayNutri = [
     {
         label: "Ficha Medico",
         icon: <FaFileMedical />,
-        to: "/ficha_tecnica_medico"
+        to: "/ficha_tecnica"
 
     },
 

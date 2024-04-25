@@ -37,6 +37,8 @@ import { V_HistorialOdonto2 } from '../Views/FormatoOdonto/V_HistorialOdonto2'
 import { V_HistorialOdonto3 } from '../Views/FormatoOdonto/V_HistorialOdonto3'
 import { V_FichaMedicaO } from '../Views/FormatoOdonto/V_FichaMedicaO'
 
+import { V_FichaTecnica } from '../Views/FormatoNutricion/V_FichaTecnica'
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../Contexto/AuthContext';
@@ -125,7 +127,7 @@ export function Rutas() {
 
                     {userGroup == "Nutriologo" && (
                         <>
-                            <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />,
+                            <Route path='/ficha_tecnica' element={<V_FichaTecnica />} />,
                             <Route path='/home_nutricion' element={<V_HomeNutricion />} />
                         </>
                     )}
