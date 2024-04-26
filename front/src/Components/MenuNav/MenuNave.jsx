@@ -180,6 +180,44 @@ export function MenuNave() {
 
             )}
 
+            {userGroup == "oftalmologo" && (
+                <div >
+                    <h3 className="MenuNav">Oftalmólogo</h3>
+                    {linkArrayOftal.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
+                                </div>
+                            </NavLink>
+                        </div>
+                    ))}
+                </div>
+
+            )}
+
+            {userGroup == "audiologo" && (
+                <div >
+                    <h3 className="MenuNav">Audiólogo</h3>
+                    {linkArrayAudio.map(({ icon, label, to }) => (
+                        <div className='LinkContainer' key={label}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                                <div className='LinkIcon'>
+                                    {icon}
+                                    <div>
+                                        <span>{label}</span>
+                                    </div>
+                                </div>
+                            </NavLink>
+                        </div>
+                    ))}
+                </div>
+
+            )}
+
             {userGroup == "Recepcion" && (
                 <div >
                     <h3 className="MenuNav">Recepcionista</h3>
@@ -418,6 +456,40 @@ const linkArrayNutri = [
         label: "Home",
         icon: <FaHome />,
         to: "/home_nutricion"
+
+    },
+
+    {
+        label: "Ficha Medico",
+        icon: <FaFileMedical />,
+        to: "/ficha_tecnica"
+
+    },
+
+]
+
+const linkArrayOftal = [
+    {
+        label: "Home",
+        icon: <FaHome />,
+        to: "/home_oftalmologo"
+
+    },
+
+    {
+        label: "Ficha Medico",
+        icon: <FaFileMedical />,
+        to: "/ficha_tecnica"
+
+    },
+
+]
+
+const linkArrayAudio = [
+    {
+        label: "Home",
+        icon: <FaHome />,
+        to: "/home_audiologo"
 
     },
 
