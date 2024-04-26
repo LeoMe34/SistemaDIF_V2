@@ -13,6 +13,7 @@ export function FichaTecnica() {
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [showReferencia, setShowReferencia] = useState(false)
+    const [grupo, setGrupo] = useState('')
 
     const handleReferencia = (e) => {
         setShowReferencia(e.target.value === "1");
@@ -29,6 +30,7 @@ export function FichaTecnica() {
                 });
                 const no_Empleado = response.data.user_info.no_trabajador
                 setNoEmpleado(no_Empleado)
+                setGrupo(response.data.user_info.grupo)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -66,7 +68,14 @@ export function FichaTecnica() {
     const enviar = handleSubmit(async data => {
         registrarFicha(data)
         localStorage.setItem('noExp', JSON.stringify(noExpediente));
-        navegador('/home_nutricion')
+        
+        if (grupo === 'oftalmologo') {
+            navegador('/home_oftalmologo');
+        } else if (grupo === 'audiologo') {
+            navegador('/home_audiologo');
+        } else if (grupo === 'nutriologo') {
+            navegador('/home_nutricion');
+        }        
     })
 
     return (
