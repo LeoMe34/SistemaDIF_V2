@@ -23,6 +23,8 @@ import { V_Usuario } from '../Views/Empleado/V_Usuario'
 import { V_HomeRecepcionGral } from '../Views/Homes/V_HomeRecepcionGral'
 import { V_HomeRecepcionPsico } from '../Views/Homes/V_HomeRecepcionPsico'
 import { V_HomeNutricion } from '../Views/Homes/V_HomeNutricion'
+import { V_HomeOftalmologo } from '../Views/Homes/V_HomeOftalmogo'
+import { V_HomeAudiologo } from '../Views/Homes/V_HomeAudiologo'
 
 import { V_HistoriaClinica1 } from '../Views/FormatoMedico/V_HistoriaClinica1'
 import { V_HistoriaClinica2 } from '../Views/FormatoMedico/V_HistoriaClinica2'
@@ -129,6 +131,20 @@ export function Rutas() {
                         <>
                             <Route path='/ficha_tecnica' element={<V_FichaTecnica />} />,
                             <Route path='/home_nutricion' element={<V_HomeNutricion />} />
+                        </>
+                    )}
+
+                    {userGroup == "oftalmologo" && (
+                        <>
+                            <Route path='/ficha_tecnica' element={<V_FichaTecnica />} />,
+                            <Route path='/home_oftalmologo' element={<V_HomeOftalmologo />} />
+                        </>
+                    )}
+
+                    {userGroup == "audiologo" && (
+                        <>
+                            <Route path='/ficha_tecnica' element={<V_FichaTecnica />} />,
+                            <Route path='/home_audiologo' element={<V_HomeAudiologo />} />
                         </>
                     )}
 
