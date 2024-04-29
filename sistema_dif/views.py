@@ -887,15 +887,21 @@ def get_historialesMedicos(request):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        # Imprimir todos los empleados asociados al usuario
-        print(usuario.empleado_set.all())
-        # Obtener el primer empleado asociado al usuario
-        empleado = usuario.empleado_set.first()
-        historial_clinico = HistorialMedico.objects.filter(empleado=empleado)
-        serializer = HistorialMedicoSerializer(historial_clinico, many=True)
-        return Response(serializer.data)
+        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
+        historiales = HistorialMedico.objects.filter(fichaMed__in=ficha_medica)
+        # Serializar los historiales médicos junto con la información del paciente
+        serialized_data = []
+        for historial in historiales:
+            noExp = {
+                "no_expediente": historial.fichaMed.paciente.no_expediente
+            }
+            historial_data = HistorialMedicoSerializer(historial).data
+            historial_data["no_expediente"] = noExp
+            serialized_data.append(historial_data)
+        return Response(serialized_data)
     except HistorialMedico.DoesNotExist:
         return Response(status=404)
+
 
 
 @api_view(["POST"])

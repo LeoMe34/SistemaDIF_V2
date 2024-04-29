@@ -6,8 +6,12 @@ import { useAuth } from '../../Contexto/AuthContext';
 export function TablaMedicina() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombre, setNombre] = useState(null);
+    const [cedula, setCedula] = useState(null)
     const [historialClinico, setHistorialCLinico] = useState([])
     const [detallesPacientes, setDetallesPacientes] = useState([])
+    const [fechaActual, setFechaActual] = useState('')
+
 
     const getNoEmpleado = async () => {
         try {
@@ -17,7 +21,11 @@ export function TablaMedicina() {
                 }
             });
             const no_Empleado = response.data.user_info.no_trabajador
+            const nombre = response.data.user_info.nombre_empleado
+            const cedula = response.data.user_info.cedula_profesional
             setNoEmpleado(no_Empleado)
+            setNombre(nombre)
+            setCedula(cedula)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -34,7 +42,7 @@ export function TablaMedicina() {
             console.log(response.data)
             setHistorialCLinico(response.data)
 
-            const numExp = response.data.map(historial => historial.paciente)
+            const numExp = response.data.map(historial => historial.no_expediente.no_expediente)
             setDetallesPacientes([]) // Limpiar detalles de pacientes
             getDetallesPaciente(numExp)
 
@@ -59,6 +67,12 @@ export function TablaMedicina() {
         } catch (error) {
             console.error('Error al obtener detalles del paciente:', error);
         }
+    }
+
+    const getFechaActual = () => {
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10); // Formateamos la fecha como 'YYYY-MM-DD'
+        setFechaActual(formattedDate);
     }
 
     const convertirReferencia = (referencia) => {
@@ -89,17 +103,18 @@ export function TablaMedicina() {
     useEffect(() => {
         getNoEmpleado();
         getHistorialClinico();
+        getFechaActual()
     }, [token, noEmpleado]);
 
     return (
         <div className="container">
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" />
+                <input type="date" value={fechaActual} readOnly/>
                 <label className="">Nombre del medico</label>
-                <input type="text" />
+                <input type="text" value={nombre} readOnly/>
                 <label className="">Cedula profesional</label>
-                <input type="text" />
+                <input type="text" value={cedula} readOnly/>
                 <label className="">Localidad sede: Coatzacoalcos</label>
 
 
@@ -120,7 +135,7 @@ export function TablaMedicina() {
                         {historialClinico.map((historial, index) => (
                             <tr key={index}>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{historial.paciente}</td>
+                                <td className="">{historial.no_expediente.no_expediente}</td>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
                                 <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
                                 <td className="">{convertirReferencia(historial)}</td>
