@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 baseDatos = (
     Empleado,
     Paciente,
-    AnexoDocumentos,
     FichaTecnicaEnfermeria,
     FichaTecnicaPsicologia,
     HistorialMedico,
