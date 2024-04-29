@@ -6,9 +6,13 @@ import { useAuth } from '../../Contexto/AuthContext';
 export function TablaOdontologia() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombre, setNombre] = useState(null);
+    const [cedula, setCedula] = useState(null)
     const [historialOdonto, setHistorialOdonto] = useState([])
     const [detallesPacientes, setDetallesPacientes] = useState([])
     const [diagnosticos, setDiagnosticos] = useState([])
+    const [fechaActual, setFechaActual] = useState('')
+
 
     const getNoEmpleado = async () => {
         try {
@@ -18,7 +22,11 @@ export function TablaOdontologia() {
                 }
             });
             const no_Empleado = response.data.user_info.no_trabajador
+            const nombre = response.data.user_info.nombre_empleado
+            const cedula = response.data.user_info.cedula_profesional
             setNoEmpleado(no_Empleado)
+            setNombre(nombre)
+            setCedula(cedula)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -83,6 +91,12 @@ export function TablaOdontologia() {
         }
     }
 
+    const getFechaActual = () => {
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10); // Formateamos la fecha como 'YYYY-MM-DD'
+        setFechaActual(formattedDate);
+    }
+
     const convertirReferencia = (referencia) => {
         if (referencia.referencia.referencia) {
             return "Sí"
@@ -102,17 +116,18 @@ export function TablaOdontologia() {
     useEffect(() => {
         getNoEmpleado();
         getHistorialOdonto();
+        getFechaActual()
     }, [token, noEmpleado]);
 
     return (
         <div className="container">
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" />
+                <input type="date" value={fechaActual} readOnly/>
                 <label className="">Nombre del medico</label>
-                <input type="text" />
+                <input type="text" value={nombre} readOnly/>
                 <label className="">Cedula profesional</label>
-                <input type="text" />
+                <input type="text" value={cedula} readOnly/>
                 <label className="">Localidad sede: Coatzacoalcos</label>
 
 
