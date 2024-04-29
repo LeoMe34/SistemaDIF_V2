@@ -30,7 +30,7 @@ export function FichaTecnica() {
                 });
                 const no_Empleado = response.data.user_info.no_trabajador
                 setNoEmpleado(no_Empleado)
-                setGrupo(response.data.user_info.grupo)
+                setGrupo(response.data.user_info.name)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -66,8 +66,7 @@ export function FichaTecnica() {
     }
 
     const enviar = handleSubmit(async data => {
-        registrarFicha(data)
-        localStorage.setItem('noExp', JSON.stringify(noExpediente));
+        registrarFicha(data)        
         
         if (grupo === 'oftalmologo') {
             navegador('/home_oftalmologo');
