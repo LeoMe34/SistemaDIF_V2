@@ -6,8 +6,11 @@ import { useAuth } from '../../Contexto/AuthContext';
 export function TablaPsicologia() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombre, setNombre] = useState(null);
+    const [cedula, setCedula] = useState(null)
     const [fichalPsico, setFichaPsico] = useState([])
     const [detallesPacientes, setDetallesPacientes] = useState([])
+    const [fechaActual, setFechaActual] = useState('')
 
 
     const getNoEmpleado = async () => {
@@ -18,7 +21,11 @@ export function TablaPsicologia() {
                 }
             });
             const no_Empleado = response.data.user_info.no_trabajador
+            const nombre = response.data.user_info.nombre_empleado
+            const cedula = response.data.user_info.cedula_profesional
             setNoEmpleado(no_Empleado)
+            setNombre(nombre)
+            setCedula(cedula)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -97,6 +104,12 @@ export function TablaPsicologia() {
         }
     }
 
+    const getFechaActual = () => {
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10); // Formateamos la fecha como 'YYYY-MM-DD'
+        setFechaActual(formattedDate);
+    }
+
     const convertirVisita = (visita) => {
         switch (visita) {
             case "1":
@@ -111,17 +124,18 @@ export function TablaPsicologia() {
     useEffect(() => {
         getNoEmpleado()
         getFichaPsico()
+        getFechaActual()
     }, [token, noEmpleado])
 
     return (
         <div className="container">
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" />
+                <input type="date" value={fechaActual} readOnly/>
                 <label className="">Psicólogo(a): </label>
-                <input type="text" />
+                <input type="text" value={nombre} readOnly/>
                 <label className="">Cedula profesional</label>
-                <input type="text" />
+                <input type="text" value={cedula} readOnly/>
 
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
