@@ -452,6 +452,7 @@ def get_fichasTecnicasP(request):
     serializer = FihaTecnicaPSerializer(queryset, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_fichasTP_relacionadas(request):
@@ -461,7 +462,8 @@ def get_fichasTP_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(
+            empleado=empleado)
         serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
         return Response(serializer.data)
     except FichaTecnicaPsicologia.DoesNotExist:
@@ -887,7 +889,8 @@ def get_historialesMedicos(request):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
+        ficha_medica = FichaTecnicaMedica.objects.filter(
+            empleado__usuario=usuario)
         historiales = HistorialMedico.objects.filter(fichaMed__in=ficha_medica)
         # Serializar los historiales médicos junto con la información del paciente
         serialized_data = []
@@ -901,7 +904,6 @@ def get_historiales_relacionadas(request):
         return Response(serialized_data)
     except HistorialMedico.DoesNotExist:
         return Response(status=404)
-
 
 
 @api_view(["POST"])
@@ -1111,4 +1113,62 @@ def eliminar_receta(request, pk):
         return Response(status=404)
 
     receta.delete()
+    return Response(status=204)
+
+
+# ANEXAR DOCUMENOS
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def guardar_documento(request):
+    # Verifica si se ha enviado un archivo en la solicitud
+    if 'documento' not in request.FILES:
+        return Response({"error": "No se ha proporcionado un archivo"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Crea una instancia del serializador con los datos recibidos
+    serializer = AnexoDocumentosSerializer(
+        data={'documento': request.FILES['documento'], 'paciente': request.user.paciente.id})
+
+    # Valida los datos recibidos
+    if serializer.is_valid():
+        # Guarda el documento en la base de datos
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_documentos(request):
+    queryset = AnexoDocumentos.objects.all()
+    serializer = AnexoDocumentosSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def modificar_documento(request, pk):
+    try:
+        documento = AnexoDocumentos.objects.get(pk=pk)
+    except AnexoDocumentos.DoesNotExist:
+        return Response(status=404)
+
+    serializer = AnexoDocumentosSerializer(documento, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def eliminar_documento(request, pk):
+    try:
+        documento = AnexoDocumentos.objects.get(pk=pk)
+    except AnexoDocumentos.DoesNotExist:
+        return Response(status=404)
+
+    documento.delete()
     return Response(status=204)
