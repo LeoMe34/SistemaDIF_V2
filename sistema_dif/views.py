@@ -121,6 +121,8 @@ def get_datos_usuario(request):
                     "username": user.username,
                     "email": user.email,
                     "no_trabajador": empleado.no_trabajador if empleado else None,
+                    "nombre_empleado": empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno,
+                    "cedula": empleado.cedula_profesional,
                     "name": group.name if group else None,
                     "is_superuser": user.is_superuser,
                 },
