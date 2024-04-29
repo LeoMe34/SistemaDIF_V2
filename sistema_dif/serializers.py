@@ -5,7 +5,6 @@ from sistema_dif.models import (
     Empleado,
     FichaTecnicaEnfermeria,
     FichaTecnicaPsicologia,
-    AnexoDocumentos,
     HistorialMedico,
     HistorialOdonto,
     NotaEvolucionOdonto,
@@ -77,12 +76,6 @@ class FichaTecnicaESerializer(serializers.ModelSerializer):
 class FihaTecnicaPSerializer(serializers.ModelSerializer):
     class Meta:
         model = FichaTecnicaPsicologia
-        fields = "__all__"
-
-
-class AnexoDocumentosSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AnexoDocumentos
         fields = "__all__"
 
 

@@ -87,18 +87,6 @@ class FichaTecnicaPsicologia(models.Model):
     objects = models.Manager()
 
 
-class AnexoDocumentos(models.Model):
-    documento = models.BinaryField(max_length=40, blank=True, null=True)
-    paciente = models.ForeignKey(
-        Paciente,
-        on_delete=models.DO_NOTHING,
-        null=False,
-        blank=False,
-    )
-
-    objects = models.Manager()
-
-
 class FichaTecnicaMedica(models.Model):
     diagnostico = models.TextField(max_length=100, default="")
     motivo_consulta = models.TextField(max_length=100, default="")
