@@ -6,9 +6,10 @@ import { useAuth } from '../../Contexto/AuthContext';
 export function TablaEnfermeria() {
     const { token } = useAuth()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombre, setNombre] = useState(null)
     const [fichasTecnicas, setFichasTenicas] = useState([])
-    const [noExpediente, setNoExpediente] = useState([])
     const [detallesPacientes, setDetallesPacientes] = useState([])
+    const [fechaActual, setFechaActual] = useState('')
 
     const getNoEmpleado = async () => {
         try {
@@ -19,7 +20,9 @@ export function TablaEnfermeria() {
                 }
             });
             const no_Empleado = response.data.user_info.no_trabajador
+            const nombre = response.data.user_info.nombre_empleado
             setNoEmpleado(no_Empleado)
+            setNombre(nombre)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -65,6 +68,12 @@ export function TablaEnfermeria() {
         }
     }
 
+    const getFechaActual = () => {
+        const today = new Date();
+        const formattedDate = today.toISOString().substr(0, 10); // Formateamos la fecha como 'YYYY-MM-DD'
+        setFechaActual(formattedDate);
+    }
+
     const convertirServicio = (numeroServicio) => {
         switch (numeroServicio) {
             case "1":
@@ -98,13 +107,16 @@ export function TablaEnfermeria() {
     useEffect(() => {
         getNoEmpleado();
         getFichasTecnicas()
+        getFechaActual()
     }, [token, noEmpleado]);
 
     return (
         <div className="container">
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" />
+                <input type="date" value={fechaActual} readOnly/>
+                <label className="">Enfermero(a) responsable: </label>
+                <input type="text" value={nombre} readOnly/>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
