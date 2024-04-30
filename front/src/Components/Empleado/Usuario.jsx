@@ -8,6 +8,8 @@ export function Usuario() {
     const [nombre, setNombre] = useState(null)
     const [cedula, setCedula] = useState(null)
     const [email, setEmail] = useState(null)
+    const [telefono, setTelefono] = useState(null)
+    const [id, setId] = useState(null)
     const [detalleEmpleado, setDetalleEmpleado] = useState({});
     const [editando, setEditando] = useState(false);
 
@@ -28,6 +30,7 @@ export function Usuario() {
             setNombre(nombre)
             setCedula(cedula)
             setEmail(correo)
+            setId(response.data.user_info.id)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -43,6 +46,7 @@ export function Usuario() {
                 }
             });
             setDetalleEmpleado(response.data)
+            setTelefono(response.data.telefono)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener los datos del empleado:', error);
@@ -58,9 +62,24 @@ export function Usuario() {
         setEditando(true);
     };
 
-    const handleGuardarCambios = () => {
-        setEditando(false);
-    };
+    const handleGuardarCambios = async () => {
+        console.log(detalleEmpleado.id)
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/editar_empleado/${id}`, {
+                email: email,
+                telefono: telefono
+            }, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            console.log('Datos actualizados:', response.data);
+            setEditando(false);
+        } catch (error) {
+            console.error('Error al guardar cambios:', error);
+        }
+    }
+    
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -118,9 +137,9 @@ export function Usuario() {
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="telefono">Número telefónico:</label>
                             {editando ? (
-                                <input className="entrada" id='telefono' name='telefono' type="text" value={detalleEmpleado.telefono} onChange={handleTelefonoChange} />
+                                <input className="entrada" id='telefono' name='telefono' type="text" value={telefono} onChange={handleTelefonoChange} />
                             ) : (
-                                <input className="entrada" id='telefono' name='telefono' type="text" value={detalleEmpleado.telefono} readOnly />
+                                <input className="entrada" id='telefono' name='telefono' type="text" value={telefono} readOnly />
                             )}
                         </div>
                     </div>

@@ -222,20 +222,32 @@ def detalle_empleado(request):
         return Response({"error": "No se encontró un empleado asociado al usuario"}, status=404)
 
 
-
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
-def modificar_empleado(request, pk):
-    try:
-        empleado = Empleado.objects.get(pk=pk)
-    except Empleado.DoesNotExist:
-        return Response(status=404)
+# Cambia el nombre del parámetro a user_id
+def modificar_empleado(request, user_id):
+    # Obtener los datos proporcionados en la solicitud
+    datos = request.data
 
-    serializer = EmpleadoSerializer(empleado, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
+    try:
+        # Buscar al empleado por el id del usuario
+        empleado = Empleado.objects.get(usuario_id=user_id)
+
+        # Actualizar el número de teléfono del empleado con el valor proporcionado en la solicitud
+        empleado.telefono = datos['telefono']
+        empleado.save()
+
+        user = User.objects.get(id=user_id)
+        user.email = datos['email']
+        user.save()
+
+        # Devolver la respuesta con los datos actualizados del empleado
+        serializer = EmpleadoSerializer(empleado)
         return Response(serializer.data)
-    return Response(serializer.errors, status=400)
+    except Empleado.DoesNotExist:
+        return Response({'error': 'Empleado no encontrado'}, status=404)
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
 
 
 @api_view(["PATCH"])
