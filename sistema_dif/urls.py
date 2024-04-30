@@ -9,6 +9,8 @@ urlpatterns = [
     path("logout/", knox_views.LogoutView.as_view()),
     path("logoutall/", knox_views.LogoutAllView.as_view()),
     path("registrar_empleado/", views.crear_empleado),
+    path("get_empleado/", views.detalle_empleado),
+
     path("crear_grupo/", views.agregar_grupo),
     path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/",
          views.unir_usuario_grupo),

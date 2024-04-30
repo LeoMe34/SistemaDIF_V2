@@ -210,14 +210,17 @@ def crear_empleado(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_empleado(request, pk):
-    try:
-        empleado = Empleado.objects.get(pk=pk)
-    except Empleado.DoesNotExist:
-        return Response(status=404)
+def detalle_empleado(request):
+    user = request.user
 
-    serializer = EmpleadoSerializer(empleado)
-    return Response(serializer.data)
+    try:
+        # Obtener el empleado asociado al usuario
+        empleado = Empleado.objects.get(usuario=user)
+        serializer = EmpleadoSerializer(empleado)
+        return Response(serializer.data)
+    except Empleado.DoesNotExist:
+        return Response({"error": "No se encontró un empleado asociado al usuario"}, status=404)
+
 
 
 @api_view(["PUT"])
