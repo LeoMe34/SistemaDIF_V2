@@ -9,6 +9,7 @@ export function Usuario() {
     const [cedula, setCedula] = useState(null)
     const [email, setEmail] = useState(null)
     const [detalleEmpleado, setDetalleEmpleado] = useState({});
+    const [editando, setEditando] = useState(false);
 
 
     const getNoEmpleado = async () => {
@@ -22,7 +23,7 @@ export function Usuario() {
             const no_Empleado = response.data.user_info.no_trabajador
             const nombre = response.data.user_info.nombre_empleado
             const cedula = response.data.user_info.cedula_profesional
-            const correo = response.data.user_info.email            
+            const correo = response.data.user_info.email
             setNoEmpleado(no_Empleado)
             setNombre(nombre)
             setCedula(cedula)
@@ -53,6 +54,22 @@ export function Usuario() {
         getDatosEmpleado();
     }, [token, noEmpleado]);
 
+    const handleEditarPerfil = () => {
+        setEditando(true);
+    };
+
+    const handleGuardarCambios = () => {
+        setEditando(false);
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handleTelefonoChange = (e) => {
+        setTelefono(e.target.value);
+    };
+
     return (
         <div className='container'>
             <h2 className="subtitulo">Perfil de usuario</h2>
@@ -82,7 +99,7 @@ export function Usuario() {
                             <label className='etiqueta-user' htmlFor="area">Área:</label>
                             <input className="entrada" id='area' name='area' type="text" value={detalleEmpleado.area} readOnly />
                         </div>
-                         */}                        
+                         */}
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="rol">Rol:</label>
                             <input className="entrada" id='rol' name='rol' type="text" value={detalleEmpleado.ocupacion} readOnly />
@@ -92,16 +109,50 @@ export function Usuario() {
                     <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="correo">Correo electronico:</label>
-                            <input className="entrada" id='correo' name='correo' type="text" value={email} readOnly />
+                            {editando ? (
+                                <input className="entrada" id='correo' name='correo' type="text" value={email} onChange={handleEmailChange} />
+                            ) : (
+                                <input className="entrada" id='correo' name='correo' type="text" value={email} readOnly />
+                            )}
                         </div>
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="telefono">Número telefónico:</label>
-                            <input className="entrada" id='telefono' name='telefono' type="text" value={detalleEmpleado.telefono} readOnly />
-                        </div>                        
+                            {editando ? (
+                                <input className="entrada" id='telefono' name='telefono' type="text" value={detalleEmpleado.telefono} onChange={handleTelefonoChange} />
+                            ) : (
+                                <input className="entrada" id='telefono' name='telefono' type="text" value={detalleEmpleado.telefono} readOnly />
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="center container pt-1 mb-3 ml-10">
+                        <div className="col">
+                            {editando ? (
+                                <div>
+                                    <button className="btn btn-guardar btn-lg btn-block" onClick={handleGuardarCambios}>
+                                        Guardar cambios
+                                    </button>
+
+                                    <button className="btn ml-10 btn-cancelar btn-lg btn-block" onClick={handleGuardarCambios}>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <button className="btn btn-guardar btn-lg btn-block" onClick={handleEditarPerfil}>
+                                        Editar perfil
+                                    </button>
+                                    <button className="btn ml-10 btn-guardar btn-lg btn-block">
+                                        Cambiar contraseña
+                                    </button>
+                                </div>
+                            )}
+
+                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
