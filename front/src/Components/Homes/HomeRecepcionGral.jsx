@@ -1,3 +1,4 @@
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
 
 export function HomeRecepcionGral() {
     return (
@@ -10,6 +11,7 @@ export function HomeRecepcionGral() {
                     </ol>
                 </nav>
             </div>
+            <BusquedaPaciente isHomePage={true} />
         </div>
     )
 }

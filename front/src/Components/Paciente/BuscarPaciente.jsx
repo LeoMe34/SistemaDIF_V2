@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
-
-function BusquedaPaciente({ getIdHistorialMedico }) {
+import { useNavigate } from 'react-router-dom';
+function BusquedaPaciente({ getIdHistorialMedico, isHomePage }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const { showResultados, setShowResultados } = useState(true);
     const [ setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
+    const navegador = useNavigate()
 
 
     const handleConsultaChange = (event) => {
@@ -40,10 +41,15 @@ function BusquedaPaciente({ getIdHistorialMedico }) {
         if (getIdHistorialMedico) {
             getIdHistorialMedico(noExpediente);
         }
+
+        if(isHomePage){
+            navegador(`/mostrar_paciente/${noExpediente}`)
+        }
         // Filtrar los resultados para mantener solo al paciente seleccionado
         const pacienteSeleccionado = resultados.find(paciente => paciente.no_expediente === noExpediente);
         setResultados([pacienteSeleccionado]);
         setShowResultados(false);
+        
     };
     
 
