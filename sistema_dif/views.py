@@ -350,7 +350,6 @@ def buscar_paciente_psico(request):
     serializer = PacienteSerializer(pacientes, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def modificar_paciente(request, pk):
@@ -364,6 +363,7 @@ def modificar_paciente(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
+
 
 
 @api_view(["DELETE"])

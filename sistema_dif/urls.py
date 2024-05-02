@@ -17,6 +17,7 @@ urlpatterns = [
          views.unir_usuario_grupo),
     path("registrar_paciente/", views.crear_paciente),
     path("detalle_paciente/<str:pk>", views.detalle_paciente),
+    path("modificar_paciente/<str:pk>", views.modificar_paciente),
     path("pacientes/", views.get_pacientes),
     path("buscar_paciente/", views.buscar_paciente),
     path("buscar_paciente_psico/", views.buscar_paciente_psico),

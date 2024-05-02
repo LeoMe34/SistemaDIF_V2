@@ -40,6 +40,7 @@ import { V_HistorialOdonto3 } from '../Views/FormatoOdonto/V_HistorialOdonto3'
 import { V_FichaMedicaO } from '../Views/FormatoOdonto/V_FichaMedicaO'
 
 import { V_FichaTecnica } from '../Views/FormatoNutricion/V_FichaTecnica'
+import { V_MostrarPaciente } from '../Views/Paciente/V_MostrarPacienteM'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -152,6 +153,7 @@ export function Rutas() {
                         <>
                             <Route path='/home_recepcion_medica' element={<V_HomeRecepcionGral />} />,
                             <Route path='/crear_paciente' element={<V_CrearPaciente />} />
+                            <Route path='/mostrar_paciente/:noExpediente' element={<V_MostrarPaciente />} />
                         </>
                     )}
 
