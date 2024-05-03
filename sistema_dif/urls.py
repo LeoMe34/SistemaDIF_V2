@@ -13,6 +13,7 @@ urlpatterns = [
 
     path("registrar_empleado/", views.crear_empleado),
     path("get_empleado/", views.detalle_empleado),
+    path("get_todos_empleados/", views.get_empleados),
     path("editar_empleado/<int:user_id>", views.modificar_empleado),
 
     path("crear_grupo/", views.agregar_grupo),
@@ -27,6 +28,7 @@ urlpatterns = [
     path("buscar_nota_medica/", views.buscar_notaMedica),
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
     path("buscar_usuario/", views.buscar_usuario),
+
     path("crear_historial_medico/", views.crear_historialMedico),
     path("registrar_histOdonto/", views.crear_historialO),
     path("registrar_notaEvoOdont/", views.crear_notaEvolucionO),

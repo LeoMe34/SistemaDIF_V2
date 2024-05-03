@@ -7,8 +7,7 @@ import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
 function BuscarUsuario() {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
-    const [ showResultados, setShowResultados ] = useState(true);
-    const [setError] = useState('');
+    const [ showResultados, setShowResultados ] = useState(true);    
     const { token } = useAuth()
     const { setUsuarioId } = useUsuarioId()
 
@@ -28,9 +27,8 @@ function BuscarUsuario() {
             });
             setResultados(response.data);
             console.log(resultados)
-            setError('');
         } catch (error) {
-            setError('Ocurrió un error al buscar el usuario.');
+            console.log("Ocurrio un error: " + error)
             setResultados([]);
         }
     };

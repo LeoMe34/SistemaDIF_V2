@@ -232,7 +232,9 @@ def validar_contrasenia_actual(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_empleados(request):
-    queryset = Empleado.objects.all()
+    user = request.user  # Obtener el usuario autenticado
+    queryset = Empleado.objects.exclude(usuario=user)  # Excluir al usuario autenticado del queryset
+
     serializer = EmpleadoSerializer(queryset, many=True)
     return Response(serializer.data)
 

@@ -1,4 +1,5 @@
-
+import { TablaUsuarios } from "../Empleado/TablaUsuarios"
+import BuscarUsuario from "../Empleado/BuscarUsuario"
 export function HomeAdmin() {
     return (
         <div>
@@ -10,6 +11,9 @@ export function HomeAdmin() {
                     </ol>
                 </nav>
             </div>
+
+            <BuscarUsuario></BuscarUsuario>
+            <TablaUsuarios></TablaUsuarios>
         </div>
     )
 }
