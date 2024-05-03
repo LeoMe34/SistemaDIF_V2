@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const MySwal = withReactContent(Swal)
 
-export const cambiarContrasenia = (token) => {
+export const cambiarContrasenia = (token, onSuccess) => {
 
     MySwal.fire({
         title: "Ingresa tu contraseña actual",
@@ -33,7 +33,8 @@ export const cambiarContrasenia = (token) => {
             Swal.fire({
                 title: "Contraseña correcta",
                 icon: "success"
-            });           
+            })
+            if (onSuccess) onSuccess();
         }
     });
 }

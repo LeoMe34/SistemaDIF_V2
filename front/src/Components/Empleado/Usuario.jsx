@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form"
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import { cambiarContrasenia } from "../../Modales/CambiarContrasenia";
 
 export function Usuario() {
     const { token } = useAuth()
@@ -9,9 +11,14 @@ export function Usuario() {
     const [cedula, setCedula] = useState(null)
     const [email, setEmail] = useState(null)
     const [telefono, setTelefono] = useState(null)
+    const [contraseña, setContraseña] = useState(null)
+    const [confirmar_contra, setConfirmar_contra] = useState(null)
     const [id, setId] = useState(null)
     const [detalleEmpleado, setDetalleEmpleado] = useState({});
     const [editando, setEditando] = useState(false);
+    const { register, formState: { errors }, setValue } = useForm()
+
+    const [mostrarInputs, setMostrarInputs] = useState(false);
 
 
     const getNoEmpleado = async () => {
@@ -79,7 +86,7 @@ export function Usuario() {
             console.error('Error al guardar cambios:', error);
         }
     }
-    
+
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -88,6 +95,38 @@ export function Usuario() {
     const handleTelefonoChange = (e) => {
         setTelefono(e.target.value);
     };
+
+    const handleContraseña = (e) => {
+        setContraseña(e.target.value);
+    };
+
+    const handleConfirmarContra = (e) => {
+        setConfirmar_contra(e.target.value);
+    };
+
+    // Función para mostrar los campos de contraseña cuando la contraseña actual es validada
+    const mostrarInputsContraseña = () => {
+        cambiarContrasenia((token), () => {
+            setMostrarInputs(true);
+        });        
+    };
+
+    const handleModificarContrasenia = async (data) => {
+        console.log(detalleEmpleado.id)
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/cambiar_contrasenia/${id}`, {
+                password: contraseña              
+            }, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            console.log('Datos actualizados:', response.data);
+            setMostrarInputs(false)
+        } catch (error) {
+            console.error('Error al guardar cambios:', error);
+        }
+    }
 
     return (
         <div className='container'>
@@ -144,6 +183,28 @@ export function Usuario() {
                         </div>
                     </div>
 
+                    {mostrarInputs && (
+                        <div className="center container pt-1 mb-3 ml-10">
+                            <div className="col">
+                                <label className='etiqueta-user' htmlFor="nueva_contra">Nueva contraseña: </label>
+                                <input className="entrada" type="password" id="nueva_contra" placeholder="Nueva contraseña" 
+                                 onChange={handleContraseña}/>
+                            </div>
+
+                            <div className="col">
+                                <label className='etiqueta-user' htmlFor="confirmar_contra">Confirmar contraseña: </label>
+                                <input className="entrada" type="password" id="confirmar_contra" placeholder="Confirmar contraseña" 
+                                 onChange={handleConfirmarContra}/>
+                            </div>
+
+                            <div className="col">
+                                <button className="btn btn-guardar btn-lg btn-block" onClick={handleModificarContrasenia}>
+                                    Guardar contraseña
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="center container pt-1 mb-3 ml-10">
                         <div className="col">
                             {editando ? (
@@ -161,7 +222,7 @@ export function Usuario() {
                                     <button className="btn btn-guardar btn-lg btn-block" onClick={handleEditarPerfil}>
                                         Editar perfil
                                     </button>
-                                    <button className="btn ml-10 btn-guardar btn-lg btn-block">
+                                    <button className="btn ml-10 btn-guardar btn-lg btn-block" onClick={mostrarInputsContraseña}>
                                         Cambiar contraseña
                                     </button>
                                 </div>
