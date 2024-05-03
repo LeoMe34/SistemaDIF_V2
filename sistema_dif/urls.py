@@ -8,6 +8,8 @@ urlpatterns = [
     path("registrar/", views.registrar_api),
     path("logout/", knox_views.LogoutView.as_view()),
     path("logoutall/", knox_views.LogoutAllView.as_view()),
+    path("cambiar_contraseña/<int:user_id>", views.cambiar_contrasenia),
+
     path("registrar_empleado/", views.crear_empleado),
     path("get_empleado/", views.detalle_empleado),
     path("editar_empleado/<int:user_id>", views.modificar_empleado),

@@ -1,6 +1,6 @@
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
-
+from django.contrib.auth.hashers import make_password
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -185,6 +185,29 @@ def buscar_usuario(request):
         usuarios_serializados.append(usuario_serializado)
 
     return Response(usuarios_serializados, status=status.HTTP_200_OK)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def cambiar_contrasenia(request, user_id):
+    # Asegúrate de que el usuario que intenta cambiar la contraseña sea el mismo que el usuario cuyo ID se proporciona.
+    if request.user.id != user_id:
+        return Response({'error': 'No tienes permiso para cambiar la contraseña de este usuario'}, status=403)
+
+    datos = request.data
+
+    try:
+        user = User.objects.get(id=user_id)
+        # Validar y establecer la contraseña utilizando el método de Django
+        nueva_contrasenia = datos.get('password')
+        if not nueva_contrasenia:
+            return Response({'error': 'La contraseña no puede estar vacía'}, status=400)
+        
+        user.set_password(nueva_contrasenia)
+        user.save()
+        return Response({'success': 'Contraseña cambiada exitosamente'})
+
+    except User.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
 
 
 # EMPLEADO
