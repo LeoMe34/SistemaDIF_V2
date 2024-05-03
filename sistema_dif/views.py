@@ -186,6 +186,7 @@ def buscar_usuario(request):
 
     return Response(usuarios_serializados, status=status.HTTP_200_OK)
 
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def cambiar_contrasenia(request, user_id):
@@ -201,7 +202,7 @@ def cambiar_contrasenia(request, user_id):
         nueva_contrasenia = datos.get('password')
         if not nueva_contrasenia:
             return Response({'error': 'La contraseña no puede estar vacía'}, status=400)
-        
+
         user.set_password(nueva_contrasenia)
         user.save()
         return Response({'success': 'Contraseña cambiada exitosamente'})
@@ -209,6 +210,21 @@ def cambiar_contrasenia(request, user_id):
     except User.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=404)
 
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def validar_contrasenia_actual(request):
+    datos = request.data
+    contrasenia_actual = datos.get('password')
+
+    if not contrasenia_actual:
+        return Response({'error': 'Debes proporcionar la contraseña actual'}, status=400)
+
+    # Verificar si la contraseña actual coincide con la contraseña almacenada
+    if not request.user.check_password(contrasenia_actual):
+        return Response({'error': 'La contraseña actual es incorrecta'}, status=400)
+
+    return Response({'success': 'La contraseña actual es válida'})
 
 # EMPLEADO
 
@@ -373,6 +389,7 @@ def buscar_paciente_psico(request):
     serializer = PacienteSerializer(pacientes, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def modificar_paciente(request, pk):
@@ -386,7 +403,6 @@ def modificar_paciente(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=400)
-
 
 
 @api_view(["DELETE"])
