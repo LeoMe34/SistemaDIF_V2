@@ -130,6 +130,37 @@ def get_datos_usuario(request):
     return Response({"error": "no autenticado"}, status=400)
 
 
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def get_usuarios(request, user_id):
+    # Obtener el usuario por su ID o devolver un error 404 si no se encuentra
+    user = get_object_or_404(User, pk=user_id)
+
+    # Obtener el empleado asociado al usuario, si existe
+    empleado = Empleado.objects.filter(usuario=user).first()
+
+    # Obtener el grupo al que pertenece el usuario, si existe
+    group = user.groups.first()
+
+    # Devolver la información del usuario
+    return Response(
+        {
+            "user_info": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "no_trabajador": empleado.no_trabajador if empleado else None,
+                "nombre_empleado": empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno if empleado else None,
+                "cedula": empleado.cedula_profesional if empleado else None,
+                "ocupacion": empleado.ocupacion if empleado else None,
+                "telefono": empleado.telefono if empleado else None,
+                "name": group.name if group else None,
+                "is_superuser": user.is_superuser,
+            },
+        }
+    )
+
+
 # @staff_member_required
 @api_view(["POST"])
 @permission_classes([IsAdminUser])

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 
@@ -8,6 +8,7 @@ export function TablaUsuarios() {
     const [fecha, setFecha] = useState('')
     const [nombre, setNombre] = useState(null)
     const [detallesEmpleados, setDetalleEmpleado] = useState([])
+    const navegador = useNavigate()
 
     const getUsuario = async () => {
         try {
@@ -46,6 +47,11 @@ export function TablaUsuarios() {
         setFecha(formattedDate);
     }
 
+    const handleClick = (id) => {
+        localStorage.setItem('idUsuario', id)        
+        navegador(`/usuario/${id}`);        
+    }
+
     useEffect(() => {
         getUsuario()
         getEmpleados();
@@ -73,7 +79,7 @@ export function TablaUsuarios() {
 
                     <tbody>
                         {detallesEmpleados.map((empleados, index) => (
-                            <tr key={index} >
+                            <tr key={index} onClick={() => handleClick(empleados.usuario)}>
                                 <td className="">{empleados.no_trabajador}</td>                                
                                 <td className="">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>                                
                                 <td className="">{empleados.cedula_profesional}</td>
