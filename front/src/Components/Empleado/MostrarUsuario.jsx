@@ -5,13 +5,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 
 export function MostrarUsuario() {
     const { token } = useAuth()
- /*
-    const [noEmpleado, setNoEmpleado] = useState(null);
-    const [nombre, setNombre] = useState(null)
-    const [cedula, setCedula] = useState(null)
-    const [email, setEmail] = useState(null)
-    const [telefono, setTelefono] = useState(null)
-    */
+
     const [datosUsuario, setDatosUsuario] = useState({});
     
     const [idUsuario, setIdUsuario] = useState(null)
@@ -45,51 +39,6 @@ export function MostrarUsuario() {
         }
     };
 
-    /*
-    const getNoEmpleado = async () => {
-        try {
-
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_usuarios/${idUsuario}`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            const no_Empleado = response.data.user_info.no_trabajador
-            const nombre = response.data.user_info.nombre_empleado
-            const cedula = response.data.user_info.cedula_profesional
-            const correo = response.data.user_info.email
-            setNoEmpleado(no_Empleado)
-            setNombre(nombre)
-            setCedula(cedula)
-            setEmail(correo)
-            setId(response.data.user_info.id)
-            console.log(response)
-        } catch (error) {
-            console.error('Error al obtener ID de empleado:', error);
-        }
-    };
-
-    const getDatosEmpleado = async () => {
-        try {
-
-            const response = await axios.get("http://127.0.0.1:8000/api/get_empleado/", {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            setDetalleEmpleado(response.data)
-            setTelefono(response.data.telefono)
-            console.log(response)
-        } catch (error) {
-            console.error('Error al obtener los datos del empleado:', error);
-        }
-    };
-
-    useEffect(() => {
-        getNoEmpleado();
-        getDatosEmpleado();
-    }, [noEmpleado]);
-*/
     return (
         <div className='container'>
             <h2 className="subtitulo">Perfil de usuario</h2>
@@ -114,12 +63,7 @@ export function MostrarUsuario() {
                             <label className='etiqueta-user' htmlFor="num_emp">Número empleado:</label>
                             <input className="entrada" id='num_emp' name='num_emp' type="text" value={datosUsuario.no_trabajador} readOnly />
                         </div>
-                        {/*
-                        <div className="col">
-                            <label className='etiqueta-user' htmlFor="area">Área:</label>
-                            <input className="entrada" id='area' name='area' type="text" value={detalleEmpleado.area} readOnly />
-                        </div>
-                         */}
+
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="rol">Rol:</label>
                             <input className="entrada" id='rol' name='rol' type="text" value={datosUsuario.ocupacion} readOnly />
