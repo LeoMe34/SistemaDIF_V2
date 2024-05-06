@@ -25,12 +25,12 @@ export function NotasMedicas() {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
-        setNotExpediente(noExpediente)
+        setIdNota(noExpediente)
 
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
 
-    const getIdHistorialM = async () => {
+    const getIdHistorialM = async (noExpediente) => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/getHistorialM/?no_expediente=${noExpediente}`,
                 {
@@ -38,12 +38,14 @@ export function NotasMedicas() {
                         Authorization: `Token ${token}`
                     }
                 })
-            setIdHistorial(response.data[0].id)
-            console.log(idHistorial)
+            return response.data[0].id; // Devolvemos el ID del historial
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
+            return null; // En caso de error, devolvemos null
+
         }
     }
+
 
     const registrarNota = async (data) => {
         try {
@@ -62,7 +64,7 @@ export function NotasMedicas() {
                 }
             })
             console.log(data)
-            localStorage.removeItem('noExp');
+            //localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -73,19 +75,22 @@ export function NotasMedicas() {
     }, []);
 
     useEffect(() => {
-        if (noExpediente) {
-            getIdHistorialM();
+        const storedData = localStorage.getItem('noExp');
+        if (storedData) {
+            const noExpediente = JSON.parse(storedData);
+            getIdHistorialM(noExpediente).then((id) => {
+                setIdHistorial(id);
+                console.log(id);
+            });
         }
-    }, [noExpediente]);
+    }, []);
 
     const enviar = async (data) => {
         registrarNota(data, idHistorial);
         localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
 
         MensajeReceta(navegador)
-
     }
-
     return (
         <div>
             <div className="mt-3 ml-10 container">

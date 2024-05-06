@@ -7,7 +7,7 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const { showResultados, setShowResultados } = useState(true);
-    const [ setError] = useState('');
+    const [setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
     const navegador = useNavigate()
@@ -42,16 +42,15 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage }) {
             getIdHistorialMedico(noExpediente);
         }
 
-        if(isHomePage){
+        if (isHomePage) {
             navegador(`/mostrar_paciente/${noExpediente}`)
         }
         // Filtrar los resultados para mantener solo al paciente seleccionado
         const pacienteSeleccionado = resultados.find(paciente => paciente.no_expediente === noExpediente);
         setResultados([pacienteSeleccionado]);
-        setShowResultados(false);
-        
+
     };
-    
+
 
     return (
         <div>

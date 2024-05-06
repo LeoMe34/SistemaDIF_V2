@@ -61,82 +61,86 @@ export function HistorialClinicoDental() {
 
     const registrarHistOdonto = async (data) => {
         try {
-            const url = "http://127.0.0.1:8000/api/registrar_histOdonto/"
-            const respuesta = await axios.post(url, {
-                fecha_elaboracion: data.fechaElaboracion,
-                "referencia": {
-                    referencia: data.referencia,
-                    referencia_lugar: data.referenciaLugar,
-                    subsecuente: data.subsecuente,
-                    citado: data.citado,
-                    estudios: data.estudios
-                },
-                "aparatosSistemas": {
-                    respiratorio: data.respiratorio,
-                    digestivo: data.digestivo,
-                    neuro: data.neuro,
-                    cardioV: data.cardioV,
-                    muscoes: data.muscoes
-                },
-                padecimiento_actual: data.padecimiento,
-                habitos_exteriores: data.habitos_ext,
-                "cabeza": {
-                    labios: data.labios,
-                    mucosa: data.mucosa,
-                    encias: data.encias,
-                    lengua: data.lengua,
-                    paladar_blando: data.paladar_blando,
-                    paladar_duro: data.paladar_duro
-                },
-                "antHerediPato": {
-                    diabetesH: data.diabetesH,
-                    hipertH: data.hipertH,
-                    tuberculoH: data.tuberculoH,
-                    cancerH: data.cancerH,
-                    cardioH: data.cardioH,
-                    asmaH: data.asmaH,
-                    epilepsiaH: data.epilepsiaH,
-                    diabetes_parentesco: data.diabetes_parentesco,
-                    hipert_parentesco: data.hipert_parentesco,
-                    tuberculo_parentesco: data.tuberculo_parentesco,
-                    cancer_parentesco: data.cancer_parentesco,
-                    cardio_parentesco: data.cardio_parentesco,
-                    asma_parentesco: data.asma_parentesco,
-                    epilepsia_parentesco: data.epilepsia_parentesco,
+            const formData = new FormData();
+            formData.append('archivo', data.archivo[0]); // Aquí asumo que el nombre del campo del archivo es 'archivo', asegúrate de cambiarlo si es diferente
+            formData.append('fechaElaboracion', data.fechaElaboracion);
+            formData.append('referencia', JSON.stringify({
+                referencia: data.referencia,
+                referencia_lugar: data.referenciaLugar,
+                subsecuente: data.subsecuente,
+                citado: data.citado,
+                estudios: data.estudios
+            }));
+            formData.append('aparatosSistemas', JSON.stringify({
+                respiratorio: data.respiratorio,
+                digestivo: data.digestivo,
+                neuro: data.neuro,
+                cardioV: data.cardioV,
+                muscoes: data.muscoes
+            }));
+            formData.append('padecimiento_actual', data.padecimiento);
+            formData.append('habitos_exteriores', data.habitos_ext);
+            formData.append('cabeza', JSON.stringify({
+                labios: data.labios,
+                mucosa: data.mucosa,
+                encias: data.encias,
+                lengua: data.lengua,
+                paladar_blando: data.paladar_blando,
+                paladar_duro: data.paladar_duro
+            }));
+            formData.append('antHerediPato', JSON.stringify({
+                diabetesH: data.diabetesH,
+                hipertH: data.hipertH,
+                tuberculoH: data.tuberculoH,
+                cancerH: data.cancerH,
+                cardioH: data.cardioH,
+                asmaH: data.asmaH,
+                epilepsiaH: data.epilepsiaH,
+                diabetes_parentesco: data.diabetes_parentesco,
+                hipert_parentesco: data.hipert_parentesco,
+                tuberculo_parentesco: data.tuberculo_parentesco,
+                cancer_parentesco: data.cancer_parentesco,
+                cardio_parentesco: data.cardio_parentesco,
+                asma_parentesco: data.asma_parentesco,
+                epilepsia_parentesco: data.epilepsia_parentesco,
+            }));
+            formData.append('antPersonPato', JSON.stringify({
+                diabetes: data.diabetes,
+                hipert: data.hipert,
+                tuberculo: data.tuberculo,
+                cancer: data.cancer,
+                transfusion: data.transfusion,
+                quirurgicos: data.quirurgicos,
+                anestesicos: data.anestesicos,
+                alergicos: data.alergicos,
+                trauma: data.trauma
+            }));
+            formData.append('personNoPato', JSON.stringify({
+                vacuna: data.vacuna,
+                alimentacion: data.alimentacion,
+                fauna_nociva: data.fauna_nociva,
+                vivienda: data.vivienda,
+                adicciones: data.adicciones
+            }));
+            formData.append('antGinecob', JSON.stringify({
+                fecha_ultima_regla: data.fecha_ultima_regla,
+                fecha_ult_doc: data.fecha_ult_doc,
+                planificacion_fam: data.planificacion_fam
+            }));
+            formData.append('cuello_odont', data.cuello);
+            formData.append('paciente', noExpediente);
+            formData.append('empleado', noEmpleado);
 
-                },
-                "antPersonPato": {
-                    diabetes: data.diabetes,
-                    hipert: data.hipert,
-                    tuberculo: data.tuberculo,
-                    cancer: data.cancer,
-                    transfusion: data.transfusion,
-                    quirurgicos: data.quirurgicos,
-                    anestesicos: data.anestesicos,
-                    alergicos: data.alergicos,
-                    trauma: data.trauma
-                },
-                "personNoPato": {
-                    vacuna: data.vacuna,
-                    alimentacion: data.alimentacion,
-                    fauna_nociva: data.fauna_nociva,
-                    vivienda: data.vivienda,
-                    adicciones: data.adicciones
-                },
-                "antGinecob": {
-                    fecha_ultima_regla: data.fecha_ultima_regla,
-                    fecha_ult_doc: data.fecha_ult_doc,
-                    planificacion_fam: data.planificacion_fam
-                },
-                cuello_odont: data.cuello,
-                paciente: noExpediente,
-                empleado: noEmpleado
-            }, {
+            const url = "http://127.0.0.1:8000/api/registrar_histOdonto/"
+            const respuesta = await axios.post(url, formData, {
+
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     Authorization: `Token ${token}`
                 }
             })
             console.log(data)
+
         } catch (error) {
             console.error("Ocurrió un error", error);
         }

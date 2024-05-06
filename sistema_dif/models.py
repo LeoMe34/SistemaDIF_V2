@@ -109,6 +109,16 @@ class FichaTecnicaMedica(models.Model):
     objects = models.Manager()
 
 
+def ruta_documentoMed(instance, filename):
+    # Genera la ruta de almacenamiento para el archivo
+    return "documentoHistMed/{0}/{1}".format(instance.id, filename)
+
+
+def ruta_documento_Odon(instance, filename):
+    # Genera la ruta de almacenamiento para el archivo
+    return "documentoHistOdont/{0}/{1}".format(instance.id, filename)
+
+
 class HistorialOdonto(models.Model):
     fecha_elaboracion = models.DateField(auto_now=False, auto_now_add=True)
     referencia = models.JSONField()  # referencia y lugar ref, subsecuente/citado
@@ -126,6 +136,8 @@ class HistorialOdonto(models.Model):
     # vacuna, alimentacion, fauna nociva, vivienda, adicciones
     antGinecob = models.JSONField()
     # fecha ultima regla y ult doc, planificacion familiar
+    archivo = models.FileField(upload_to=ruta_documentoMed, null=True, blank=True)
+
     odontograma = models.BinaryField(max_length=40, blank=True, null=True)
 
     objects = models.Manager()
@@ -199,6 +211,7 @@ class HistorialMedico(models.Model):
     # parejas: hetero, homo, bi, met planif familiar, fecha ult parto
     estudiosExter = models.JSONField()
     # rayosX, lab, ultrasonido, tomografia
+    archivo = models.FileField(upload_to=ruta_documento_Odon, null=True, blank=True)
 
     fichaMed = models.ForeignKey(
         FichaTecnicaMedica,

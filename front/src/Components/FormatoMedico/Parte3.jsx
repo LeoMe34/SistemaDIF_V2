@@ -12,6 +12,13 @@ export function Parte3() {
     const [fichaMedica, setFichaMedica] = useState(null);
     const { token } = useAuth()
     const navegador = useNavigate()
+    const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+
+    const handleFileChange = (event) => {
+        const archivos = event.target.files;
+        const archivosArray = Array.from(archivos);
+        setArchivosSeleccionados(archivosArray); // Actualizamos archivosSeleccionados con el array de archivos
+    }
 
 
     useEffect(() => {
@@ -29,7 +36,7 @@ export function Parte3() {
     //console.log(datos2);
 
     useEffect(() => {
-        const getFichaMedica= async () => {
+        const getFichaMedica = async () => {
             try {
 
                 const response = await axios.get(`http://127.0.0.1:8000/api/getFichaMedica/?no_expediente=${noExpediente}`, {
@@ -50,95 +57,103 @@ export function Parte3() {
 
     const registrarHistorial = async (data) => {
         try {
+            const formData = new FormData();
+            if (data.archivo && data.archivo.length > 0) { // Verificamos que data.archivo esté definido y tenga una longitud mayor que cero
+                for (let i = 0; i < data.archivo.length; i++) {
+                    formData.append('archivo', data.archivo[i]);
+                }
+            }
+            formData.append('fecha_elaboracion', datos.fecha);
+            formData.append('informante', datos.informante);
+            formData.append('referenciaMed', JSON.stringify({
+                num_consultorio: datos.no_consultorio,
+                referencia: datos.referencia,
+                lugar_referencia: datos.lugar
+            }));
+            formData.append('datosFamiliares', JSON.stringify({
+                tipo_familia: datos.tipo_familia,
+                rol_madre: datos.rol_madre,
+                familia: datos.familia,
+                disfuncional: datos.disfuncional,
+            }));
+
+            formData.append('antHerediPatM', JSON.stringify({
+                diabetes: datos2.diabetes,
+                hipertension: datos2.hipertension,
+                cancer: datos2.cancer,
+                cardiopatia: datos2.cardiopatia,
+                par_diabetes: datos2.par_diabetes,
+                par_hipertension: datos2.par_hipertension,
+                par_cancer: datos2.par_cancer,
+                par_cardiopatia: datos2.par_cardiopatia,
+                otros: datos2.otros_ant
+            }));
+            formData.append('antPersoPatM', JSON.stringify({
+                medicosQT: datos2.medicosQT,
+                tabaquismoAA: datos2.tabaquismoAA,
+                tendenciaDM: datos2.tendenciaDM,
+                otros: datos2.otros_antPat
+            }));
+            formData.append('antPersoNoPatM', JSON.stringify({
+                alimentacion: datos2.alimentacion,
+                habitacion: datos2.habitacion,
+                higiene: datos2.higiene
+            }));
+            formData.append('ginecobMed', JSON.stringify({
+                menarca: datos2.menarca,
+                vida_sexual: datos2.vida_sexual,
+                menstruacion: datos2.menstruacion,
+                num_embarazos: datos2.num_embarazos,
+                partos: datos2.partos,
+                abortos: datos2.abortos,
+                cesarea: datos2.cesarea,
+                ultimo_parto: datos2.ultimo_parto,
+                num_hijos: datos2.num_hijos,
+                macrosomicos: datos2.macrosomicos,
+                bajo_peso: datos2.bajo_peso,
+                num_parejas: datos2.num_parejas,
+                heterosexuales: datos2.heterosexuales,
+                homosexuales: datos2.homosexuales,
+                bisexuales: datos2.bisexuales,
+                diu: datos2.diu,
+                hormonales: datos2.hormonales,
+                quirurgico: datos2.quirurgico,
+                otros: datos2.otrosMP
+            }));
+            formData.append('interrogatorio', JSON.stringify({
+                padecimiento: data.padecimiento,
+                aparatos_sistemas: data.aparatos_sistemas,
+                auxiliares: data.auxiliares,
+                tratamientos_previos: data.tratamientos_previos
+            }));
+            formData.append('exploracionFisica', JSON.stringify({
+                inspeccion_gral: data.inspeccion_gral,
+                cabeza: data.cabeza,
+                cuello: data.cuello,
+                torax: data.torax,
+                abdomen: data.abdomen,
+                columna_vertical: data.columna_vertical,
+                genitales_externos: data.genitales_externos,
+                extremidades: data.extremidades
+            }));
+            formData.append('diagnostico', JSON.stringify({
+                diagnostico: data.diagnostico,
+                tratamiento_integral: data.tratamiento_integral,
+                pronostico: data.pronostico
+            }));
+            formData.append('estudiosExter', JSON.stringify({
+                estudios: datos.estudios
+            }));
+            formData.append('fichaMed', fichaMedica);
+
             const url = "http://127.0.0.1:8000/api/crear_historial_medico/"
-            const respuesta = await axios.post(url, {
-                fecha_elaboracion: datos.fecha,
-                informante: datos.informante,
-                "referenciaMed": {
-                    num_consultorio: datos.no_consultorio,
-                    referencia: datos.referencia,
-                    lugar_referencia: datos.lugar
-                },
-                "datosFamiliares": {
-                    tipo_familia: datos.tipo_familia,
-                    rol_madre: datos.rol_madre,
-                    familia: datos.familia,
-                    disfuncional: datos.disfuncional,
-                },
-                "antHerediPatM": {
-                    diabetes: datos2.diabetes,
-                    hipertension: datos2.hipertension,
-                    cancer: datos2.cancer,
-                    cardiopatia: datos2.cardiopatia,
-                    par_diabetes: datos2.par_diabetes,
-                    par_hipertension: datos2.par_hipertension,
-                    par_cancer: datos2.par_cancer,
-                    par_cardiopatia: datos2.par_cardiopatia,
-                    otros: datos2.otros_ant
-                },
-                "antPersoPatM": {
-                    medicosQT: datos2.medicosQT,
-                    tabaquismoAA: datos2.tabaquismoAA,
-                    tendenciaDM: datos2.tendenciaDM,
-                    otros: datos2.otros_antPat
-                },
-                "antPersoNoPatM": {
-                    alimentacion: datos2.alimentacion,
-                    habitacion: datos2.habitacion,
-                    higiene: datos2.higiene
-                },
-                "ginecobMed": {
-                    menarca: datos2.menarca,
-                    vida_sexual: datos2.vida_sexual,
-                    menstruacion: datos2.menstruacion,
-                    num_embarazos: datos2.num_embarazos,
-                    partos: datos2.partos,
-                    abortos: datos2.abortos,
-                    cesarea: datos2.cesarea,
-                    ultimo_parto: datos2.ultimo_parto,
-                    num_hijos: datos2.num_hijos,
-                    macrosomicos: datos2.macrosomicos,
-                    bajo_peso: datos2.bajo_peso,
-                    num_parejas: datos2.num_parejas,
-                    heterosexuales: datos2.heterosexuales,
-                    homosexuales: datos2.homosexuales,
-                    bisexuales: datos2.bisexuales,
-                    diu: datos2.diu,
-                    hormonales: datos2.hormonales,
-                    quirurgico: datos2.quirurgico,
-                    otros: datos2.otrosMP
-                },
-                "interrogatorio": {
-                    padecimiento: data.padecimiento,
-                    aparatos_sistemas: data.aparatos_sistemas,
-                    auxiliares: data.auxiliares,
-                    tratamientos_previos: data.tratamientos_previos
-                },
-                "exploracionFisica": {
-                    inspeccion_gral: data.inspeccion_gral,
-                    cabeza: data.cabeza,
-                    cuello: data.cuello,
-                    torax: data.torax,
-                    abdomen: data.abdomen,
-                    columna_vertical: data.columna_vertical,
-                    genitales_externos: data.genitales_externos,
-                    extremidades: data.extremidades
-                },
-                "diagnostico": {
-                    diagnostico: data.diagnostico,
-                    tratamiento_integral: data.tratamiento_integral,
-                    pronostico: data.pronostico
-                },
-                "estudiosExter": {
-                    estudios: datos.estudios
-                },
-                fichaMed: fichaMedica
-            }, {
+            const respuesta = await axios.post(url, formData, {
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(data)
+            console.log(respuesta.data)
         } catch (error) {
             console.error("Ocurrió un error", error);
 
@@ -257,6 +272,23 @@ export function Parte3() {
                             <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
                             <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("pronostico", { required: true })} />
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-3 mb-3">
+                    <div className='row'>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
+                            <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
+                            <label htmlFor="fileInput" className="btn btn-cargar">
+                                Elegir archivo(s)
+                            </label>
+                            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple
+                                {...register("archivo", { required: true })} />
+
+                            {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (
+                                <label key={index}>{archivo.name}</label>
+                            ))}
                         </div>
                     </div>
                 </div>

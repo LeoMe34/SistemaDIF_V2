@@ -11,11 +11,6 @@ export function Parte1() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
 
-    const handleFileChange = (event) => {
-        const archivos = event.target.files;
-        const nombresArchivos = Array.from(archivos).map((archivo) => archivo.name);
-        setArchivosSeleccionados(nombresArchivos);
-    }
 
     const enviar = handleSubmit(async data => {
         const historialOdonto = { ...data, noExpediente }
@@ -87,28 +82,6 @@ export function Parte1() {
                     </div>
 
 
-
-                    <div className="mt-3 mb-3">
-                        <div className='row'>
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                                <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios  en formato PDF</span>
-                                <label htmlFor="fileInput" className="btn btn-cargar">
-                                    Elegir archivo(s)
-                                </label>
-                                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple />
-
-                                {archivosSeleccionados.length > 0 && (
-                                    <div>
-                                        {archivosSeleccionados.map((nombreArchivo, index) => (
-                                            <label key={index}>{nombreArchivo}</label>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                    </div>
 
 
                     <div className="">

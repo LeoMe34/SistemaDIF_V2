@@ -8,11 +8,17 @@ import { useForm } from "react-hook-form"
 export function Parte3() {
     const navegador = useNavigate()
     const { token } = useAuth()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()    
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [antecedentes, setAntecedentes] = useState(null);
     const [historialO, setHistorialO] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
 
+    const handleFileChange = (event) => {
+        const archivos = event.target.files;
+        const archivosArray = Array.from(archivos);
+        setArchivosSeleccionados(archivosArray); // Actualizamos archivosSeleccionados con el array de archivos
+    }
 
     const getNoEmpleado = async () => {
         try {
@@ -32,82 +38,88 @@ export function Parte3() {
 
     const registrarHistOdonto = async (data) => {
         try {
-            const url = "http://127.0.0.1:8000/api/registrar_histOdonto/"
-            const respuesta = await axios.post(url, {
-                fecha_elaboracion: historialO.fechaElaboracion,
-                "referencia": {
-                    referencia: historialO.referencia,
-                    referencia_lugar: historialO.referenciaLugar,
-                    subsecuente: historialO.subsecuente,
-                    citado: historialO.citado,
-                    estudios: historialO.estudios
-                },
-                "aparatosSistemas": {
-                    respiratorio: data.respiratorio,
-                    digestivo: data.digestivo,
-                    neuro: data.neuro,
-                    cardioV: data.cardioV,
-                    muscoes: data.muscoes
-                },
-                padecimiento_actual: historialO.padecimiento,
-                habitos_exteriores: data.habitos_ext,
-                "cabeza": {
-                    labios: data.labios,
-                    mucosa: data.mucosa,
-                    encias: data.encias,
-                    lengua: data.lengua,
-                    paladar_blando: data.paladar_blando,
-                    paladar_duro: data.paladar_duro
-                },
-                "antHerediPato": {
-                    diabetesH: antecedentes.diabetesH,
-                    hipertH: antecedentes.hipertH,
-                    tuberculoH: antecedentes.tuberculoH,
-                    cancerH: antecedentes.cancerH,
-                    cardioH: antecedentes.cardioH,
-                    asmaH: antecedentes.asmaH,
-                    epilepsiaH: antecedentes.epilepsiaH,
-                    diabetes_parentesco: antecedentes.diabetesParentesco,
-                    hipert_parentesco: antecedentes.hipertParentesco,
-                    tuberculo_parentesco: antecedentes.tuberculoParentesco,
-                    cancer_parentesco: antecedentes.cancerParentesco,
-                    cardio_parentesco: antecedentes.cardioParentesco,
-                    asma_parentesco: antecedentes.asmaParentesco,
-                    epilepsia_parentesco: antecedentes.epilepsiaParentesco,
+            const formData = new FormData();
+            if (data.archivo && data.archivo.length > 0) { // Verificamos que data.archivo esté definido y tenga una longitud mayor que cero
+                for (let i = 0; i < data.archivo.length; i++) {
+                    formData.append('archivo', data.archivo[i]);
+                }
+            }
+            formData.append('fechaElaboracion', historialO.fechaElaboracion);
+            formData.append('referencia', JSON.stringify({
+                referencia: historialO.referencia,
+                referencia_lugar: historialO.referenciaLugar,
+                subsecuente: historialO.subsecuente,
+                citado: historialO.citado,
+                estudios: historialO.estudios
+            }));
+            formData.append('aparatosSistemas', JSON.stringify({
+                respiratorio: data.respiratorio,
+                digestivo: data.digestivo,
+                neuro: data.neuro,
+                cardioV: data.cardioV,
+                muscoes: data.muscoes
+            }));
+            formData.append('padecimiento_actual', historialO.padecimiento,);
+            formData.append('habitos_exteriores', data.habitos_ext);
+            formData.append('cabeza', JSON.stringify({
+                labios: data.labios,
+                mucosa: data.mucosa,
+                encias: data.encias,
+                lengua: data.lengua,
+                paladar_blando: data.paladar_blando,
+                paladar_duro: data.paladar_duro
+            }));
+            formData.append('antHerediPato', JSON.stringify({
+                diabetesH: antecedentes.diabetesH,
+                hipertH: antecedentes.hipertH,
+                tuberculoH: antecedentes.tuberculoH,
+                cancerH: antecedentes.cancerH,
+                cardioH: antecedentes.cardioH,
+                asmaH: antecedentes.asmaH,
+                epilepsiaH: antecedentes.epilepsiaH,
+                diabetes_parentesco: antecedentes.diabetesParentesco,
+                hipert_parentesco: antecedentes.hipertParentesco,
+                tuberculo_parentesco: antecedentes.tuberculoParentesco,
+                cancer_parentesco: antecedentes.cancerParentesco,
+                cardio_parentesco: antecedentes.cardioParentesco,
+                asma_parentesco: antecedentes.asmaParentesco,
+                epilepsia_parentesco: antecedentes.epilepsiaParentesco,
+            }));
+            formData.append('antPersonPato', JSON.stringify({
+                diabetes: antecedentes.diabetes,
+                hipert: antecedentes.hipert,
+                tuberculo: antecedentes.tuberculo,
+                cancer: antecedentes.cancer,
+                transfusion: antecedentes.transfusion,
+                quirurgicos: antecedentes.quirurgicos,
+                anestesicos: antecedentes.anestesicos,
+                alergicos: antecedentes.alergicos,
+                trauma: antecedentes.trauma
+            }));
+            formData.append('personNoPato', JSON.stringify({
+                vacuna: antecedentes.vacuna,
+                alimentacion: antecedentes.alimentacion,
+                fauna_nociva: antecedentes.fauna_nociva,
+                vivienda: antecedentes.vivienda,
+                adicciones: antecedentes.adicciones
+            }));
+            formData.append('antGinecob', JSON.stringify({
+                fecha_ultima_regla: antecedentes.fecha_ultima_regla,
+                fecha_ult_doc: antecedentes.fecha_ult_doc,
+                planificacion_fam: antecedentes.planificacion_fam
+            }));
+            formData.append('cuello_odont', data.cuello);
+            formData.append('paciente', historialO.noExpediente);
+            formData.append('empleado', noEmpleado);
 
-                },
-                "antPersonPato": {
-                    diabetes: antecedentes.diabetes,
-                    hipert: antecedentes.hipert,
-                    tuberculo: antecedentes.tuberculo,
-                    cancer: antecedentes.cancer,
-                    transfusion: antecedentes.transfusion,
-                    quirurgicos: antecedentes.quirurgicos,
-                    anestesicos: antecedentes.anestesicos,
-                    alergicos: antecedentes.alergicos,
-                    trauma: antecedentes.trauma
-                },
-                "personNoPato": {
-                    vacuna: antecedentes.vacuna,
-                    alimentacion: antecedentes.alimentacion,
-                    fauna_nociva: antecedentes.fauna_nociva,
-                    vivienda: antecedentes.vivienda,
-                    adicciones: antecedentes.adicciones
-                },
-                "antGinecob": {
-                    fecha_ultima_regla: antecedentes.fecha_ultima_regla,
-                    fecha_ult_doc: antecedentes.fecha_ult_doc,
-                    planificacion_fam: antecedentes.planificacion_fam
-                },
-                cuello_odont: data.cuello,
-                paciente: historialO.noExpediente,
-                empleado: noEmpleado
-            }, {
+            const url = "http://127.0.0.1:8000/api/registrar_histOdonto/"
+            const respuesta = await axios.post(url, formData, {
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(data)
+            console.log(respuesta.data)
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -122,7 +134,7 @@ export function Parte3() {
         }
     }, []);
 
-    useEffect(() => {        
+    useEffect(() => {
         getNoEmpleado();
     }, [token]);
 
@@ -224,7 +236,25 @@ export function Parte3() {
                                 {...register("muscoes", { required: true })} />
                         </div>
                         <div className='col'></div>
-                    </div>                
+                    </div>
+                    <div className="mt-3 mb-3">
+                        <div className='row'>
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
+                                <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
+                                <label htmlFor="fileInput" className="btn btn-cargar">
+                                    Elegir archivo(s)
+                                </label>
+                                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple
+                                    {...register("archivo", { required: true })} />
+
+                                {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (
+                                    <label key={index}>{archivo.name}</label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">

@@ -86,15 +86,39 @@ class FichaTecnicaMedSerializer(serializers.ModelSerializer):
 
 
 class HistorialMedicoSerializer(serializers.ModelSerializer):
+    archivo = serializers.FileField()
+
     class Meta:
         model = HistorialMedico
         fields = "__all__"
 
+    def create(self, validated_data):
+        archivo = validated_data.pop("archivo", None)
+        historial = HistorialMedico.objects.create(**validated_data)
+
+        if archivo:
+            historial.archivo = archivo
+            historial.save()
+
+        return historial
+
 
 class HistorialOdontoSerializer(serializers.ModelSerializer):
+    archivo = serializers.FileField()
+
     class Meta:
         model = HistorialOdonto
         fields = "__all__"
+
+    def create(self, validated_data):
+        archivo = validated_data.pop("archivo", None)
+        historial = HistorialOdonto.objects.create(**validated_data)
+
+        if archivo:
+            historial.archivo = archivo
+            historial.save()
+
+        return historial
 
 
 class NotaEvolucionOdontoSerializer(serializers.ModelSerializer):

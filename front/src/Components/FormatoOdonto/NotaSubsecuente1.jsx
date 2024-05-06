@@ -30,20 +30,19 @@ export function NotaSubsecuente1() {
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
 
-    const getIdHistorialOdonto = async () => {
+    const getIdHistorialOdonto = async (noExpediente) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/getNotaEvo/?no_expediente=${noExpediente}`,
-                {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                })
-            setHistOdonto(response.data[0].id)
-            console.log(idHistOdonto)
+            const response = await axios.get(`http://127.0.0.1:8000/api/getNotaEvo/?no_expediente=${noExpediente}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return response.data[0].id; // Devolvemos el ID del historial
         } catch (error) {
             console.error('Error al obtener ID del historial:', error);
+            return null; // En caso de error, devolvemos null
         }
-    }
+    };
 
     const registrarNotaEvoOdonto = async (data) => {
         try {
@@ -69,10 +68,15 @@ export function NotaSubsecuente1() {
     }, []);
 
     useEffect(() => {
-        if (noExpediente) {
-            getIdHistorialOdonto();
+        const storedData = localStorage.getItem('noExp');
+        if (storedData) {
+            const noExpediente = JSON.parse(storedData);
+            getIdHistorialOdonto(noExpediente).then((id) => {
+                setHistOdonto(id);
+                console.log(id);
+            });
         }
-    }, [noExpediente]);
+    }, []);
 
     const enviar = async (data) => {
         registrarNotaEvoOdonto(data, idHistOdonto);
