@@ -42,6 +42,8 @@ import { V_FichaMedicaO } from '../Views/FormatoOdonto/V_FichaMedicaO'
 import { V_FichaTecnica } from '../Views/FormatoNutricion/V_FichaTecnica'
 import { V_MostrarPaciente } from '../Views/Paciente/V_MostrarPacienteM'
 
+import {V_MostrarUsuario} from '../Views/Empleado/V_MostrarUsuario'
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../Contexto/AuthContext';
@@ -85,6 +87,7 @@ export function Rutas() {
                             <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                             <Route path='/crear_usuario' element={<V_CrearUsuario />} />
                             <Route path='/home_administrador' element={<V_HomeAdmin />} />
+                            <Route path='/usuario/:id' element={<V_MostrarUsuario />} />
                         </>
                     )}
 
