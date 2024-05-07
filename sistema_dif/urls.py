@@ -19,6 +19,9 @@ urlpatterns = [
     path("get_empleado/", views.detalle_empleado),
     path("get_todos_empleados/", views.get_empleados),
     path("editar_empleado/<int:user_id>", views.modificar_empleado),
+    path("eliminar_usuario/<int:pk>", views.eliminar_usuario),
+
+
     path("crear_grupo/", views.agregar_grupo),
     path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/", views.unir_usuario_grupo),
     path("registrar_paciente/", views.crear_paciente),

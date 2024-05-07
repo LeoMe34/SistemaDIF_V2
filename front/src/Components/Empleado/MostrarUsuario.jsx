@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form"
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 export function MostrarUsuario() {
     const { token } = useAuth()
@@ -9,6 +9,8 @@ export function MostrarUsuario() {
     const [datosUsuario, setDatosUsuario] = useState({});
     
     const [idUsuario, setIdUsuario] = useState(null)
+
+    const navegador = useNavigate()
 
     useEffect(() => {
         const storedId = localStorage.getItem('idUsuario');
@@ -33,6 +35,20 @@ export function MostrarUsuario() {
                 }
             });
             return response.data.user_info;
+        } catch (error) {
+            console.error('Error al obtener datos de usuario:', error);
+            throw error;
+        }
+    };
+
+    const eliminarUsuario = async () => {
+        try {
+            const response = await axios.patch(`http://127.0.0.1:8000/api/eliminar_usuario/${idUsuario}`,null, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            navegador('/home_administrador/')
         } catch (error) {
             console.error('Error al obtener datos de usuario:', error);
             throw error;
@@ -85,7 +101,7 @@ export function MostrarUsuario() {
                     <div className="center container mt-5 pt-1 mb-3 ml-10">
                         <div className="col">
                             <div>
-                                <button className="btn ml-10 btn-eliminar btn-lg btn-block">
+                                <button className="btn ml-10 btn-eliminar btn-lg btn-block" onClick={eliminarUsuario}>
                                     Eliminar
                                 </button>
                             </div>

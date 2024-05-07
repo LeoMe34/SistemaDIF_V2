@@ -257,17 +257,39 @@ def validar_contrasenia_actual(request):
 
     return Response({'success': 'La contraseña actual es válida'})
 
+
+@api_view(["PATCH"])
+@permission_classes([IsAdminUser])
+def eliminar_usuario(request, pk):
+    try:        
+        user = User.objects.get(pk=pk)
+
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Actualizar el estado del usuario a inactivo
+    user.is_active = False
+    user.save()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 # EMPLEADO
 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_empleados(request):
-    user = request.user  # Obtener el usuario autenticado
-    queryset = Empleado.objects.exclude(usuario=user)  # Excluir al usuario autenticado del queryset
+    usuario_autenticado = request.user  # Obtener el usuario autenticado
 
-    serializer = EmpleadoSerializer(queryset, many=True)
+    # Obtener todos los empleados excluyendo al usuario autenticado
+    queryset = Empleado.objects.exclude(usuario=usuario_autenticado)
+
+    # Filtrar los empleados cuyos usuarios asociados estén activos
+    empleados_activos = [empleado for empleado in queryset if empleado.usuario.is_active]
+
+    serializer = EmpleadoSerializer(empleados_activos, many=True)
     return Response(serializer.data)
+
 
 
 @api_view(["POST"])
@@ -321,22 +343,6 @@ def modificar_empleado(request, user_id):
     except User.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=404)
 
-
-@api_view(["PATCH"])
-@permission_classes([IsAdminUser])
-def eliminar_empleado(request, pk):
-    try:
-        empleado = Empleado.objects.get(pk=pk)
-        user = empleado.usuario
-
-    except Empleado.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    # Actualizar el estado del usuario a inactivo
-    user.is_active = False
-    user.save()
-
-    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # Paciente
