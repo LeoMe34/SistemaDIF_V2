@@ -82,10 +82,10 @@ export function MostrarUsuario() {
                         </div>
                     </div>
 
-                    <div className="center container pt-1 mb-3 ml-10">
+                    <div className="center container mt-5 pt-1 mb-3 ml-10">
                         <div className="col">
                             <div>
-                                <button className="btn ml-10 btn-guardar btn-lg btn-block">
+                                <button className="btn ml-10 btn-eliminar btn-lg btn-block">
                                     Eliminar
                                 </button>
                             </div>
