@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
 
 export function TablaMedicina() {
     const { token } = useAuth()
@@ -108,6 +109,7 @@ export function TablaMedicina() {
 
     return (
         <div className="container">
+            <BusquedaPaciente isMostrarExp={true}></BusquedaPaciente>
             <div className="">
                 <label className="">Fecha</label>
                 <input type="date" value={fechaActual} readOnly/>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
-function BusquedaPaciente({ getIdHistorialMedico, isHomePage }) {
+function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const { showResultados, setShowResultados } = useState(true);
@@ -36,14 +36,19 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage }) {
         }
     };
 
-    const handlePacienteSeleccionado = (noExpediente) => {
+    const handlePacienteSeleccionado = (noExpediente) => {        
         setNoExpediente(noExpediente);
+
         if (getIdHistorialMedico) {
             getIdHistorialMedico(noExpediente);
         }
 
         if (isHomePage) {
             navegador(`/mostrar_paciente/${noExpediente}`)
+        }
+
+        if(isMostrarExp){
+            navegador(`/mostrar_expediente`)
         }
         // Filtrar los resultados para mantener solo al paciente seleccionado
         const pacienteSeleccionado = resultados.find(paciente => paciente.no_expediente === noExpediente);
