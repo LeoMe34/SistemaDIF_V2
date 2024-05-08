@@ -3,16 +3,23 @@ import { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types'
 import axios from 'axios';
+import { useAuth } from '../../Contexto/AuthContext';
 
 export function CardPaciente({id}) {
     const { register, setValue } = useForm()
+    const {token} = useAuth()
 
     // mostrar los datos en los recuadros
     useEffect(() => {
         async function cargarPaciente() {
             const url = `http://127.0.0.1:8000/api/detalle_paciente/${id}`;
             try {
-                const respuesta = await axios.get(url);
+                const respuesta = await axios.get(url,
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`
+                        }
+                    })
                 const paciente = respuesta.data; // Suponiendo que la respuesta es un objeto con los detalles del paciente
 
                 setValue('nombre', `${paciente.datosPersonalesPacient.nombre} ${paciente.datosPersonalesPacient.apellidoP} ${paciente.datosPersonalesPacient.apellidoM}`);

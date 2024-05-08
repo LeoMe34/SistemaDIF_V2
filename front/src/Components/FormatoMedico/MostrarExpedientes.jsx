@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+import { CardPaciente } from "../Paciente/CardPaciente";
 
 export function MostrarExpedientes() {
     const { token } = useAuth()
@@ -32,6 +33,7 @@ export function MostrarExpedientes() {
     return (
         <div className="container">
             <div className="mt-3 expediente-container">
+                <CardPaciente id={noExpediente}></CardPaciente>
                 {expedientes.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
                         <Link to={`/mostrar_expediente/${expediente.fecha}`}>
