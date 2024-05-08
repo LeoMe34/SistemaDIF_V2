@@ -32,6 +32,8 @@ urlpatterns = [
     path("buscar_paciente_psico/", views.buscar_paciente_psico),
     path("buscar_nota_medica/", views.buscar_notaMedica),
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
+    path("fichas_por_paciente/<str:noExp>", views.filtrar_fichas_por_paciente),
+
     path("buscar_usuario/", views.buscar_usuario),
     path("crear_historial_medico/", views.crear_historialMedico),
     path("registrar_histOdonto/", views.crear_historialO),
