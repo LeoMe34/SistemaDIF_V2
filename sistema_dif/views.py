@@ -514,13 +514,13 @@ def crear_FichaTecnicaE(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_fichaTecnicaE(request, pk):
+def detalle_fichaTecnicaE(request, noExp, fecha):
     try:
-        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(pk=pk)
-    except FichaTecnicaEnfermeria.DoesNotExist:
+        paciente = get_object_or_404(Paciente, no_expediente=noExp)
+        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(paciente=paciente, fecha=fecha)
+    except (Paciente.DoesNotExist, FichaTecnicaEnfermeria.DoesNotExist):
         return Response(status=404)
 
     serializer = FichaTecnicaESerializer(fichaTecnicaE)

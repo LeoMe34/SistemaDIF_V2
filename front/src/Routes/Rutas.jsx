@@ -44,6 +44,7 @@ import { V_MostrarPaciente } from '../Views/Paciente/V_MostrarPacienteM'
 
 import { V_MostrarUsuario } from '../Views/Empleado/V_MostrarUsuario'
 import { V_MostrarExpedientes } from '../Views/FormatoMedico/V_MostrarExpedientes'
+import { V_MostrarFichaEnfermeria } from '../Views/FormatoEnfermeria/V_MostrarFichaEnfermeria'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -95,7 +96,8 @@ export function Rutas() {
                     {userGroup == "Enfermero" && (
                         <>
                             <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />,
-                            <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />
+                            <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />,
+                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />
                         </>
                     )}
 
@@ -121,6 +123,7 @@ export function Rutas() {
                             <Route path='/historial_clinico_p2' element={<V_HistoriaClinica2 />} />,
                             <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />,
                             <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
+                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
                             <Route path='/receta' element={<V_Receta />} />
                         </>
                     )}
