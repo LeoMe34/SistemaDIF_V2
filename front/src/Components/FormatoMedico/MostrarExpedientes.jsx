@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
@@ -10,6 +10,7 @@ export function MostrarExpedientes() {
     const { noExpediente } = useNoExpediente(); // Obtener noExpediente del contexto
     const [expedientes, setExpedientes] = useState([]);
     const [expedienteSeleccionado, setExpedienteSeleccionado] = useState(null);
+    const navegador = useNavigate()
 
     const getExpedientes = async () => {
         try {
@@ -33,6 +34,10 @@ export function MostrarExpedientes() {
         }
     }
 
+    const handleEnfermeria = (fecha)  => {
+        navegador(`/mostrar_expediente/${fecha}`)
+    }
+
     useEffect(() => {
         if (noExpediente) {
             getExpedientes();
@@ -52,7 +57,7 @@ export function MostrarExpedientes() {
                         </div>
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
-                                <p className="texto_2">Ficha Tecnica Enfermeria</p>
+                                <p className="texto_2" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
                                 <p className="texto_2">Ficha Tecnica Medica</p>
                                 <p className="texto_2">Historial clinico</p>
                                 <p className="texto_2">Recetas</p>
