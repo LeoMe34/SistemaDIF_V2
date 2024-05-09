@@ -52,8 +52,8 @@ export function MostrarExpedientes() {
                 {expedientes.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
                         <div className="expediente-info" onClick={() => toggleExpediente(expediente.id)}>
-                            <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder`}></i>
-                            <p className="texto_1"> {expediente.fecha}</p>   
+                            <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder cursor-pointer`}></i>
+                            <p className="texto_1 cursor-pointer"> {expediente.fecha}</p>   
                         </div>
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
