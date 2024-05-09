@@ -648,6 +648,10 @@ textarea {
   margin-bottom: 10px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /*
 .box {
   padding: 10px 30px;

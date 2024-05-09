@@ -57,7 +57,7 @@ export function MostrarExpedientes() {
                         </div>
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
-                                <p className="texto_2" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
+                                <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
                                 <p className="texto_2">Ficha Tecnica Medica</p>
                                 <p className="texto_2">Historial clinico</p>
                                 <p className="texto_2">Recetas</p>
