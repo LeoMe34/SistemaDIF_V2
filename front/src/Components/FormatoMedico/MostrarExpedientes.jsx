@@ -6,9 +6,10 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { CardPaciente } from "../Paciente/CardPaciente";
 
 export function MostrarExpedientes() {
-    const { token } = useAuth()
+    const { token } = useAuth();
     const { noExpediente } = useNoExpediente(); // Obtener noExpediente del contexto
-    const [expedientes, setExpedientes] = useState([])
+    const [expedientes, setExpedientes] = useState([]);
+    const [expedienteSeleccionado, setExpedienteSeleccionado] = useState(null);
 
     const getExpedientes = async () => {
         try {
@@ -17,10 +18,18 @@ export function MostrarExpedientes() {
                     headers: {
                         Authorization: `Token ${token}`
                     }
-                })
-            setExpedientes(response.data)
+                });
+            setExpedientes(response.data);
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
+        }
+    }
+
+    const toggleExpediente = (expedienteId) => {
+        if (expedienteSeleccionado === expedienteId) {
+            setExpedienteSeleccionado(null); // Si el expediente ya está seleccionado, lo cerramos
+        } else {
+            setExpedienteSeleccionado(expedienteId); // Si no, lo seleccionamos
         }
     }
 
@@ -34,12 +43,21 @@ export function MostrarExpedientes() {
         <div className="container">
             <div className="mt-3 expediente-container">
                 <CardPaciente id={noExpediente}></CardPaciente>
+                
                 {expedientes.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
-                        <Link to={`/mostrar_expediente/${expediente.fecha}`}>
-                            <i className="bi bi-folder folder"> </i>
-                            <p className="texto_1"> {expediente.fecha}</p>
-                        </Link>
+                        <div className="expediente-info" onClick={() => toggleExpediente(expediente.id)}>
+                            <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder`}></i>
+                            <p className="texto_1"> {expediente.fecha}</p>   
+                        </div>
+                        {expediente.id === expedienteSeleccionado && (
+                            <div className="">
+                                <p className="texto_2">Ficha Tecnica Enfermeria</p>
+                                <p className="texto_2">Ficha Tecnica Medica</p>
+                                <p className="texto_2">Historial clinico</p>
+                                <p className="texto_2">Recetas</p>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
