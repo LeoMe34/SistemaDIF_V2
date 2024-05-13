@@ -62,7 +62,7 @@ export function HistorialClinicoDental() {
     const registrarHistOdonto = async (data) => {
         try {
             const formData = new FormData();
-            formData.append('archivo', data.archivo[0]); // Aquí asumo que el nombre del campo del archivo es 'archivo', asegúrate de cambiarlo si es diferente
+            formData.append('archivo', data.archivo[0]);
             formData.append('fechaElaboracion', data.fechaElaboracion);
             formData.append('referencia', JSON.stringify({
                 referencia: data.referencia,

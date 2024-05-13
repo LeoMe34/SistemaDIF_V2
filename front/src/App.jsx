@@ -34,6 +34,7 @@ function App() {
                 <div className={isLoginPage ? '' : 'sidebarState'}>
                   {!isLoginPage && <MenuNave />}
                   <Rutas />
+
                 </div>
               </main>
 

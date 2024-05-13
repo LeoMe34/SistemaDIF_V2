@@ -12,7 +12,6 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
     const { setNoExpediente } = useNoExpediente()
     const navegador = useNavigate()
 
-
     const handleConsultaChange = (event) => {
         setConsulta(event.target.value);
     };
@@ -36,7 +35,7 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
         }
     };
 
-    const handlePacienteSeleccionado = (noExpediente) => {        
+    const handlePacienteSeleccionado = (noExpediente) => {
         setNoExpediente(noExpediente);
 
         if (getIdHistorialMedico) {
@@ -47,7 +46,7 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
             navegador(`/mostrar_paciente/${noExpediente}`)
         }
 
-        if(isMostrarExp){
+        if (isMostrarExp) {
             navegador(`/mostrar_expediente`)
         }
         // Filtrar los resultados para mantener solo al paciente seleccionado

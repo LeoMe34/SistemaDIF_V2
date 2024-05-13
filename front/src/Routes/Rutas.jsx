@@ -45,6 +45,7 @@ import { V_MostrarPaciente } from '../Views/Paciente/V_MostrarPacienteM'
 import { V_MostrarUsuario } from '../Views/Empleado/V_MostrarUsuario'
 import { V_MostrarExpedientes } from '../Views/FormatoMedico/V_MostrarExpedientes'
 import { V_MostrarFichaEnfermeria } from '../Views/FormatoEnfermeria/V_MostrarFichaEnfermeria'
+import { V_MostrarHistOdonto } from '../Views/FormatoOdonto/V_MostrarHistOdonto'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -110,7 +111,11 @@ export function Rutas() {
                             <Route path='/nota_subs1' element={<V_NotaSubsecuente1 />} />,
                             <Route path='/nota_subs2' element={<V_NotaSubsecuente2 />} />,
                             <Route path='/ficha_medica' element={<V_FichaMedicaO />} />,
-                            <Route path='/nota_evo' element={<V_NotaEvolucion />} />
+                            <Route path='/nota_evo' element={<V_NotaEvolucion />} />,
+                            <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
+                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
+                            <Route path='/mostrar_expediente_HistO/:fecha' element={<V_MostrarHistOdonto />} />,
+
                         </>
                     )}
 

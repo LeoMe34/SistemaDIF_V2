@@ -44,7 +44,7 @@ export function Parte3() {
                     formData.append('archivo', data.archivo[i]);
                 }
             }
-            formData.append('fechaElaboracion', historialO.fechaElaboracion);
+            formData.append('fecha_elaboracion', historialO.fechaElaboracion);
             formData.append('referencia', JSON.stringify({
                 referencia: historialO.referencia,
                 referencia_lugar: historialO.referenciaLugar,
@@ -245,7 +245,7 @@ export function Parte3() {
                                 <label htmlFor="fileInput" className="btn btn-cargar">
                                     Elegir archivo(s)
                                 </label>
-                                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple
+                                <input type="file" id="fileInput" style={{ display: 'block' }} onChange={handleFileChange} multiple
                                     {...register("archivo", { required: true })} />
 
                                 {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (

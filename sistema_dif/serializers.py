@@ -121,6 +121,12 @@ class HistorialOdontoSerializer(serializers.ModelSerializer):
         return historial
 
 
+class HistOdontoArchivoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistorialOdonto
+        fields = ["id", "archivo"]
+
+
 class NotaEvolucionOdontoSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotaEvolucionOdonto

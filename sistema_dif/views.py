@@ -21,6 +21,7 @@ from .serializers import (
     GrupoSerializer,
     FichaTecnicaMedSerializer,
     FichaTecnicaMedOdontoSerializer,
+    HistOdontoArchivoSerializer,
 )
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
@@ -119,7 +120,11 @@ def get_datos_usuario(request):
                     "username": user.username,
                     "email": user.email,
                     "no_trabajador": empleado.no_trabajador if empleado else None,
-                    "nombre_empleado": empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno,
+                    "nombre_empleado": empleado.nombre
+                    + " "
+                    + empleado.apellidoPaterno
+                    + " "
+                    + empleado.apellidoMaterno,
                     "cedula": empleado.cedula_profesional,
                     "name": group.name if group else None,
                     "is_superuser": user.is_superuser,
@@ -150,7 +155,15 @@ def get_usuarios(request, user_id):
                 "username": user.username,
                 "email": user.email,
                 "no_trabajador": empleado.no_trabajador if empleado else None,
-                "nombre_empleado": empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno if empleado else None,
+                "nombre_empleado": (
+                    empleado.nombre
+                    + " "
+                    + empleado.apellidoPaterno
+                    + " "
+                    + empleado.apellidoMaterno
+                    if empleado
+                    else None
+                ),
                 "cedula": empleado.cedula_profesional if empleado else None,
                 "ocupacion": empleado.ocupacion if empleado else None,
                 "telefono": empleado.telefono if empleado else None,
@@ -223,45 +236,50 @@ def buscar_usuario(request):
 def cambiar_contrasenia(request, user_id):
     # Asegúrate de que el usuario que intenta cambiar la contraseña sea el mismo que el usuario cuyo ID se proporciona.
     if request.user.id != user_id:
-        return Response({'error': 'No tienes permiso para cambiar la contraseña de este usuario'}, status=403)
+        return Response(
+            {"error": "No tienes permiso para cambiar la contraseña de este usuario"},
+            status=403,
+        )
 
     datos = request.data
 
     try:
         user = User.objects.get(id=user_id)
         # Validar y establecer la contraseña utilizando el método de Django
-        nueva_contrasenia = datos.get('password')
+        nueva_contrasenia = datos.get("password")
         if not nueva_contrasenia:
-            return Response({'error': 'La contraseña no puede estar vacía'}, status=400)
+            return Response({"error": "La contraseña no puede estar vacía"}, status=400)
 
         user.set_password(nueva_contrasenia)
         user.save()
-        return Response({'success': 'Contraseña cambiada exitosamente'})
+        return Response({"success": "Contraseña cambiada exitosamente"})
 
     except User.DoesNotExist:
-        return Response({'error': 'Usuario no encontrado'}, status=404)
+        return Response({"error": "Usuario no encontrado"}, status=404)
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def validar_contrasenia_actual(request):
     datos = request.data
-    contrasenia_actual = datos.get('password')
+    contrasenia_actual = datos.get("password")
 
     if not contrasenia_actual:
-        return Response({'error': 'Debes proporcionar la contraseña actual'}, status=400)
+        return Response(
+            {"error": "Debes proporcionar la contraseña actual"}, status=400
+        )
 
     # Verificar si la contraseña actual coincide con la contraseña almacenada
     if not request.user.check_password(contrasenia_actual):
-        return Response({'error': 'La contraseña actual es incorrecta'}, status=400)
+        return Response({"error": "La contraseña actual es incorrecta"}, status=400)
 
-    return Response({'success': 'La contraseña actual es válida'})
+    return Response({"success": "La contraseña actual es válida"})
 
 
 @api_view(["PATCH"])
 @permission_classes([IsAdminUser])
 def eliminar_usuario(request, pk):
-    try:        
+    try:
         user = User.objects.get(pk=pk)
 
     except User.DoesNotExist:
@@ -272,6 +290,7 @@ def eliminar_usuario(request, pk):
     user.save()
 
     return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # EMPLEADO
 
@@ -285,11 +304,12 @@ def get_empleados(request):
     queryset = Empleado.objects.exclude(usuario=usuario_autenticado)
 
     # Filtrar los empleados cuyos usuarios asociados estén activos
-    empleados_activos = [empleado for empleado in queryset if empleado.usuario.is_active]
+    empleados_activos = [
+        empleado for empleado in queryset if empleado.usuario.is_active
+    ]
 
     serializer = EmpleadoSerializer(empleados_activos, many=True)
     return Response(serializer.data)
-
 
 
 @api_view(["POST"])
@@ -313,7 +333,9 @@ def detalle_empleado(request):
         serializer = EmpleadoSerializer(empleado)
         return Response(serializer.data)
     except Empleado.DoesNotExist:
-        return Response({"error": "No se encontró un empleado asociado al usuario"}, status=404)
+        return Response(
+            {"error": "No se encontró un empleado asociado al usuario"}, status=404
+        )
 
 
 @api_view(["PUT"])
@@ -328,21 +350,20 @@ def modificar_empleado(request, user_id):
         empleado = Empleado.objects.get(usuario_id=user_id)
 
         # Actualizar el número de teléfono del empleado con el valor proporcionado en la solicitud
-        empleado.telefono = datos['telefono']
+        empleado.telefono = datos["telefono"]
         empleado.save()
 
         user = User.objects.get(id=user_id)
-        user.email = datos['email']
+        user.email = datos["email"]
         user.save()
 
         # Devolver la respuesta con los datos actualizados del empleado
         serializer = EmpleadoSerializer(empleado)
         return Response(serializer.data)
     except Empleado.DoesNotExist:
-        return Response({'error': 'Empleado no encontrado'}, status=404)
+        return Response({"error": "Empleado no encontrado"}, status=404)
     except User.DoesNotExist:
-        return Response({'error': 'Usuario no encontrado'}, status=404)
-
+        return Response({"error": "Usuario no encontrado"}, status=404)
 
 
 # Paciente
@@ -476,31 +497,35 @@ def get_fichasE_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(
-            empleado=empleado)
+        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(empleado=empleado)
         serializer = FichaTecnicaESerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaEnfermeria.DoesNotExist:
         return Response(status=404)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def filtrar_fichas_por_paciente(request, noExp):
     try:
         fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
-        
+
         if not fichas_medicas.exists():
             return Response(
-                {"error": "No se encontraron fichas médicas para el paciente especificado."},
+                {
+                    "error": "No se encontraron fichas médicas para el paciente especificado."
+                },
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
+
         serializer = FichaTecnicaESerializer(fichas_medicas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     except FichaTecnicaEnfermeria.DoesNotExist:
         return Response(
-            {"error": "No se encontraron fichas médicas para el paciente especificado."},
+            {
+                "error": "No se encontraron fichas médicas para el paciente especificado."
+            },
             status=status.HTTP_404_NOT_FOUND,
         )
 
@@ -514,12 +539,15 @@ def crear_FichaTecnicaE(request):
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def detalle_fichaTecnicaE(request, noExp, fecha):
     try:
         paciente = get_object_or_404(Paciente, no_expediente=noExp)
-        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(paciente=paciente, fecha=fecha)
+        fichaTecnicaE = FichaTecnicaEnfermeria.objects.get(
+            paciente=paciente, fecha=fecha
+        )
     except (Paciente.DoesNotExist, FichaTecnicaEnfermeria.DoesNotExist):
         return Response(status=404)
 
@@ -574,8 +602,7 @@ def get_fichasTP_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        fichasT_psico = FichaTecnicaPsicologia.objects.filter(
-            empleado=empleado)
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
         serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
         return Response(serializer.data)
     except FichaTecnicaPsicologia.DoesNotExist:
@@ -746,13 +773,24 @@ def crear_historialO(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_historialO(request, pk):
+def detalle_historialO(request, noExp, fecha):
     try:
-        historialO = HistorialOdonto.objects.get(pk=pk)
-    except HistorialOdontoSerializer.DoesNotExist:
+        paciente = get_object_or_404(Paciente, no_expediente=noExp)
+        historialO = HistorialOdonto.objects.get(
+            paciente=paciente, fecha_elaboracion=fecha
+        )
+    except (Paciente.DoesNotExist, HistorialOdonto.DoesNotExist):
         return Response(status=404)
 
     serializer = HistorialOdontoSerializer(historialO)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def obtener_documento(request, id):
+    documento = get_object_or_404(HistorialOdonto, id=id)
+    serializer = HistOdontoArchivoSerializer(documento)
     return Response(serializer.data)
 
 
@@ -795,8 +833,7 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list(
-                "histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -813,8 +850,7 @@ def get_notasEvolucionO(request):
 def get_notasEvolucionO_relacionada(request, pk):
     try:
         historial = HistorialOdonto.objects.get(id=pk)
-        notas_historial = NotaEvolucionOdonto.objects.filter(
-            histlOdonto=historial)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
         serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -834,10 +870,16 @@ def get_ultima_nota_evolucion(request):
         )
         if ultima_nota.exists():  # Verificar si hay resultados
             serializer = NotaEvolucionOdontoSerializer(
-                ultima_nota.first())  # Obtener el primer resultado
+                ultima_nota.first()
+            )  # Obtener el primer resultado
             return Response(serializer.data)
         else:
-            return Response({"error": "No se encontró ninguna nota de evolución para este paciente"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {
+                    "error": "No se encontró ninguna nota de evolución para este paciente"
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
     else:
         return Response(
             {"error": "Debe proporcionar un número de expediente del paciente"},
@@ -875,8 +917,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -952,8 +993,7 @@ def modificar_fichaTecnicaMedOdonto(request, pk):
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = FichaTecnicaMedOdontoSerializer(
-        fichaTecnicaMO, data=request.data)
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -985,7 +1025,8 @@ def get_historialesMedicos(request):
         )
         # Obtener los historiales médicos que no tienen una nota médica relacionada
         historiales_sin_nota = historiales_paciente.annotate(
-            num_notas=Count('notamedica')).filter(num_notas=0)
+            num_notas=Count("notamedica")
+        ).filter(num_notas=0)
         serializer = HistorialMedicoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
     else:
@@ -1001,15 +1042,12 @@ def get_historialesMedicos(request):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        ficha_medica = FichaTecnicaMedica.objects.filter(
-            empleado__usuario=usuario)
+        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
         historiales = HistorialMedico.objects.filter(fichaMed__in=ficha_medica)
         # Serializar los historiales médicos junto con la información del paciente
         serialized_data = []
         for historial in historiales:
-            noExp = {
-                "no_expediente": historial.fichaMed.paciente.no_expediente
-            }
+            noExp = {"no_expediente": historial.fichaMed.paciente.no_expediente}
             historial_data = HistorialMedicoSerializer(historial).data
             historial_data["no_expediente"] = noExp
             serialized_data.append(historial_data)

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
+
 
 export function TablaOdontologia() {
     const { token } = useAuth()
@@ -121,13 +123,15 @@ export function TablaOdontologia() {
 
     return (
         <div className="container">
+            <BusquedaPaciente isMostrarExp={true}></BusquedaPaciente>
+
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly/>
+                <input type="date" value={fechaActual} readOnly />
                 <label className="">Nombre del medico</label>
-                <input type="text" value={nombre} readOnly/>
+                <input type="text" value={nombre} readOnly />
                 <label className="">Cedula profesional</label>
-                <input type="text" value={cedula} readOnly/>
+                <input type="text" value={cedula} readOnly />
                 <label className="">Localidad sede: Coatzacoalcos</label>
 
 
