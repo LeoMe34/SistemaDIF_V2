@@ -91,7 +91,7 @@ class FichaTecnicaMedica(models.Model):
     diagnostico = models.TextField(max_length=100, default="")
     motivo_consulta = models.TextField(max_length=100, default="")
     observacion = models.TextField(max_length=100, default="")
-    extras = models.JSONField(max_length=100, default="")
+    extras = models.JSONField(max_length=100, default="") #Fecha
 
     paciente = models.ForeignKey(
         Paciente,

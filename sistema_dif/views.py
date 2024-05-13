@@ -670,9 +670,9 @@ def crear_FichaTecnicaMed(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_fichaTecnicaMed(request, pk):
+def detalle_fichaTecnicaMed(request, noExp):
     try:
-        fichaTecnicaE = FichaTecnicaMedica.objects.get(pk=pk)
+        fichaTecnicaE = FichaTecnicaMedica.objects.get(paciente=noExp)
     except FichaTecnicaMedica.DoesNotExist:
         return Response(status=404)
 
