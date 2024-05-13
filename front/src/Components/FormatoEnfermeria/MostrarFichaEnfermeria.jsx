@@ -90,7 +90,7 @@ export function MostrarFichaEnfermeria() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="es_trabajador">Trabajador: </label>
                             <input className="opciones" id='es_trabajador' name='es_trabajador' type="text"
-                                value={convertirTrabajador(detalles.trabajador)}/>
+                                value={convertirTrabajador(detalles.trabajador)} />
                         </div>
 
                     </div>

@@ -29,7 +29,7 @@ export function Parte1() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="fechaAct">Fecha: </label>
                             <input id="fechaAlt" type="date" placeholder="aaaa/mm/dd" className="entrada"
-                                {...register("fechaElaboracion", { required: true })} />
+                                {...register("fecha_elaboracion", { required: true })} />
                         </div>
 
                         <div className="col">

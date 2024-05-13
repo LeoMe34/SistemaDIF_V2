@@ -9,7 +9,6 @@ urlpatterns = [
     path("login/", views.login_api),
     path("usuario/", views.get_datos_usuario),
     path("get_usuarios/<int:user_id>", views.get_usuarios),
-
     path("registrar/", views.registrar_api),
     path("logout/", knox_views.LogoutView.as_view()),
     path("logoutall/", knox_views.LogoutAllView.as_view()),
@@ -20,8 +19,6 @@ urlpatterns = [
     path("get_todos_empleados/", views.get_empleados),
     path("editar_empleado/<int:user_id>", views.modificar_empleado),
     path("eliminar_usuario/<int:pk>", views.eliminar_usuario),
-
-
     path("crear_grupo/", views.agregar_grupo),
     path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/", views.unir_usuario_grupo),
     path("registrar_paciente/", views.crear_paciente),
@@ -57,4 +54,6 @@ urlpatterns = [
     path("registrar_ficha_medica/", views.crear_FichaTecnicaMed),
     path("getFichaMedica/", views.get_fichasTecnicasMed),
     path("registrar_ficha_medicaO/", views.crear_FichaTecnicaMedOdonto),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("get_hist_odonto/<str:noExp>/<str:fecha>/", views.detalle_historialO),
+    path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
+]
