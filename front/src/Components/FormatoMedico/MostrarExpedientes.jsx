@@ -92,8 +92,9 @@ export function MostrarExpedientes() {
                                     </>)}
                                 {userGroup == "Odontologo" && (
                                     <>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>                                        
                                         <p className="texto_2">Nota evolucion</p>
+                                        <p className="texto_2">Ficha tecnica medicina</p>
                                         <p className="texto_2">Nota subsecuente</p>
                                     </>)}
 
