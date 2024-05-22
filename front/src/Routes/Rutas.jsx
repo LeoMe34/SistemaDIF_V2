@@ -46,6 +46,7 @@ import { V_MostrarUsuario } from '../Views/Empleado/V_MostrarUsuario'
 import { V_MostrarExpedientes } from '../Views/FormatoMedico/V_MostrarExpedientes'
 import { V_MostrarFichaEnfermeria } from '../Views/FormatoEnfermeria/V_MostrarFichaEnfermeria'
 import { V_MostrarHistOdonto } from '../Views/FormatoOdonto/V_MostrarHistOdonto'
+import { V_MostrarFichaTecnicaMedico } from '../Views/FormatoMedico/V_MostrarFichaTecnicaMedico'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -123,6 +124,7 @@ export function Rutas() {
                         <>
                             <Route path='/home_medico' element={<V_HomeMedico />} />,
                             <Route path='/ficha_tecnica_medico' element={<V_FichaTecnicaMedico />} />,
+                            <Route path='/ficha_tecnica_medico/:fecha' element={<V_MostrarFichaTecnicaMedico />} />,
                             <Route path='/notas_medicas' element={<V_NotasMedicas />} />,
                             <Route path='/historial_clinico_p1' element={<V_HistoriaClinica1 />} />,
                             <Route path='/historial_clinico_p2' element={<V_HistoriaClinica2 />} />,

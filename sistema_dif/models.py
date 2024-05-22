@@ -88,10 +88,11 @@ class FichaTecnicaPsicologia(models.Model):
 
 
 class FichaTecnicaMedica(models.Model):
+    fecha = models.DateField(auto_now=False, auto_now_add=True)
     diagnostico = models.TextField(max_length=100, default="")
     motivo_consulta = models.TextField(max_length=100, default="")
     observacion = models.TextField(max_length=100, default="")
-    extras = models.JSONField(max_length=100, default="") #Fecha
+    extras = models.JSONField(max_length=100, default="") 
 
     paciente = models.ForeignKey(
         Paciente,
