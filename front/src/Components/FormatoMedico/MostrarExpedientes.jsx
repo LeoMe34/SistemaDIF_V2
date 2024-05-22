@@ -45,7 +45,7 @@ export function MostrarExpedientes() {
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
         }
-    }
+    }    
 
     const toggleExpediente = (expedienteId) => {
         if (expedienteSeleccionado === expedienteId) {
@@ -63,6 +63,10 @@ export function MostrarExpedientes() {
         navegador(`/ficha_tecnica_medico/${fecha}`)
     }
 
+    const handleHistorialMedico= (fecha) => {
+        navegador(`/historial_clinico/${noExpediente}/${fecha}`)
+    }
+
 
     const handleOdonto = (fecha) => {
         navegador(`/mostrar_expediente_HistO/${fecha}`)
@@ -70,7 +74,7 @@ export function MostrarExpedientes() {
 
     useEffect(() => {
         if (noExpediente) {
-            getExpedientes();
+            getExpedientes();            
         }
     }, [noExpediente, token]);
 
@@ -91,7 +95,7 @@ export function MostrarExpedientes() {
                                 {userGroup == "Medico" && (
                                     <>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
-                                        <p className="texto_2">Historial clinico</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
                                         <p className="texto_2">Recetas</p>
                                     </>)}
                                 {userGroup == "Odontologo" && (

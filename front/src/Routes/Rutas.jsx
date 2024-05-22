@@ -26,6 +26,7 @@ import { V_HomeNutricion } from '../Views/Homes/V_HomeNutricion'
 import { V_HomeOftalmologo } from '../Views/Homes/V_HomeOftalmogo'
 import { V_HomeAudiologo } from '../Views/Homes/V_HomeAudiologo'
 
+import { V_HistoriaClinicaS } from '../Views/FormatoMedico/V_HistoriaClinica'
 import { V_HistoriaClinica1 } from '../Views/FormatoMedico/V_HistoriaClinica1'
 import { V_HistoriaClinica2 } from '../Views/FormatoMedico/V_HistoriaClinica2'
 import { V_HistoriaClinica3 } from '../Views/FormatoMedico/V_HistoriaClinica3'
@@ -131,6 +132,7 @@ export function Rutas() {
                             <Route path='/historial_clinico_p3' element={<V_HistoriaClinica3 />} />,
                             <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
                             <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
+                            <Route path='/historial_clinico/:noExpediente/:fecha' element={<V_HistoriaClinicaS />} />,
                             <Route path='/receta' element={<V_Receta />} />
                         </>
                     )}

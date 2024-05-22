@@ -191,7 +191,7 @@ class FichaTecnicaMedOdonto(models.Model):
 
 class HistorialMedico(models.Model):
     fecha_elaboracion = models.DateField(auto_now=False, auto_now_add=True)
-    referenciaMed = models.JSONField()  # referencia y lugar
+    referenciaMed = models.JSONField()  # referencia y lugar, num_consultorio
     interrogatorio = models.JSONField()
     # padecimiento actual, tratamiento previo, diagnostico previo, aparato/sistema
     exploracionFisica = models.JSONField()

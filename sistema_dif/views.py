@@ -684,6 +684,32 @@ def get_fichasMed_relacionadas(request):
     except FichaTecnicaMedica.DoesNotExist:
         return Response(status=404)
 
+"""
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def filtrar_fichasM_por_paciente(request, noExp):
+    try:
+        fichas_medicas = FichaTecnicaMedica.objects.filter(paciente=noExp)
+
+        if not fichas_medicas.exists():
+            return Response(
+                {
+                    "error": "No se encontraron fichas médicas para el paciente especificado."
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = FichaTecnicaMedSerializer(fichas_medicas, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except FichaTecnicaMedica.DoesNotExist:
+        return Response(
+            {
+                "error": "No se encontraron fichas médicas para el paciente especificado."
+            },
+            status=status.HTTP_404_NOT_FOUND,
+        )
+"""
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -1055,6 +1081,16 @@ def get_historiales_relacionadas(request):
     except HistorialMedico.DoesNotExist:
         return Response(status=404)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialClinico(request,pk):
+    try:
+        historialMedico = HistorialMedico.objects.get(pk=pk)
+    except HistorialMedicoSerializer.DoesNotExist:
+        return Response(status=404)
+
+    serializer = HistorialMedicoSerializer(historialMedico)
+    return Response(serializer.data)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])

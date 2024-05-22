@@ -1,169 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../Contexto/AuthContext';
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
-import { Ginecobstetrico } from '../FormatosCompartidos/Ginecobstetrico';
-import { Interrogatorio } from './Interrogatorio';
-import { ExploracionFisica } from './ExploracionFisica';
-import { AntecedentesHereditarios } from './AntecedentesHereditarios';
-import { AntecedentesPersonales } from './AntecedentesPersonales';
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
-import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { useAuth } from '../../Contexto/AuthContext';
 
 export function HistoriaClinicaSimplificada() {
-    const navegador = useNavigate()
-    const { token } = useAuth()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
-    const { noExpediente } = useNoExpediente()
-    const [noEmpleado, setNoEmpleado] = useState(null);
-    const [ginecoData, setGinecoData] = useState(null)
-    const [interrogatorioData, setInterrogatorioData] = useState(null)
-    const [exploracionData, setExploracionData] = useState(null)
-    const [hereditariosData, setHereditariosData] = useState(null)
-    const [personalesData, setPersonalesData] = useState(null)
+    const [fichaMedica, setFichaMedica] = useState([]);
+    const [historiaClinica, setHistoriaClinica] = useState(null);
+    const { noExpediente, fecha } = useParams();
+    const { token } = useAuth();
 
-    const handleGinecoData = (data) => {
-        setGinecoData(data)
-    }
-
-    const handleInterrogatorioData = (data) => {
-        setInterrogatorioData(data)
-    }
-
-    const handleExploracionData = (data) => {
-        setExploracionData(data)
-    }
-
-    const handleHereditariosData = (data) => {
-        setHereditariosData(data)
-    }
-    const handlePersonalesData = (data) => {
-        setPersonalesData(data)
-    }
-
-    useEffect(() => {
-        const getNoEmpleado = async () => {
-            try {
-
-                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                });
-                const no_Empleado = response.data.user_info.no_trabajador
-                setNoEmpleado(no_Empleado)
-                console.log(response)
-            } catch (error) {
-                console.error('Error al obtener ID de empleado:', error);
-            }
-        };
-
-        getNoEmpleado();
-    }, [token]);
-
-    const registrarHistorial = async (data) => {
+    const getFichasMedicas = async () => {
         try {
-            const url = "http://127.0.0.1:8000/api/crear_historial_medico/"
-            const respuesta = await axios.post(url, {
-                fecha_elaboracion: data.fecha,
-                informante: data.informante,
-                "referenciaMed": {
-                    num_consultorio: data.no_consultorio,
-                    referencia: data.referencia,
-                    lugar_referencia: data.lugar
-                },
-                "datosFamiliares": {
-                    tipo_familia: data.tipo_familia,
-                    rol_madre: data.rol_madre,
-                    familia: data.familia,
-                    disfuncional: data.disfuncional,
-                },
-                "antHerediPatM": {
-                    diabetes: data.diabetes,
-                    hipertension: data.hipertension,
-                    cancer: data.cancer,
-                    cardiopatia: data.cardiopatia,
-                    par_diabetes: data.par_diabetes,
-                    par_hipertension: data.par_hipertension,
-                    par_cancer: data.par_cancer,
-                    par_cardiopatia: data.par_cardiopatia,
-                    otros: data.otros
-                },
-                "antPersoPatM": {
-                    medicosQT: data.medicosQT,
-                    tabaquismoAA: data.tabaquismoAA,
-                    tendenciaDM: data.tendenciaDM,
-                    otros: data.otros
-                },
-                "antPersoNoPatM": {
-                    alimentacion: data.alimentacion,
-                    habitacion: data.habitacion,
-                    higiene: data.higiene
-                },
-                "ginecobMed": {
-                    menarca: data.menarca,
-                    vida_sexual: data.vida_sexual,
-                    menstruacion: data.menstruacion,
-                    num_embarazos: data.num_embarazos,
-                    partos: data.partos,
-                    abortos: data.abortos,
-                    cesarea: data.cesarea,
-                    ultimo_parto: data.ultimo_parto,
-                    num_hijos: data.num_hijos,
-                    macrosomicos: data.macrosomicos,
-                    bajo_peso: data.bajo_peso,
-                    num_parejas: data.num_parejas,
-                    heterosexuales: data.heterosexuales,
-                    homosexuales: data.homosexuales,
-                    bisexuales: data.bisexuales,
-                    diu: data.diu,
-                    hormonales: data.hormonales,
-                    quirurgico: data.quirurgico,
-                    otros: data.otros
-                },
-                "interrogatorio": {
-                    padecimiento: data.padecimiento,
-                    aparatos_sistemas: data.aparatos_sistemas,
-                    auxiliares: data.auxiliares,
-                    tratamientos_previos: data.tratamientos_previos
-                },
-                "exploracionFisica": {
-                    inspeccion_gral: data.inspeccion_gral,
-                    cabeza: data.cabeza,
-                    cuello: data.cuello,
-                    torax: data.torax,
-                    abdomen: data.abdomen,
-                    columna_vertical: data.columna_vertical,
-                    genitales_externos: data.genitales_externos,
-                    extremidades: data.extremidades
-                },
-                "diagnostico": {
-                    diagnostico: data.diagnostico,
-                    tratamiento_integral: data.tratamiento_integral,
-                    pronostico: data.pronostico
-                },
-                "estudiosExter": {
-                    estudios: data.estudios
-                },
-                paciente: noExpediente,
-                empleado: noEmpleado
-            }, {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fecha}`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
-            })
-            console.log(data)
+            });
+            setFichaMedica(response.data);       
+            console.log('Datos de ficha médica:', fichaMedica);     
         } catch (error) {
-            console.error("Ocurrió un error", error);
+            console.error('Error al obtener ID del historial médico:', error);
         }
-    }
+    };
 
-    const enviar = handleSubmit(async data => {
-        await registrarHistorial({ ...data, ...ginecoData, ...interrogatorioData, ...exploracionData, ...hereditariosData, ...personalesData });
-    })
+    const getHistoriaClinica = async () => {
+        if (fichaMedica.id) {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/get_historia_clinica/${fichaMedica.id}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });               
+                setHistoriaClinica(response.data);
+                console.log('Datos del historial clínico:', response.data);     
+            } catch (error) {
+                console.error('Error al obtener el historial clínico:', error);
+            }
+        }
+    };
 
+
+    useEffect(() => {
+        if (noExpediente && fecha) {            
+            getFichasMedicas();
+        }
+    }, [noExpediente, fecha, token]);
+
+    useEffect(() => {
+        if (fichaMedica.id) {            
+            getHistoriaClinica();
+        }
+    }, [fichaMedica]);
     return (
         <div>
             <div className="mt-3 ml-10 container">
@@ -186,151 +75,433 @@ export function HistoriaClinicaSimplificada() {
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
-                <BusquedaPaciente></BusquedaPaciente>
-
-                <form onSubmit={enviar}>
-                    <div className='ml-10 container'>
-                        <div className='ml-10 mb-3'>
-                        </div>
-                        <div className='row'>
-                            <div className='col'>
-                                {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 
+                <div className='ml-10 container'>
+                    <div className='ml-10 mb-3'>
+                    </div>
+                    <div className='row'>
+                        <div className='col'>
+                            {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 
                             para que ya no tenga que estar llenandolo */}
-                                <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
-                                <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
-                                    {...register("no_consultorio", { required: true })} />
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-                                <input className="entrada" id='fecha' name='fecha' type="date"
-                                    {...register("fecha", { required: true })} />
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="referencia">Referencia:</label>
-                                <select className="opciones" id='referencia' name='referencia' type=""
-                                    {...register("referencia", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value={true}>Si</option>
-                                    <option value={false}>No</option>
-                                </select>
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
-                                <input className="entrada" id='lugar' name='lugar' type="text"
-                                    {...register("lugar", { required: true })} />
-                            </div>
+                            <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
+                            <input className="entrada" id='num_consultorio' name='num_consultorio' type="text" 
+                            value={historiaClinica?.referenciaMed?.num_consultorio}/>
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="fecha">Fecha:</label>
+                            <input className="entrada" id='fecha' name='fecha' type="date"
+                                value={historiaClinica?.fecha_elaboracion} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="referencia">Referencia:</label>
+                            <input className="entrada" id='referencia' name='referencia' type="text"
+                                value={historiaClinica?.referenciaMed?.referencia} />                           
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
+                            <input className="entrada" id='lugar' name='lugar' type="text"
+                                value={historiaClinica?.referenciaMed?.lugar_referencia} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='ml-10 container'>
+                    <h4 className='subtitulo_2'> Información familiar</h4>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia: </label>
+                            <input className="entrada" id='tipo_familia' name='tipo_familia' type="text" 
+                            value={historiaClinica?.datosFamiliares?.tipo_familia}/>
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="rol_madre">Rol de madre: </label>
+                            <input className="entrada" id='rol_madre' name='rol_madre' type="text" 
+                            value={historiaClinica?.datosFamiliares?.rol_madre}/>
                         </div>
                     </div>
 
-                    <div className='ml-10 container'>
-                        <h4 className='subtitulo_2'> Información familiar</h4>
-                        <div className='row'>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia: </label>
-                                <select className="opciones" id='tipo_familia' name='tipo_familia' type=""
-                                    {...register("tipo_familia", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value="0">Nuclear</option>
-                                    <option value="1">Extensa</option>
-                                    <option value="2">Compuesta</option>
-                                </select>
+                    <h4 className='subtitulo_2'>Familiar responsable del paciente </h4>
 
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="rol_madre">Rol de madre: </label>
-                                <select className="opciones" id='rol_madre' name='rol_madre' type=""
-                                    {...register("rol_madre", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value="0">No aplica</option>
-                                    <option value="1">E-M</option>
-                                    <option value="2">E-C</option>
-                                    <option value="3">E-SD</option>
-                                </select>
-                            </div>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="familia">Familia:</label>
+                            <input className="entrada" id='familia' name='familia' type="text" 
+                            value={historiaClinica?.datosFamiliares?.familia}/>
                         </div>
 
-                        <h4 className='subtitulo_2'>Familiar responsable del paciente </h4>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:</label>
+                            <input className="entrada" id='disfuncional' name='disfuncional' type="text" 
+                            value={historiaClinica?.datosFamiliares?.disfuncional}/>
+                        </div>
 
-                        <div className='row'>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="familia">Familia:</label>
-                                <select className="opciones" id='familia' name='familia' type=""
-                                    {...register("familia", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value="1">1</option>
-                                    <option value="d">D</option>
-                                </select>
-                            </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="informante">Informante: </label>
+                            <input className="entrada" id='informante' name='informante' type="text"
+                                value={historiaClinica?.informante} />
+                        </div>
 
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:</label>
-                                <select className="opciones" id='disfuncional' name='disfuncional' type=""
-                                    {...register("disfuncional", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value="si">Si</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="informante">Informante: </label>
-                                <input className="entrada" id='informante' name='informante' type="text"
-                                    {...register("informante", { required: true })} />
-                            </div>
-
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
-                                <select className="opciones" id='estudios' name='estudios' type=""
-                                    {...register("estudios", { required: true })}>
-                                    <option value="" selected disabled>Elija una opción</option>
-                                    <option value="0">Ninguno</option>
-                                    <option value="1">Laboratorios</option>
-                                    <option value="2">Ultrasonido</option>
-                                    <option value="3">Tomografia</option>
-                                    <option value="4">Rayos X</option>
-                                </select>
-                            </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
+                            <input className="entrada" id='estudios' name='estudios' type="text"
+                               value={historiaClinica?.estudiosExter?.estudios}/>
                         </div>
                     </div>
 
-                    <div className='ml-10 container'>
-                        <h3 className='subtitulo'>Antecedentes</h3>
-                        <AntecedentesHereditarios getHereditariosData={handleHereditariosData} />
-                        <AntecedentesPersonales getPersonalesData={handlePersonalesData} />
-                        <Ginecobstetrico getGinecoData={handleGinecoData} />
+                </div>
+
+                <div className='ml-10 container'>
+                    <h3 className='subtitulo'>Antecedentes</h3>
+                </div>
+
+                <h3 className='subtitulo_2'>Hereditarios y familiares</h3>
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
+                            <input className="entrada" id='diabetes' name='diabetes' type="text" 
+                            value={historiaClinica?.antHerediPatM?.diabetes}/>                            
+                            {/*showPDiabetes && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
+                                    <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
+                                        {...register("par_diabetes", { required: false })}></textarea>
+                                </div>
+                            )*/}
+                        </div>
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
+                            <input className="entrada" id='hipertension' name='hipertension' type="text" 
+                            value={historiaClinica?.antHerediPatM?.hipertension}/>  
+                            {/*showPHiper && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
+                                    <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
+                                        {...register("par_hipertension", { required: false })}></textarea>
+                                </div>
+                            )*/}
+                        </div>
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="cancer">Cancer</label>
+                            <input className="entrada" id='cancer' name='cancer' type="text" 
+                            value={historiaClinica?.antHerediPatM?.cancer}/> 
+                            {/*showPCancer && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
+                                    <textarea name="par_cancer" id="par_cancer" className="text-amplio"
+                                        {...register("par_cancer", { required: false })}></textarea>
+                                </div>
+                            )*/}
+                        </div>
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
+                            <input className="entrada" id='cardiopatia' name='cardiopatia' type="text" 
+                            value={historiaClinica?.antHerediPatM?.cardiopatia}/> 
+                            {/*showPCardio && (
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
+                                    <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
+                                        {...register("par_cardiopatia", { required: false })}></textarea>
+                                </div>
+                            )*/}
+                        </div>
                     </div>
+                </div>
 
-                    <div className='ml-10 container'>
-                        <h3 className='subtitulo'>Interrogatorio</h3>
-
-                        <Interrogatorio getInterrogatorioData={handleInterrogatorioData} />
+                <div className="container">
+                    <div className="col">
+                        <label className='form-check-label etiqueta' htmlFor="otros_ant">Otros</label>
+                        <textarea name="otros_ant" id="otros_ant" className="text-amplio"
+                            value={historiaClinica?.antHerediPatM?.otros}></textarea>
                     </div>
+                </div>
 
-                    <div className='ml-10 container'>
-                        <h3 className="subtitulo">Exploración física</h3>
-                        <CardFichaEnfermeria />
-                        <ExploracionFisica getExploracionData={handleExploracionData} />
+                <h3 className='subtitulo_2'>Personales no patológicos</h3>
+
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="alimentacion">Alimentación</label>
+                            <textarea name="alimentacion" id="alimentacion" className="text-amplio"
+                                value={historiaClinica?.antPersoNoPatM?.alimentacion}></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="habitacion">Habitación</label>
+                            <textarea name="habitacion" id="habitacion" className="text-amplio"
+                                value={historiaClinica?.antHerediPatM?.habitacion}></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="higiene">Higiene personal</label>
+                            <textarea name="higiene" id="higiene" className="text-amplio"
+                                value={historiaClinica?.antHerediPatM?.higiene}></textarea>
+                        </div>
                     </div>
+                </div>
 
+                <h3 className='subtitulo_2'>Personales patológicos</h3>
 
-                    <div className='ml-10 mb-5 container'>
-                        <div className='row'>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="medico">Médico:</label>
-                                <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
-                                <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                                <input className="datos_lectura" id='cedula' name='cedula' type="text" readOnly />
-                                <label className='etiqueta' htmlFor="firma">Firma:</label>
-                            </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="medicosQT">Médicos,quirúrgicos,transfusiones</label>
+                            <textarea name="medicosQT" id="medicosQT" className="text-amplio"
+                                value={historiaClinica?.antPersoPatM?.medicosQT}></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="tabaquismoAA">Tabaquismo,alcoholismo,alérgicos</label>
+                            <textarea name="tabaquismoAA" id="tabaquismoAA" className="text-amplio"
+                                value={historiaClinica?.antPersoPatM?.tabaquismoAA}></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos</label>
+                            <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
+                                value={historiaClinica?.antPersoPatM?.tendenciaDM}></textarea>
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="otros_antPat">Otros</label>
+                            <textarea name="otros_antPat" id="otros_antPat" className="text-amplio"
+                                value={historiaClinica?.antPersoPatM?.otros}></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 className='subtitulo_2'>Datos ginecobstetricos</h3>
+
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="menarca">Menarca: </label>
+                            <input className="entrada" id='menarca' name='menarca' type="text"
+                                value={historiaClinica?.ginecobMed?.menarca} />
+
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="vida_sexual">Inicio de vida sexual activa: </label>
+                            <input className="entrada" id='vida_sexual' name='vida_sexual' type="text"
+                                value={historiaClinica?.ginecobMed?.vida_sexual} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="menstruacion">Ultima menstruación</label>
+                            <input className="entrada" id='menstruacion' name='menstruacion' type="text"
+                                value={historiaClinica?.ginecobMed?.menstruacion} />
+                        </div>
+                    </div>
+                </div>
+
+                <h3 className='subtitulo_2'>Embarazos</h3>
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="num_embarazos">N° embarazos: </label>
+                            <input className="entrada" id='num_embarazos' name='num_embarazos' type="text"
+                                value={historiaClinica?.ginecobMed?.num_embarazos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="partos">Partos:</label>
+                            <input className="entrada" id='partos' name='partos' type="text"
+                                value={historiaClinica?.ginecobMed?.partos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="abortos">Abortos</label>
+                            <input className="entrada" id='abortos' name='abortos' type="text"
+                                value={historiaClinica?.ginecobMed?.abortos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="cesarea">Cesareas</label>
+                            <input className="entrada" id='cesarea' name='cesarea' type="text"
+                                value={historiaClinica?.ginecobMed?.cesarea} />
+                        </div>
+                    </div>
+                </div>
+
+                <h3 className='subtitulo_2'>Partos</h3>
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="ultimo_parto">Fecha de ultimo parto: </label>
+                            <input className="entrada" id='ultimo_parto' name='ultimo_parto' type="text"
+                                value={historiaClinica?.ginecobMed?.ultimo_parto} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="num_hijos">N° de hijos:</label>
+                            <input className="entrada" id='num_hijos' name='num_hijos' type="text"
+                                value={historiaClinica?.ginecobMed?.num_hijos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="macrosomicos">Macrosomicos vivos</label>
+                            <input className="entrada" id='macrosomicos' name='macrosomicos' type="text"
+                                value={historiaClinica?.ginecobMed?.macrosomicos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="bajo_peso">Bajo peso al nacer</label>
+                            <input className="entrada" id='bajo_peso' name='bajo_peso' type="text"
+                                value={historiaClinica?.ginecobMed?.bajo_peso} />
+                        </div>
+                    </div>
+                </div>
+
+                <h3 className='subtitulo_2'>Parejas</h3>
+                <div className='mt-3 container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="num_parejas">N° de parejas</label>
+                            <input className="entrada" id='num_parejas' name='num_parejas' type="text"
+                                value={historiaClinica?.ginecobMed?.num_parejas} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="heterosexuales">Heterosexuales:</label>
+                            <input className="entrada" id='heterosexuales' name='heterosexuales' type="text"
+                                value={historiaClinica?.ginecobMed?.heterosexuales} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="homosexuales">Homosexuales</label>
+                            <input className="entrada" id='homosexuales' name='homosexuales' type="text"
+                                value={historiaClinica?.ginecobMed?.homosexuales} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="bisexuales">Bisexuales</label>
+                            <input className="entrada" id='bisexuales' name='bisexuales' type="text"
+                                value={historiaClinica?.ginecobMed?.bisexuales} />
+                        </div>
+                    </div>
+                </div>
+
+                <h3 className='subtitulo_2'>Método de planificación familiar</h3>
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="diu">DIU</label>
+                            <input className="entrada" id='diu' name='diu' type="text"
+                                value={historiaClinica?.ginecobMed?.diu} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="hormonales">Hormonales</label>
+                            <input className="entrada" id='hormonales' name='hormonales' type="text"
+                                value={historiaClinica?.ginecobMed?.hormonales} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="quirurgico">Quirurgico</label>
+                            <input className="entrada" id='quirurgico' name='quirurgico' type="text"
+                                value={historiaClinica?.ginecobMed?.quirurgico} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="otrosMP">Otros</label>
+                            <input className="entrada" id='otrosMP' name='otrosMP' type="text"
+                                value={historiaClinica?.ginecobMed?.otros} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='ml-10 container'>
+                    <h3 className='subtitulo'>Interrogatorio</h3>
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="padecimiento">Padecimiento actual</label>
+                            <textarea id="padecimiento" placeholder="Dolor de garganta..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.interrogatorio?.padecimiento} />
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="aparatos_sistemas">Aparatos y sistemas</label>
+                            <textarea id="aparatos_sistemas" placeholder="Sistema nervioso..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.interrogatorio?.aparatos_sistemas} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="auxiliares">Auxiliares de diagnóstico previo</label>
+                            <textarea id="auxiliares" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.interrogatorio?.auxiliares} />
+                        </div>
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="tratamientos_previos">Manejo de tratamiento previos</label>
+                            <textarea id="tratamientos_previos" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.interrogatorio?.tratamientos_previos} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='ml-10 container'>
+                    <h3 className="subtitulo">Exploración física</h3>
+                </div>
+
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="inspeccion_gral">Inspección general:</label>
+                            <textarea id="inspeccion_gral" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.inspeccion_gral} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="cabeza">Cabeza:</label>
+                            <textarea id="cabeza" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.cabeza} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="cuello">Cuello:</label>
+                            <textarea id="cuello" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.cuello} />
                         </div>
                     </div>
 
-                    <div className="text-center">
-                        <div className="pt-1 mb-3 text-center">
-                            <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="torax">Tórax:</label>
+                            <textarea id="torax" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.torax} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="abdomen">Abdomen:</label>
+                            <textarea id="abdomen" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.abdomen} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="columna_vertical">Columna vertical:</label>
+                            <textarea id="columna_vertical" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.columna_vertical} />
                         </div>
                     </div>
-                </form>
+
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="genitales_externos">Genitales externos:</label>
+                            <textarea id="genitales_externos" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.genitales_externos} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="extremidades">Extremidades:</label>
+                            <textarea id="extremidades" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.exploracionFisica?.extremidades} />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className='container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
+                            <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.diagnostico?.diagnostico} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral:</label>
+                            <textarea id="tratamiento_integral" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.diagnostico?.tratamiento_integral} />
+                        </div>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
+                            <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
+                                value={historiaClinica?.diagnostico?.pronostico} />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div >
     )
