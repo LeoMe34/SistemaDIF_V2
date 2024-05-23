@@ -71,6 +71,9 @@ export function MostrarExpedientes() {
         navegador(`/nota_medica/${noExpediente}/${fecha}`)
     }
 
+    const handleReceta = (fecha) => {
+        navegador(`/receta/${noExpediente}/${fecha}`)
+    }
 
     const handleOdonto = (fecha) => {
         navegador(`/mostrar_expediente_HistO/${fecha}`)
@@ -101,7 +104,7 @@ export function MostrarExpedientes() {
                                         <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleNotaMedica(expediente.fecha)}>Nota Medica</p>
-                                        <p className="texto_2">Recetas</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleReceta(expediente.fecha)}>Recetas</p>
                                     </>)}
                                 {userGroup == "Odontologo" && (
                                     <>

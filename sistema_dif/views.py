@@ -1265,9 +1265,9 @@ def crear_receta(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_receta(request, pk):
+def detalle_receta(request, fk):
     try:
-        receta = Receta.objects.get(pk=pk)
+        receta = Receta.objects.get(notMed=fk)
     except RecetaSerializer.DoesNotExist:
         return Response(status=404)
 
