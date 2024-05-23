@@ -48,6 +48,7 @@ import { V_MostrarExpedientes } from '../Views/FormatoMedico/V_MostrarExpediente
 import { V_MostrarFichaEnfermeria } from '../Views/FormatoEnfermeria/V_MostrarFichaEnfermeria'
 import { V_MostrarHistOdonto } from '../Views/FormatoOdonto/V_MostrarHistOdonto'
 import { V_MostrarFichaTecnicaMedico } from '../Views/FormatoMedico/V_MostrarFichaTecnicaMedico'
+import { V_MostrarNotaMedica } from '../Views/FormatoMedico/V_MostrarNotaMedica'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -115,7 +116,7 @@ export function Rutas() {
                             <Route path='/ficha_medica' element={<V_FichaMedicaO />} />,
                             <Route path='/nota_evo' element={<V_NotaEvolucion />} />,
                             <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
-                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
+                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,                            
                             <Route path='/mostrar_expediente_HistO/:fecha' element={<V_MostrarHistOdonto />} />,
 
                         </>
@@ -133,6 +134,7 @@ export function Rutas() {
                             <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
                             <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
                             <Route path='/historial_clinico/:noExpediente/:fecha' element={<V_HistoriaClinicaS />} />,
+                            <Route path='/nota_medica/:noExpediente/:fecha' element={<V_MostrarNotaMedica />} />,
                             <Route path='/receta' element={<V_Receta />} />
                         </>
                     )}

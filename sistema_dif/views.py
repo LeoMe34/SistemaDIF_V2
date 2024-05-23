@@ -1083,9 +1083,9 @@ def get_historiales_relacionadas(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_historialClinico(request,pk):
+def get_historialClinico(request,fk):
     try:
-        historialMedico = HistorialMedico.objects.get(pk=pk)
+        historialMedico = HistorialMedico.objects.get(fichaMed=fk)
     except HistorialMedicoSerializer.DoesNotExist:
         return Response(status=404)
 

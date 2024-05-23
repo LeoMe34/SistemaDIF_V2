@@ -45,7 +45,7 @@ export function MostrarExpedientes() {
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
         }
-    }    
+    }
 
     const toggleExpediente = (expedienteId) => {
         if (expedienteSeleccionado === expedienteId) {
@@ -59,12 +59,16 @@ export function MostrarExpedientes() {
         navegador(`/mostrar_expediente/${fecha}`)
     }
 
-    const handleFichaMedica= (fecha) => {
+    const handleFichaMedica = (fecha) => {
         navegador(`/ficha_tecnica_medico/${fecha}`)
     }
 
-    const handleHistorialMedico= (fecha) => {
+    const handleHistorialMedico = (fecha) => {
         navegador(`/historial_clinico/${noExpediente}/${fecha}`)
+    }
+
+    const handleNotaMedica = (fecha) => {
+        navegador(`/nota_medica/${noExpediente}/${fecha}`)
     }
 
 
@@ -74,7 +78,7 @@ export function MostrarExpedientes() {
 
     useEffect(() => {
         if (noExpediente) {
-            getExpedientes();            
+            getExpedientes();
         }
     }, [noExpediente, token]);
 
@@ -96,11 +100,12 @@ export function MostrarExpedientes() {
                                     <>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleNotaMedica(expediente.fecha)}>Nota Medica</p>
                                         <p className="texto_2">Recetas</p>
                                     </>)}
                                 {userGroup == "Odontologo" && (
                                     <>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>                                        
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
                                         <p className="texto_2">Nota evolucion</p>
                                         <p className="texto_2">Ficha tecnica medicina</p>
                                         <p className="texto_2">Nota subsecuente</p>
