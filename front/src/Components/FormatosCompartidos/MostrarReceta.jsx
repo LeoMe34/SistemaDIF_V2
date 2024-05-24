@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 
 export function MostrarReceta() {
     const [fichaMedica, setFichaMedica] = useState(null);
+    const [empleado, setEmpleado] = useState([])
     const [historiaClinica, setHistoriaClinica] = useState(null);
     const [notaMedica, setNotaMedica] = useState(null);
     const [receta, setReceta] = useState(null);
@@ -24,6 +25,20 @@ export function MostrarReceta() {
             console.log('Datos de ficha médica:', response.data);
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
+        }
+    };
+
+    const getEmpleadoFicha = async () => {
+        try {
+
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_empleado/${fichaMedica.empleado}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data)
+        } catch (error) {
+            console.error('Error al obtener al empleado', error);
         }
     };
 
@@ -75,6 +90,7 @@ export function MostrarReceta() {
 
     useEffect(() => {
         if (fichaMedica?.id) {
+            getEmpleadoFicha()
             getHistoriaClinica(fichaMedica.id);
         }
     }, [fichaMedica]);
@@ -129,15 +145,17 @@ export function MostrarReceta() {
             <div className="ml-10 mb-3 col">
                 <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
                 <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="10" cols="30"
-                 value={receta?.medicamento?.tratamiento}/>
+                    value={receta?.medicamento?.tratamiento} />
             </div>
             <div className='ml-10 mb-2 container'>
                 <div className='row'>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="medico">Médico:</label>
-                        <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                        <input className="datos_lectura" id='medico' name='medico' type="text"
+                            value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
                         <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                        <input className="datos_lectura" id='cedula' name='cedula' type="text" readOnly />
+                        <input className="datos_lectura" id='cedula' name='cedula' type="text"
+                            value={empleado.cedula_profesional} readOnly />
                         <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                     </div>
                 </div>
