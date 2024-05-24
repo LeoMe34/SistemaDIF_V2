@@ -7,6 +7,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 
 export function HistoriaClinicaSimplificada() {
     const [fichaMedica, setFichaMedica] = useState([]);
+    const [empleado, setEmpleado] = useState([])
     const [historiaClinica, setHistoriaClinica] = useState(null);
     const { noExpediente, fecha } = useParams();
     const { token } = useAuth();
@@ -18,10 +19,24 @@ export function HistoriaClinicaSimplificada() {
                     Authorization: `Token ${token}`
                 }
             });
-            setFichaMedica(response.data);       
-            console.log('Datos de ficha médica:', fichaMedica);     
+            setFichaMedica(response.data);
+            console.log('Datos de ficha médica:', fichaMedica);
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
+        }
+    };
+
+    const getEmpleadoFicha = async () => {
+        try {
+
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_empleado/${fichaMedica.empleado}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data)
+        } catch (error) {
+            console.error('Error al obtener al empleado', error);
         }
     };
 
@@ -32,24 +47,24 @@ export function HistoriaClinicaSimplificada() {
                     headers: {
                         Authorization: `Token ${token}`
                     }
-                });               
+                });
                 setHistoriaClinica(response.data);
-                console.log('Datos del historial clínico:', response.data);     
+                console.log('Datos del historial clínico:', response.data);
             } catch (error) {
                 console.error('Error al obtener el historial clínico:', error);
             }
         }
     };
 
-
     useEffect(() => {
-        if (noExpediente && fecha) {            
+        if (noExpediente && fecha) {
             getFichasMedicas();
         }
     }, [noExpediente, fecha, token]);
 
     useEffect(() => {
-        if (fichaMedica.id) {            
+        if (fichaMedica.id) {
+            getEmpleadoFicha()
             getHistoriaClinica();
         }
     }, [fichaMedica]);
@@ -83,8 +98,8 @@ export function HistoriaClinicaSimplificada() {
                             {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 
                             para que ya no tenga que estar llenandolo */}
                             <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
-                            <input className="entrada" id='num_consultorio' name='num_consultorio' type="text" 
-                            value={historiaClinica?.referenciaMed?.num_consultorio}/>
+                            <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
+                                value={historiaClinica?.referenciaMed?.num_consultorio} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="fecha">Fecha:</label>
@@ -94,7 +109,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="referencia">Referencia:</label>
                             <input className="entrada" id='referencia' name='referencia' type="text"
-                                value={historiaClinica?.referenciaMed?.referencia} />                           
+                                value={historiaClinica?.referenciaMed?.referencia} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
@@ -109,13 +124,13 @@ export function HistoriaClinicaSimplificada() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia: </label>
-                            <input className="entrada" id='tipo_familia' name='tipo_familia' type="text" 
-                            value={historiaClinica?.datosFamiliares?.tipo_familia}/>
+                            <input className="entrada" id='tipo_familia' name='tipo_familia' type="text"
+                                value={historiaClinica?.datosFamiliares?.tipo_familia} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="rol_madre">Rol de madre: </label>
-                            <input className="entrada" id='rol_madre' name='rol_madre' type="text" 
-                            value={historiaClinica?.datosFamiliares?.rol_madre}/>
+                            <input className="entrada" id='rol_madre' name='rol_madre' type="text"
+                                value={historiaClinica?.datosFamiliares?.rol_madre} />
                         </div>
                     </div>
 
@@ -124,14 +139,14 @@ export function HistoriaClinicaSimplificada() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="familia">Familia:</label>
-                            <input className="entrada" id='familia' name='familia' type="text" 
-                            value={historiaClinica?.datosFamiliares?.familia}/>
+                            <input className="entrada" id='familia' name='familia' type="text"
+                                value={historiaClinica?.datosFamiliares?.familia} />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:</label>
-                            <input className="entrada" id='disfuncional' name='disfuncional' type="text" 
-                            value={historiaClinica?.datosFamiliares?.disfuncional}/>
+                            <input className="entrada" id='disfuncional' name='disfuncional' type="text"
+                                value={historiaClinica?.datosFamiliares?.disfuncional} />
                         </div>
 
                         <div className='col'>
@@ -143,7 +158,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
                             <input className="entrada" id='estudios' name='estudios' type="text"
-                               value={historiaClinica?.estudiosExter?.estudios}/>
+                                value={historiaClinica?.estudiosExter?.estudios} />
                         </div>
                     </div>
 
@@ -158,8 +173,8 @@ export function HistoriaClinicaSimplificada() {
                     <div className="row">
                         <div className="col">
                             <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
-                            <input className="entrada" id='diabetes' name='diabetes' type="text" 
-                            value={historiaClinica?.antHerediPatM?.diabetes}/>                            
+                            <input className="entrada" id='diabetes' name='diabetes' type="text"
+                                value={historiaClinica?.antHerediPatM?.diabetes} />
                             {/*showPDiabetes && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
@@ -171,8 +186,8 @@ export function HistoriaClinicaSimplificada() {
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
-                            <input className="entrada" id='hipertension' name='hipertension' type="text" 
-                            value={historiaClinica?.antHerediPatM?.hipertension}/>  
+                            <input className="entrada" id='hipertension' name='hipertension' type="text"
+                                value={historiaClinica?.antHerediPatM?.hipertension} />
                             {/*showPHiper && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
@@ -184,8 +199,8 @@ export function HistoriaClinicaSimplificada() {
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
-                            <input className="entrada" id='cancer' name='cancer' type="text" 
-                            value={historiaClinica?.antHerediPatM?.cancer}/> 
+                            <input className="entrada" id='cancer' name='cancer' type="text"
+                                value={historiaClinica?.antHerediPatM?.cancer} />
                             {/*showPCancer && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
@@ -197,8 +212,8 @@ export function HistoriaClinicaSimplificada() {
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
-                            <input className="entrada" id='cardiopatia' name='cardiopatia' type="text" 
-                            value={historiaClinica?.antHerediPatM?.cardiopatia}/> 
+                            <input className="entrada" id='cardiopatia' name='cardiopatia' type="text"
+                                value={historiaClinica?.antHerediPatM?.cardiopatia} />
                             {/*showPCardio && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
@@ -502,6 +517,14 @@ export function HistoriaClinicaSimplificada() {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div className='container'>
+                <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
+                <input className="datos_lectura" id='medico' name='medico' type="text"
+                    value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
+                <input className="datos_lectura" id='medico' name='medico' type="text"
+                    value={empleado.cedula_profesional} readOnly />
             </div>
         </div >
     )
