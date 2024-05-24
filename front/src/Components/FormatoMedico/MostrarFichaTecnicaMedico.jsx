@@ -8,10 +8,11 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
 export function MostrarFichaTecnicaMedico() {
     const navegador = useNavigate()
-    const { token } = useAuth()    
+    const { token } = useAuth()
     const { noExpediente } = useNoExpediente()
     const { fecha } = useParams();
     const [detalles, setDetalles] = useState([])
+    const [empleado, setEmpleado] = useState([])
 
     const getFichas = async () => {
         try {
@@ -28,9 +29,29 @@ export function MostrarFichaTecnicaMedico() {
         }
     };
 
+    const getEmpleadoFicha = async () => {
+        try {
+
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_empleado/${detalles.empleado}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data)
+        } catch (error) {
+            console.error('Error al obtener al empleado', error);
+        }
+    };
+
     useEffect(() => {
         getFichas();
     }, [fecha, token]);
+
+    useEffect(() => {
+        if (detalles.empleado) {
+            getEmpleadoFicha();
+        }
+    }, [detalles]);
 
     return (
         <div>
@@ -55,35 +76,32 @@ export function MostrarFichaTecnicaMedico() {
             </div>
 
             <div className="ml-10 container">
-                <form >
-                    <label className='etiqueta' htmlFor="fecha">Fecha: </label>
-                    <input className="entrada" id='fecha' name='fecha' type="date" value={fecha} readOnly/>
+                <label className='etiqueta' htmlFor="fecha">Fecha: </label>
+                <input className="entrada" id='fecha' name='fecha' type="date" value={fecha} readOnly />
 
-                    <div className="mt-2 row">
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
-                            <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30" value={detalles.motivo_consulta}/>
-                        </div>
-
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
-                            <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30" value={detalles.diagnostico}/>
-                        </div>
-
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="observacion">Observación</label>
-                            <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30" value={detalles.observacion}/>
-                        </div>
+                <div className="mt-2 row">
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
+                        <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30" value={detalles.motivo_consulta} />
                     </div>
 
-                    <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
-
-                    {/*Seccion del boton*/}
-                    <div className="pt-1 mb-3 text-center">
-                        <button className="btn btn-guardar btn-lg btn-block">Siguiente</button>
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
+                        <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30" value={detalles.diagnostico} />
                     </div>
-                </form>
+
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="observacion">Observación</label>
+                        <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30" value={detalles.observacion} />
+                    </div>
+                </div>
+
+                <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
+                <input className="datos_lectura" id='medico' name='medico' type="text" 
+                value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
+                <input className="datos_lectura" id='medico' name='medico' type="text" 
+                value={empleado.cedula_profesional} readOnly />
+
             </div>
         </div>
     )
