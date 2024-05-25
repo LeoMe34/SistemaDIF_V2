@@ -37,6 +37,7 @@ export function FichaTecnicaMedico() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/"
             const respuesta = await axios.post(url, {
+                fecha: data.fecha,
                 diagnostico: data.diagnostico,
                 motivo_consulta: data.motivo_consulta,
                 observacion: data.observacion,
@@ -87,6 +88,9 @@ export function FichaTecnicaMedico() {
                 </div>
 
                 <form onSubmit={enviar}>
+                    <label className='etiqueta' htmlFor="fecha">Fecha: </label>
+                    <input className="entrada" id='fecha' name='fecha' type="date" 
+                    {...register("fecha", { required: true })}/>
                     <div className='row'>
                         <div className='mt-2 col'>
                             <label className='etiqueta' htmlFor="peso">Peso: </label>
