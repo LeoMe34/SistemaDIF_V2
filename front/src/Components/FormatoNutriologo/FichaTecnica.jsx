@@ -12,6 +12,8 @@ export function FichaTecnica() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombreE, setNombreE] = useState(null);
+    const [cedula, setCedula] = useState(null);
     const [showReferencia, setShowReferencia] = useState(false)
     const [grupo, setGrupo] = useState('')
 
@@ -29,7 +31,11 @@ export function FichaTecnica() {
                     }
                 });
                 const no_Empleado = response.data.user_info.no_trabajador
+                const nombre = response.data.user_info.nombre_empleado
+                const cedula = response.data.user_info.cedula
                 setNoEmpleado(no_Empleado)
+                setNombreE(nombre)
+                setCedula(cedula)
                 setGrupo(response.data.user_info.name)
                 console.log(response)
             } catch (error) {
@@ -156,7 +162,11 @@ export function FichaTecnica() {
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text" 
+                    value={nombreE} readOnly />
+                    <label className="mt-3 etiqueta" htmlFor="medico">Cédula</label>
+                    <input className="datos_lectura" id='medico' name='medico' type="text" 
+                    value={cedula} readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">
