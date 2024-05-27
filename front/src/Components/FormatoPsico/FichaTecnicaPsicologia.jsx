@@ -13,6 +13,7 @@ export function FichaTecnicaPsicologia() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [empleado, setEmpleado] = useState([]);
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -25,6 +26,7 @@ export function FichaTecnicaPsicologia() {
                 });
                 const no_Empleado = response.data.user_info.no_trabajador
                 setNoEmpleado(no_Empleado)
+                setEmpleado(response.data.user_info)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -207,10 +209,12 @@ export function FichaTecnicaPsicologia() {
 
                     <div className="mt-5 mb-4 text-center">
                         <label className="etiqueta" htmlFor="psicologo">Psicólogo(A)</label>
-                        <input className="datos_lectura" id='psicologo' name='psicologo' type="text" readOnly />
+                        <input className="datos_lectura" id='psicologo' name='psicologo' type="text" 
+                        value={empleado.nombre_empleado} readOnly />
 
                         <label className="etiqueta" htmlFor="cedula_psi">Cédula</label>
-                        <input className="datos_lectura" id='cedula_psi' name='cedula_psi' type="text" readOnly />
+                        <input className="datos_lectura" id='cedula_psi' name='cedula_psi' type="text" 
+                        value={empleado.cedula} readOnly />
                     </div>
 
                     {/*Seccion del boton*/}
