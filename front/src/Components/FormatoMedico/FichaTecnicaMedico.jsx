@@ -12,6 +12,7 @@ export function FichaTecnicaMedico() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [nombreE, setNombreE] = useState(null);
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -23,7 +24,9 @@ export function FichaTecnicaMedico() {
                     }
                 });
                 const no_Empleado = response.data.user_info.no_trabajador
+                const nombre = response.data.user_info.nombre_empleado
                 setNoEmpleado(no_Empleado)
+                setNombreE(nombre)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -135,7 +138,8 @@ export function FichaTecnicaMedico() {
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text" 
+                    value={nombreE} readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">
