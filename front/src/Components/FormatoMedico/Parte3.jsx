@@ -13,6 +13,22 @@ export function Parte3() {
     const { token } = useAuth()
     const navegador = useNavigate()
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+    const [empleado, setEmpleado] = useState([]);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data.user_info)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
 
     const handleFileChange = (event) => {
         const archivos = event.target.files;
@@ -20,6 +36,9 @@ export function Parte3() {
         setArchivosSeleccionados(archivosArray); // Actualizamos archivosSeleccionados con el array de archivos
     }
 
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     useEffect(() => {
         const storedData = localStorage.getItem('datos');
@@ -289,6 +308,20 @@ export function Parte3() {
                             {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (
                                 <label key={index}>{archivo.name}</label>
                             ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className='ml-10 mb-5 container'>
+                    <div className='row'>
+                        <div className='col'>
+                            <label className='etiqueta' htmlFor="medico">Médico:</label>
+                            <input className="datos_lectura" id='medico' name='medico' type="text" 
+                            value={empleado.nombre_empleado} readOnly />
+                            <label className='etiqueta' htmlFor="cedula">Cédula:</label>
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text" 
+                            value={empleado.cedula} readOnly />
+                            <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
                 </div>
