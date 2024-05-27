@@ -12,6 +12,26 @@ export function Receta() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [idHistorial, setIdHistorial] = useState(null)
     const [idNota, setIdNota] = useState(null)
+    const [empleado, setEmpleado] = useState([]);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data.user_info)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
+
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     const getExp = () => {
         const storedData = localStorage.getItem('idHistorial');
@@ -135,9 +155,11 @@ export function Receta() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="medico">Médico:</label>
-                            <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                            <input className="datos_lectura" id='medico' name='medico' type="text" 
+                            value={empleado.nombre_empleado} readOnly />
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                            <input className="datos_lectura" id='cedula' name='cedula' type="text" readOnly />
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text" 
+                            value={empleado.cedula} readOnly />
                             <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                         </div>
                     </div>

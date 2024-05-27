@@ -523,6 +523,7 @@ export function HistoriaClinicaSimplificada() {
                 <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
                 <input className="datos_lectura" id='medico' name='medico' type="text"
                     value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
+                <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                 <input className="datos_lectura" id='medico' name='medico' type="text"
                     value={empleado.cedula_profesional} readOnly />
             </div>
