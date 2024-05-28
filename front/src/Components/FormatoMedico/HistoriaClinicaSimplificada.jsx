@@ -86,6 +86,23 @@ export function HistoriaClinicaSimplificada() {
             getHistoriaClinica();
         }
     }, [fichaMedica]);
+
+    const convertirReferencia = (tieneRef) => {
+        const opciones = {
+            true: 'Sí',
+            false: 'No'
+        };
+        return opciones[tieneRef];
+    };
+
+    const convertirAntecedentes = (tieneRef) => {
+        const opciones = {
+            True: 'Sí',
+            False: 'No'
+        };
+        return opciones[tieneRef];
+    };
+
     return (
         <div>
             <div className="mt-3 ml-10 container">
@@ -127,7 +144,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="referencia">Referencia:</label>
                             <input className="entrada" id='referencia' name='referencia' type="text"
-                                value={historiaClinica?.referenciaMed?.referencia} />
+                                value={convertirReferencia(historiaClinica?.referenciaMed?.referencia)} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
@@ -192,7 +209,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
                             <input className="entrada" id='diabetes' name='diabetes' type="text"
-                                value={historiaClinica?.antHerediPatM?.diabetes} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.diabetes)} />
                             {/*showPDiabetes && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
@@ -205,7 +222,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
                             <input className="entrada" id='hipertension' name='hipertension' type="text"
-                                value={historiaClinica?.antHerediPatM?.hipertension} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension)} />
                             {/*showPHiper && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
@@ -218,7 +235,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <input className="entrada" id='cancer' name='cancer' type="text"
-                                value={historiaClinica?.antHerediPatM?.cancer} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer)} />
                             {/*showPCancer && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
@@ -231,7 +248,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <input className="entrada" id='cardiopatia' name='cardiopatia' type="text"
-                                value={historiaClinica?.antHerediPatM?.cardiopatia} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia)} />
                             {/*showPCardio && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
@@ -287,6 +304,8 @@ export function HistoriaClinicaSimplificada() {
                             <textarea name="tabaquismoAA" id="tabaquismoAA" className="text-amplio"
                                 value={historiaClinica?.antPersoPatM?.tabaquismoAA}></textarea>
                         </div>
+                    </div>
+                    <div className='row'>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos</label>
                             <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
