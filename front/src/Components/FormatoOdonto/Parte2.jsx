@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../Contexto/AuthContext';
+import axios from "axios";
 
 export function Parte2() {
     const navegador = useNavigate()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const { token } = useAuth()
     const [showPDiabetes, setShowPDiabetes] = useState(false)
     const [showPHiper, setShowPHiper] = useState(false)
     const [showPCancer, setShowPCancer] = useState(false)
@@ -12,6 +15,8 @@ export function Parte2() {
     const [showPTuber, setShowPTuber] = useState(false)
     const [showPAsma, setShowPAsma] = useState(false)
     const [showPEpilepsia, setShowPEpilepsia] = useState(false)
+    const [noExpediente, setNoExpediente] = useState(null)
+    const [sexo, setSexo] = useState(null)
 
     const handleChangeDiabetes = (e) => {
         setShowPDiabetes(e.target.value === "True");
@@ -41,7 +46,38 @@ export function Parte2() {
         setShowPEpilepsia(e.target.value === "True");
     };
 
-    const enviar = handleSubmit(async data => {        
+    const getNoExp = () => {
+        const storedData = localStorage.getItem('noExp');
+        setNoExpediente(JSON.parse(storedData));
+    };
+
+    useEffect(() => {
+        if (token) {
+            getNoExp();
+        }
+    }, [token]);
+
+    const getPaciente = async () => {
+        if (noExpediente) {
+            try {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+                const response = await axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setSexo(response.data.datosPersonalesPacient.sexo);
+            } catch (error) {
+                console.error("Ocurrió un error", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        getPaciente();
+    }, [noExpediente]);
+
+    const enviar = handleSubmit(async data => {
         localStorage.setItem('antecedentes', JSON.stringify(data))
         navegador("/historial_odontologico_p3")
     })
@@ -60,7 +96,7 @@ export function Parte2() {
                         <li className="breadcrumb-item pag-actual" aria-current="page">Antecedentes</li>
                     </ol>
                 </nav>
-            </div>            
+            </div>
 
             {/*
             <div className='ml-10 mt-3 mb-2 container'>
@@ -343,29 +379,31 @@ export function Parte2() {
                             </div>
                         </div>
                     </div>
+                    {sexo === 'Femenino' && (
+                        <div className='ml-10 container'>
+                            <h3 className="subtitulo_2">Antecedentes ginecobstetricos</h3>
+                            <div className='row'>
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
+                                    <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
+                                        {...register("fecha_ult_doc", { required: true })} />
+                                </div>
 
-                    <div className='ml-10 container'>
-                        <h3 className="subtitulo_2">Antecedentes ginecobstetricos</h3>                        
-                        <div className='row'>
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
-                                <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
-                                    {...register("fecha_ult_doc", { required: true })} />
-                            </div>
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
+                                    <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
+                                        {...register("fecha_ultima_regla", { required: true })} />
+                                </div>
 
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
-                                <input id="fechaDoc" type="date" placeholder="aaaa/mm/dd" className="entrada"
-                                    {...register("fecha_ultima_regla", { required: true })} />
-                            </div>
-
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
-                                <input id="planiFami" type="text" placeholder="Planificación" className="entrada"
-                                    {...register("planificacion_fam", { required: true })} />
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
+                                    <input id="planiFami" type="text" placeholder="Planificación" className="entrada"
+                                        {...register("planificacion_fam", { required: true })} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">

@@ -15,6 +15,7 @@ export function Parte1() {
     const enviar = handleSubmit(async data => {
         const historialOdonto = { ...data, noExpediente }
         localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+        localStorage.setItem('noExp', JSON.stringify(noExpediente))
         navegador("/historial_odontologico_p2")
     })
 
