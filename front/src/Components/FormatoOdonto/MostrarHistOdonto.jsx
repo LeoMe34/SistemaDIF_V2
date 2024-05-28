@@ -17,10 +17,7 @@ export function MostrarHistOdonto() {
     const [showParentesco, setShowP] = useState(false)
     const [documento, setDocumento] = useState(null);
     const [empleado, setEmpleado] = useState([])
-
-
-
-
+    const [sexo, setSexo] = useState(null)
 
     const convertirReferencia = (tieneRef) => {
         const opciones = {
@@ -74,6 +71,22 @@ export function MostrarHistOdonto() {
         }
     };
 
+    const getPaciente = async () => {
+        if (noExpediente) {
+            try {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+                const response = await axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setSexo(response.data.datosPersonalesPacient.sexo);
+            } catch (error) {
+                console.error("Ocurrió un error", error);
+            }
+        }
+    };
+
     useEffect(() => {
         const getHistOdont = async () => {
             try {
@@ -91,7 +104,10 @@ export function MostrarHistOdonto() {
         };
 
         getHistOdont();
+        getPaciente()
     }, [fecha, noExpediente, token]);
+
+
 
     useEffect(() => {
         if (detalles?.id) {
@@ -303,7 +319,6 @@ export function MostrarHistOdonto() {
                             </div>
                         </div>
 
-
                         <div className="container">
                             <div className="row">
                                 <div className="col">
@@ -332,7 +347,6 @@ export function MostrarHistOdonto() {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="container">
                             <div className="row">
@@ -380,28 +394,31 @@ export function MostrarHistOdonto() {
                         </div>
                     </div>
 
-                    <div className='ml-10 container'>
-                        <h3 className="subtitulo_2">Antecedentes ginecobstetricos</h3>
-                        <div className='row'>
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
-                                <input id="fechaDoc" type="date" name="fec" className="entrada"
-                                    value={detalles.antGinecob?.fecha_ult_doc} />
-                            </div>
+                    {sexo === 'Femenino' && (
+                        <div className='ml-10 container'>
+                            <h3 className="subtitulo_2">Antecedentes ginecobstetricos</h3>
+                            <div className='row'>
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
+                                    <input id="fechaDoc" type="date" name="fec" className="entrada"
+                                        value={detalles.antGinecob?.fecha_ult_doc} />
+                                </div>
 
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
-                                <input id="fechaDoc" type="date" name="fecha" className="entrada"
-                                    value={detalles.antGinecob?.fecha_ultima_regla} />
-                            </div>
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
+                                    <input id="fechaDoc" type="date" name="fecha" className="entrada"
+                                        value={detalles.antGinecob?.fecha_ultima_regla} />
+                                </div>
 
-                            <div className="col">
-                                <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
-                                <input id="planiFami" type="text" name="planificación" className="entrada"
-                                    value={detalles.antGinecob?.planificacion_fam} />
+                                <div className="col">
+                                    <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
+                                    <input id="planiFami" type="text" name="planificación" className="entrada"
+                                        value={detalles.antGinecob?.planificacion_fam} />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
                     {/* --------------------------------------------------   */}
                     <h3 className="subtitulo">Exploración fisica</h3>
                     <div className='row'>
