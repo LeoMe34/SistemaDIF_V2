@@ -34,6 +34,7 @@ export function NotaEvolucion() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_notaEvoOdont/"
             const respuesta = await axios.post(url, {
+                fecha: data.fecha,
                 diagnostico: data.diagnostico,
                 tratamiento: data.tratamiento,
                 notas: data.notas,
@@ -84,7 +85,7 @@ export function NotaEvolucion() {
 
             <div className="mt-3 ml-10 container">
                 <label htmlFor="fecha">Fecha: </label>
-                <input type="date" />
+                <input type="date"  {...register("fecha", { required: true })} />
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>

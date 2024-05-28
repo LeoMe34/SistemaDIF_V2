@@ -51,6 +51,8 @@ import { V_MostrarHistOdonto } from '../Views/FormatoOdonto/V_MostrarHistOdonto'
 import { V_MostrarFichaTecnicaMedico } from '../Views/FormatoMedico/V_MostrarFichaTecnicaMedico'
 import { V_MostrarNotaMedica } from '../Views/FormatoMedico/V_MostrarNotaMedica'
 import { V_MostrarReceta } from '../Views/FormatoMedico/V_MostrarReceta'
+import { V_MostrarNotaEvo } from '../Views/FormatoOdonto/V_MostrarNotaEvo'
+import { V_MostrarFichaMedOdonto } from '../Views/FormatoOdonto/V_MostrarFichaMedOdonto'
 
 import { V_MostrarFTP } from '../Views/FormatoPsico/V_MostrarFTP'
 
@@ -120,8 +122,10 @@ export function Rutas() {
                             <Route path='/ficha_medica' element={<V_FichaMedicaO />} />,
                             <Route path='/nota_evo' element={<V_NotaEvolucion />} />,
                             <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
-                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,                            
+                            <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />,
                             <Route path='/mostrar_expediente_HistO/:fecha' element={<V_MostrarHistOdonto />} />,
+                            <Route path='/mostrar_nota_evo/:noExpediente/:fecha' element={<V_MostrarNotaEvo />} />,
+                            <Route path='/mostrar_fichaMed_Odont/:noExpediente/:fecha' element={<V_MostrarFichaMedOdonto />} />,
 
                         </>
                     )}

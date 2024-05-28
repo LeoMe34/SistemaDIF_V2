@@ -79,6 +79,14 @@ export function MostrarExpedientes() {
         navegador(`/mostrar_expediente_HistO/${fecha}`)
     }
 
+    const handleOdontoNotEvo = (fecha) => {
+        navegador(`/mostrar_nota_evo/${noExpediente}/${fecha}`)
+    }
+
+    const handleOdontoFichMed = (fecha) => {
+        navegador(`/mostrar_fichaMed_Odont/${noExpediente}/${fecha}`)
+    }
+
     useEffect(() => {
         if (noExpediente) {
             getExpedientes();
@@ -109,9 +117,9 @@ export function MostrarExpedientes() {
                                 {userGroup == "Odontologo" && (
                                     <>
                                         <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
-                                        <p className="texto_2">Nota evolucion</p>
-                                        <p className="texto_2">Ficha tecnica medicina</p>
-                                        <p className="texto_2">Nota subsecuente</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoNotEvo(expediente.fecha)}>Nota evolucion</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoFichMed(expediente.fecha)}>Ficha tecnica medicina</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoNotEvo(expediente.fecha)}>Nota subsecuente</p>
                                     </>)}
 
                             </div>
