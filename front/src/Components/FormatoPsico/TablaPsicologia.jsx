@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import BuscarPacientePsico from "../Paciente/BuscarPacientePsico";
 
 export function TablaPsicologia() {
     const { token } = useAuth()
@@ -115,7 +116,7 @@ export function TablaPsicologia() {
             case "1":
                 return "Primera vez";
             case "2":
-                return "Subsecuente";            
+                return "Subsecuente";
             default:
                 return "Ninguno";
         }
@@ -131,12 +132,13 @@ export function TablaPsicologia() {
         <div className="container">
             <div className="">
                 <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly/>
+                <input type="date" value={fechaActual} readOnly />
                 <label className="">Psicólogo(a): </label>
-                <input type="text" value={nombre} readOnly/>
+                <input type="text" value={nombre} readOnly />
                 <label className="">Cedula profesional</label>
-                <input type="text" value={cedula} readOnly/>
+                <input type="text" value={cedula} readOnly />
 
+                <BuscarPacientePsico isMostrarExp={true}></BuscarPacientePsico>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">

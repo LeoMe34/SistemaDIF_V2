@@ -625,6 +625,34 @@ def get_fichasTP_relacionadas(request):
         return Response(status=404)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def filtrar_ficha_pp_psicologia(request, fk):
+    try:
+        fichaTecnicaP = FichaTecnicaPsicologia.objects.filter(paciente=fk)
+    except FichaTecnicaPsicologia.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FihaTecnicaPSerializer(fichaTecnicaP, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_FichaTecnica_indiv(request, noExp, fecha):
+    try:
+        paciente = get_object_or_404(Paciente, no_expediente=noExp)
+        fichaTecnicaP = FichaTecnicaPsicologia.objects.get(
+            paciente=paciente, fecha_visita=fecha
+        )
+    except (Paciente.DoesNotExist, FichaTecnicaPsicologia.DoesNotExist):
+        return Response(status=404)
+
+    serializer = FihaTecnicaPSerializer(fichaTecnicaP)
+    return Response(serializer.data)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_FichaTecnicaP(request):

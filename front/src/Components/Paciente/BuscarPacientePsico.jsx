@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+import { useNavigate } from 'react-router-dom';
 
-function BuscarPacientePsico({ getIdHistorialMedico }) {
+function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const [error, setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
+    const navegador = useNavigate()
 
 
     const handleConsultaChange = (event) => {
@@ -36,7 +38,15 @@ function BuscarPacientePsico({ getIdHistorialMedico }) {
     const handlePacienteSeleccionado = (noExpediente) => {
         setNoExpediente(noExpediente);
 
-        getIdHistorialMedico(noExpediente);
+        if (isMostrarExp) {
+            navegador(`/mostrar_expediente_psicologia`)
+        }
+        if (getIdHistorialMedico) {
+            getIdHistorialMedico(noExpediente);
+        }
+
+        const pacienteSeleccionado = resultados.find(paciente => paciente.no_expediente === noExpediente);
+        setResultados([pacienteSeleccionado]);
     };
 
     return (

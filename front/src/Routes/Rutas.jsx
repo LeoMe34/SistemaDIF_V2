@@ -32,6 +32,7 @@ import { V_HistoriaClinica2 } from '../Views/FormatoMedico/V_HistoriaClinica2'
 import { V_HistoriaClinica3 } from '../Views/FormatoMedico/V_HistoriaClinica3'
 
 import { V_CrearPacientePsico } from '../Views/Paciente/V_CrearPacientePsico'
+import { V_MostrarExpedientePsico } from '../Views/FormatoPsico/V_MostrarExpedientePsico'
 
 import { ListaPacientes } from '../Components/Paciente/ListaPacientes'
 
@@ -50,6 +51,8 @@ import { V_MostrarHistOdonto } from '../Views/FormatoOdonto/V_MostrarHistOdonto'
 import { V_MostrarFichaTecnicaMedico } from '../Views/FormatoMedico/V_MostrarFichaTecnicaMedico'
 import { V_MostrarNotaMedica } from '../Views/FormatoMedico/V_MostrarNotaMedica'
 import { V_MostrarReceta } from '../Views/FormatoMedico/V_MostrarReceta'
+
+import { V_MostrarFTP } from '../Views/FormatoPsico/V_MostrarFTP'
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -145,7 +148,9 @@ export function Rutas() {
                         <>
                             <Route path='/home_psicologia' element={<V_HomePsico />} />,
                             <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />,
-                            <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />
+                            <Route path='/ficha_tecnica_psicologia' element={<V_FichaTecnicaPsiologia />} />,
+                            <Route path='/expediente_psicologia/:noExpediente/:fecha' element={<V_MostrarFTP />} />,
+                            <Route path='/mostrar_expediente_psicologia' element={<V_MostrarExpedientePsico />} />,
                         </>
                     )}
 

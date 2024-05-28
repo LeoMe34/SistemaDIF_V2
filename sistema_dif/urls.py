@@ -22,7 +22,8 @@ urlpatterns = [
     path("editar_empleado/<int:user_id>", views.modificar_empleado),
     path("eliminar_usuario/<int:pk>", views.eliminar_usuario),
     path("crear_grupo/", views.agregar_grupo),
-    path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/", views.unir_usuario_grupo),
+    path("unir_grupo/<int:usuario_id>/<str:nombre_grupo>/",
+         views.unir_usuario_grupo),
     path("registrar_paciente/", views.crear_paciente),
     path("detalle_paciente/<str:pk>", views.detalle_paciente),
     path("modificar_paciente/<str:pk>", views.modificar_paciente),
@@ -32,14 +33,19 @@ urlpatterns = [
     path("buscar_nota_medica/", views.buscar_notaMedica),
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
     path("fichas_por_paciente/<str:noExp>", views.filtrar_fichas_por_paciente),
-    
-    #path("fichasMed_por_paciente/<str:noExp>", views.filtrar_fichasM_por_paciente),
 
-    path("get_ficha_enfermeria/<str:noExp>/<str:fecha>/", views.detalle_fichaTecnicaE),
-    path("get_ficha_medica/<str:noExp>/<str:fecha>/", views.detalle_fichaTecnicaMed),
+    # path("fichasMed_por_paciente/<str:noExp>", views.filtrar_fichasM_por_paciente),
+
+    path("get_ficha_enfermeria/<str:noExp>/<str:fecha>/",
+         views.detalle_fichaTecnicaE),
+    path("get_ficha_medica/<str:noExp>/<str:fecha>/",
+         views.detalle_fichaTecnicaMed),
     path("get_historia_clinica/<int:fk>", views.get_historialClinico),
     path("get_receta/<int:fk>", views.detalle_receta),
-    
+    path("get_ficha_psicologia/<str:noExp>/<str:fecha>/",
+         views.get_FichaTecnica_indiv),
+    path("filtrar_fichas_psicologia/<str:fk>",
+         views.filtrar_ficha_pp_psicologia),
 
     path("buscar_usuario/", views.buscar_usuario),
     path("crear_historial_medico/", views.crear_historialMedico),
@@ -51,8 +57,12 @@ urlpatterns = [
     path("get_detalles_NM/<int:id_historial>", views.detalle_notaMedica),
     path("getNotaEvo/", views.get_notasEvolucionO),
     path("get_ultima_notaEvo/", views.get_ultima_nota_evolucion),
-    path("notas_evo_relacionadas/<int:pk>", views.get_notasEvolucionO_relacionada),
+    path("notas_evo_relacionadas/<int:pk>",
+         views.get_notasEvolucionO_relacionada),
+
     path("registrar_ficha_psicologia/", views.crear_FichaTecnicaP),
+
+
     path("fichas_home/", views.get_fichasE_relacionadas),
     path("historial_clinico_home/", views.get_historiales_relacionadas),
     path("historial_odonto_home/", views.get_historialesO_relacionadas),
