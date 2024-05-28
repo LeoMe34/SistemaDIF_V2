@@ -511,8 +511,7 @@ def get_fichasE_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(
-            empleado=empleado)
+        ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(empleado=empleado)
         serializer = FichaTecnicaESerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaEnfermeria.DoesNotExist:
@@ -617,8 +616,7 @@ def get_fichasTP_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        fichasT_psico = FichaTecnicaPsicologia.objects.filter(
-            empleado=empleado)
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
         serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
         return Response(serializer.data)
     except FichaTecnicaPsicologia.DoesNotExist:
@@ -743,8 +741,7 @@ def crear_FichaTecnicaMed(request):
 @permission_classes([IsAuthenticated])
 def detalle_fichaTecnicaMed(request, noExp, fecha):
     try:
-        fichaTecnicaE = FichaTecnicaMedica.objects.get(
-            paciente=noExp, fecha=fecha)
+        fichaTecnicaE = FichaTecnicaMedica.objects.get(paciente=noExp, fecha=fecha)
     except FichaTecnicaMedica.DoesNotExist:
         return Response(status=404)
 
@@ -878,8 +875,7 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list(
-                "histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -896,8 +892,7 @@ def get_notasEvolucionO(request):
 def get_notasEvolucionO_relacionada(request, pk):
     try:
         historial = HistorialOdonto.objects.get(id=pk)
-        notas_historial = NotaEvolucionOdonto.objects.filter(
-            histlOdonto=historial)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
         serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -946,9 +941,9 @@ def crear_notaEvolucionO(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_notaEvolucionO(request, pk):
+def detalle_notaEvolucionO(request, id_histOdonto):
     try:
-        notaEvolucionO = NotaEvolucionOdonto.objects.get(pk=pk)
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(histlOdonto=id_histOdonto)
     except NotaEvolucionOdontoSerializer.DoesNotExist:
         return Response(status=404)
 
@@ -964,8 +959,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1023,9 +1017,9 @@ def crear_FichaTecnicaMedOdonto(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_fichaTecnicaMedOdonto(request, pk):
+def detalle_fichaTecnicaMedOdonto(request, id_notEvo):
     try:
-        fichaTecnicaMO = FichaTecnicaMedOdonto.objects.get(pk=pk)
+        fichaTecnicaMO = FichaTecnicaMedOdonto.objects.get(notaEvo=id_notEvo)
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
@@ -1041,8 +1035,7 @@ def modificar_fichaTecnicaMedOdonto(request, pk):
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = FichaTecnicaMedOdontoSerializer(
-        fichaTecnicaMO, data=request.data)
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1091,8 +1084,7 @@ def get_historialesMedicos(request):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        ficha_medica = FichaTecnicaMedica.objects.filter(
-            empleado__usuario=usuario)
+        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
         historiales = HistorialMedico.objects.filter(fichaMed__in=ficha_medica)
         # Serializar los historiales médicos junto con la información del paciente
         serialized_data = []

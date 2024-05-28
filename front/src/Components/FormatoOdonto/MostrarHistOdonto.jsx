@@ -16,6 +16,8 @@ export function MostrarHistOdonto() {
     const [detalles, setDetalles] = useState([])
     const [showParentesco, setShowP] = useState(false)
     const [documento, setDocumento] = useState(null);
+    const [empleado, setEmpleado] = useState([])
+
 
 
 
@@ -58,6 +60,20 @@ export function MostrarHistOdonto() {
         }
     };
 
+    const getEmpleadoFicha = async () => {
+        try {
+
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_empleado/${detalles.empleado}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setEmpleado(response.data);
+        } catch (error) {
+            console.error('Error al obtener al empleado', error);
+        }
+    };
+
     useEffect(() => {
         const getHistOdont = async () => {
             try {
@@ -76,6 +92,12 @@ export function MostrarHistOdonto() {
 
         getHistOdont();
     }, [fecha, noExpediente, token]);
+
+    useEffect(() => {
+        if (detalles?.id) {
+            getEmpleadoFicha()
+        }
+    }, [detalles]);
 
     return (
         <div>
@@ -485,14 +507,17 @@ export function MostrarHistOdonto() {
                     <div className='ml-10 mb-5 container'>
                         <div className='row'>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="enfermero">Odontologo:</label>
-                                <input className="datos_lectura" id='enfermero' name='enfermero' type="text" readOnly />
+                                <label className='etiqueta' htmlFor="medico">Odontólogo:</label>
+                                <input className="datos_lectura" id='medico' name='medico' type="text"
+                                    value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
+                                <label className='etiqueta' htmlFor="cedula">Cédula:</label>
+                                <input className="datos_lectura" id='cedula' name='cedula' type="text"
+                                    value={empleado.cedula_profesional} readOnly />
+                                <label className='etiqueta' htmlFor="firma">Firma:</label>
                             </div>
                         </div>
                     </div>
-                    <div className="pt-1 mb-3 text-center">
-                        <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
-                    </div>
+
                 </div>
             </form>
         </div>
