@@ -290,6 +290,12 @@ textarea {
   font-size: large;
 }
 
+.etiqueta_obligatoria {
+  font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
+  color: #d40000;
+  font-size: large;
+}
+
 .entrada {
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   color: black;
