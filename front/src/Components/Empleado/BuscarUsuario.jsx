@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
-
+import { toast } from 'react-hot-toast'
 
 function BuscarUsuario() {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
-    const [ showResultados, setShowResultados ] = useState(true);    
+    const [showResultados, setShowResultados] = useState(true);
     const { token } = useAuth()
     const { setUsuarioId } = useUsuarioId()
 
@@ -16,27 +16,37 @@ function BuscarUsuario() {
         setConsulta(event.target.value);
     };
 
+    const validarEntrada = (entrada) => {
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
+        return entradaRegex.test(entrada)
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/buscar_usuario/?q=${consulta}`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            setResultados(response.data);
-            console.log(resultados)
-        } catch (error) {
-            console.log("Ocurrio un error: " + error)
+        const entrada = validarEntrada(consulta)
+        if (!entrada) {
+            toast.error("Ese caracter no es valido")
             setResultados([]);
+        } else {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/buscar_usuario/?q=${consulta}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setResultados(response.data);
+                console.log(resultados)
+            } catch (error) {
+                console.log("Ocurrio un error: " + error)
+                setResultados([]);
+            }
         }
     };
 
     const handleUsuarioSeleccionado = (id) => {
         console.log(id);
         setUsuarioId(id);
-        const usuarioSeleccionado = resultados.find(usuario =>  usuario.id === id);
+        const usuarioSeleccionado = resultados.find(usuario => usuario.id === id);
         setResultados([usuarioSeleccionado]);
         setShowResultados(false)
     };
