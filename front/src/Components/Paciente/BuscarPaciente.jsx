@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast'
+
 function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
@@ -16,22 +18,32 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
         setConsulta(event.target.value);
     };
 
+    const validarEntrada = (entrada) => {
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
+        return entradaRegex.test(entrada)
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/buscar_paciente/?q=${consulta}`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            setResultados(response.data);
-            console.log(resultados)
-            setShowResultados(true)
-            setError('');
-        } catch (error) {
-            setError('Ocurrió un error al buscar pacientes.');
+        const entrada = validarEntrada(consulta)
+        if (!entrada) {
+            toast.error("Ese caracter no es valido")
             setResultados([]);
+        } else {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/buscar_paciente/?q=${consulta}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setResultados(response.data);
+                console.log(resultados)
+                setShowResultados(true)
+                setError('');
+            } catch (error) {
+                setError('Ocurrió un error al buscar pacientes.');
+                setResultados([]);
+            }
         }
     };
 
