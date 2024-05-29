@@ -2,30 +2,29 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
 
 function BuscarUsuario() {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const [showResultados, setShowResultados] = useState(true);
-    const { token } = useAuth()
-    const { setUsuarioId } = useUsuarioId()
-
+    const { token } = useAuth();
+    const { setUsuarioId } = useUsuarioId();
 
     const handleConsultaChange = (event) => {
         setConsulta(event.target.value);
     };
 
     const validarEntrada = (entrada) => {
-        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
-        return entradaRegex.test(entrada)
-    }
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/;
+        return entradaRegex.test(entrada);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const entrada = validarEntrada(consulta)
+        const entrada = validarEntrada(consulta);
         if (!entrada) {
-            toast.error("Ese caracter no es valido")
+            toast.error("Ese caracter no es válido");
             setResultados([]);
         } else {
             try {
@@ -35,9 +34,10 @@ function BuscarUsuario() {
                     }
                 });
                 setResultados(response.data);
-                console.log(resultados)
+                setShowResultados(true);
             } catch (error) {
-                console.log("Ocurrio un error: " + error)
+                console.log("Ocurrió un error: " + error);
+                toast.error("Ocurrió un error al buscar el usuario");
                 setResultados([]);
             }
         }
@@ -48,7 +48,7 @@ function BuscarUsuario() {
         setUsuarioId(id);
         const usuarioSeleccionado = resultados.find(usuario => usuario.id === id);
         setResultados([usuarioSeleccionado]);
-        setShowResultados(false)
+        setShowResultados(false);
     };
 
     return (
@@ -71,38 +71,40 @@ function BuscarUsuario() {
                     </div>
                 )}
 
-
                 <ul className='mt-3 p-0'>
-                    {resultados.map((user) => (
-                        < ol key={user.id} >
-
-                            <div className='mb-2 datos-busqueda'>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
-                                        onChange={() => handleUsuarioSeleccionado(user.id)} />
-                                    <label className='form-check-label etiqueta' htmlFor="seleccionar">Seleccionar</label>
-                                </div>
-                                <div className='mb-2 mt-3'>
-                                    <div className='form-campos'>
-                                        <label htmlFor="username">
-                                            Nombre de usuario:
-                                            <br />
-                                            {user.username}
-                                        </label>
+                    {resultados.length > 0 ? ( resultados.map((user) => (
+                            <ol key={user.id}>
+                                <div className='mb-2 datos-busqueda'>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
+                                            onChange={() => handleUsuarioSeleccionado(user.id)} />
+                                        <label className='form-check-label etiqueta' htmlFor="seleccionar">Seleccionar</label>
                                     </div>
+                                    <div className='mb-2 mt-3'>
+                                        <div className='form-campos'>
+                                            <label htmlFor="username">
+                                                Nombre de usuario:
+                                                <br />
+                                                {user.username}
+                                            </label>
+                                        </div>
 
-                                    <div className='form-campos'>
-                                        <label htmlFor="nombre">Correo:
-                                            <br />
-                                            {user.email} </label>
+                                        <div className='form-campos'>
+                                            <label htmlFor="nombre">Correo:
+                                                <br />
+                                                {user.email}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </ol>
-                    ))}
+                            </ol>
+                        ))
+                    ) : (
+                        <div className="mt-3 ml-10">No se encontraron resultados.</div>
+                    )}
                 </ul>
             </form>
-        </div >
+        </div>
     );
 }
 

@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast'
 function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
+    const [showResultados, setShowResultados] = useState(true);
     const [error, setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
@@ -37,7 +38,7 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
                     }
                 });
                 setResultados(response.data);
-                console.log(resultados)
+                setShowResultados(true);                
                 setError('');
             } catch (error) {
                 setError('Ocurrió un error al buscar pacientes.');
@@ -73,12 +74,16 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
                         </div>
                     </button>
                 </div>
-                <div className='mt-3 ml-10 form-campos'>
-                    <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
-                </div>
+
+                {resultados.length > 0 && showResultados && (
+                    <div className='mt-3 ml-10 form-campos'>
+                        <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
+                    </div>
+                )}
 
                 <ul className='mt-3 p-0'>
-                    {resultados.map((paciente) => (
+                {resultados.length > 0 ? (
+                        resultados.map((paciente) => (
                         <ol key={paciente.no_expediente}>
 
                             <div className='datos-busqueda'>
@@ -140,7 +145,10 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
 
                             </div>
                         </ol>
-                    ))}
+                    ))
+                ):(
+                    <div className="mt-3 ml-10">No se encontraron resultados.</div>
+                )}
                 </ul>
                 {/*<ul>
                 {resultados.map((paciente) => (

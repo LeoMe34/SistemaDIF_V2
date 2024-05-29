@@ -3,31 +3,30 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast'
 
 function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
-    const { showResultados, setShowResultados } = useState(true);
-    const [setError] = useState('');
-    const { token } = useAuth()
-    const { setNoExpediente } = useNoExpediente()
-    const navegador = useNavigate()
+    const [showResultados, setShowResultados] = useState(true);
+    const [error, setError] = useState('');
+    const { token } = useAuth();
+    const { setNoExpediente } = useNoExpediente();
+    const navegador = useNavigate();
 
     const handleConsultaChange = (event) => {
         setConsulta(event.target.value);
     };
 
     const validarEntrada = (entrada) => {
-        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
-        return entradaRegex.test(entrada)
-    }
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/;
+        return entradaRegex.test(entrada);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const entrada = validarEntrada(consulta)
+        const entrada = validarEntrada(consulta);
         if (!entrada) {
-            toast.error("Ese caracter no es valido")
+            toast.error("Ese caracter no es valido");
             setResultados([]);
         } else {
             try {
@@ -37,8 +36,7 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
                     }
                 });
                 setResultados(response.data);
-                console.log(resultados)
-                setShowResultados(true)
+                setShowResultados(true);
                 setError('');
             } catch (error) {
                 setError('Ocurrió un error al buscar pacientes.');
@@ -91,83 +89,85 @@ function BusquedaPaciente({ getIdHistorialMedico, isHomePage, isMostrarExp }) {
                 )}
 
                 <ul className='mt-3 p-0'>
-                    {resultados.map((paciente) => (
-                        <ol key={paciente.no_expediente}>
+                    {resultados.length > 0 ? (
+                        resultados.map((paciente) => (
+                            <ol key={paciente.no_expediente}>
 
-                            <div className='mb-2 datos-busqueda'>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
-                                        onChange={() => handlePacienteSeleccionado(paciente.no_expediente)} />
-                                    <label className='form-check-label etiqueta' htmlFor="seleccionar">Seleccionar</label>
+                                <div className='mb-2 datos-busqueda'>
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input caja_opciones" type="checkbox" id='seleccionar' name='seleccionar'
+                                            onChange={() => handlePacienteSeleccionado(paciente.no_expediente)} />
+                                        <label className='form-check-label etiqueta' htmlFor="seleccionar">Seleccionar</label>
+                                    </div>
+                                    <div className='mb-2 mt-3'>
+                                        <div className='form-campos'>
+                                            <label htmlFor="num_expediente">
+                                                N° Expediente:
+                                                <br />
+                                                {paciente.no_expediente}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="nombre">Nombre:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.nombre} {paciente.datosPersonalesPacient.apellidoP} {paciente.datosPersonalesPacient.apellidoM}</label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="fecha_nacimiento">Fecha de nacimiento:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.fechaDeNacimiento}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="direccion">Direccion:
+                                                <br />
+                                                {paciente.datosDireccionPacient.direccion}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="sexo">Sexo:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.sexo}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="edad">Edad:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.edad}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="ocupacion">Ocupación:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.ocupacion}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="telefono">Teléfono:
+                                                <br />
+                                                {paciente.datosContactoPacient.telefono}
+                                            </label>
+                                        </div>
+
+                                        <div className='form-campos'>
+                                            <label htmlFor="nacionalidad">Nacionalidad:
+                                                <br />
+                                                {paciente.datosPersonalesPacient.nacionalidad}
+                                            </label>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <div className='mb-2 mt-3'>
-                                    <div className='form-campos'>
-                                        <label htmlFor="num_expediente">
-                                            N° Expediente:
-                                            <br />
-                                            {paciente.no_expediente}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="nombre">Nombre:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.nombre} {paciente.datosPersonalesPacient.apellidoP} {paciente.datosPersonalesPacient.apellidoM}</label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="fecha_nacimiento">Fecha de nacimiento:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.fechaDeNacimiento}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="direccion">Direccion:
-                                            <br />
-                                            {paciente.datosDireccionPacient.direccion}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="sexo">Sexo:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.sexo}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="edad">Edad:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.edad}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="ocupacion">Ocupación:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.ocupacion}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="telefono">Teléfono:
-                                            <br />
-                                            {paciente.datosContactoPacient.telefono}
-                                        </label>
-                                    </div>
-
-                                    <div className='form-campos'>
-                                        <label htmlFor="nacionalidad">Nacionalidad:
-                                            <br />
-                                            {paciente.datosPersonalesPacient.nacionalidad}
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </ol>
-                    ))}
+                            </ol>
+                        ))
+                    ) : (<div className="mt-3 ml-10">No se encontraron resultados.</div>)}
                 </ul>
                 {/*<ul>
                 {resultados.map((paciente) => (
