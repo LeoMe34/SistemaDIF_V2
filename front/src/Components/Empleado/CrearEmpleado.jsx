@@ -8,9 +8,6 @@ import { CrearUsuario } from './CrearUsuario';
 import BuscarUsuario from './BuscarUsuario';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
 
-
-
-
 export function CrearEmpleado() {
     const navegador = useNavigate()
     const { token } = useAuth()
@@ -63,8 +60,26 @@ export function CrearEmpleado() {
             });
     };
 
+    const validarNombreCompleto = (nombreOApellido) => {
+        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü]{1,50}$/
+
+        return nombreCompletoRegex.test(nombreOApellido)
+    }
+
+    const validarTelefono = (telefono) => {
+        const telefonoRegex = /^[0-9]{10}$/
+
+        return telefonoRegex.test(telefono)
+    }
+
 
     const enviar = handleSubmit(async data => {
+        const nombreValido = validarNombreCompleto(data.nombre)
+        const apellidoPValido = validarNombreCompleto(data.apellido_paterno)
+        const apellidoMValido = validarNombreCompleto(data.apellido_materno)
+        const telefonoValido = validarTelefono(data.telefono)
+        let cedulaDuplicada = empleados.some((empleado) => empleado.cedula_profesional == data.cedula_profesional)
+        
         try {
             console.log(data);
             const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
