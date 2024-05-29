@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useParams } from 'react-router-dom';
+import PDFViewer from './PDFViewer';
+import { Document, Page } from '@react-pdf/renderer';
 
 
 export function MostrarHistOdonto() {
@@ -15,7 +17,6 @@ export function MostrarHistOdonto() {
     const { fecha, id } = useParams();
     const [detalles, setDetalles] = useState([])
     const [showParentesco, setShowP] = useState(false)
-    const [documento, setDocumento] = useState(null);
     const [empleado, setEmpleado] = useState([])
     const [sexo, setSexo] = useState(null)
 
@@ -39,23 +40,6 @@ export function MostrarHistOdonto() {
         setShowP(e.target.value === "True");
     };
 
-    const obtenerDocumento = async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto_doc/${id}/`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            // Verificar si la respuesta contiene una URL válida
-            if (response.data.url) {
-                setDocumento(response.data.url);
-            } else {
-                console.error('La respuesta de la API no contiene una URL válida para el documento.');
-            }
-        } catch (error) {
-            console.error('Error al obtener el documento:', error);
-        }
-    };
 
     const getEmpleadoFicha = async () => {
         try {
@@ -87,7 +71,10 @@ export function MostrarHistOdonto() {
         }
     };
 
+
+
     useEffect(() => {
+
         const getHistOdont = async () => {
             try {
                 const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fecha}`, {
@@ -97,7 +84,7 @@ export function MostrarHistOdonto() {
                 });
                 console.log(response)
                 setDetalles(response.data)
-                obtenerDocumento(); // Llama a la función aquí después de obtener los detalles
+                // obtenerDocumento(); // Llama a la función aquí después de obtener los detalles
             } catch (error) {
                 console.error('Error al obtener la ficha', error);
             }
@@ -512,7 +499,7 @@ export function MostrarHistOdonto() {
                         <div className='row'>
                             <div className="col">
                                 <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                                {documento && <iframe src={documento} width="100%" height="600px" title="Documento" />}
+                                <PDFViewer detalles={detalles} token={token} />
                             </div>
                         </div>
                     </div>
