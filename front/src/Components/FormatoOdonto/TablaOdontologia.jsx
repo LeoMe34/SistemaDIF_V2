@@ -93,11 +93,14 @@ export function TablaOdontologia() {
         }
     }
 
-    const getFechaActual = () => {
+    useEffect(() => {
         const today = new Date();
-        const formattedDate = today.toISOString().substr(0, 10); // Formateamos la fecha como 'YYYY-MM-DD'
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
         setFechaActual(formattedDate);
-    }
+    }, []);
 
     const convertirReferencia = (referencia) => {
         if (referencia.referencia.referencia) {
@@ -118,7 +121,6 @@ export function TablaOdontologia() {
     useEffect(() => {
         getNoEmpleado();
         getHistorialOdonto();
-        getFechaActual()
     }, [token, noEmpleado]);
 
     return (

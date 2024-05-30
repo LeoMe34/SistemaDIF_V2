@@ -38,8 +38,12 @@ export function FichaTecnicaEnfermeria() {
     }, [token]);
 
     useEffect(() => {
-        const today = new Date().toISOString().split('T')[0];
-        setValue("fecha", today);
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setValue("fecha", formattedDate);
     }, [setValue]);
 
     useEffect(() => {
