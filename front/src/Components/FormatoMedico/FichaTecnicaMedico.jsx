@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+import { toast } from 'react-hot-toast'
 
 export function FichaTecnicaMedico() {
     const navegador = useNavigate()
@@ -13,6 +14,7 @@ export function FichaTecnicaMedico() {
     const { noExpediente } = useNoExpediente()
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombreE, setNombreE] = useState(null);
+    const [fechaActual, setFechaActual] = useState('')
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -36,6 +38,15 @@ export function FichaTecnicaMedico() {
         getNoEmpleado();
     }, [token]);
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
     const registrarFicha = async (data) => {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/"
@@ -57,11 +68,30 @@ export function FichaTecnicaMedico() {
         }
     }
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+
+        return textoRegex.test(texto)
+    }
+
     const enviar = handleSubmit(async data => {
-        registrarFicha(data)
-        localStorage.setItem('noExp', JSON.stringify(noExpediente));
-        navegador('/historial_clinico_p1')
-    })
+        const diagnosticoValido = validarTexto(data.diagnostico);
+        const motivoValido = validarTexto(data.motivo_consulta);
+        const observacionValido = validarTexto(data.observacion);
+    
+        if (!diagnosticoValido) {
+            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!motivoValido) {
+            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!observacionValido) {
+            toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else {
+            await registrarFicha(data);
+            localStorage.setItem('noExp', JSON.stringify(noExpediente));
+            navegador('/historial_clinico_p1');
+        }
+    });
+    
 
     return (
         <div>
@@ -92,42 +122,21 @@ export function FichaTecnicaMedico() {
 
                 <form onSubmit={enviar}>
                     <label className='etiqueta' htmlFor="fecha">Fecha: </label>
-                    <input className="entrada" id='fecha' name='fecha' type="date" 
-                    {...register("fecha", { required: true })}/>
-                    <div className='row'>
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="peso">Peso: </label>
-                            <input className="entrada" id='peso' name='peso' type="text" />
-
-                            <label className='mt-2 etiqueta' htmlFor="correo">Correo electrónico: </label>
-                            <input className="entrada" id='correo' name='correo' type="text" />
-                        </div>
-
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="talla">Talla: </label>
-                            <input className="entrada" id='talla' name='talla' type="text" />
-
-                            <label className='mt-2 etiqueta' htmlFor="profesion">Profesión: </label>
-                            <input className="entrada" id='profesion' name='profesion' type="text" />
-                        </div>
-
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="lugar_nacimiento">Lugar de nacimiento: </label>
-                            <input className="entrada" id='lugar_nacimiento' name='lugar_nacimiento' type="text" />
-                        </div>
-                    </div>
+                    <input className="entrada" id='fecha' name='fecha' type="date"
+                        value={fechaActual} readOnly
+                        {...register("fecha", { required: true })} />
 
                     <div className="mt-2 row">
                         <div className="col">
                             <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
-                                {...register("diagnostico", { required: true })} />
+                                {...register("motivo_consulta", { required: true })} />
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
-                                {...register("motivo_consulta", { required: true })} />
+                                {...register("diagnostico", { required: true })} />
                         </div>
 
                         <div className="col">
@@ -138,8 +147,8 @@ export function FichaTecnicaMedico() {
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" 
-                    value={nombreE} readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text"
+                        value={nombreE} readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">
