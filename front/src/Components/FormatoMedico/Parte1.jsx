@@ -62,11 +62,24 @@ export function Parte1() {
     const enviar = handleSubmit(async data => {
         const noConsultorioValido = validarNumeros(data.no_consultorio)
         const informanteValido = validarTexto(data.informante)
+        const lugarReferenciaValido = validarTexto(data.lugar)
         if (!noConsultorioValido) {
             toast.error("Ingrese solo caracteres numéricos en el numero de consultorio");
         } else if (!informanteValido) {
             toast.error("Ingrese solo caracteres alfanuméricos y signos de puntuación en el campo de informante");
-        } else {
+        } else if (showReferencia) {
+            if (!lugarReferenciaValido) {
+                toast.error("Ingrese solo caracteres alfanuméricos y signos de puntuación en el campo de lugar de referencia")
+            }
+            else {
+                const datosCompletos = { ...data, noExpediente };
+
+                localStorage.setItem('datos', JSON.stringify(datosCompletos));
+
+                navegador('/historial_clinico_p2');
+            }
+        }
+        else {
             const datosCompletos = { ...data, noExpediente };
 
             localStorage.setItem('datos', JSON.stringify(datosCompletos));
