@@ -78,7 +78,7 @@ export function FichaTecnicaMedico() {
         const diagnosticoValido = validarTexto(data.diagnostico);
         const motivoValido = validarTexto(data.motivo_consulta);
         const observacionValido = validarTexto(data.observacion);
-    
+
         if (!diagnosticoValido) {
             toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
         } else if (!motivoValido) {
@@ -91,7 +91,7 @@ export function FichaTecnicaMedico() {
             navegador('/historial_clinico_p1');
         }
     });
-    
+
 
     return (
         <div>
@@ -128,19 +128,25 @@ export function FichaTecnicaMedico() {
 
                     <div className="mt-2 row">
                         <div className="col">
-                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
+                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
+                            <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="observacion">Observación</label>
+                            <label className="etiqueta" htmlFor="observacion">Observación
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
                         </div>
