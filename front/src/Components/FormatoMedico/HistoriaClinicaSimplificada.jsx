@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import { useAuth } from '../../Contexto/AuthContext';
+import PDFViewer from '../FormatoOdonto/PDFViewer';
 
 export function HistoriaClinicaSimplificada() {
     const [fichaMedica, setFichaMedica] = useState([]);
@@ -559,6 +560,16 @@ export function HistoriaClinicaSimplificada() {
                     </div>
                 </div>
             </div>
+
+            <div className="mt-3 mb-3">
+                <div className='row'>
+                    <div className="col">
+                        <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
+                        <PDFViewer detalles={historiaClinica} token={token} />
+                    </div>
+                </div>
+            </div>
+
 
             <div className='container'>
                 <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
