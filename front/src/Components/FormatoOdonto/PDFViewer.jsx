@@ -21,7 +21,6 @@ function PDFViewer({ detalles, token }) {
                 console.error('Error al obtener el PDF', error);
             }
         };
-
         getPdfData();
     }, [detalles, token]);
 
