@@ -3,10 +3,12 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast'
 
 function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
+    const [showResultados, setShowResultados] = useState(true);
     const [error, setError] = useState('');
     const { token } = useAuth()
     const { setNoExpediente } = useNoExpediente()
@@ -17,21 +19,31 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
         setConsulta(event.target.value);
     };
 
+    const validarEntrada = (entrada) => {
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
+        return entradaRegex.test(entrada)
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/buscar_paciente_psico/?q=${consulta}`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            });
-            setResultados(response.data);
-            console.log(resultados)
-            setError('');
-        } catch (error) {
-            setError('Ocurrió un error al buscar pacientes.');
+        const entrada = validarEntrada(consulta)
+        if (!entrada) {
+            toast.error("Ese caracter no es valido")
             setResultados([]);
+        } else {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/buscar_paciente_psico/?q=${consulta}`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setResultados(response.data);
+                setShowResultados(true);                
+                setError('');
+            } catch (error) {
+                setError('Ocurrió un error al buscar pacientes.');
+                setResultados([]);
+            }
         }
     };
 
@@ -62,12 +74,16 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
                         </div>
                     </button>
                 </div>
-                <div className='mt-3 ml-10 form-campos'>
-                    <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
-                </div>
+
+                {resultados.length > 0 && showResultados && (
+                    <div className='mt-3 ml-10 form-campos'>
+                        <label htmlFor="Instruccion" className='etiqueta'>Seleccione el paciente:</label>
+                    </div>
+                )}
 
                 <ul className='mt-3 p-0'>
-                    {resultados.map((paciente) => (
+                {resultados.length > 0 ? (
+                        resultados.map((paciente) => (
                         <ol key={paciente.no_expediente}>
 
                             <div className='datos-busqueda'>
@@ -129,7 +145,10 @@ function BuscarPacientePsico({ getIdHistorialMedico, isMostrarExp }) {
 
                             </div>
                         </ol>
-                    ))}
+                    ))
+                ):(
+                    <div className="mt-3 ml-10">No se encontraron resultados.</div>
+                )}
                 </ul>
                 {/*<ul>
                 {resultados.map((paciente) => (

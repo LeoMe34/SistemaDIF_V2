@@ -44,6 +44,7 @@ function App() {
               </footer>
             </NoExpedienteProvider>
           </UsuarioIdProvider>
+          <Toaster />
         </BrowserRouter>
       </AuthProvider>
     </>
