@@ -133,6 +133,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
+                                {errors.motivo_consulta && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
@@ -141,6 +142,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
+                                {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
@@ -149,6 +151,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
+                                {errors.observacion && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 

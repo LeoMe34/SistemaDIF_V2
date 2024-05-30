@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast'
 
 export function Parte1() {
     const navegador = useNavigate()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
+    const [showReferencia, setShowReferencia] = useState(false)
 
     const getExp = () => {
         const storedData = localStorage.getItem('noExp')
@@ -23,16 +26,53 @@ export function Parte1() {
         setNotExpediente(noExpediente)
     };
 
+    const validarNumeros = (numero) => {
+        const numeroRegex = /^[0-9]{1,5}$/
+
+        return numeroRegex.test(numero)
+    }
+
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+
+        return textoRegex.test(texto)
+    }
+
     useEffect(() => {
         getExp();
     }, []);
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
+    const handleReferenciaChange = (e) => {
+        if (e.target.value === "true") {
+            setShowReferencia(true)
+        }
+        else {
+            setShowReferencia(false)
+        }
+    };
     const enviar = handleSubmit(async data => {
-        const datosCompletos = { ...data, noExpediente };
+        const noConsultorioValido = validarNumeros(data.no_consultorio)
+        const informanteValido = validarTexto(data.informante)
+        if (!noConsultorioValido) {
+            toast.error("Ingrese solo caracteres numéricos en el numero de consultorio");
+        } else if (!informanteValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos y signos de puntuación en el campo de informante");
+        } else {
+            const datosCompletos = { ...data, noExpediente };
 
-        localStorage.setItem('datos', JSON.stringify(datosCompletos));
+            localStorage.setItem('datos', JSON.stringify(datosCompletos));
 
-        navegador('/historial_clinico_p2');
+            navegador('/historial_clinico_p2');
+        }
     });
 
     return (
@@ -69,29 +109,39 @@ export function Parte1() {
                             <div className='col'>
                                 {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 
                             para que ya no tenga que estar llenandolo */}
-                                <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
+                                <label className='etiqueta' htmlFor="num_consultorio">N° consultorio:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
                                     {...register("no_consultorio", { required: true })} />
                             </div>
                             <div className='col'>
                                 <label className='etiqueta' htmlFor="fecha">Fecha:</label>
                                 <input className="entrada" id='fecha' name='fecha' type="date"
+                                    value={fechaActual} readOnly
                                     {...register("fecha", { required: true })} />
                             </div>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="referencia">Referencia:</label>
+                                <label className='etiqueta' htmlFor="referencia">Referencia:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='referencia' name='referencia' type=""
-                                    {...register("referencia", { required: true })}>
+                                    {...register("referencia", { required: true })}
+                                    onChange={handleReferenciaChange}>
                                     <option value="" selected disabled>Elija una opción</option>
                                     <option value={true}>Si</option>
                                     <option value={false}>No</option>
                                 </select>
                             </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
-                                <input className="entrada" id='lugar' name='lugar' type="text"
-                                    {...register("lugar", { required: true })} />
-                            </div>
+                            {showReferencia && (
+                                <div className='col'>
+                                    <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
+                                    <input className="entrada" id='lugar' name='lugar' type="text"
+                                        {...register("lugar", { required: true })} />
+                                </div>
+                            )}
+
+
                         </div>
                     </div>
 
@@ -99,7 +149,9 @@ export function Parte1() {
                         <h4 className='subtitulo_2'> Información familiar</h4>
                         <div className='row'>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia: </label>
+                                <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='tipo_familia' name='tipo_familia' type=""
                                     {...register("tipo_familia", { required: true })}>
                                     <option value="" selected disabled>Elija una opción</option>
@@ -110,7 +162,9 @@ export function Parte1() {
 
                             </div>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="rol_madre">Rol de madre: </label>
+                                <label className='etiqueta' htmlFor="rol_madre">Rol de madre:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='rol_madre' name='rol_madre' type=""
                                     {...register("rol_madre", { required: true })}>
                                     <option value="" selected disabled>Elija una opción</option>
@@ -126,7 +180,9 @@ export function Parte1() {
 
                         <div className='row'>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="familia">Familia:</label>
+                                <label className='etiqueta' htmlFor="familia">Familia:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='familia' name='familia' type=""
                                     {...register("familia", { required: true })}>
                                     <option value="" selected disabled>Elija una opción</option>
@@ -136,7 +192,9 @@ export function Parte1() {
                             </div>
 
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:</label>
+                                <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='disfuncional' name='disfuncional' type=""
                                     {...register("disfuncional", { required: true })}>
                                     <option value="" selected disabled>Elija una opción</option>
@@ -146,13 +204,17 @@ export function Parte1() {
                             </div>
 
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="informante">Informante: </label>
+                                <label className='etiqueta' htmlFor="informante">Informante:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <input className="entrada" id='informante' name='informante' type="text"
                                     {...register("informante", { required: true })} />
                             </div>
 
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
+                                <label className='etiqueta' htmlFor="estudios">Estudios externo:
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
                                 <select className="opciones" id='estudios' name='estudios' type=""
                                     {...register("estudios", { required: true })}>
                                     <option value="" selected disabled>Elija una opción</option>
