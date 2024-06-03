@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { MensajeReceta } from '../../Modales/MensajeReceta';
+import { toast } from 'react-hot-toast'
 
 export function NotasMedicas() {
     const navegador = useNavigate()
@@ -12,6 +13,8 @@ export function NotasMedicas() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
     const [idHistorial, setIdHistorial] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
+    const [horaActual, setHoraActual] = useState('');
     const [empleado, setEmpleado] = useState([]);
 
     const getNoEmpleado = async () => {
@@ -66,6 +69,20 @@ export function NotasMedicas() {
         }
     }
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+
+        const hours = String(today.getHours()).padStart(2, '0');
+        const minutes = String(today.getMinutes()).padStart(2, '0');
+        const formattedTime = `${hours}:${minutes}`;
+        setHoraActual(formattedTime);
+    }, []);
+
 
     const registrarNota = async (data) => {
         try {
@@ -105,11 +122,31 @@ export function NotasMedicas() {
         }
     }, []);
 
-    const enviar = async (data) => {
-        registrarNota(data, idHistorial);
-        localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
 
-        MensajeReceta(navegador)
+        return textoRegex.test(texto)
+    }
+
+    const enviar = async (data) => {
+        const servicioValido = validarTexto(data.servicio)
+        const diagnosticoValido = validarTexto(data.diagnostico)
+        const tratamientoValido = validarTexto(data.tratamiento)
+        const observacionesValido = validarTexto(data.observaciones)
+        if (!servicioValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de servicio");
+        } else if (!diagnosticoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de diagnóstico");
+        } else if (!tratamientoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
+        } else if (!observacionesValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de observaciones");
+        }
+        else {
+            registrarNota(data, idHistorial);
+            localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+            MensajeReceta(navegador)
+        }
     }
     return (
         <div>
@@ -151,18 +188,23 @@ export function NotasMedicas() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-                            <input className="entrada" id='fecha' name='fecha' type="text"
+                            <input className="entrada" id='fecha' name='fecha' type="date"
+                                value={fechaActual} readOnly
                                 {...register("fecha", { required: true })} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="hora">Hora:</label>
-                            <input className="entrada" id='hora' name='hora' type="text"
+                            <input className="entrada" id='hora' name='hora' type="time"
+                            value={horaActual} readOnly
                                 {...register("hora", { required: true })} />
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="servicio">Servicio:</label>
+                            <label className='etiqueta' htmlFor="servicio">Servicio
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <input className="entrada" id='servicio' name='servicio' type="text"
                                 {...register("servicio", { required: true })} />
+                            {errors.servicio && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -170,19 +212,28 @@ export function NotasMedicas() {
                 <div className='ml-10 mb-5 container'>
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
+                            <label className='etiqueta' htmlFor="diagnostico">Diagnóstico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="5" cols="10"
                                 {...register("diagnostico", { required: true })} />
+                            {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="tratamiento">Tratamiento:</label>
+                            <label className='etiqueta' htmlFor="tratamiento">Tratamiento
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="5" cols="10"
                                 {...register("tratamiento", { required: true })} />
+                            {errors.tratamiento && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="observaciones">Observaciones:</label>
+                            <label className='etiqueta' htmlFor="observaciones">Observaciones
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="observaciones" placeholder="..." className="text-amplio" rows="5" cols="10"
                                 {...register("observaciones", { required: true })} />
+                            {errors.observaciones && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -191,11 +242,11 @@ export function NotasMedicas() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="medico">Médico:</label>
-                            <input className="datos_lectura" id='medico' name='medico' type="text" 
-                            value={empleado.nombre_empleado} readOnly />
+                            <input className="datos_lectura" id='medico' name='medico' type="text"
+                                value={empleado.nombre_empleado} readOnly />
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                            <input className="datos_lectura" id='cedula' name='cedula' type="text" 
-                            value={empleado.cedula} readOnly />
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text"
+                                value={empleado.cedula} readOnly />
                             <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
