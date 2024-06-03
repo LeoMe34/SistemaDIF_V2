@@ -86,7 +86,7 @@ class FichaTecnicaMedSerializer(serializers.ModelSerializer):
 
 
 class HistorialMedicoSerializer(serializers.ModelSerializer):
-    archivo = serializers.FileField()
+    archivo = serializers.FileField(required=False)
 
     class Meta:
         model = HistorialMedico
@@ -104,7 +104,7 @@ class HistorialMedicoSerializer(serializers.ModelSerializer):
 
 
 class HistorialOdontoSerializer(serializers.ModelSerializer):
-    archivo = serializers.FileField()
+    archivo = serializers.FileField(required=False)
 
     class Meta:
         model = HistorialOdonto
