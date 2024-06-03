@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast'
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -50,9 +51,6 @@ export function Parte3() {
             setNoExpediente(JSON.parse(noExp))
         }
     }, []);
-
-    //console.log(datos);
-    //console.log(datos2);
 
     useEffect(() => {
         const getFichaMedica = async () => {
@@ -179,9 +177,64 @@ export function Parte3() {
         }
     }
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+
+        return textoRegex.test(texto)
+    }
+
     const enviar = handleSubmit(async data => {
-        registrarHistorial(data);
-        navegador('/notas_medicas')
+        const padecimientoValido = validarTexto(data.padecimiento)
+        const aparatosSistemasValido = validarTexto(data.aparatos_sistemas)
+        const auxiliaresValido = validarTexto(data.auxiliares)
+        const tratamientosPreviosValido = validarTexto(data.tratamientos_previos)
+        const inspeccionGralValido = validarTexto(data.inspeccion_gral)
+        const cabezaValido = validarTexto(data.cabeza)
+        const cuelloValido = validarTexto(data.cuello)
+        const toraxValido = validarTexto(data.torax)
+        const abdomenValido = validarTexto(data.abdomen)
+        const columnaValido = validarTexto(data.columna_vertical)
+        const genitalesExtValido = validarTexto(data.genitales_externos)
+        const extremidadesValido = validarTexto(data.extremidades)
+        const diagnosticoValido = validarTexto(data.diagnostico)
+        const tratamientoIntegralValido = validarTexto(data.tratamiento_integral)
+        const pronosticoValido = validarTexto(data.pronostico)
+
+        if (!padecimientoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de padecimiento actual");
+        } else if (!aparatosSistemasValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de aparatos y sistemas");
+        } else if (!auxiliaresValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de auxiliares de diagnóstico previo");
+        } else if (!tratamientosPreviosValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de manejo tratamientos previos");
+        } else if (!inspeccionGralValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de inspección general");
+        } else if (!cabezaValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de cabeza");
+        } else if (!cuelloValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de cuello");
+        } else if (!toraxValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de tórax");
+        } else if (!abdomenValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de abdomen");
+        } else if (!columnaValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de columna vertical");
+        } else if (!genitalesExtValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de genitales exteriores");
+        } else if (!extremidadesValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de extremidades");
+        } else if (!diagnosticoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de diagnóstico");
+        } else if (!tratamientoIntegralValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento y manejo integral");
+        } else if (!pronosticoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de pronóstico");
+        }
+        else {
+            registrarHistorial(data);
+            navegador('/notas_medicas')
+        }
     })
     return (
         <div>
@@ -192,14 +245,20 @@ export function Parte3() {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <label className="etiqueta" htmlFor="padecimiento">Padecimiento actual</label>
+                            <label className="etiqueta" htmlFor="padecimiento">Padecimiento actual
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="padecimiento" placeholder="Dolor de garganta..." className="text-amplio" rows="10" cols="30"
                                 {...register("padecimiento", { required: true })} />
+                            {errors.padecimiento && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="aparatos_sistemas">Aparatos y sistemas</label>
+                            <label className="etiqueta" htmlFor="aparatos_sistemas">Aparatos y sistemas
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="aparatos_sistemas" placeholder="Sistema nervioso..." className="text-amplio" rows="10" cols="30"
                                 {...register("aparatos_sistemas", { required: true })} />
+                            {errors.aparatos_sistemas && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -207,14 +266,20 @@ export function Parte3() {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            <label className="etiqueta" htmlFor="auxiliares">Auxiliares de diagnóstico previo</label>
+                            <label className="etiqueta" htmlFor="auxiliares">Auxiliares de diagnóstico previo
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="auxiliares" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
                                 {...register("auxiliares", { required: true })} />
+                            {errors.auxiliares && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="tratamientos_previos">Manejo de tratamiento previos</label>
+                            <label className="etiqueta" htmlFor="tratamientos_previos">Manejo de tratamiento previos
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="tratamientos_previos" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
                                 {...register("tratamientos_previos", { required: true })} />
+                            {errors.tratamientos_previos && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -226,50 +291,73 @@ export function Parte3() {
                 <div className='container'>
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="inspeccion_gral">Inspección general:</label>
+                            <label className='etiqueta' htmlFor="inspeccion_gral">Inspección general
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="inspeccion_gral" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("inspeccion_gral", { required: true })} />
+                            {errors.inspeccion_gral && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="cabeza">Cabeza:</label>
+                            <label className='etiqueta' htmlFor="cabeza">Cabeza
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="cabeza" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("cabeza", { required: true })} />
+                            {errors.cabeza && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="cuello">Cuello:</label>
+                            <label className='etiqueta' htmlFor="cuello">Cuello
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="cuello" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("cuello", { required: true })} />
+                            {errors.cuello && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="torax">Tórax:</label>
+                            <label className='etiqueta' htmlFor="torax">Tórax
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="torax" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("torax", { required: true })} />
+                            {errors.torax && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="abdomen">Abdomen:</label>
+                            <label className='etiqueta' htmlFor="abdomen">Abdomen
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="abdomen" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("abdomen", { required: true })} />
+                            {errors.abdomen && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="columna_vertical">Columna vertical:</label>
+                            <label className='etiqueta' htmlFor="columna_vertical">Columna vertical
+                                <span className='etiqueta_obligatoria'>*</span></label>
                             <textarea id="columna_vertical" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("columna_vertical", { required: true })} />
+                            {errors.columna_vertical && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="genitales_externos">Genitales externos:</label>
+                            <label className='etiqueta' htmlFor="genitales_externos">Genitales externos
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="genitales_externos" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("genitales_externos", { required: true })} />
+                            {errors.genitales_externos && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="extremidades">Extremidades:</label>
+                            <label className='etiqueta' htmlFor="extremidades">Extremidades
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="extremidades" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("extremidades", { required: true })} />
+                            {errors.extremidades && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
@@ -278,19 +366,28 @@ export function Parte3() {
                 <div className='container'>
                     <div className='row'>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
+                            <label className='etiqueta' htmlFor="diagnostico">Diagnóstico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
+                            {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral:</label>
+                            <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="tratamiento_integral" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("tratamiento_integral", { required: true })} />
+                            {errors.tratamiento_integral && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'>
-                            <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
+                            <label className='etiqueta' htmlFor="pronostico">Pronóstico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
                                 {...register("pronostico", { required: true })} />
+                            {errors.pronostico && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -303,7 +400,7 @@ export function Parte3() {
                                 Elegir archivo(s)
                             </label>
                             <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple
-                                {...register("archivo", { required: true })} />
+                                {...register("archivo", { required: false })} />
 
                             {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (
                                 <label key={index}>{archivo.name}</label>
@@ -316,11 +413,11 @@ export function Parte3() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="medico">Médico:</label>
-                            <input className="datos_lectura" id='medico' name='medico' type="text" 
-                            value={empleado.nombre_empleado} readOnly />
+                            <input className="datos_lectura" id='medico' name='medico' type="text"
+                                value={empleado.nombre_empleado} readOnly />
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                            <input className="datos_lectura" id='cedula' name='cedula' type="text" 
-                            value={empleado.cedula} readOnly />
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text"
+                                value={empleado.cedula} readOnly />
                             <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
