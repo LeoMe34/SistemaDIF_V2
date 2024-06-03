@@ -195,7 +195,7 @@ export function NotasMedicas() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="hora">Hora:</label>
                             <input className="entrada" id='hora' name='hora' type="time"
-                            value={horaActual} readOnly
+                                value={horaActual} readOnly
                                 {...register("hora", { required: true })} />
                         </div>
                         <div className='col'>
