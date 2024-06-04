@@ -15,6 +15,7 @@ export function FichaTecnica() {
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
     const [showReferencia, setShowReferencia] = useState(false)
+    const [fechaActual, setFechaActual] = useState('')
     const [grupo, setGrupo] = useState('')
 
     const handleReferencia = (e) => {
@@ -46,10 +47,20 @@ export function FichaTecnica() {
         getNoEmpleado();
     }, [token]);
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
     const registrarFicha = async (data) => {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/"
             const respuesta = await axios.post(url, {
+                fecha: data.fecha,
                 diagnostico: data.diagnostico,
                 motivo_consulta: data.motivo_consulta,
                 observacion: data.observacion,
@@ -71,16 +82,38 @@ export function FichaTecnica() {
         }
     }
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,1000}$/
+
+        return textoRegex.test(texto)
+    }
+
     const enviar = handleSubmit(async data => {
-        registrarFicha(data)        
-        
-        if (grupo === 'oftalmologo') {
-            navegador('/home_oftalmologo');
-        } else if (grupo === 'audiologo') {
-            navegador('/home_audiologo');
-        } else if (grupo === 'nutriologo') {
-            navegador('/home_nutricion');
-        }        
+        const diagnosticoValido = validarTexto(data.diagnostico);
+        const motivoValido = validarTexto(data.motivo_consulta);
+        const observacionValido = validarTexto(data.observacion);
+
+        if (!diagnosticoValido) {
+            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!motivoValido) {
+            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!observacionValido) {
+            toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else {
+            try {
+                await registrarFicha(data);
+                if (grupo === 'oftalmologo') {
+                    navegador('/home_oftalmologo');
+                } else if (grupo === 'audiologo') {
+                    navegador('/home_audiologo');
+                } else if (grupo === 'Nutriologo') {
+                    navegador('/home_nutricion');
+                }
+            } catch (error) {
+                console.error('Error al registrar la ficha:', error);
+                toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
+            }
+        }
     })
 
     return (
@@ -113,16 +146,30 @@ export function FichaTecnica() {
                 <form onSubmit={enviar}>
                     <div className='row'>
                         <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="visita">Visita: </label>
+                            <label className='etiqueta' htmlFor="fecha">Fecha</label>
+                            <input className="entrada" id='fecha' name='fecha' type="date"
+                                value={fechaActual} readOnly
+                                {...register("fecha", { required: true })} />
+                        </div>
+
+                        <div className='mt-2 col'>
+                            <label className='etiqueta' htmlFor="visita">Visita
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <select className="opciones" id='visita' name='visita' type=""
                                 {...register("visita", { required: true })}>
                                 <option value="" selected disabled>Elija una opción</option>
                                 <option value="1">Primera vez</option>
                                 <option value="2">Subsecuente</option>
                             </select>
+                            {errors.visita && <span>Es necesario este campo</span>}
                         </div>
+                    </div>
+                    <div className="row">
                         <div className="mt-2 col">
-                            <label className='mt-2 etiqueta' htmlFor="referencia">Referencia: </label>
+                            <label className='mt-2 etiqueta' htmlFor="referencia">Referencia
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <select className="opciones" id='referencia' name='referencia' type=""
                                 {...register("referencia", { required: true })}
                                 onChange={handleReferencia}>
@@ -130,43 +177,56 @@ export function FichaTecnica() {
                                 <option value="1">Si</option>
                                 <option value="2">No</option>
                             </select>
-
-                            {showReferencia && (
-                                <div className="col">
-                                    <label className="etiqueta" htmlFor="lugar_ref">Lugar de referencia</label>
-                                    <textarea name="lugar_ref" id="lugar_ref" className="text-amplio"
-                                        {...register("lugar_ref", { required: false })}></textarea>
-                                </div>
-                            )}
+                            {errors.referencia && <span>Es necesario este campo</span>}
                         </div>
+                        {showReferencia && (
+                            <div className="mt-2 col">
+                                <label className="etiqueta" htmlFor="lugar_ref">Lugar de referencia
+                                    <span className='etiqueta_obligatoria'>*</span>
+                                </label>
+                                <input name="lugar_ref" id="lugar_ref" className="entrada" type="text"
+                                    {...register("lugar_ref", { required: false })} />
+                                {errors.lugar_ref && <span>Es necesario este campo</span>}
+                            </div>
+                        )}
                     </div>
+
 
                     <div className="mt-2 row">
                         <div className="col">
-                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
+                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
-                                {...register("diagnostico", { required: true })} />
-                        </div>
-
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
-                            <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
+                            {errors.motivo_consulta && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="observacion">Observación</label>
+                            <label className="etiqueta" htmlFor="diagMedi">Diagnóstico medico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
+                                {...register("diagnostico", { required: true })} />
+                            {errors.diagnostico && <span>Es necesario este campo</span>}
+                        </div>
+
+                        <div className="col">
+                            <label className="etiqueta" htmlFor="observacion">Observación
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
+                            {errors.observacion && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" 
-                    value={nombreE} readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text"
+                        value={nombreE} readOnly />
                     <label className="mt-3 etiqueta" htmlFor="medico">Cédula</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" 
-                    value={cedula} readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text"
+                        value={cedula} readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">
