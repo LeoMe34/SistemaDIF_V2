@@ -136,18 +136,21 @@ export function FichaMedica() {
                             <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
+                            {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
+                            <label className="etiqueta" htmlFor="diagMedi">Diagnóstico medico</label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
+                            {errors.motivo_consulta && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="observacion">Observación</label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
+                            {errors.observacion && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
