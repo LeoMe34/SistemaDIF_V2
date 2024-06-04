@@ -14,6 +14,7 @@ export const MensajeReceta = (navegador) => {
         if (result.isConfirmed) {
             navegador('/receta')
         } else if (result.isDenied) {
+            localStorage.removeItem('idHistorial');
             navegador('/home_medico')
         }
     });

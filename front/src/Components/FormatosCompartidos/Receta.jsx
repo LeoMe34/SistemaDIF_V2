@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BuscarNotaMedica from '../FormatoMedico/BuscarNotaMedica';
+import { toast } from 'react-hot-toast'
 
 export function Receta() {
     const { token } = useAuth()
@@ -42,6 +43,10 @@ export function Receta() {
         }
         console.log(idHistorial);
     }
+
+    useEffect(() => {
+        getExp();
+    }, []);
 
     const getIdNota = async () => {
         try {
@@ -86,13 +91,20 @@ export function Receta() {
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
 
-    const enviar = handleSubmit(async data => {
-        registrarReceta(data)
-    })
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
 
-    useEffect(() => {
-        getExp();
-    }, []);
+        return textoRegex.test(texto)
+    }
+
+    const enviar = handleSubmit(async data => {
+        const tratamientoValido = validarTexto(data.tratamiento)
+        if (!tratamientoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
+        } else {
+            registrarReceta(data)
+        }
+    })
 
     useEffect(() => {
         if (idHistorial) {
@@ -147,7 +159,9 @@ export function Receta() {
 
 
                 <div className="ml-10 mb-3 col">
-                    <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
+                    <label className="etiqueta" htmlFor="tratamiento">Tratamiento
+                        <span className='etiqueta_obligatoria'>*</span>
+                    </label>
                     <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="10" cols="30"
                         {...register("tratamiento", { required: true })} />
                 </div>
@@ -155,11 +169,11 @@ export function Receta() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="medico">Médico:</label>
-                            <input className="datos_lectura" id='medico' name='medico' type="text" 
-                            value={empleado.nombre_empleado} readOnly />
+                            <input className="datos_lectura" id='medico' name='medico' type="text"
+                                value={empleado.nombre_empleado} readOnly />
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                            <input className="datos_lectura" id='cedula' name='cedula' type="text" 
-                            value={empleado.cedula} readOnly />
+                            <input className="datos_lectura" id='cedula' name='cedula' type="text"
+                                value={empleado.cedula} readOnly />
                             <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
