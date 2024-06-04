@@ -11,6 +11,8 @@ export function FichaMedica() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
+    const [nombreE, setNombreE] = useState(null);
+    const [cedula, setCedula] = useState(null);
     const [idNota, setIdNota] = useState(null);
 
     const getExp = () => {
@@ -22,6 +24,28 @@ export function FichaMedica() {
         }
         console.log(noExpediente)
     }
+
+    useEffect(() => {
+        const getNoEmpleado = async () => {
+            try {
+
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                const nombre = response.data.user_info.nombre_empleado
+                const cedula = response.data.user_info.cedula
+                setNombreE(nombre)
+                setCedula(cedula)
+                console.log(response)
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+
+        getNoEmpleado();
+    }, [token]);
 
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
@@ -133,21 +157,27 @@ export function FichaMedica() {
                 <form onSubmit={enviar}>
                     <div className="mt-2 row">
                         <div className="col">
-                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
+                            <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
                             {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="diagMedi">Diagnóstico medico</label>
+                            <label className="etiqueta" htmlFor="diagMedi">Diagnóstico medico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
                             {errors.motivo_consulta && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="observacion">Observación</label>
+                            <label className="etiqueta" htmlFor="observacion">Observación
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
                             {errors.observacion && <span>Es necesario este campo</span>}
@@ -155,7 +185,11 @@ export function FichaMedica() {
                     </div>
 
                     <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
+                    <input className="datos_lectura" id='medico' name='medico' type="text"
+                        value={nombreE} readOnly />
+                    <label className="mt-3 etiqueta" htmlFor="medico">Cédula</label>
+                    <input className="datos_lectura" id='medico' name='medico' type="text"
+                        value={cedula} readOnly />
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">
