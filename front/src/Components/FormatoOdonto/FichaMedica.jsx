@@ -71,9 +71,33 @@ export function FichaMedica() {
         }
     }, [noExpediente]);
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,1000}$/
+
+        return textoRegex.test(texto)
+    }
+
     const enviar = handleSubmit(async data => {
-        registrarFicha(data)
-        navegador('/nota_evo')
+        const diagnosticoValido = validarTexto(data.diagnostico);
+        const motivoValido = validarTexto(data.motivo_consulta);
+        const observacionValido = validarTexto(data.observacion);
+
+        if (!diagnosticoValido) {
+            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!motivoValido) {
+            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else if (!observacionValido) {
+            toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+        } else {
+            try {
+                await registrarFicha(data)
+                navegador('/nota_evo')
+            } catch (error) {
+                console.error('Error al registrar la ficha:', error);
+                toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
+            }
+        }
+
     })
 
     return (
@@ -106,29 +130,6 @@ export function FichaMedica() {
                 </div>
 
                 <form onSubmit={enviar}>
-                    <div className='row'>
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="peso">Peso: </label>
-                            <input className="entrada" id='peso' name='peso' type="text" />
-
-                            <label className='mt-2 etiqueta' htmlFor="correo">Correo electrónico: </label>
-                            <input className="entrada" id='correo' name='correo' type="text" />
-                        </div>
-
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="talla">Talla: </label>
-                            <input className="entrada" id='talla' name='talla' type="text" />
-
-                            <label className='mt-2 etiqueta' htmlFor="profesion">Profesión: </label>
-                            <input className="entrada" id='profesion' name='profesion' type="text" />
-                        </div>
-
-                        <div className='mt-2 col'>
-                            <label className='etiqueta' htmlFor="lugar_nacimiento">Lugar de nacimiento: </label>
-                            <input className="entrada" id='lugar_nacimiento' name='lugar_nacimiento' type="text" />
-                        </div>
-                    </div>
-
                     <div className="mt-2 row">
                         <div className="col">
                             <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
