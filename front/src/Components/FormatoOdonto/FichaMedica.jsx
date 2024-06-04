@@ -4,6 +4,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
+import { toast } from 'react-hot-toast'
 
 export function FichaMedica() {
     const navegador = useNavigate()
