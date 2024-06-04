@@ -75,7 +75,7 @@ export function Parte3() {
     const registrarHistorial = async (data) => {
         try {
             const formData = new FormData();
-            if (data.archivo && data.archivo.length > 0) { // Verificamos que data.archivo esté definido y tenga una longitud mayor que cero
+            if (data.archivo !== null && data.archivo.length > 0) {
                 for (let i = 0; i < data.archivo.length; i++) {
                     formData.append('archivo', data.archivo[i]);
                 }
@@ -400,7 +400,7 @@ export function Parte3() {
                                 Elegir archivo(s)
                             </label>
                             <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} multiple
-                                {...register("archivo", { required: false })} />
+                                {...register("archivo")} />
 
                             {archivosSeleccionados && archivosSeleccionados.map((archivo, index) => (
                                 <label key={index}>{archivo.name}</label>
