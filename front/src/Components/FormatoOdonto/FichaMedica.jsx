@@ -108,11 +108,11 @@ export function FichaMedica() {
         const observacionValido = validarTexto(data.observacion);
 
         if (!diagnosticoValido) {
-            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else if (!motivoValido) {
-            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else if (!observacionValido) {
-            toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
             try {
                 await registrarFicha(data)
