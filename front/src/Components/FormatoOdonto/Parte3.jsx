@@ -4,6 +4,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
+import { toast } from 'react-hot-toast'
 
 export function Parte3() {
     const navegador = useNavigate()
@@ -125,6 +126,12 @@ export function Parte3() {
         }
     }
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+
+        return textoRegex.test(texto)
+    }
+
     useEffect(() => {
         const storedData = localStorage.getItem('antecedentes');
         const storeData2 = localStorage.getItem('historialO')
@@ -139,22 +146,67 @@ export function Parte3() {
     }, [token]);
 
     const enviar = handleSubmit(async data => {
-        registrarHistOdonto(data)
-        localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+        const habitosValido = validarTexto(data.habitos_ext)
+        const labiosValido = validarTexto(data.labios)
+        const mucosaValido = validarTexto(data.mucosa)
+        const enciaValido = validarTexto(data.encias)
+        const lenguaValida = validarTexto(data.lengua)
+        const paladarBValido = validarTexto(data.paladar_blando)
+        const paladarDValuido = validarTexto(data.paladar_duro)
+        const cuelloValido = validarTexto(data.cuello)
+        const respiratorioValido = validarTexto(data.respiratorio)
+        const digestivoValido = validarTexto(data.digestivo)
+        const neurologicoValido = validarTexto(data.neuro)
+        const cardioValido = validarTexto(data.cardioV)
+        const musculoValido = validarTexto(data.muscoes)
+        if (!habitosValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de habitos exteriores");
+        } else if (!labiosValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de labios");
+        } else if (!mucosaValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de mucosa oral");
+        } else if (!enciaValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de encias");
+        } else if (!lenguaValida) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de lengua");
+        } else if (!paladarBValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de paladar blando");
+        } else if (!paladarDValuido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de paladar duro");
+        } else if (!cuelloValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de cuello");
+        } else if (!respiratorioValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de respiratorio");
+        } else if (!digestivoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de digestivo");
+        } else if (!neurologicoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de neurológico");
+        } else if (!cardioValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de cardiovasculares");
+        } else if (!musculoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos en el campo de muscuesqueleto");
+        }
+        else {
+            registrarHistOdonto(data)
+            localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
 
-        navegador('/nota_subs1')
+            navegador('/nota_subs1')
+        }
     })
 
     return (
         <div>
-            <div className="ml-10 container">
+            <div className="ml-5 container">
                 <form className="row" onSubmit={enviar}>
                     <h3 className="subtitulo">Exploración fisica</h3>
                     <div className='row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="habitos">Habitos exteriores</label>
+                            <label className="etiqueta" htmlFor="habitos">Habitos exteriores
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
                             <textarea id="habitos" type="text" placeholder="Habitos" className="entrada" rows="10" cols="30"
                                 {...register("habitos_ext", { required: true })} />
+                            {errors.habitos_ext && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
@@ -162,78 +214,114 @@ export function Parte3() {
 
                     <div className='row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="labio">Labios</label>
-                            <input id="labio" type="text" placeholder="Revisión de labios" className="entrada"
+                            <label className="etiqueta" htmlFor="labio">Labios
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="labio" type="text" placeholder="Revisión de labios" className="text-amplio"
                                 {...register("labios", { required: true })} />
+                            {errors.labios && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
-                            <label className="etiqueta" htmlFor="mucosa">Mucosa oral</label>
-                            <input id="mucosa" type="text" placeholder="Revisión de mucosa oral" className="entrada"
+                            <label className="etiqueta" htmlFor="mucosa">Mucosa oral
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="mucosa" type="text" placeholder="Revisión de mucosa oral" className="text-amplio"
                                 {...register("mucosa", { required: true })} />
+                            {errors.mucosa && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="encias">Encias</label>
-                            <input id="encia" type="text" placeholder="Revisión de encias" className="entrada"
+                            <label className="etiqueta" htmlFor="encias">Encias
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="encia" type="text" placeholder="Revisión de encias" className="text-amplio"
                                 {...register("encias", { required: true })} />
+                            {errors.encias && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <div className='mt-3 row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="lengua">Lengua</label>
-                            <input id="lengua" type="text" placeholder="Revisión de lengua" className="entrada"
+                            <label className="etiqueta" htmlFor="lengua">Lengua
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="lengua" type="text" placeholder="Revisión de lengua" className="text-amplio"
                                 {...register("lengua", { required: true })} />
+                            {errors.lengua && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="paladorB">Paladar blando</label>
-                            <input id="paladorB" type="text" placeholder="Revisión de palador blando" className="entrada"
+                            <label className="etiqueta" htmlFor="paladorB">Paladar blando
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="paladorB" type="text" placeholder="Revisión de palador blando" className="text-amplio"
                                 {...register("paladar_blando", { required: true })} />
+                            {errors.paladar_blando && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="paladorD">Paladar duro</label>
-                            <input id="paladorD" type="text" placeholder="Revisión de palador duro" className="entrada"
+                            <label className="etiqueta" htmlFor="paladorD">Paladar duro
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="paladorD" type="text" placeholder="Revisión de palador duro" className="text-amplio"
                                 {...register("paladar_duro", { required: true })} />
+                            {errors.paladar_duro && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <div className='mt-3 row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="cuello">Cuello</label>
-                            <input id="cuello" type="text" placeholder="Revisión de cuello" className="entrada"
+                            <label className="etiqueta" htmlFor="cuello">Cuello
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="cuello" type="text" placeholder="Revisión de cuello" className="text-amplio"
                                 {...register("cuello", { required: true })} />
+                            {errors.cuello && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <h3 className="subtitulo_2">Interrogatorio por aparatos y sistema</h3>
                     <div className='row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="respi">Respiratorio</label>
-                            <input id="respi" type="text" placeholder="Sistema respiratorio" className="entrada"
+                            <label className="etiqueta" htmlFor="respi">Respiratorio
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="respi" type="text" placeholder="Sistema respiratorio" className="text-amplio"
                                 {...register("respiratorio", { required: true })} />
+                            {errors.respiratorio && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="digestivo">Digestivo</label>
-                            <input id="digestivo" type="text" placeholder="Sistema digestivo" className="entrada"
+                            <label className="etiqueta" htmlFor="digestivo">Digestivo
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="digestivo" type="text" placeholder="Sistema digestivo" className="text-amplio"
                                 {...register("digestivo", { required: true })} />
+                            {errors.digestivo && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="neuro">Neurológico</label>
-                            <input id="neuro" type="text" placeholder="Sistema neurológico" className="entrada"
+                            <label className="etiqueta" htmlFor="neuro">Neurológico
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="neuro" type="text" placeholder="Sistema neurológico" className="text-amplio"
                                 {...register("neuro", { required: true })} />
+                            {errors.neuro && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
                     <div className='mt-3 row'>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="cardio">Cardiovasculares</label>
-                            <input id="cardio" type="text" placeholder="Cardiovasculares" className="entrada"
+                            <label className="etiqueta" htmlFor="cardio">Cardiovasculares
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="cardio" type="text" placeholder="Cardiovasculares" className="text-amplio"
                                 {...register("cardioV", { required: true })} />
+                            {errors.cardioV && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="musco">Muscoesqueleto</label>
-                            <input id="musco" type="text" placeholder="Muscoesqueleto" className="entrada"
+                            <label className="etiqueta" htmlFor="musco">Muscoesqueleto
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <textarea id="musco" type="text" placeholder="Muscoesqueleto" className="text-amplio"
                                 {...register("muscoes", { required: true })} />
+                            {errors.muscoes && <span>Es necesario este campo</span>}
                         </div>
                         <div className='col'></div>
                     </div>
@@ -241,7 +329,7 @@ export function Parte3() {
                         <div className='row'>
                             <div className="col">
                                 <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                                <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
+                                <span className="ml-5" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
                                 <label htmlFor="fileInput" className="btn btn-cargar">
                                     Elegir archivo(s)
                                 </label>
