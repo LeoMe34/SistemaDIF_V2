@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { toast } from 'react-hot-toast'
 
 export function NotaSubsecuente1() {
     const navegador = useNavigate()
@@ -12,6 +13,40 @@ export function NotaSubsecuente1() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [idHistOdonto, setHistOdonto] = useState(null)
     const [noExpediente, setNotExpediente] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
+    const [nombreE, setNombreE] = useState(null);
+    const [cedula, setCedula] = useState(null);
+
+    useEffect(() => {
+        const getNoEmpleado = async () => {
+            try {
+
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                const nombre = response.data.user_info.nombre_empleado
+                const cedula = response.data.user_info.cedula
+                setNombreE(nombre)
+                setCedula(cedula)
+                console.log(response)
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+
+        getNoEmpleado();
+    }, [token]);
+
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
 
     const getExp = () => {
         const storedData = localStorage.getItem('noExp')
@@ -78,9 +113,29 @@ export function NotaSubsecuente1() {
         }
     }, []);
 
+    const validarTexto = (texto) => {
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+
+        return textoRegex.test(texto)
+    }
+
+
     const enviar = async (data) => {
-        registrarNotaEvoOdonto(data, idHistOdonto);
-        navegador('/ficha_medica')
+        const diagnosticoValido = validarTexto(data.diagnostico)
+        const planValido = validarTexto(data.plan)
+        const tratamientoValido = validarTexto(data.tratamiento)
+        if (!diagnosticoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de diagnóstico");
+        } else if (!planValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de plan a seguir");
+        } else if (!tratamientoValido) {
+            toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de tratamiento");
+        }
+        else {
+            registrarNotaEvoOdonto(data, idHistOdonto);
+            navegador('/ficha_medica')
+        }
+
     }
     return (
         <div>
@@ -113,29 +168,40 @@ export function NotaSubsecuente1() {
             </div>
 
             <div className="mt-3 ml-10 container">
-                <label htmlFor="fecha">Fecha: </label>
-                <input type="date" />
+                <label htmlFor="fecha" className="etiqueta">Fecha </label>
+                <input id="fecha" type="date" className="entrada"
+                    value={fechaActual} readOnly
+                    {...register("fecha", { required: true })} />
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>
 
                 <div className="mt-3 ml-10 container">
                     <div className="mt-2 col">
-                        <label className="etiqueta mb-2" htmlFor="diagnostico">Diagnóstico:</label>
+                        <label className="etiqueta mb-2" htmlFor="diagnostico">Diagnóstico
+                            <span className='etiqueta_obligatoria'>*</span>
+                        </label>
                         <textarea id="diagnostico" type="text" placeholder="diagnostico" className="entrada" rows="5"
                             {...register("diagnostico", { required: true })} />
+                        {errors.diagnostico && <span>Es necesario este campo</span>}
                     </div>
 
                     <div className="mt-2 col">
-                        <label className="etiqueta mb-2" htmlFor="plan">Plan a seguir:</label>
+                        <label className="etiqueta mb-2" htmlFor="plan">Plan a seguir
+                            <span className='etiqueta_obligatoria'>*</span>
+                        </label>
                         <textarea id="plan" type="text" placeholder="Plan" className="entrada" rows="5"
                             {...register("plan", { required: true })} />
+                        {errors.plan && <span>Es necesario este campo</span>}
                     </div>
 
                     <div className="mt-2 col">
-                        <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento:</label>
+                        <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento
+                            <span className='etiqueta_obligatoria'>*</span>
+                        </label>
                         <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5"
                             {...register("tratamiento", { required: true })} />
+                        {errors.tratamiento && <span>Es necesario este campo</span>}
                     </div>
 
                 </div>
@@ -143,11 +209,12 @@ export function NotaSubsecuente1() {
 
                 <div className='mt-2 mb-2 container'>
                     <div className='col'>
-                        <label className='etiqueta' htmlFor="medico">Médico:</label>
-                        <input className="datos_lectura" id='medico' name='medico' type="text" readOnly />
-                        <label className='etiqueta' htmlFor="cedula">Cédula:</label>
-                        <input className="datos_lectura" id='cedula' name='cedula' type="text" readOnly />
-                        <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
+                        <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
+                        <input className="datos_lectura" id='medico' name='medico' type="text"
+                            value={nombreE} readOnly />
+                        <label className="mt-3 etiqueta" htmlFor="medico">Cédula</label>
+                        <input className="datos_lectura" id='medico' name='medico' type="text"
+                            value={cedula} readOnly />
                     </div>
                 </div>
 
