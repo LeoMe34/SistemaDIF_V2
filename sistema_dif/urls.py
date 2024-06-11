@@ -28,6 +28,7 @@ urlpatterns = [
     path("detalle_paciente/<str:pk>", views.detalle_paciente),
     path("modificar_paciente/<str:pk>", views.modificar_paciente),
     path("pacientes/", views.get_pacientes),
+    path("pacientes_psicologia/", views.get_pacientes_psicologia),
     path("buscar_paciente/", views.buscar_paciente),
     path("buscar_paciente_psico/", views.buscar_paciente_psico),
     path("buscar_nota_medica/", views.buscar_notaMedica),
