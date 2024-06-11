@@ -236,7 +236,7 @@ export function MenuNave() {
                 </div>
             )}
 
-            {userGroup == "RecepcionPsico" && (
+            {userGroup == "recepcion_psico" && (
                 <div >
                     <h3 className="MenuNav">Recepcionista</h3>
                     {linkArrayRecepPsico.map(({ icon, label, to }) => (

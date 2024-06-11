@@ -187,7 +187,7 @@ export function Rutas() {
                         </>
                     )}
 
-                    {userGroup == "RecepcionPsico" && (
+                    {userGroup == "recepcion_psico" && (
                         <>
                             <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />,
                             <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />

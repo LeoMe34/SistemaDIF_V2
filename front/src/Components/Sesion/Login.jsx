@@ -47,7 +47,7 @@ export function Login() {
         'Psicologo': '/home_psicologia',
         'Nutriologo': '/home_nutricion',
         'Recepcion': '/home_recepcion_medica',
-        'RecepcionPsico': '/home_recepcion_psicologia',
+        'recepcion_psico': '/home_recepcion_psicologia',
         'oftalmologo' : '/home_oftalmologo',
         'audiologo' : '/home_audiologo' 
     }
