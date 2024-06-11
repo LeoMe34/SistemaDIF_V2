@@ -235,37 +235,36 @@ export function CrearPaciente() {
         const nacionValida = validarOtraNacion(data.nacionalidad)
         const coloniaValida = validarColonia(data.colonia)
         const direccionValida = validarDireccion(data.direccion)
-        const correoValido = validarCorreo(data.correo)        
+        const correoValido = validarCorreo(data.correo)
         const anioNacimientoValido = validarAnio()
         let curpDuplicada = pacientes.some((paciente) => paciente.curp === data.curp)
 
         if (!curpValida) {
             toast.error('La CURP ingresada es incorrecta,debe tener 16 caracteres')
-        } else if(curpDuplicada){
+        } else if (curpDuplicada) {
             toast.error('Esta CURP fue registrada anteriormente')
+        } else if (!fechaNacimientoValida) {
+            toast.error('La fecha de nacimiento debe ser anterior a la actual')
+        } else if (!anioNacimientoValido) {
+            toast.error('La fecha de nacimiento puede comprender los úlltimos 100 años')
         } else if (!nombreValido) {
             toast.error('Ingrese sólo letras en el nombre')
         } else if (!apellidoPValido) {
             toast.error('Ingrese sólo letras en el apellido paterno')
         } else if (!apellidoMValido) {
             toast.error('Ingrese sólo letras en el apellido materno')
-        } else if (!fechaNacimientoValida) {
-            toast.error('La fecha de nacimiento debe ser anterior a la actual')
-        } else if (!anioNacimientoValido) {
-            toast.error('La fecha de nacimiento puede comprender los úlltimos 100 años')
         } else if (!nacionValida) {
             toast.error('La nacionalidad debe ser conformada por un máximo de 30 letras')
+        } else if (!telefonoValido) {
+            toast.error('Recuerde sólo ocupar números para el campo de telefono y que tienen que ser diez')
+        } else if (!correoValido) {
+            toast.error('El correo ingresado no es valido')
         } else if (!coloniaValida) {
             toast.error('El máximo de la colonia debe ser 50 caracteres alfanuméricos')
         } else if (!direccionValida) {
             toast.error('El máximo de la dirección debe ser 50 caracteres alfanuméricos')
         } else if (!ocupacionValida) {
             toast.error('Ocupación no valida, ocupe solo letras')
-        } else if (!telefonoValido) {
-            toast.error('Recuerde sólo ocupar números para el campo de telefono y que tienen que ser diez')
-        } else if (!correoValido) {
-            toast.error('El correo ingresado no es valido')
-
         } else {
             registrarPaciente(data)
             navegador("/home_recepcion_medica")
@@ -314,7 +313,7 @@ export function CrearPaciente() {
                             <label className="form-label etiqueta" htmlFor="edad">Edad
                                 <span className='etiqueta_obligatoria'>*</span>
                             </label>
-                            <input id="edad" type="text" className="entrada"
+                            <input id="edad" type="text" className="entrada" readOnly
                                 {...register("edad", { required: true })} />
                             {errors.edad && <span>Es necesario este campo</span>}
                         </div>
@@ -358,7 +357,7 @@ export function CrearPaciente() {
                             <label className="form-label etiqueta" htmlFor="noExpediente">Número de expediente
                                 <span className='etiqueta_obligatoria'>*</span>
                             </label>
-                            <input id="noExpediente" type="text" className="entrada"
+                            <input id="noExpediente" type="text" className="entrada" readOnly
                                 {...register("noExpediente", { required: true })} />
                             {errors.noExpediente && <span>Es necesario este campo</span>}
                         </div>
