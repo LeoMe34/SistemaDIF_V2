@@ -225,7 +225,7 @@ export function Parte2() {
                                         <span className='etiqueta_obligatoria'>*</span>
                                     </label>
                                     <select name="cancer" id="cancer" className="opciones" type=""
-                                        {...register("cancer", { required: true })}
+                                        {...register("cancerH", { required: true })}
                                         onChange={handleChangeCancer}>
                                         <option value="" disabled selected>Elija la opción</option>
                                         <option value="True">Si</option>
