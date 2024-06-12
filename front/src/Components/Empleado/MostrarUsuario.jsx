@@ -69,7 +69,7 @@ export function MostrarUsuario() {
                     <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="cedula">Cédula profesional:</label>
-                            <input className="entrada" id='cedula' name='cedula' type="text" value={datosUsuario.cedula_profesional} readOnly />
+                            <input className="entrada" id='cedula' name='cedula' type="text" value={datosUsuario.cedula} readOnly />
                         </div>
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="nombre">Nombre:</label>
