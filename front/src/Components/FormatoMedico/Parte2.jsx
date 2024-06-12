@@ -235,11 +235,13 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {errors.diabetes && <span>Es necesario este campo</span>}
                             {showPDiabetes && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
                                     <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
                                         {...register("par_diabetes", { required: false })}></textarea>
+                                    {errors.par_diabetes && <span>Es necesario este campo</span>}
                                 </div>
                             )}
                         </div>
@@ -255,11 +257,14 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {errors.hipertension && <span>Es necesario este campo</span>}
+
                             {showPHiper && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
                                     <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
                                         {...register("par_hipertension", { required: false })}></textarea>
+                                    {errors.par_hipertension && <span>Es necesario este campo</span>}
                                 </div>
                             )}
                         </div>
@@ -275,11 +280,14 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {errors.cancer && <span>Es necesario este campo</span>}
+
                             {showPCancer && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
                                     <textarea name="par_cancer" id="par_cancer" className="text-amplio"
                                         {...register("par_cancer", { required: false })}></textarea>
+                                    {errors.par_cancer && <span>Es necesario este campo</span>}
                                 </div>
                             )}
                         </div>
@@ -295,11 +303,14 @@ export function Parte2() {
                                 <option value="True">Si</option>
                                 <option value="False">No</option>
                             </select>
+                            {errors.cardiopatia && <span>Es necesario este campo</span>}
+
                             {showPCardio && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
                                     <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
                                         {...register("par_cardiopatia", { required: false })}></textarea>
+                                    {errors.par_cardiopatia && <span>Es necesario este campo</span>}
                                 </div>
                             )}
                         </div>
@@ -318,6 +329,7 @@ export function Parte2() {
                             <label className='form-check-label etiqueta' htmlFor="otros_ant_par">Antecedente y parentesco</label>
                             <textarea name="otros_ant_par" id="otros_ant_par" className="text-amplio"
                                 {...register("otros_ant_par", { required: false })}></textarea>
+                            {errors.otros_ant_par && <span>Es necesario este campo</span>}
                         </div>
                     )}
 
@@ -333,6 +345,7 @@ export function Parte2() {
                             </label>
                             <textarea name="alimentacion" id="alimentacion" className="text-amplio"
                                 {...register("alimentacion", { required: true })}></textarea>
+                            {errors.alimentacion && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="habitacion">Habitación
@@ -340,6 +353,7 @@ export function Parte2() {
                             </label>
                             <textarea name="habitacion" id="habitacion" className="text-amplio"
                                 {...register("habitacion", { required: true })}></textarea>
+                            {errors.habitacion && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="higiene">Higiene personal
@@ -347,6 +361,7 @@ export function Parte2() {
                             </label>
                             <textarea name="higiene" id="higiene" className="text-amplio"
                                 {...register("higiene", { getPersonalesData: true })}></textarea>
+                            {errors.higiene && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                 </div>
@@ -361,6 +376,7 @@ export function Parte2() {
                             </label>
                             <textarea name="medicosQT" id="medicosQT" className="text-amplio"
                                 {...register("medicosQT", { required: true })}></textarea>
+                            {errors.medicosQT && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tabaquismoAA">Tabaquismo,alcoholismo,alérgicos
@@ -368,6 +384,7 @@ export function Parte2() {
                             </label>
                             <textarea name="tabaquismoAA" id="tabaquismoAA" className="text-amplio"
                                 {...register("tabaquismoAA", { required: true })}></textarea>
+                            {errors.tabaquismoAA && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos
@@ -375,6 +392,7 @@ export function Parte2() {
                             </label>
                             <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
                                 {...register("tendenciaDM", { required: true })}></textarea>
+                            {errors.tendenciaDM && <span>Es necesario este campo</span>}
                         </div>
                     </div>
                     <div className="row">
@@ -389,6 +407,7 @@ export function Parte2() {
                                 <label className="etiqueta" htmlFor="otros_antPat">Otros</label>
                                 <textarea name="otros_antPat" id="otros_antPat" className="text-amplio"
                                     {...register("otros_antPat", { required: false })}></textarea>
+                                {errors.otros_antPat && <span>Es necesario este campo</span>}
                             </div>
                         )}
 
@@ -408,6 +427,7 @@ export function Parte2() {
                                     </label>
                                     <input className="entrada" id='menarca' name='menarca' type="text"
                                         {...register("menarca", { required: true })} />
+                                    {errors.menarca && <span>Es necesario este campo</span>}
 
                                 </div>
                                 <div className='col'>
@@ -416,6 +436,7 @@ export function Parte2() {
                                     </label>
                                     <input className="entrada" id='vida_sexual' name='vida_sexual' type="text"
                                         {...register("vida_sexual", { required: true })} />
+                                    {errors.vida_sexual && <span>Es necesario este campo</span>}
                                 </div>
                                 {showUltimaMens && (
                                     <div className='col'>
@@ -423,7 +444,8 @@ export function Parte2() {
                                             <span className='etiqueta_obligatoria'>*</span>
                                         </label>
                                         <input className="entrada" id='menstruacion' name='menstruacion' type="date"
-                                            {...register("menstruacion", { required: false })} />
+                                            {...register("menstruacion", { required: true })} />
+                                        {errors.menstruacion && <span>Es necesario este campo</span>}
                                     </div>
                                 )}
                             </div>
@@ -440,6 +462,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='num_embarazos' name='num_embarazos' type="text"
                                                 {...register("num_embarazos", { required: true })} />
+                                            {errors.num_embarazos && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="partos">Partos:
@@ -447,6 +470,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='partos' name='partos' type="text"
                                                 {...register("partos", { required: true })} />
+                                            {errors.partos && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="abortos">Abortos:
@@ -454,6 +478,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='abortos' name='abortos' type="text"
                                                 {...register("abortos", { required: true })} />
+                                            {errors.abortos && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="cesarea">Cesareas:
@@ -461,6 +486,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='cesarea' name='cesarea' type="text"
                                                 {...register("cesarea", { required: true })} />
+                                            {errors.cesarea && <span>Es necesario este campo</span>}
                                         </div>
                                     </div>
                                 </div>
@@ -474,6 +500,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='ultimo_parto' name='ultimo_parto' type="text"
                                                 {...register("ultimo_parto", { required: true })} />
+                                            {errors.ultimo_parto && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="num_hijos">N° de hijos:
@@ -481,6 +508,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='num_hijos' name='num_hijos' type="text"
                                                 {...register("num_hijos", { required: true })} />
+                                            {errors.num_hijos && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="macrosomicos">Macrosomicos vivos:
@@ -488,6 +516,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='macrosomicos' name='macrosomicos' type="text"
                                                 {...register("macrosomicos", { required: true })} />
+                                            {errors.macrosomicos && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="bajo_peso">Bajo peso al nacer:
@@ -495,6 +524,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='bajo_peso' name='bajo_peso' type="text"
                                                 {...register("bajo_peso", { required: true })} />
+                                            {errors.bajo_peso && <span>Es necesario este campo</span>}
                                         </div>
                                     </div>
                                 </div>
@@ -508,6 +538,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='num_parejas' name='num_parejas' type="text"
                                                 {...register("num_parejas", { required: true })} />
+                                            {errors.num_parejas && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="heterosexuales">Heterosexuales:
@@ -515,6 +546,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='heterosexuales' name='heterosexuales' type="text"
                                                 {...register("heterosexuales", { required: true })} />
+                                            {errors.heterosexuales && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="homosexuales">Homosexuales:
@@ -522,6 +554,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='homosexuales' name='homosexuales' type="text"
                                                 {...register("homosexuales", { required: true })} />
+                                            {errors.homosexuales && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="bisexuales">Bisexuales:
@@ -529,6 +562,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='bisexuales' name='bisexuales' type="text"
                                                 {...register("bisexuales", { required: true })} />
+                                            {errors.bisexuales && <span>Es necesario este campo</span>}
                                         </div>
                                     </div>
                                 </div>
@@ -542,6 +576,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='diu' name='diu' type="text"
                                                 {...register("diu", { required: true })} />
+                                            {errors.diu && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="hormonales">Hormonales:
@@ -549,6 +584,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='hormonales' name='hormonales' type="text"
                                                 {...register("hormonales", { required: true })} />
+                                            {errors.hormonales && <span>Es necesario este campo</span>}
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="quirurgico">Quirurgico:
@@ -556,6 +592,7 @@ export function Parte2() {
                                             </label>
                                             <input className="entrada" id='quirurgico' name='quirurgico' type="text"
                                                 {...register("quirurgico", { required: true })} />
+                                            {errors.quirurgico && <span>Es necesario este campo</span>}
                                         </div>
                                     </div>
                                     <div className="row">
@@ -569,6 +606,7 @@ export function Parte2() {
                                                 <label className='etiqueta' htmlFor="otrosMP">Otros</label>
                                                 <textarea name="otrosMP" id="otrosMP" className="text-amplio"
                                                     {...register("otrosMP", { required: true })}></textarea>
+                                                {errors.otrosMP && <span>Es necesario este campo</span>}
                                             </div>
                                         )}
                                     </div>

@@ -103,7 +103,7 @@ export function Parte3() {
                 par_hipertension: datos2.par_hipertension,
                 par_cancer: datos2.par_cancer,
                 par_cardiopatia: datos2.par_cardiopatia,
-                otros: datos2.otros_ant
+                otros: datos2.otros_ant_par
             }));
             formData.append('antPersoPatM', JSON.stringify({
                 medicosQT: datos2.medicosQT,

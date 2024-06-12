@@ -120,19 +120,18 @@ export function Parte1() {
                         </div>
                         <div className='row'>
                             <div className='col'>
-                                {/*Se podria hacer que desde que incie sesion ponga en que consultorio esta 
-                            para que ya no tenga que estar llenandolo */}
+                                <label className='etiqueta' htmlFor="fecha">Fecha:</label>
+                                <input className="entrada" id='fecha' name='fecha' type="date"
+                                    value={fechaActual} readOnly
+                                    {...register("fecha", { required: true })} />
+                            </div>
+                            <div className='col'>
                                 <label className='etiqueta' htmlFor="num_consultorio">N° consultorio:
                                     <span className='etiqueta_obligatoria'>*</span>
                                 </label>
                                 <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
                                     {...register("no_consultorio", { required: true })} />
-                            </div>
-                            <div className='col'>
-                                <label className='etiqueta' htmlFor="fecha">Fecha:</label>
-                                <input className="entrada" id='fecha' name='fecha' type="date"
-                                    value={fechaActual} readOnly
-                                    {...register("fecha", { required: true })} />
+                                {errors.no_consultorio && <span>Es necesario este campo</span>}
                             </div>
                             <div className='col'>
                                 <label className='etiqueta' htmlFor="referencia">Referencia:
@@ -145,12 +144,14 @@ export function Parte1() {
                                     <option value={true}>Si</option>
                                     <option value={false}>No</option>
                                 </select>
+                                {errors.referencia && <span>Es necesario este campo</span>}
                             </div>
                             {showReferencia && (
                                 <div className='col'>
                                     <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
                                     <input className="entrada" id='lugar' name='lugar' type="text"
                                         {...register("lugar", { required: true })} />
+                                    {errors.lugar && <span>Es necesario este campo</span>}
                                 </div>
                             )}
 
@@ -172,6 +173,7 @@ export function Parte1() {
                                     <option value="1">Extensa</option>
                                     <option value="2">Compuesta</option>
                                 </select>
+                                {errors.tipo_familia && <span>Es necesario este campo</span>}
 
                             </div>
                             <div className='col'>
@@ -186,6 +188,7 @@ export function Parte1() {
                                     <option value="2">E-C</option>
                                     <option value="3">E-SD</option>
                                 </select>
+                                {errors.rol_madre && <span>Es necesario este campo</span>}
                             </div>
                         </div>
 
@@ -202,6 +205,7 @@ export function Parte1() {
                                     <option value="1">1</option>
                                     <option value="d">D</option>
                                 </select>
+                                {errors.familia && <span>Es necesario este campo</span>}
                             </div>
 
                             <div className='col'>
@@ -214,6 +218,7 @@ export function Parte1() {
                                     <option value="si">Si</option>
                                     <option value="no">No</option>
                                 </select>
+                                {errors.disfuncional && <span>Es necesario este campo</span>}
                             </div>
 
                             <div className='col'>
@@ -222,6 +227,7 @@ export function Parte1() {
                                 </label>
                                 <input className="entrada" id='informante' name='informante' type="text"
                                     {...register("informante", { required: true })} />
+                                {errors.informante && <span>Es necesario este campo</span>}
                             </div>
 
                             <div className='col'>
@@ -237,6 +243,7 @@ export function Parte1() {
                                     <option value="3">Tomografía</option>
                                     <option value="4">Rayos X</option>
                                 </select>
+                                {errors.estudios && <span>Es necesario este campo</span>}
                             </div>
                         </div>
 
