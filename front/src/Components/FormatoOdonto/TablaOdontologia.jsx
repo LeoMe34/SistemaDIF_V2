@@ -25,7 +25,7 @@ export function TablaOdontologia() {
             });
             const no_Empleado = response.data.user_info.no_trabajador
             const nombre = response.data.user_info.nombre_empleado
-            const cedula = response.data.user_info.cedula_profesional
+            const cedula = response.data.user_info.cedula
             setNoEmpleado(no_Empleado)
             setNombre(nombre)
             setCedula(cedula)

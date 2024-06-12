@@ -84,7 +84,7 @@ export function TablaUsuarios() {
                             <tr key={index} onClick={() => handleClick(empleados.usuario)}>
                                 <td className="">{empleados.no_trabajador}</td>                                
                                 <td className="">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>                                
-                                <td className="">{empleados.cedula_profesional}</td>
+                                <td className="">{empleados.cedula}</td>
                                 <td className="">{empleados.ocupacion}</td>
                                 <td className="">{empleados.telefono}</td>
                             </tr>
