@@ -86,7 +86,12 @@ export function CrearEmpleado() {
     }, []);
 
     useEffect(() => {
-        getUsuarioId()
+        if (noTrabajador) {
+            getUsuarioId()
+        }
+        else {
+            handlePacienteSeleccionado()
+        }
     }, [noTrabajador]);
 
 
@@ -125,7 +130,6 @@ export function CrearEmpleado() {
     }
 
     const getUsuarioId = async () => {
-        console.log("el num " + noTrabajador)
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/get_usuario_noTrabajador/${noTrabajador}`, {
                 headers: {
@@ -141,14 +145,14 @@ export function CrearEmpleado() {
                 toast.error("No se encontró ningún usuario con ese número de trabajador.");
             }
         } catch (error) {
-            console.log("Ocurrió un error: " + error);            
+            console.log("Ocurrió un error: " + error);
         }
     };
 
 
-    const handlePacienteSeleccionado = (noTrabajador) => {
-        console.log("No trabajador", noTrabajador);
-        setNoTrabajador(noTrabajador)
+    const handlePacienteSeleccionado = (noTrabajadorSeleccionado) => {
+        console.log("No trabajador", noTrabajadorSeleccionado);        
+        setValue("no_trabajador", noTrabajadorSeleccionado)
     };
 
     const enviar = handleSubmit(async data => {

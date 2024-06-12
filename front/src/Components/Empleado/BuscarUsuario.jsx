@@ -48,6 +48,7 @@ function BuscarUsuario({getNoTrabajador}) {
         setUsuarioId(id);
         const usuarioSeleccionado = resultados.find(usuario => usuario.id === id);
         setResultados([usuarioSeleccionado]);
+        getNoTrabajador(usuarioSeleccionado.username)
         setShowResultados(false);
     };
 
