@@ -281,12 +281,12 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="habitacion">Habitación</label>
                             <textarea name="habitacion" id="habitacion" className="text-amplio"
-                                value={historiaClinica?.antHerediPatM?.habitacion}></textarea>
+                                value={historiaClinica?.antPersoNoPatM?.habitacion}></textarea>
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="higiene">Higiene personal</label>
                             <textarea name="higiene" id="higiene" className="text-amplio"
-                                value={historiaClinica?.antHerediPatM?.higiene}></textarea>
+                                value={historiaClinica?.antPersoNoPatM?.higiene}></textarea>
                         </div>
                     </div>
                 </div>
