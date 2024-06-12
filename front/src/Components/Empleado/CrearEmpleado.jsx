@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form"
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
-import { CrearUsuario } from './CrearUsuario';
 import BuscarUsuario from './BuscarUsuario';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
 import { toast } from 'react-hot-toast'
@@ -14,12 +13,13 @@ export function CrearEmpleado() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     /*const [, setUser] = useState(null);*/
-    const { usuarioId } = useUsuarioId();
+    const { usuarioId, setUsuarioId } = useUsuarioId();
     const [mostrarCedula, setMostrarCedula] = useState(false)
     const [empleados, setEmpleados] = useState([]);
+    const [noTrabajador, setNoTrabajador] = useState(null)
 
     const registrarEmpleado = async (data) => {
-        console.log(usuarioId)
+        console.log("El usuario es" + usuarioId)
         try {
             const url = "http://127.0.0.1:8000/api/registrar_empleado/"
             const respuesta = await axios.post(url, {
@@ -27,7 +27,7 @@ export function CrearEmpleado() {
                 apellidoPaterno: data.apellidoPaterno,
                 apellidoMaterno: data.apellidoMaterno,
                 no_trabajador: data.no_trabajador,
-                cedula_profesional: data.cedula,
+                cedula_profesional: data.cedula_profesional,
                 ocupacion: data.ocupacion,
                 telefono: data.telefono,
                 usuario: usuarioId
@@ -39,6 +39,7 @@ export function CrearEmpleado() {
             const noTrabajadorRegistrado = respuesta.data
             if (noTrabajadorRegistrado) {
                 console.log("Usuario registrado correctamente");
+                localStorage.removeItem("noTrabajador")
                 navegador("/crear_empleado");
                 return {
                     usuarioID: noTrabajadorRegistrado.usuarioId,
@@ -47,6 +48,7 @@ export function CrearEmpleado() {
             } else {
                 console.log("Usuario duplicado");
             }
+
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -79,8 +81,18 @@ export function CrearEmpleado() {
         getEmpleados()
     }, [token]);
 
+    useEffect(() => {
+        getNoTrabajador();
+    }, []);
+
+    useEffect(() => {
+        getUsuarioId()
+    }, [noTrabajador]);
+
+
+
     const validarNombreCompleto = (nombreOApellido) => {
-        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü]{1,50}$/
+        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü\s]{1,50}$/
 
         return nombreCompletoRegex.test(nombreOApellido)
     }
@@ -102,7 +114,46 @@ export function CrearEmpleado() {
         }
     }
 
+    const getNoTrabajador = () => {
+        const storedData = localStorage.getItem('noTrabajador')
+        if (storedData) {
+            setNoTrabajador(JSON.parse(storedData))
+        } else {
+            setNoTrabajador(null)
+        }
+        console.log(noTrabajador)
+    }
+
+    const getUsuarioId = async () => {
+        console.log("el num " + noTrabajador)
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_usuario_noTrabajador/${noTrabajador}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+
+            if (response.data.length > 0) {
+                const usuario = response.data[0]; // Accede al primer objeto en el array
+                setUsuarioId(usuario.id);
+            } else {
+                console.log("No se encontró ningún usuario.");
+                toast.error("No se encontró ningún usuario con ese número de trabajador.");
+            }
+        } catch (error) {
+            console.log("Ocurrió un error: " + error);            
+        }
+    };
+
+
+    const handlePacienteSeleccionado = (noTrabajador) => {
+        console.log("No trabajador", noTrabajador);
+        setNoTrabajador(noTrabajador)
+    };
+
     const enviar = handleSubmit(async data => {
+        console.log(usuarioId)
+
         const nombreValido = validarNombreCompleto(data.nombre)
         const apellidoPValido = validarNombreCompleto(data.apellidoPaterno)
         const apellidoMValido = validarNombreCompleto(data.apellidoMaterno)
@@ -127,6 +178,7 @@ export function CrearEmpleado() {
                     const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
                     console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
                     await unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
+                    navegador("/home_administrador")
                 } catch (error) {
                     console.error('Error al registrar empleado:', error);
                 }
@@ -138,6 +190,7 @@ export function CrearEmpleado() {
                 const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
                 console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
                 await unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
+                navegador("/home_administrador")
             } catch (error) {
                 console.error('Error al registrar empleado:', error);
             }
@@ -159,7 +212,10 @@ export function CrearEmpleado() {
                     </ol>
                 </nav>
             </div>
-            <BuscarUsuario></BuscarUsuario>
+            {!noTrabajador && (
+                <BuscarUsuario getNoTrabajador={handlePacienteSeleccionado}></BuscarUsuario>
+            )}
+
             {/*<NavBarSimple />*/}
 
             <div className="ml-10 container mt-2">
@@ -171,6 +227,7 @@ export function CrearEmpleado() {
                                 <span className='etiqueta_obligatoria'>*</span>
                             </label>
                             <input id="no_trabajador" type="text" placeholder="Número de trabajador" className="entrada"
+                                value={noTrabajador} readOnly
                                 {...register("no_trabajador", { required: true })} />
                         </div>
                         <div className='mt-2 mb-2 col'>

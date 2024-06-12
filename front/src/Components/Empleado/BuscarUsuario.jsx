@@ -4,7 +4,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
 import { toast } from 'react-hot-toast';
 
-function BuscarUsuario() {
+function BuscarUsuario({getNoTrabajador}) {
     const [consulta, setConsulta] = useState('');
     const [resultados, setResultados] = useState([]);
     const [showResultados, setShowResultados] = useState(true);

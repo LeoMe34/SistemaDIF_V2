@@ -300,17 +300,16 @@ const linkArrayAdmin = [
         to: "/home_administrador"
 
     },
-
-    {
-        label: "Crear Empleado",
-        icon: <FaFileMedical />,
-        to: "/crear_empleado"
-
-    },
     {
         label: "Crear Usuario",
         icon: <FaFileMedical />,
         to: "/crear_usuario"
+
+    },
+    {
+        label: "Crear Empleado",
+        icon: <FaFileMedical />,
+        to: "/crear_empleado"
 
     },
 ]

@@ -175,6 +175,36 @@ def get_usuarios(request, user_id):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_usuario_noTrabajador(request, noTrabajador):
+    if not noTrabajador:
+        return Response(
+            {"error": "Debe proporcionar un nombre de usuario"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    usuarios = User.objects.filter(username__icontains=noTrabajador)
+
+    if not usuarios.exists():
+        return Response(
+            {"error": "No se encontró ningún usuario con ese nombre de usuario"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    # Serializar los datos manualmente
+    usuarios_serializados = []
+    for usuario in usuarios:
+        usuario_serializado = {
+            "id": usuario.id,
+            "username": usuario.username,
+            "email": usuario.email,
+        }
+        usuarios_serializados.append(usuario_serializado)
+
+    return Response(usuarios_serializados, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
 @permission_classes([IsAdminUser])
 def get_all_usuarios(request):
     usuarios = User.objects.all()
