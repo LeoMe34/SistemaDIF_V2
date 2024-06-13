@@ -504,10 +504,6 @@ export function MostrarHistOdonto() {
                         </div>
                     </div>
 
-
-
-
-
                     <div className='ml-10 mb-5 container'>
                         <div className='row'>
                             <div className='col'>
