@@ -75,7 +75,7 @@ export function CrearPacientePsico() {
     }
 
     const validarOcupacion = (ocupacion) => {
-        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü][A-Za-zÁÉÍÓÚáéíóúü\s]*$/
+        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü][A-Za-zÁÉÍÓÚáéíóúü\s/,.-:()]*$/
 
         return ocupacionRegex.test(ocupacion)
     }
@@ -213,7 +213,7 @@ export function CrearPacientePsico() {
         const ocupacionValida = validarOcupacion(data.ocupacion)
         const coloniaValida = validarColonia(data.colonia)
         const direccionValida = validarDireccion(data.direccion)
-        const correoValido = validarCorreo(data.correo)
+        const correoValido = data.correo ? validarCorreo(data.correo) : true
         const anioNacimientoValido = validarAnio()
         let curpDuplicada = pacientes.some((paciente) => paciente.curp === data.curp)
 
@@ -243,7 +243,7 @@ export function CrearPacientePsico() {
             toast.error('El máximo de la dirección debe ser 50 caracteres alfanuméricos')
         } else {
             registrarPaciente(data)
-            navegador("/home_psicologia")
+            navegador("/home_recepcion_psicologia")
         }
     })
 

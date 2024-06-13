@@ -1,5 +1,5 @@
 import { TablaPacientePsico } from "../Paciente/TablaPacientePsico"
-
+import BuscarPacientePsico from "../Paciente/BuscarPacientePsico"
 export function HomeRecepcionPsico() {
     return (
         <div>
@@ -11,6 +11,9 @@ export function HomeRecepcionPsico() {
                     </ol>
                 </nav>
             </div>
+
+            <BuscarPacientePsico isHomePage={true}></BuscarPacientePsico>
+
             <TablaPacientePsico></TablaPacientePsico>
         </div>
     )

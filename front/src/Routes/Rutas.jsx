@@ -43,6 +43,7 @@ import { V_FichaMedicaO } from '../Views/FormatoOdonto/V_FichaMedicaO'
 
 import { V_FichaTecnica } from '../Views/FormatoNutricion/V_FichaTecnica'
 import { V_MostrarPaciente } from '../Views/Paciente/V_MostrarPacienteM'
+import { V_MostrarPacientePsico } from '../Views/Paciente/V_MostrarPacientePsico'
 
 import { V_MostrarUsuario } from '../Views/Empleado/V_MostrarUsuario'
 import { V_MostrarExpedientes } from '../Views/FormatoMedico/V_MostrarExpedientes'
@@ -191,6 +192,7 @@ export function Rutas() {
                         <>
                             <Route path='/crear_paciente_psicologia' element={<V_CrearPacientePsico />} />,
                             <Route path='/home_recepcion_psicologia' element={<V_HomeRecepcionPsico />} />
+                            <Route path='/mostrar_paciente/:noExpediente' element={<V_MostrarPacientePsico />} />
                         </>
                     )}
                     {/*<Route path='/antecedente' element={<V_Antecedentes />} />

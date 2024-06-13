@@ -33,7 +33,7 @@ export function CrearPaciente() {
     }
 
     const validarOcupacion = (ocupacion) => {
-        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü][A-Za-zÁÉÍÓÚáéíóúü\s]*$/
+        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü][A-Za-zÁÉÍÓÚáéíóúü\s/,.-:()]*$/
 
         return ocupacionRegex.test(ocupacion)
     }
@@ -235,7 +235,7 @@ export function CrearPaciente() {
         const nacionValida = validarOtraNacion(data.nacionalidad)
         const coloniaValida = validarColonia(data.colonia)
         const direccionValida = validarDireccion(data.direccion)
-        const correoValido = validarCorreo(data.correo)
+        const correoValido = data.correo ? validarCorreo(data.correo) : true
         const anioNacimientoValido = validarAnio()
         let curpDuplicada = pacientes.some((paciente) => paciente.curp === data.curp)
 
