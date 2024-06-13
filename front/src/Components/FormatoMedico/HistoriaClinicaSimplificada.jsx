@@ -13,6 +13,8 @@ export function HistoriaClinicaSimplificada() {
     const { noExpediente, fecha } = useParams();
     const { token } = useAuth();
     const [sexo, setSexo] = useState(null)
+    const [vidaSexual, setVidaSexual] = useState(null)
+    const showVidaSexual = vidaSexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '';
 
     const getFichasMedicas = async () => {
         try {
@@ -22,7 +24,6 @@ export function HistoriaClinicaSimplificada() {
                 }
             });
             setFichaMedica(response.data);
-            console.log('Datos de ficha médica:', fichaMedica);
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
         }
@@ -51,6 +52,9 @@ export function HistoriaClinicaSimplificada() {
                     }
                 });
                 setHistoriaClinica(response.data);
+                const vida_Sexual = response.data.ginecobMed.vida_sexual
+                setVidaSexual(vida_Sexual)
+
                 console.log('Datos del historial clínico:', response.data);
             } catch (error) {
                 console.error('Error al obtener el historial clínico:', error);
@@ -344,110 +348,113 @@ export function HistoriaClinicaSimplificada() {
                                 </div>
                             </div>
                         </div>
+                        {showVidaSexual && (
+                            <div>
+                                <h3 className='subtitulo_2'>Embarazos</h3>
+                                <div className='container'>
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="num_embarazos">N° embarazos: </label>
+                                            <input className="entrada" id='num_embarazos' name='num_embarazos' type="text"
+                                                value={historiaClinica?.ginecobMed?.num_embarazos} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="partos">Partos:</label>
+                                            <input className="entrada" id='partos' name='partos' type="text"
+                                                value={historiaClinica?.ginecobMed?.partos} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="abortos">Abortos</label>
+                                            <input className="entrada" id='abortos' name='abortos' type="text"
+                                                value={historiaClinica?.ginecobMed?.abortos} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="cesarea">Cesareas</label>
+                                            <input className="entrada" id='cesarea' name='cesarea' type="text"
+                                                value={historiaClinica?.ginecobMed?.cesarea} />
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <h3 className='subtitulo_2'>Embarazos</h3>
-                        <div className='container'>
-                            <div className='row'>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="num_embarazos">N° embarazos: </label>
-                                    <input className="entrada" id='num_embarazos' name='num_embarazos' type="text"
-                                        value={historiaClinica?.ginecobMed?.num_embarazos} />
+                                <h3 className='subtitulo_2'>Partos</h3>
+                                <div className='container'>
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="ultimo_parto">Fecha de ultimo parto: </label>
+                                            <input className="entrada" id='ultimo_parto' name='ultimo_parto' type="text"
+                                                value={historiaClinica?.ginecobMed?.ultimo_parto} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="num_hijos">N° de hijos:</label>
+                                            <input className="entrada" id='num_hijos' name='num_hijos' type="text"
+                                                value={historiaClinica?.ginecobMed?.num_hijos} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="macrosomicos">Macrosomicos vivos</label>
+                                            <input className="entrada" id='macrosomicos' name='macrosomicos' type="text"
+                                                value={historiaClinica?.ginecobMed?.macrosomicos} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="bajo_peso">Bajo peso al nacer</label>
+                                            <input className="entrada" id='bajo_peso' name='bajo_peso' type="text"
+                                                value={historiaClinica?.ginecobMed?.bajo_peso} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="partos">Partos:</label>
-                                    <input className="entrada" id='partos' name='partos' type="text"
-                                        value={historiaClinica?.ginecobMed?.partos} />
+
+                                <h3 className='subtitulo_2'>Parejas</h3>
+                                <div className='mt-3 container'>
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="num_parejas">N° de parejas</label>
+                                            <input className="entrada" id='num_parejas' name='num_parejas' type="text"
+                                                value={historiaClinica?.ginecobMed?.num_parejas} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="heterosexuales">Heterosexuales:</label>
+                                            <input className="entrada" id='heterosexuales' name='heterosexuales' type="text"
+                                                value={historiaClinica?.ginecobMed?.heterosexuales} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="homosexuales">Homosexuales</label>
+                                            <input className="entrada" id='homosexuales' name='homosexuales' type="text"
+                                                value={historiaClinica?.ginecobMed?.homosexuales} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="bisexuales">Bisexuales</label>
+                                            <input className="entrada" id='bisexuales' name='bisexuales' type="text"
+                                                value={historiaClinica?.ginecobMed?.bisexuales} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="abortos">Abortos</label>
-                                    <input className="entrada" id='abortos' name='abortos' type="text"
-                                        value={historiaClinica?.ginecobMed?.abortos} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="cesarea">Cesareas</label>
-                                    <input className="entrada" id='cesarea' name='cesarea' type="text"
-                                        value={historiaClinica?.ginecobMed?.cesarea} />
+
+                                <h3 className='subtitulo_2'>Método de planificación familiar</h3>
+                                <div className='container'>
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="diu">DIU</label>
+                                            <input className="entrada" id='diu' name='diu' type="text"
+                                                value={historiaClinica?.ginecobMed?.diu} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="hormonales">Hormonales</label>
+                                            <input className="entrada" id='hormonales' name='hormonales' type="text"
+                                                value={historiaClinica?.ginecobMed?.hormonales} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="quirurgico">Quirurgico</label>
+                                            <input className="entrada" id='quirurgico' name='quirurgico' type="text"
+                                                value={historiaClinica?.ginecobMed?.quirurgico} />
+                                        </div>
+                                        <div className='col'>
+                                            <label className='etiqueta' htmlFor="otrosMP">Otros</label>
+                                            <input className="entrada" id='otrosMP' name='otrosMP' type="text"
+                                                value={historiaClinica?.ginecobMed?.otros} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <h3 className='subtitulo_2'>Partos</h3>
-                        <div className='container'>
-                            <div className='row'>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="ultimo_parto">Fecha de ultimo parto: </label>
-                                    <input className="entrada" id='ultimo_parto' name='ultimo_parto' type="text"
-                                        value={historiaClinica?.ginecobMed?.ultimo_parto} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="num_hijos">N° de hijos:</label>
-                                    <input className="entrada" id='num_hijos' name='num_hijos' type="text"
-                                        value={historiaClinica?.ginecobMed?.num_hijos} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="macrosomicos">Macrosomicos vivos</label>
-                                    <input className="entrada" id='macrosomicos' name='macrosomicos' type="text"
-                                        value={historiaClinica?.ginecobMed?.macrosomicos} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="bajo_peso">Bajo peso al nacer</label>
-                                    <input className="entrada" id='bajo_peso' name='bajo_peso' type="text"
-                                        value={historiaClinica?.ginecobMed?.bajo_peso} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3 className='subtitulo_2'>Parejas</h3>
-                        <div className='mt-3 container'>
-                            <div className='row'>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="num_parejas">N° de parejas</label>
-                                    <input className="entrada" id='num_parejas' name='num_parejas' type="text"
-                                        value={historiaClinica?.ginecobMed?.num_parejas} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="heterosexuales">Heterosexuales:</label>
-                                    <input className="entrada" id='heterosexuales' name='heterosexuales' type="text"
-                                        value={historiaClinica?.ginecobMed?.heterosexuales} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="homosexuales">Homosexuales</label>
-                                    <input className="entrada" id='homosexuales' name='homosexuales' type="text"
-                                        value={historiaClinica?.ginecobMed?.homosexuales} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="bisexuales">Bisexuales</label>
-                                    <input className="entrada" id='bisexuales' name='bisexuales' type="text"
-                                        value={historiaClinica?.ginecobMed?.bisexuales} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3 className='subtitulo_2'>Método de planificación familiar</h3>
-                        <div className='container'>
-                            <div className='row'>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="diu">DIU</label>
-                                    <input className="entrada" id='diu' name='diu' type="text"
-                                        value={historiaClinica?.ginecobMed?.diu} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="hormonales">Hormonales</label>
-                                    <input className="entrada" id='hormonales' name='hormonales' type="text"
-                                        value={historiaClinica?.ginecobMed?.hormonales} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="quirurgico">Quirurgico</label>
-                                    <input className="entrada" id='quirurgico' name='quirurgico' type="text"
-                                        value={historiaClinica?.ginecobMed?.quirurgico} />
-                                </div>
-                                <div className='col'>
-                                    <label className='etiqueta' htmlFor="otrosMP">Otros</label>
-                                    <input className="entrada" id='otrosMP' name='otrosMP' type="text"
-                                        value={historiaClinica?.ginecobMed?.otros} />
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 )}
 
