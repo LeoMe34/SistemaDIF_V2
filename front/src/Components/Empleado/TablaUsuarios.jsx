@@ -51,42 +51,42 @@ export function TablaUsuarios() {
     }, []);
 
     const handleClick = (id) => {
-        localStorage.setItem('idUsuario', id)        
-        navegador(`/usuario/${id}`);        
+        localStorage.setItem('idUsuario', id)
+        navegador(`/usuario/${id}`);
     }
 
     useEffect(() => {
         getUsuario()
-        getEmpleados();        
+        getEmpleados();
     }, [token]);
 
     return (
         <div className="container">
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fecha} />
-                <label className="">Administrador</label>
-                <input type="text" value={nombre} readOnly />
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entarda" value={fecha} />
+                <label className="etiqueta" htmlFor="nombre_admin">Administrador</label>
+                <input type="text" id="nombre_admin" name="nombre_admin" className="entarda" value={nombre} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">No.Trabajador</th>                            
-                            <th className="">Nombre del empleado</th>
-                            <th className="">Cedula profesional</th>
-                            <th className="">Ocupación</th>
-                            <th className="">Teléfono</th>
+                            <th className="etiqueta">No.Trabajador</th>
+                            <th className="etiqueta">Nombre del empleado</th>
+                            <th className="etiqueta">Cedula profesional</th>
+                            <th className="etiqueta">Ocupación</th>
+                            <th className="etiqueta">Teléfono</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {detallesEmpleados.map((empleados, index) => (
                             <tr key={index} onClick={() => handleClick(empleados.usuario)}>
-                                <td className="">{empleados.no_trabajador}</td>                                
-                                <td className="">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>                                
-                                <td className="">{empleados.cedula}</td>
-                                <td className="">{empleados.ocupacion}</td>
-                                <td className="">{empleados.telefono}</td>
+                                <td className="etiqueta">{empleados.no_trabajador}</td>
+                                <td className="etiqueta">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>
+                                <td className="etiqueta">{empleados.cedula}</td>
+                                <td className="etiqueta">{empleados.ocupacion}</td>
+                                <td className="etiqueta">{empleados.telefono}</td>
                             </tr>
                         ))}
                     </tbody>

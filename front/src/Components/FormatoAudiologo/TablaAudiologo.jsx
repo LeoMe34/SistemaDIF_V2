@@ -108,36 +108,36 @@ export function TablaAudiologo() {
     return (
         <div className="container">
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fechaActual}/>
-                <label className="">Nombre del nutriólogo</label>
-                <input type="text" value={nombre} readOnly />
-                <label className="">Cedula profesional</label>
-                <input type="text" value={cedula} readOnly />
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
+                <label className="etiqueta" htmlFor="nombre_audi">Nombre del audiólogo</label>
+                <input type="text" id="nombre_audi" name="nombre_audi" className="entrada" value={nombre} readOnly />
+                <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
+                <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">No.Expediente</th>
-                            <th className="">Nombre</th>
-                            <th className="">Visita</th>
-                            <th className="">Referencia</th>
-                            <th className="">Sexo</th>
-                            <th className="">Edad</th>
-                            <th className="">Diagnóstico</th>
+                            <th className="etiqueta">No.Expediente</th>
+                            <th className="etiqueta">Nombre</th>
+                            <th className="etiqueta">Visita</th>
+                            <th className="etiqueta">Referencia</th>
+                            <th className="etiqueta">Sexo</th>
+                            <th className="etiqueta">Edad</th>
+                            <th className="etiqueta">Diagnóstico</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {fichasMedicas.map((ficha, index) => (
                             <tr key={index}>
-                                <td className="">{ficha.paciente}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{convertirVisita(ficha.extras.visita)}</td>
-                                <td className="">{convertirReferencia(ficha.extras.referencia, ficha.extras.lugar_referencia)}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
-                                <td className="">{ficha.diagnostico}</td>
+                                <td className="etiqueta">{ficha.paciente}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
+                                <td className="etiqueta">{convertirVisita(ficha.extras.visita)}</td>
+                                <td className="etiqueta">{convertirReferencia(ficha.extras.referencia, ficha.extras.lugar_referencia)}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="etiqueta">{ficha.diagnostico}</td>
                             </tr>
                         ))}
                     </tbody>

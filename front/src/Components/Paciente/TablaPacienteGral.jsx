@@ -52,38 +52,38 @@ export function TablaPacienteGral() {
     return (
         <div className="container">
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly />
-                <label className="">Enfermero(a) responsable: </label>
-                <input type="text" value={nombre} readOnly />
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
+                <label className="etiqueta" htmlFor="nombre_recepcion">Recepcionista responsable: </label>
+                <input type="text" id="nombre_recepcion" name="nombre_recepcion" className="entrada" value={nombre} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">No.Expediente</th>
-                            <th className="">CURP</th>
-                            <th className="">Nombre</th>
-                            <th className="">Edad</th>
-                            <th className="">Sexo</th>
-                            <th className="">Número telefónico</th>
-                            <th className="">Colonia</th>
-                            <th className="">Dirección</th>
-                            <th className="">Nacionalidad</th>
+                            <th className="etiqueta">No.Expediente</th>
+                            <th className="etiqueta">CURP</th>
+                            <th className="etiqueta">Nombre</th>
+                            <th className="etiqueta">Edad</th>
+                            <th className="etiqueta">Sexo</th>
+                            <th className="etiqueta">Número telefónico</th>
+                            <th className="etiqueta">Colonia</th>
+                            <th className="etiqueta">Dirección</th>
+                            <th className="etiqueta">Nacionalidad</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {detallesPacientes.map((paciente, index) => (
                             <tr key={index}>
-                                <td className="">{paciente.no_expediente}</td>
-                                <td className="">{paciente.curp}</td>
-                                <td className="">{paciente.datosPersonalesPacient.nombre + " " + paciente.datosPersonalesPacient.apellidoP + " " + paciente.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{paciente.datosPersonalesPacient.edad}</td>
-                                <td className="">{paciente.datosPersonalesPacient.sexo}</td>
-                                <td className="">{paciente.datosContactoPacient.telefono}</td>
-                                <td className="">{paciente.datosDireccionPacient.colonia}</td>
-                                <td className="">{paciente.datosDireccionPacient.direccion}</td>
-                                <td className="">{paciente.datosPersonalesPacient.nacionalidad}</td>
+                                <td className="etiqueta">{paciente.no_expediente}</td>
+                                <td className="etiqueta">{paciente.curp}</td>
+                                <td className="etiqueta">{paciente.datosPersonalesPacient.nombre + " " + paciente.datosPersonalesPacient.apellidoP + " " + paciente.datosPersonalesPacient.apellidoM}</td>
+                                <td className="etiqueta">{paciente.datosPersonalesPacient.edad}</td>
+                                <td className="etiqueta">{paciente.datosPersonalesPacient.sexo}</td>
+                                <td className="etiqueta">{paciente.datosContactoPacient.telefono}</td>
+                                <td className="etiqueta">{paciente.datosDireccionPacient.colonia}</td>
+                                <td className="etiqueta">{paciente.datosDireccionPacient.direccion}</td>
+                                <td className="etiqueta">{paciente.datosPersonalesPacient.nacionalidad}</td>
                             </tr>
                         ))}
                     </tbody>

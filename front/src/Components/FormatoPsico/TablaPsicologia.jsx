@@ -132,41 +132,40 @@ export function TablaPsicologia() {
 
     return (
         <div className="container">
+            <BuscarPacientePsico isMostrarExp={true}></BuscarPacientePsico>
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly />
-                <label className="">Psicólogo(a): </label>
-                <input type="text" value={nombre} readOnly />
-                <label className="">Cedula profesional</label>
-                <input type="text" value={cedula} readOnly />
-
-                <BuscarPacientePsico isMostrarExp={true}></BuscarPacientePsico>
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
+                <label className="etiqueta" htmlFor="nombre_psico">Psicólogo(a): </label>
+                <input type="text" id="nombre_psico" name="nombre_psico" className="entrada" value={nombre} readOnly />
+                <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
+                <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">No.Expediente</th>
-                            <th className="">Nombre</th>
-                            <th className="">Edad</th>
-                            <th className="">Domicilio</th>
-                            <th className="">Teléfono</th>
-                            <th className="">Motivo de consulta</th>
-                            <th className="">Valoración</th>
-                            <th className="">Visita</th>
+                            <th className="etiqueta">No.Expediente</th>
+                            <th className="etiqueta">Nombre</th>
+                            <th className="etiqueta">Edad</th>
+                            <th className="etiqueta">Domicilio</th>
+                            <th className="etiqueta">Teléfono</th>
+                            <th className="etiqueta">Motivo de consulta</th>
+                            <th className="etiqueta">Valoración</th>
+                            <th className="etiqueta">Visita</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {fichalPsico.map((ficha, index) => (
                             <tr key={index}>
-                                <td className="">{ficha.paciente}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
-                                <td className="">{detallesPacientes[index]?.datosDireccionPacient?.direccion + ", " + detallesPacientes[index]?.datosDireccionPacient?.colonia}</td>
-                                <td className="">{detallesPacientes[index]?.datosContactoPacient?.telefono}</td>
-                                <td className="">{convertirConsulta(ficha.visita.tipo_consulta)}</td>
-                                <td className="">{ficha.tratamiento.valoracion}</td>
-                                <td className="">{convertirVisita(ficha.visita.tipo_visita)}</td>
+                                <td className="etiqueta">{ficha.paciente}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosDireccionPacient?.direccion + ", " + detallesPacientes[index]?.datosDireccionPacient?.colonia}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosContactoPacient?.telefono}</td>
+                                <td className="etiqueta">{convertirConsulta(ficha.visita.tipo_consulta)}</td>
+                                <td className="etiqueta">{ficha.tratamiento.valoracion}</td>
+                                <td className="etiqueta">{convertirVisita(ficha.visita.tipo_visita)}</td>
                             </tr>
                         ))}
                     </tbody>

@@ -128,38 +128,38 @@ export function TablaOdontologia() {
             <BusquedaPaciente isMostrarExp={true}></BusquedaPaciente>
 
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly />
-                <label className="">Nombre del medico</label>
-                <input type="text" value={nombre} readOnly />
-                <label className="">Cedula profesional</label>
-                <input type="text" value={cedula} readOnly />
-                <label className="">Localidad sede: Coatzacoalcos</label>
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
+                <label className="etiqueta" htmlFor="nombre_odonto">Nombre del odontólogo</label>
+                <input type="text" id="nombre_odonto" name="nombre_odonto" className="entrada" value={nombre} readOnly />
+                <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
+                <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
+                <label className="etiqueta">Localidad sede: Coatzacoalcos</label>
 
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">Nombre</th>
-                            <th className="">No.Expediente</th>
-                            <th className="">Sexo</th>
-                            <th className="">Edad</th>
-                            <th className="">Referencia</th>
-                            <th className="">Estudios externos</th>
-                            <th className="">Diagnóstico </th>
+                            <th className="etiqueta">Nombre</th>
+                            <th className="etiqueta">No.Expediente</th>
+                            <th className="etiqueta">Sexo</th>
+                            <th className="etiqueta">Edad</th>
+                            <th className="etiqueta">Referencia</th>
+                            <th className="etiqueta">Estudios externos</th>
+                            <th className="etiqueta">Diagnóstico </th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {historialOdonto.map((historial, index) => (
                             <tr key={index}>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{historial.paciente}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
-                                <td className="">{convertirReferencia(historial)}</td>
-                                <td className="">{convertirEstudios(historial)}</td>
-                                <td className="">
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
+                                <td className="etiqueta">{historial.paciente}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.sexo}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="etiqueta">{convertirReferencia(historial)}</td>
+                                <td className="etiqueta">{convertirEstudios(historial)}</td>
+                                <td className="etiqueta">
                                     {diagnosticos[index]?.length > 0 ? diagnosticos[index][0].diagnostico : '-'}
                                 </td>
 

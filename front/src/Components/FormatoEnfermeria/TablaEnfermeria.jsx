@@ -115,32 +115,32 @@ export function TablaEnfermeria() {
     return (
         <div className="container">
             <div className="">
-                <label className="">Fecha</label>
-                <input type="date" value={fechaActual} readOnly/>
-                <label className="">Enfermero(a) responsable: </label>
-                <input type="text" value={nombre} readOnly/>
+                <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
+                <label className="etiqueta" htmlFor="nombre_enfermero">Enfermero(a) responsable: </label>
+                <input type="text" id="nombre_enfermero" name="nombre_enfermero" className="entrada" value={nombre} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
-                            <th className="">No.Expediente</th>
-                            <th className="">Nombre</th>
-                            <th className="">Edad</th>
-                            <th className="">Servicio</th>
-                            <th className="">Población</th>
-                            <th className="">Nacionalidad</th>
+                            <th className="etiqueta">No.Expediente</th>
+                            <th className="etiqueta">Nombre</th>
+                            <th className="etiqueta">Edad</th>
+                            <th className="etiqueta">Servicio</th>
+                            <th className="etiqueta">Población</th>
+                            <th className="etiqueta">Nacionalidad</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {fichasTecnicas.map((ficha, index) => (
                             <tr key={index}>
-                                <td className="">{ficha.paciente}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
-                                <td className="">{convertirServicio(ficha.servicio_enfermeria)}</td>
-                                <td className="">{convertirPoblacion(ficha)}</td>
-                                <td className="">{detallesPacientes[index]?.datosPersonalesPacient.nacionalidad}</td>
+                                <td className="etiqueta">{ficha.paciente}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.edad}</td>
+                                <td className="etiqueta">{convertirServicio(ficha.servicio_enfermeria)}</td>
+                                <td className="etiqueta">{convertirPoblacion(ficha)}</td>
+                                <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nacionalidad}</td>
                             </tr>
                         ))}
                     </tbody>
