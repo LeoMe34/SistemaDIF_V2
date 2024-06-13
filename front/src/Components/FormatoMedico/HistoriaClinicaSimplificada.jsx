@@ -139,22 +139,22 @@ export function HistoriaClinicaSimplificada() {
                             para que ya no tenga que estar llenandolo */}
                             <label className='etiqueta' htmlFor="num_consultorio">N° consultorio: </label>
                             <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
-                                value={historiaClinica?.referenciaMed?.num_consultorio} />
+                                value={historiaClinica?.referenciaMed?.num_consultorio} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="fecha">Fecha:</label>
                             <input className="entrada" id='fecha' name='fecha' type="date"
-                                value={historiaClinica?.fecha_elaboracion} />
+                                value={historiaClinica?.fecha_elaboracion} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="referencia">Referencia:</label>
                             <input className="entrada" id='referencia' name='referencia' type="text"
-                                value={convertirReferencia(historiaClinica?.referenciaMed?.referencia)} />
+                                value={convertirReferencia(historiaClinica?.referenciaMed?.referencia)} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
                             <input className="entrada" id='lugar' name='lugar' type="text"
-                                value={historiaClinica?.referenciaMed?.lugar_referencia} />
+                                value={historiaClinica?.referenciaMed?.lugar_referencia} readOnly />
                         </div>
                     </div>
                 </div>
@@ -165,12 +165,12 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tipo_familia">Tipo de familia: </label>
                             <input className="entrada" id='tipo_familia' name='tipo_familia' type="text"
-                                value={historiaClinica?.datosFamiliares?.tipo_familia} />
+                                value={historiaClinica?.datosFamiliares?.tipo_familia} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="rol_madre">Rol de madre: </label>
                             <input className="entrada" id='rol_madre' name='rol_madre' type="text"
-                                value={historiaClinica?.datosFamiliares?.rol_madre} />
+                                value={historiaClinica?.datosFamiliares?.rol_madre} readOnly />
                         </div>
                     </div>
 
@@ -180,25 +180,25 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="familia">Familia:</label>
                             <input className="entrada" id='familia' name='familia' type="text"
-                                value={historiaClinica?.datosFamiliares?.familia} />
+                                value={historiaClinica?.datosFamiliares?.familia} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="disfuncional">Disfuncionales familiares:</label>
                             <input className="entrada" id='disfuncional' name='disfuncional' type="text"
-                                value={historiaClinica?.datosFamiliares?.disfuncional} />
+                                value={historiaClinica?.datosFamiliares?.disfuncional} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="informante">Informante: </label>
                             <input className="entrada" id='informante' name='informante' type="text"
-                                value={historiaClinica?.informante} />
+                                value={historiaClinica?.informante} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="estudios">Estudios externo: </label>
                             <input className="entrada" id='estudios' name='estudios' type="text"
-                                value={historiaClinica?.estudiosExter?.estudios} />
+                                value={historiaClinica?.estudiosExter?.estudios} readOnly />
                         </div>
                     </div>
 
@@ -214,7 +214,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
                             <input className="entrada" id='diabetes' name='diabetes' type="text"
-                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.diabetes)} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.diabetes)} readOnly />
                             {/*showPDiabetes && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
@@ -227,7 +227,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
                             <input className="entrada" id='hipertension' name='hipertension' type="text"
-                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension)} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension)} readOnly />
                             {/*showPHiper && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
@@ -240,7 +240,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <input className="entrada" id='cancer' name='cancer' type="text"
-                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer)} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer)} readOnly />
                             {/*showPCancer && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
@@ -253,7 +253,7 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <input className="entrada" id='cardiopatia' name='cardiopatia' type="text"
-                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia)} />
+                                value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia)} readOnly />
                             {/*showPCardio && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
@@ -269,7 +269,7 @@ export function HistoriaClinicaSimplificada() {
                     <div className="col">
                         <label className='form-check-label etiqueta' htmlFor="otros_ant">Otros</label>
                         <textarea name="otros_ant" id="otros_ant" className="text-amplio"
-                            value={historiaClinica?.antHerediPatM?.otros}></textarea>
+                            value={historiaClinica?.antHerediPatM?.otros} readOnly></textarea>
                     </div>
                 </div>
 
@@ -280,17 +280,17 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="alimentacion">Alimentación</label>
                             <textarea name="alimentacion" id="alimentacion" className="text-amplio"
-                                value={historiaClinica?.antPersoNoPatM?.alimentacion}></textarea>
+                                value={historiaClinica?.antPersoNoPatM?.alimentacion} readOnly></textarea>
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="habitacion">Habitación</label>
                             <textarea name="habitacion" id="habitacion" className="text-amplio"
-                                value={historiaClinica?.antPersoNoPatM?.habitacion}></textarea>
+                                value={historiaClinica?.antPersoNoPatM?.habitacion} readOnly></textarea>
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="higiene">Higiene personal</label>
                             <textarea name="higiene" id="higiene" className="text-amplio"
-                                value={historiaClinica?.antPersoNoPatM?.higiene}></textarea>
+                                value={historiaClinica?.antPersoNoPatM?.higiene} readOnly></textarea>
                         </div>
                     </div>
                 </div>
@@ -302,24 +302,24 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="medicosQT">Médicos,quirúrgicos,transfusiones</label>
                             <textarea name="medicosQT" id="medicosQT" className="text-amplio"
-                                value={historiaClinica?.antPersoPatM?.medicosQT}></textarea>
+                                value={historiaClinica?.antPersoPatM?.medicosQT} readOnly></textarea>
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tabaquismoAA">Tabaquismo,alcoholismo,alérgicos</label>
                             <textarea name="tabaquismoAA" id="tabaquismoAA" className="text-amplio"
-                                value={historiaClinica?.antPersoPatM?.tabaquismoAA}></textarea>
+                                value={historiaClinica?.antPersoPatM?.tabaquismoAA} readOnly></textarea>
                         </div>
                     </div>
                     <div className='row'>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos</label>
                             <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
-                                value={historiaClinica?.antPersoPatM?.tendenciaDM}></textarea>
+                                value={historiaClinica?.antPersoPatM?.tendenciaDM} readOnly></textarea>
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="otros_antPat">Otros</label>
                             <textarea name="otros_antPat" id="otros_antPat" className="text-amplio"
-                                value={historiaClinica?.antPersoPatM?.otros}></textarea>
+                                value={historiaClinica?.antPersoPatM?.otros} readOnly></textarea>
                         </div>
                     </div>
                 </div>
@@ -333,18 +333,18 @@ export function HistoriaClinicaSimplificada() {
                                 <div className='col'>
                                     <label className='etiqueta' htmlFor="menarca">Menarca: </label>
                                     <input className="entrada" id='menarca' name='menarca' type="text"
-                                        value={historiaClinica?.ginecobMed?.menarca} />
+                                        value={historiaClinica?.ginecobMed?.menarca} readOnly />
 
                                 </div>
                                 <div className='col'>
                                     <label className='etiqueta' htmlFor="vida_sexual">Inicio de vida sexual activa: </label>
                                     <input className="entrada" id='vida_sexual' name='vida_sexual' type="text"
-                                        value={historiaClinica?.ginecobMed?.vida_sexual} />
+                                        value={historiaClinica?.ginecobMed?.vida_sexual} readOnly />
                                 </div>
                                 <div className='col'>
                                     <label className='etiqueta' htmlFor="menstruacion">Ultima menstruación</label>
                                     <input className="entrada" id='menstruacion' name='menstruacion' type="text"
-                                        value={historiaClinica?.ginecobMed?.menstruacion} />
+                                        value={historiaClinica?.ginecobMed?.menstruacion} readOnly />
                                 </div>
                             </div>
                         </div>
@@ -356,22 +356,22 @@ export function HistoriaClinicaSimplificada() {
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="num_embarazos">N° embarazos: </label>
                                             <input className="entrada" id='num_embarazos' name='num_embarazos' type="text"
-                                                value={historiaClinica?.ginecobMed?.num_embarazos} />
+                                                value={historiaClinica?.ginecobMed?.num_embarazos} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="partos">Partos:</label>
                                             <input className="entrada" id='partos' name='partos' type="text"
-                                                value={historiaClinica?.ginecobMed?.partos} />
+                                                value={historiaClinica?.ginecobMed?.partos} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="abortos">Abortos</label>
                                             <input className="entrada" id='abortos' name='abortos' type="text"
-                                                value={historiaClinica?.ginecobMed?.abortos} />
+                                                value={historiaClinica?.ginecobMed?.abortos} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="cesarea">Cesareas</label>
                                             <input className="entrada" id='cesarea' name='cesarea' type="text"
-                                                value={historiaClinica?.ginecobMed?.cesarea} />
+                                                value={historiaClinica?.ginecobMed?.cesarea} readOnly />
                                         </div>
                                     </div>
                                 </div>
@@ -382,22 +382,22 @@ export function HistoriaClinicaSimplificada() {
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="ultimo_parto">Fecha de ultimo parto: </label>
                                             <input className="entrada" id='ultimo_parto' name='ultimo_parto' type="text"
-                                                value={historiaClinica?.ginecobMed?.ultimo_parto} />
+                                                value={historiaClinica?.ginecobMed?.ultimo_parto} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="num_hijos">N° de hijos:</label>
                                             <input className="entrada" id='num_hijos' name='num_hijos' type="text"
-                                                value={historiaClinica?.ginecobMed?.num_hijos} />
+                                                value={historiaClinica?.ginecobMed?.num_hijos} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="macrosomicos">Macrosomicos vivos</label>
                                             <input className="entrada" id='macrosomicos' name='macrosomicos' type="text"
-                                                value={historiaClinica?.ginecobMed?.macrosomicos} />
+                                                value={historiaClinica?.ginecobMed?.macrosomicos} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="bajo_peso">Bajo peso al nacer</label>
                                             <input className="entrada" id='bajo_peso' name='bajo_peso' type="text"
-                                                value={historiaClinica?.ginecobMed?.bajo_peso} />
+                                                value={historiaClinica?.ginecobMed?.bajo_peso} readOnly />
                                         </div>
                                     </div>
                                 </div>
@@ -408,22 +408,22 @@ export function HistoriaClinicaSimplificada() {
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="num_parejas">N° de parejas</label>
                                             <input className="entrada" id='num_parejas' name='num_parejas' type="text"
-                                                value={historiaClinica?.ginecobMed?.num_parejas} />
+                                                value={historiaClinica?.ginecobMed?.num_parejas} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="heterosexuales">Heterosexuales:</label>
                                             <input className="entrada" id='heterosexuales' name='heterosexuales' type="text"
-                                                value={historiaClinica?.ginecobMed?.heterosexuales} />
+                                                value={historiaClinica?.ginecobMed?.heterosexuales} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="homosexuales">Homosexuales</label>
                                             <input className="entrada" id='homosexuales' name='homosexuales' type="text"
-                                                value={historiaClinica?.ginecobMed?.homosexuales} />
+                                                value={historiaClinica?.ginecobMed?.homosexuales} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="bisexuales">Bisexuales</label>
                                             <input className="entrada" id='bisexuales' name='bisexuales' type="text"
-                                                value={historiaClinica?.ginecobMed?.bisexuales} />
+                                                value={historiaClinica?.ginecobMed?.bisexuales} readOnly />
                                         </div>
                                     </div>
                                 </div>
@@ -434,22 +434,22 @@ export function HistoriaClinicaSimplificada() {
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="diu">DIU</label>
                                             <input className="entrada" id='diu' name='diu' type="text"
-                                                value={historiaClinica?.ginecobMed?.diu} />
+                                                value={historiaClinica?.ginecobMed?.diu} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="hormonales">Hormonales</label>
                                             <input className="entrada" id='hormonales' name='hormonales' type="text"
-                                                value={historiaClinica?.ginecobMed?.hormonales} />
+                                                value={historiaClinica?.ginecobMed?.hormonales} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="quirurgico">Quirurgico</label>
                                             <input className="entrada" id='quirurgico' name='quirurgico' type="text"
-                                                value={historiaClinica?.ginecobMed?.quirurgico} />
+                                                value={historiaClinica?.ginecobMed?.quirurgico} readOnly />
                                         </div>
                                         <div className='col'>
                                             <label className='etiqueta' htmlFor="otrosMP">Otros</label>
                                             <input className="entrada" id='otrosMP' name='otrosMP' type="text"
-                                                value={historiaClinica?.ginecobMed?.otros} />
+                                                value={historiaClinica?.ginecobMed?.otros} readOnly />
                                         </div>
                                     </div>
                                 </div>
@@ -466,12 +466,12 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="padecimiento">Padecimiento actual</label>
                             <textarea id="padecimiento" placeholder="Dolor de garganta..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.interrogatorio?.padecimiento} />
+                                value={historiaClinica?.interrogatorio?.padecimiento} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="aparatos_sistemas">Aparatos y sistemas</label>
                             <textarea id="aparatos_sistemas" placeholder="Sistema nervioso..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.interrogatorio?.aparatos_sistemas} />
+                                value={historiaClinica?.interrogatorio?.aparatos_sistemas} readOnly />
                         </div>
                     </div>
                 </div>
@@ -481,12 +481,12 @@ export function HistoriaClinicaSimplificada() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="auxiliares">Auxiliares de diagnóstico previo</label>
                             <textarea id="auxiliares" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.interrogatorio?.auxiliares} />
+                                value={historiaClinica?.interrogatorio?.auxiliares} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="tratamientos_previos">Manejo de tratamiento previos</label>
                             <textarea id="tratamientos_previos" placeholder="Rayos X..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.interrogatorio?.tratamientos_previos} />
+                                value={historiaClinica?.interrogatorio?.tratamientos_previos} readOnly />
                         </div>
                     </div>
                 </div>
@@ -500,17 +500,17 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="inspeccion_gral">Inspección general:</label>
                             <textarea id="inspeccion_gral" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.inspeccion_gral} />
+                                value={historiaClinica?.exploracionFisica?.inspeccion_gral} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="cabeza">Cabeza:</label>
                             <textarea id="cabeza" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.cabeza} />
+                                value={historiaClinica?.exploracionFisica?.cabeza} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="cuello">Cuello:</label>
                             <textarea id="cuello" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.cuello} />
+                                value={historiaClinica?.exploracionFisica?.cuello} readOnly />
                         </div>
                     </div>
 
@@ -518,17 +518,17 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="torax">Tórax:</label>
                             <textarea id="torax" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.torax} />
+                                value={historiaClinica?.exploracionFisica?.torax} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="abdomen">Abdomen:</label>
                             <textarea id="abdomen" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.abdomen} />
+                                value={historiaClinica?.exploracionFisica?.abdomen} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="columna_vertical">Columna vertical:</label>
                             <textarea id="columna_vertical" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.columna_vertical} />
+                                value={historiaClinica?.exploracionFisica?.columna_vertical} readOnly />
                         </div>
                     </div>
 
@@ -536,12 +536,12 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="genitales_externos">Genitales externos:</label>
                             <textarea id="genitales_externos" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.genitales_externos} />
+                                value={historiaClinica?.exploracionFisica?.genitales_externos} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="extremidades">Extremidades:</label>
                             <textarea id="extremidades" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.exploracionFisica?.extremidades} />
+                                value={historiaClinica?.exploracionFisica?.extremidades} readOnly />
                         </div>
                     </div>
 
@@ -552,17 +552,17 @@ export function HistoriaClinicaSimplificada() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
                             <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.diagnostico?.diagnostico} />
+                                value={historiaClinica?.diagnostico?.diagnostico} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tratamiento_integral">Tratamiento y manejo integral:</label>
                             <textarea id="tratamiento_integral" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.diagnostico?.tratamiento_integral} />
+                                value={historiaClinica?.diagnostico?.tratamiento_integral} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="pronostico">Pronostico:</label>
                             <textarea id="pronostico" placeholder="..." className="text-amplio" rows="10" cols="30"
-                                value={historiaClinica?.diagnostico?.pronostico} />
+                                value={historiaClinica?.diagnostico?.pronostico} readOnly />
                         </div>
                     </div>
                 </div>
@@ -572,7 +572,7 @@ export function HistoriaClinicaSimplificada() {
                 <div className='row'>
                     <div className="col">
                         <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                        <PDFViewer detalles={historiaClinica} token={token} />
+                        <PDFViewer detalles={historiaClinica} token={token} readOnly />
                     </div>
                 </div>
             </div>

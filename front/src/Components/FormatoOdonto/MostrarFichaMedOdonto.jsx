@@ -116,19 +116,19 @@ export function MostrarFichaMedOdonto() {
                     <div className="col">
                         <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
                         <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
-                            value={fichaMedOdonto?.motivo_consulta} />
+                            value={fichaMedOdonto?.motivo_consulta} readOnly/>
                     </div>
 
                     <div className="col">
                         <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
                         <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
-                            value={fichaMedOdonto?.diagnostico} />
+                            value={fichaMedOdonto?.diagnostico} readOnly/>
                     </div>
 
                     <div className="col">
                         <label className="etiqueta" htmlFor="observacion">Observación</label>
                         <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
-                            value={fichaMedOdonto?.observacion} />
+                            value={fichaMedOdonto?.observacion} readOnly/>
                     </div>
                 </div>
 

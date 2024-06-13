@@ -82,17 +82,17 @@ export function MostrarFichaTecnicaMedico() {
                 <div className="mt-2 row">
                     <div className="col">
                         <label className="etiqueta" htmlFor="motivoCons">Motivo de consulta</label>
-                        <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30" value={detalles.motivo_consulta} />
+                        <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30" value={detalles.motivo_consulta} readOnly/>
                     </div>
 
                     <div className="col">
                         <label className="etiqueta" htmlFor="diagMedi">Diagnostico medico</label>
-                        <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30" value={detalles.diagnostico} />
+                        <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30" value={detalles.diagnostico} readOnly/>
                     </div>
 
                     <div className="col">
                         <label className="etiqueta" htmlFor="observacion">Observación</label>
-                        <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30" value={detalles.observacion} />
+                        <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30" value={detalles.observacion} readOnly/>
                     </div>
                 </div>
 

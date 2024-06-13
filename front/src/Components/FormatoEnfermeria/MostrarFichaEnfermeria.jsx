@@ -42,7 +42,7 @@ export function MostrarFichaEnfermeria() {
                 headers: {
                     Authorization: `Token ${token}`
                 }
-            });            
+            });
             setEmpleado(response.data)
         } catch (error) {
             console.error('Error al obtener al empleado', error);
@@ -101,13 +101,13 @@ export function MostrarFichaEnfermeria() {
                     <div className='col'>
                         <label className='etiqueta' htmlFor="fecha">Fecha: </label>
                         <input className="entrada" id='fecha' name='fecha' type="date"
-                            value={detalles.fecha} />
+                            value={detalles.fecha} readOnly />
                     </div>
 
                     <div className='col'>
                         <label className='etiqueta' htmlFor="es_trabajador">Trabajador: </label>
-                        <input className="opciones" id='es_trabajador' name='es_trabajador' type="text"
-                            value={convertirTrabajador(detalles.trabajador)} />
+                        <input className="entrada" id='es_trabajador' name='es_trabajador' type="text"
+                            value={convertirTrabajador(detalles.trabajador)} readOnly />
                     </div>
 
                 </div>
@@ -118,18 +118,18 @@ export function MostrarFichaEnfermeria() {
                     <div className='col'>
                         <label className='etiqueta' htmlFor="peso">Peso: </label>
                         <input className="entrada" id='peso' name='peso' type="text"
-                            value={detalles.datosFisicos?.peso} />
+                            value={detalles.datosFisicos?.peso} readOnly />
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="talla">Talla: </label>
                         <input className="entrada" id='talla' name='talla' type="text"
-                            value={detalles.datosFisicos?.talla} />
+                            value={detalles.datosFisicos?.talla} readOnly />
                     </div>
 
                     <div className='col'>
                         <label className='etiqueta' htmlFor="imc">IMC: </label>
                         <input className="entrada" id='imc' name='imc' type="text"
-                            value={detalles.datosFisicos?.imc} />
+                            value={detalles.datosFisicos?.imc} readOnly />
                     </div>
                 </div>
             </div>
@@ -142,18 +142,18 @@ export function MostrarFichaEnfermeria() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tipo_atencion">Tipo de atención</label>
                             <input className="entrada" id='tipo_atencion' name='tipo_atencion' type="text"
-                                value={detalles.servicio_enfermeria} />
+                                value={detalles.servicio_enfermeria} readOnly />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="presion">T/A: </label>
                             <input className="entrada" id='presion' name='presion' type="text"
-                                value={detalles.signosVitales?.presion} />
+                                value={detalles.signosVitales?.presion} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="frecuencia_cardiaca">Frecuencia cardiaca: </label>
                             <input className="entrada" id='frecuencia_cardiaca' name='frecuencia_cardiaca' type="text"
-                                value={detalles.signosVitales?.frecuenciaC} />
+                                value={detalles.signosVitales?.frecuenciaC} readOnly />
                         </div>
                     </div>
                 </div>
@@ -163,19 +163,19 @@ export function MostrarFichaEnfermeria() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="frecuencia_respiratoria">Frecuencia respiratoria: </label>
                             <input className="entrada" id='frecuencia_respiratoria' name='frecuencia_respiratoria' type="text"
-                                value={detalles.signosVitales?.frecuenciaR} />
+                                value={detalles.signosVitales?.frecuenciaR} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="temperatura">Temperatura: </label>
                             <input className="entrada" id='temperatura' name='temperatura' type="text"
-                                value={detalles.signosVitales?.temperatura} />
+                                value={detalles.signosVitales?.temperatura} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="glicemia">Glicemia capilar: </label>
                             <input className="entrada" id='glicemia' name='glicemia' type="text"
-                                value={detalles.signosVitales?.glicemia} />
+                                value={detalles.signosVitales?.glicemia} readOnly />
                         </div>
                     </div>
                 </div>
@@ -185,18 +185,18 @@ export function MostrarFichaEnfermeria() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="religion">Religión: </label>
                             <input className="entrada" id='religion' name='religion' type="text"
-                                value={detalles.datosDemograficos?.religion} />
+                                value={detalles.datosDemograficos?.religion} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="escolaridad">Escolaridad: </label>
                             <input className="entrada" id='escolaridad' name='escolaridad' type="text"
-                                value={detalles.datosDemograficos?.escolaridad} />
+                                value={detalles.datosDemograficos?.escolaridad} readOnly />
                         </div>
 
                         <div className='col'>
                             <label className='etiqueta' htmlFor="tipo_poblacion">Tipo de población</label>
-                            <input className='entrada' value={tipoPoblacion} />
+                            <input className='entrada' value={tipoPoblacion} readOnly />
                         </div>
                     </div>
                 </div>
@@ -205,8 +205,8 @@ export function MostrarFichaEnfermeria() {
                     <div className='row'>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="enfermero">Enfermero</label>
-                            <input className="datos_lectura" id='enfermero' name='enfermero' type="text" 
-                            value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
+                            <input className="datos_lectura" id='enfermero' name='enfermero' type="text"
+                                value={empleado.nombre + " " + empleado.apellidoPaterno + " " + empleado.apellidoMaterno} readOnly />
                         </div>
                     </div>
                 </div>

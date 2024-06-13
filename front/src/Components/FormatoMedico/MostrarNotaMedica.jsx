@@ -120,17 +120,17 @@ export function MostrarNotaMedica() {
                     <div className='col'>
                         <label className='etiqueta' htmlFor="fecha">Fecha:</label>
                         <input className="entrada" id='fecha' name='fecha' type="text"
-                            value={notaMedica?.fecha_consulta} />
+                            value={notaMedica?.fecha_consulta} readOnly/>
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="hora">Hora:</label>
                         <input className="entrada" id='hora' name='hora' type="text"
-                            value={notaMedica?.hora_consulta} />
+                            value={notaMedica?.hora_consulta} readOnly/>
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="servicio">Servicio:</label>
                         <input className="entrada" id='servicio' name='servicio' type="text"
-                            value={notaMedica?.servicio} />
+                            value={notaMedica?.servicio} readOnly/>
                     </div>
                 </div>
             </div>
@@ -140,17 +140,17 @@ export function MostrarNotaMedica() {
                     <div className='col'>
                         <label className='etiqueta' htmlFor="diagnostico">Diagnóstico:</label>
                         <textarea id="diagnostico" placeholder="..." className="text-amplio" rows="5" cols="10"
-                            value={notaMedica?.diagnostico} />
+                            value={notaMedica?.diagnostico} readOnly/>
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="tratamiento">Tratamiento:</label>
                         <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="5" cols="10"
-                            value={notaMedica?.tratamiento} />
+                            value={notaMedica?.tratamiento} readOnly/>
                     </div>
                     <div className='col'>
                         <label className='etiqueta' htmlFor="observaciones">Observaciones:</label>
                         <textarea id="observaciones" placeholder="..." className="text-amplio" rows="5" cols="10"
-                            value={notaMedica?.observaciones} />
+                            value={notaMedica?.observaciones} readOnly/>
                     </div>
                 </div>
             </div>

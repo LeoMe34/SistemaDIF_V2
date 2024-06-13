@@ -145,7 +145,7 @@ export function MostrarReceta() {
             <div className="ml-10 mb-3 col">
                 <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
                 <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="10" cols="30"
-                    value={receta?.medicamento?.tratamiento} />
+                    value={receta?.medicamento?.tratamiento} readOnly/>
             </div>
             <div className='ml-10 mb-2 container'>
                 <div className='row'>

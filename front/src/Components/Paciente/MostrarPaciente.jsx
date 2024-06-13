@@ -205,24 +205,16 @@ export function MostrarPaciente() {
 
                         <div className="col">
                             <label className="form-label etiqueta" htmlFor="sexo">Sexo</label>
-                            <select name="sexo" id="sexo" className="opciones"
-                                value={detallePaciente.datosPersonalesPacient.sexo} disabled>
-                                <option value="" disabled selected>Elija la opción</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                            </select>
+                            <input name="sexo" id="sexo" className="entrada"
+                                value={detallePaciente.datosPersonalesPacient.sexo} readOnly />                                
                             {errors.sexo && <span>Es necesario este campo</span>}
                         </div>
 
                         {/*Aun falta que desglose la opción de otra */}
                         <div className="col">
                             <label className="form-label etiqueta" htmlFor="nacionalidad">Nacionalidad</label>
-                            <select name="nacionalidad" id="nacionalidad" className="opciones"
-                                value={detallePaciente.datosPersonalesPacient.nacionalidad} disabled>
-                                <option value="" disabled selected>Elija la opción</option>
-                                <option value="Mexicana">Mexicana</option>
-                                <option value="Extranjero">Otra</option>
-                            </select>
+                            <input name="nacionalidad" id="nacionalidad" className="entrada"
+                                value={detallePaciente.datosPersonalesPacient.nacionalidad} readOnly/>                                
                             {errors.nacionalidad && <span>Es necesario este campo</span>}
 
                             {/*mostrarOtraNacion && <div className="mb-5">
@@ -254,15 +246,8 @@ export function MostrarPaciente() {
                         ) : (
                             <div className="col">
                                 <label className="form-label etiqueta" htmlFor="estadoCivil">Estado civil</label>
-                                <select name="estadoCivil" id="estadoCivil" className="opciones"
-                                    value={detallePaciente.datosPersonalesPacient.estadoCivil} disabled>
-                                    <option value="" disabled selected>Elija la opción</option>
-                                    <option value="soltero">Soltero</option>
-                                    <option value="casado">Casado</option>
-                                    <option value="viudo">Viudo</option>
-                                    <option value="divorciado">Divorciado</option>
-                                    <option value="union_libre">Unión libre</option>
-                                </select>
+                                <input name="estadoCivil" id="estadoCivil" className="entrada"
+                                    value={estadoCivil} onChange={handleEstadoCivil} readOnly />
                                 {errors.estadoCivil && <span>Es necesario este campo</span>}
                             </div>
                         )}
