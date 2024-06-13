@@ -173,7 +173,7 @@ export function MostrarHistOdonto() {
                                     <input id="diabetes" type="text" className="entrada" name='diabetes'
                                         value={convertirReferencia(detalles.antHerediPato?.diabetesH)} readOnly
                                     />
-                                    {convertirReferencia(detalles.antHerediPato?.diabetesH) == 'Si' && (
+                                    {convertirReferencia(detalles.antHerediPato?.diabetesH) == 'Sí' && (
                                         <div className="col">
                                             <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
                                             <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
@@ -188,7 +188,7 @@ export function MostrarHistOdonto() {
                                         value={convertirReferencia(detalles.antHerediPato?.hipertH)} readOnly
                                     />
 
-                                    {convertirReferencia(detalles.antHerediPato?.hipertH) == 'Si' && (
+                                    {convertirReferencia(detalles.antHerediPato?.hipertH) == 'Sí' && (
                                         <div className="col">
                                             <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
                                             <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
@@ -203,7 +203,7 @@ export function MostrarHistOdonto() {
                                         value={convertirReferencia(detalles.antHerediPato?.cancerH)} readOnly
                                     />
 
-                                    {convertirReferencia(detalles.antHerediPato?.cancerH) == 'Si' && (
+                                    {convertirReferencia(detalles.antHerediPato?.cancerH) == 'Sí' && (
                                         <div className="col">
                                             <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
                                             <textarea name="par_cancer" id="par_cancer" className="text-amplio"
@@ -218,7 +218,7 @@ export function MostrarHistOdonto() {
                                         value={convertirReferencia(detalles.antHerediPato?.tuberculoH)} readOnly
                                     />
 
-                                    {convertirReferencia(detalles.antHerediPato?.tuberculoH) == 'Si' && (
+                                    {convertirReferencia(detalles.antHerediPato?.tuberculoH) == 'Sí' && (
                                         <div className="col">
                                             <label className="etiqueta" htmlFor="par_tubercolosis">Parentesco</label>
                                             <textarea name="par_tubercolosis" id="par_tubercolosis" className="text-amplio"
@@ -234,7 +234,7 @@ export function MostrarHistOdonto() {
                                         <input id="asma" type="text" className="entrada" name='asma'
                                             value={convertirReferencia(detalles.antHerediPato?.asmaH)} readOnly
                                         />
-                                        {convertirReferencia(detalles.antHerediPato?.asmaH) == 'Si' && (
+                                        {convertirReferencia(detalles.antHerediPato?.asmaH) == 'Sí' && (
                                             <div className="col">
                                                 <label className="etiqueta" htmlFor="par_asma">Parentesco</label>
                                                 <textarea name="par_asma" id="par_asma" className="text-amplio"
@@ -248,7 +248,7 @@ export function MostrarHistOdonto() {
                                         <input id="cardiovascular" type="text" className="entrada" name='cardiovascular'
                                             value={convertirReferencia(detalles.antHerediPato?.cardioH)} readOnly 
                                         />
-                                        {convertirReferencia(detalles.antHerediPato?.cardioH) == 'Si' && (
+                                        {convertirReferencia(detalles.antHerediPato?.cardioH) == 'Sí' && (
                                             <div className="col">
                                                 <label className="etiqueta" htmlFor="par_cardiovascular">Parentesco</label>
                                                 <textarea name="par_cardiovascular" id="par_cardiovascular" className="text-amplio"
@@ -262,7 +262,7 @@ export function MostrarHistOdonto() {
                                         <input id="epilepsia" type="text" className="entrada" name='epilepsia'
                                             value={convertirReferencia(detalles.antHerediPato?.epilepsiaH)} readOnly
                                         />
-                                        {convertirReferencia(detalles.antHerediPato?.epilepsiaH) == 'Si' && (
+                                        {convertirReferencia(detalles.antHerediPato?.epilepsiaH) == 'Sí' && (
                                             <div className="col">
                                                 <label className="etiqueta" htmlFor="par_epilepsia">Parentesco</label>
                                                 <textarea name="par_epilepsia" id="par_epilepsia" className="text-amplio"

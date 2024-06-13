@@ -215,52 +215,53 @@ export function HistoriaClinicaSimplificada() {
                             <label className="etiqueta" htmlFor="diabetes">Diabetes</label>
                             <input className="entrada" id='diabetes' name='diabetes' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.diabetes)} readOnly />
-                            {/*showPDiabetes && (
+
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.diabetes) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_diabetes">Parentesco</label>
                                     <textarea name="par_diabetes" id="par_diabetes" className="text-amplio"
-                                        {...register("par_diabetes", { required: false })}></textarea>
+                                        value={historiaClinica?.antHerediPatM?.par_diabetes} readOnly></textarea>
                                 </div>
-                            )*/}
+                            )}
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="hipertension">Hipertensión</label>
                             <input className="entrada" id='hipertension' name='hipertension' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension)} readOnly />
-                            {/*showPHiper && (
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_hipertension">Parentesco</label>
                                     <textarea name="par_hipertension" id="par_hipertension" className="text-amplio"
-                                        {...register("par_hipertension", { required: false })}></textarea>
+                                        value={historiaClinica?.antHerediPatM?.par_hipertension}></textarea>
                                 </div>
-                            )*/}
+                            )}
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <input className="entrada" id='cancer' name='cancer' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer)} readOnly />
-                            {/*showPCancer && (
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
                                     <textarea name="par_cancer" id="par_cancer" className="text-amplio"
-                                        {...register("par_cancer", { required: false })}></textarea>
+                                        value={historiaClinica?.antHerediPatM?.par_cancer}></textarea>
                                 </div>
-                            )*/}
+                            )}
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <input className="entrada" id='cardiopatia' name='cardiopatia' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia)} readOnly />
-                            {/*showPCardio && (
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
                                     <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
-                                        {...register("par_cardiopatia", { required: false })}></textarea>
+                                        value={historiaClinica?.antHerediPatM?.par_cardiopatia}></textarea>
                                 </div>
-                            )*/}
+                            )}
                         </div>
                     </div>
                 </div>
