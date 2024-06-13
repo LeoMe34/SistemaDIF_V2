@@ -1,3 +1,4 @@
+import { TablaPacientePsico } from "../Paciente/TablaPacientePsico"
 
 export function HomeRecepcionPsico() {
     return (
@@ -10,6 +11,7 @@ export function HomeRecepcionPsico() {
                     </ol>
                 </nav>
             </div>
+            <TablaPacientePsico></TablaPacientePsico>
         </div>
     )
 }
