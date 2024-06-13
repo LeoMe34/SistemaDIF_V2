@@ -4,7 +4,6 @@ import { useAuth } from '../../Contexto/AuthContext';
 
 export function TablaPacienteGral() {
     const { token } = useAuth();
-    const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombre, setNombre] = useState(null);
     const [detallesPacientes, setDetallesPacientes] = useState([]);
     const [fechaActual, setFechaActual] = useState('');
@@ -16,9 +15,7 @@ export function TablaPacienteGral() {
                     Authorization: `Token ${token}`
                 }
             });
-            const no_Empleado = response.data.user_info.no_trabajador;
             const nombre = response.data.user_info.nombre_empleado;
-            setNoEmpleado(no_Empleado);
             setNombre(nombre);
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);

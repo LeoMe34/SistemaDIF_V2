@@ -15,7 +15,6 @@ export function TablaPacientePsico() {
                     Authorization: `Token ${token}`
                 }
             });
-            const no_Empleado = response.data.user_info.no_trabajador;
             const nombre = response.data.user_info.nombre_empleado;
             setNombre(nombre);
         } catch (error) {
