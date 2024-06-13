@@ -53,13 +53,13 @@ export function Parte2() {
     };
 
     const validarParentesco = (parentesco) => {
-        const parentescoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü\s.-:,;()]{1,500}$/
+        const parentescoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ\s.-:,;()]{1,500}$/
 
         return parentescoRegex.test(parentesco)
     }
 
     const validarTexto = (texto) => {
-        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
 
         return textoRegex.test(texto)
     }

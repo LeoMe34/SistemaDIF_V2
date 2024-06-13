@@ -114,7 +114,7 @@ export function NotaSubsecuente1() {
     }, []);
 
     const validarTexto = (texto) => {
-        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,500}$/
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
 
         return textoRegex.test(texto)
     }

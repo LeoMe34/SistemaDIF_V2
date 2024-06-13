@@ -49,7 +49,7 @@ export function CrearUsuario() {
                         Authorization: `Token ${token}`
                     }
                 })
-                console.log(respuesta.data)
+            console.log(respuesta.data)
             setUsuarios(respuesta.data)
         } catch (error) {
             console.error("Ocurrió un error", error);
@@ -61,19 +61,19 @@ export function CrearUsuario() {
     }, [token]);
 
     const validarNoTrabajador = (noTrabajador) => {
-        const noTrabajadorRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,50}$/
+        const noTrabajadorRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-]{1,50}$/
 
         return noTrabajadorRegex.test(noTrabajador)
     }
 
     const validarEmail = (email) => {
-        const emailRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9_.+-]+@[A-Za-zÁÉÍÓÚáéíóúü0-9]+\.[A-Za-zÁÉÍÓÚáéíóúü0-9]+$/
+        const emailRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9_.+-]+@[A-Za-zÁÉÍÓÚáéíóúü0-9]+\.[A-Za-zÁÉÍÓÚáéíóúü0-9]+$/
         return emailRegex.test(email)
     }
 
     const validarContrasenia = (contrasenia) => {
         //El .* permite cualquier número de caracteres antes del dígito.        
-        const contraseniaRegex = /^(?=.*[0-9])[A-Za-zÁÉÍÓÚáéíóúü0-9@.+\-_]{8,150}$/
+        const contraseniaRegex = /^(?=.*[0-9])[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9@.+\-_]{8,150}$/
         return contraseniaRegex.test(contrasenia)
     }
 

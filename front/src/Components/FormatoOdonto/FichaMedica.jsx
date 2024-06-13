@@ -97,7 +97,7 @@ export function FichaMedica() {
     }, [noExpediente]);
 
     const validarTexto = (texto) => {
-        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,1000}$/
+        const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,1000}$/
 
         return textoRegex.test(texto)
     }

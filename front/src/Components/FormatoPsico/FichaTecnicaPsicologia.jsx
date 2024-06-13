@@ -82,19 +82,19 @@ export function FichaTecnicaPsicologia() {
     }
 
     const validarEscolaridad = (escolar) => {
-        const escolarRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-]{1,80}$/
+        const escolarRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-]{1,80}$/
 
         return escolarRegex.test(escolar)
     }
 
     const validarAcompanianteYParentesco = (acompanianteyParentesco) => {
-        const acompanianteyParentescoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü\s]{1,80}$/
+        const acompanianteyParentescoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ\s]{1,80}$/
 
         return acompanianteyParentescoRegex.test(acompanianteyParentesco)
     }
 
     const validarTexto = (entrada) => {
-        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9\s.-:,;()/]{1,10000}$/
+        const entradaRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,10000}$/
 
         return entradaRegex.test(entrada)
     }

@@ -69,31 +69,31 @@ export function CrearPacientePsico() {
     }
 
     const validarNombreCompleto = (nombreOApellido) => {
-        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü]{1,50}$/
+        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ]{1,50}$/
 
         return nombreCompletoRegex.test(nombreOApellido)
     }
 
     const validarOcupacion = (ocupacion) => {
-        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü][A-Za-zÁÉÍÓÚáéíóúü\s/,.-:()]*$/
+        const ocupacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ][A-Za-zÁÉÍÓÚáéíóúüñÑ\s/,.-:()]*$/
 
         return ocupacionRegex.test(ocupacion)
     }
 
     const validarColonia = (colonia) => {
-        const coloniaRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9.,\s-]{1,50}$/
+        const coloniaRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9.,\s-]{1,50}$/
 
         return coloniaRegex.test(colonia)
     }
 
     const validarDireccion = (direccion) => {
-        const direccionRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9.,#\s-]{1,50}$/
+        const direccionRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9.,#\s-]{1,50}$/
 
         return direccionRegex.test(direccion)
     }
 
     const validarCorreo = (correo) => {
-        const correoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü0-9_.+-]+@[A-Za-zÁÉÍÓÚáéíóúü0-9]+\.[A-Za-zÁÉÍÓÚáéíóúü0-9]+$/
+        const correoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9_.+-]+@[A-Za-zÁÉÍÓÚáéíóúü0-9]+\.[A-Za-zÁÉÍÓÚáéíóúü0-9]+$/
         return correoRegex.test(correo)
     }
 

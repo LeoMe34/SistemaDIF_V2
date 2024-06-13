@@ -114,7 +114,7 @@ export function FichaTecnicaEnfermeria() {
     }
 
     const validarReligionYEscolaridad = (religionYEscolar) => {
-        const religionYEscolaridadRegex = /^[A-Za-zÁÉÍÓÚáéíóúü\s]{1,50}$/
+        const religionYEscolaridadRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ\s]{1,50}$/
 
         return religionYEscolaridadRegex.test(religionYEscolar)
     }

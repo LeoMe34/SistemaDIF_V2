@@ -97,7 +97,7 @@ export function CrearEmpleado() {
 
 
     const validarNombreCompleto = (nombreOApellido) => {
-        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúü\s]{1,50}$/
+        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ\s]{1,50}$/
 
         return nombreCompletoRegex.test(nombreOApellido)
     }
