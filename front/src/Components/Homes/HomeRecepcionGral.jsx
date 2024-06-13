@@ -1,4 +1,5 @@
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import { TablaPacienteGral } from "../Paciente/TablaPacienteGral"
 
 export function HomeRecepcionGral() {
     return (
@@ -12,6 +13,8 @@ export function HomeRecepcionGral() {
                 </nav>
             </div>
             <BusquedaPaciente isHomePage={true} />
+
+            <TablaPacienteGral></TablaPacienteGral>
         </div>
     )
 }
