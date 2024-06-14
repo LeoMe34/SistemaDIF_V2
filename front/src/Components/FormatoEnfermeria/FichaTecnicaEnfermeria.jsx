@@ -90,6 +90,7 @@ export function FichaTecnicaEnfermeria() {
                 }
             })
             console.log(data)
+            navegador("/home_enfermeria")
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
