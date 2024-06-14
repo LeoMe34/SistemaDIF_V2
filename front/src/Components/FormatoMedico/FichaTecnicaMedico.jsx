@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function FichaTecnicaMedico() {
     const navegador = useNavigate()
@@ -118,6 +119,9 @@ export function FichaTecnicaMedico() {
             <div className="ml-10 container">
                 <div className="ml-10">
                     <BusquedaPaciente></BusquedaPaciente>
+                    {noExpediente && (
+                        <CardFichaEnfermeria noExp={noExpediente}></CardFichaEnfermeria>
+                    )}
                 </div>
 
                 <form onSubmit={enviar}>
@@ -133,7 +137,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="motivoCons" placeholder="Motivo" className="text-amplio" rows="10" cols="30"
                                 {...register("motivo_consulta", { required: true })} />
-                                {errors.motivo_consulta && <span>Es necesario este campo</span>}
+                            {errors.motivo_consulta && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
@@ -142,7 +146,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="diagMedi" placeholder="Diagnostico" className="text-amplio" rows="10" cols="30"
                                 {...register("diagnostico", { required: true })} />
-                                {errors.diagnostico && <span>Es necesario este campo</span>}
+                            {errors.diagnostico && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">
@@ -151,7 +155,7 @@ export function FichaTecnicaMedico() {
                             </label>
                             <textarea id="observacion" placeholder="Observaciones" className="text-amplio" rows="10" cols="30"
                                 {...register("observacion", { required: true })} />
-                                {errors.observacion && <span>Es necesario este campo</span>}
+                            {errors.observacion && <span>Es necesario este campo</span>}
                         </div>
                     </div>
 
