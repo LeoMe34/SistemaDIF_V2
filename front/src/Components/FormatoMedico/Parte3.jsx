@@ -53,6 +53,7 @@ export function Parte3() {
     }, []);
 
     useEffect(() => {
+        //Creo que seria por el expediente y por el dia, pq solo hay una ficha por dia
         const getFichaMedica = async () => {
             try {
 
