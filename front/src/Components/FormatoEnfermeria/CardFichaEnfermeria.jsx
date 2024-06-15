@@ -31,6 +31,8 @@ export function CardFichaEnfermeria({ noExp, fecha }) {
             setValue('presion', ficha.signosVitales.presion);
             setValue('fre_cardiaca', ficha.signosVitales.frecuenciaC);
             setValue('fre_respiratoria', ficha.signosVitales.frecuenciaR);
+            localStorage.setItem('fichaEnfermeriaId', JSON.stringify(ficha.id))
+
             setShowCard(true)
         } catch (error) {
             console.error("Ocurrió un error al obtener la ficha de enfermería", error);

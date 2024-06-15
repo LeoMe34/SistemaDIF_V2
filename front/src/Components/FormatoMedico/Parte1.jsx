@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Parte1() {
     const navegador = useNavigate()
@@ -112,6 +113,9 @@ export function Parte1() {
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
                 {!noExpediente && (
                     <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                )}
+                {noExpediente && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                 )}
 
                 <form onSubmit={enviar}>
