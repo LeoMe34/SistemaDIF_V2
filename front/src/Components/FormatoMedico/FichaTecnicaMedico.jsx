@@ -119,8 +119,8 @@ export function FichaTecnicaMedico() {
             <div className="ml-10 container">
                 <div className="ml-10">
                     <BusquedaPaciente></BusquedaPaciente>
-                    {noExpediente && (
-                        <CardFichaEnfermeria noExp={noExpediente}></CardFichaEnfermeria>
+                    {noExpediente && fechaActual && (
+                        <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                     )}
                 </div>
 
