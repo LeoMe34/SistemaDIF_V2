@@ -68,7 +68,7 @@ export function MostrarExpedientes() {
 
     const getFichasMedicas = async (fecha) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fecha}`, {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fecha}/`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }

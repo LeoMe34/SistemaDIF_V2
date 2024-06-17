@@ -79,6 +79,7 @@ export function Receta() {
             })
             console.log(data)
             localStorage.removeItem('idHistorial');
+            localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }

@@ -15,6 +15,7 @@ export function Parte3() {
     const navegador = useNavigate()
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [empleado, setEmpleado] = useState([]);
+    const [fechaActual, setFechaActual] = useState('')
 
     const getNoEmpleado = async () => {
         try {
@@ -53,16 +54,25 @@ export function Parte3() {
     }, []);
 
     useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
+    useEffect(() => {
         //Creo que seria por el expediente y por el dia, pq solo hay una ficha por dia
         const getFichaMedica = async () => {
             try {
 
-                const response = await axios.get(`http://127.0.0.1:8000/api/getFichaMedica/?no_expediente=${noExpediente}`, {
+                const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fechaActual}/`, {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 });
-                setFichaMedica(response.data[0].id)
+                setFichaMedica(response.data.id)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
