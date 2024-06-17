@@ -148,13 +148,9 @@ export function Receta() {
                 <h3 className="subtitulo">Receta medica</h3>
             </div>
 
-            <div className="ml-10 container">
-                <CardFichaEnfermeria />
-            </div>
-
-            {!idNota && (
+            <div className='container'>
                 <BuscarNotaMedica getIdNotaMedica={handleSeleccionNotaMedica} />
-            )}
+            </div>
 
             <form onSubmit={handleSubmit(enviar)}>
 

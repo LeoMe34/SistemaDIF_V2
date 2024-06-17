@@ -1292,7 +1292,7 @@ def buscar_notaMedica(request):
 
     # Filtrar notas médicas por número de expediente del paciente
     notas_medicas = NotaMedica.objects.filter(
-        histMedic__paciente__no_expediente__icontains=query
+        histMedic__fichaMed__paciente__no_expediente__icontains=query
     )
 
     # Obtener los datos del paciente asociado a cada nota médica
@@ -1301,17 +1301,19 @@ def buscar_notaMedica(request):
         nota_medica_data = NotaMedicaSerializer(nota_medica).data
         # Incluir los datos del paciente en la respuesta
         nota_medica_data["paciente"] = {
-            "no_expediente": nota_medica.histMedic.paciente.no_expediente,
-            "nombre": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+            "no_expediente": nota_medica.histMedic.fichaMed.paciente.no_expediente,
+            "nombre": nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
                 "nombre", ""
             ),
-            "apellido_paterno": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+            "apellido_paterno": nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
                 "apellidoP", ""
             ),
-            "apellido_materno": nota_medica.histMedic.paciente.datosPersonalesPacient.get(
+            "apellido_materno": nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
                 "apellidoM", ""
             ),
-            # Agrega otros campos del paciente si los necesitas
+            "fecha_nacimiento" :nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
+                "fechaDeNacimiento", ""
+            ),
         }
         notas_medicas_data.append(nota_medica_data)
 
