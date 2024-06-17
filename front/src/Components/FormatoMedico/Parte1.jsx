@@ -111,10 +111,10 @@ export function Parte1() {
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
-                {!noExpediente && (
+                {noExpediente ===null && (
                     <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                 )}
-                {noExpediente && fechaActual && (
+                {noExpediente !== null && fechaActual && (
                     <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                 )}
 

@@ -47,6 +47,12 @@ export function MenuNave() {
         }
     }
 
+    const removerNoExp = () => {
+        console.log("si funciona")
+        localStorage.removeItem("noExp")
+    }
+
+
     return (
 
         <div className="menu">
@@ -129,7 +135,7 @@ export function MenuNave() {
                     <h3 className="MenuNav">Medico</h3>
                     {linkArrayMedico.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
-                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
                                 <div className='LinkIcon'>
                                     {icon}
                                     <div>
@@ -399,35 +405,34 @@ const linkArrayMedico = [
     {
         label: "Home",
         icon: <FaHome />,
-        to: "/home_medico"
+        to: "/home_medico",
 
     },
 
     {
         label: "Ficha Medico",
         icon: <FaFileMedical />,
-        to: "/ficha_tecnica_medico"
-
+        to: "/ficha_tecnica_medico",
     },
 
     {
         label: "Historial Clinico",
         icon: <FaFileMedical />,
-        to: "/historial_clinico_p1"
+        to: "/historial_clinico_p1",
 
     },
 
     {
         label: "Notas Medicas",
         icon: <FaFileMedical />,
-        to: "/notas_medicas"
+        to: "/notas_medicas",
 
     },
 
     {
         label: "Receta",
         icon: <FaFileMedical />,
-        to: "/receta"
+        to: "/receta",
 
     },
 
