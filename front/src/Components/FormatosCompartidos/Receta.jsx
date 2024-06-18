@@ -7,6 +7,7 @@ import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BuscarNotaMedica from '../FormatoMedico/BuscarNotaMedica';
 import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom';
 
 export function Receta() {
     const { token } = useAuth()
@@ -14,6 +15,7 @@ export function Receta() {
     const [idHistorial, setIdHistorial] = useState(null)
     const [idNota, setIdNota] = useState(null)
     const [empleado, setEmpleado] = useState([]);
+    const navegador = useNavigate()
 
     const getNoEmpleado = async () => {
         try {
@@ -104,6 +106,7 @@ export function Receta() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
         } else {
             registrarReceta(data)
+            navegador("/home_medico")
         }
     })
 
