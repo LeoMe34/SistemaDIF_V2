@@ -178,7 +178,7 @@ export function NotasMedicas() {
 
             <div className='ml-10 mb-5 container'>
                 <div className="ml-10 mb-3">
-                    {!noExpediente && (
+                    {noExpediente == null && (
                         <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                     )}
                 </div>
