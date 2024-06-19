@@ -53,19 +53,17 @@ export function NotasMedicas() {
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
 
-    const getIdHistorialM = async (noExpediente) => {
+    const getIdHistorialM = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/getHistorialM/?no_expediente=${noExpediente}`,
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_historial_medico/${noExpediente}/${fechaActual}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 })
-            return response.data[0].id; // Devolvemos el ID del historial
+            setIdHistorial(response.data.id)
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
-            return null; // En caso de error, devolvemos null
-
         }
     }
 
@@ -112,15 +110,10 @@ export function NotasMedicas() {
     }, []);
 
     useEffect(() => {
-        const storedData = localStorage.getItem('noExp');
-        if (storedData) {
-            const noExpediente = JSON.parse(storedData);
-            getIdHistorialM(noExpediente).then((id) => {
-                setIdHistorial(id);
-                console.log(id);
-            });
+        if (noExpediente !== null) {
+            getIdHistorialM()
         }
-    }, []);
+    }, [noExpediente]);
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/

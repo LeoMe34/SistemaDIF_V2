@@ -1182,6 +1182,19 @@ def get_historialesMedicos(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historialMedico(request, noExp, fecha):
+    try:
+        historialClinico = HistorialMedico.objects.get(
+            fichaMed__paciente=noExp, fecha_elaboracion=fecha)
+    except HistorialMedico.DoesNotExist:
+        return Response({"error": "Historial médico no encontrado."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+    serializer = HistorialMedicoSerializer(historialClinico)
+    return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

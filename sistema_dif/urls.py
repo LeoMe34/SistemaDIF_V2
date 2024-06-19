@@ -42,7 +42,10 @@ urlpatterns = [
          views.detalle_fichaTecnicaE),
     path("get_ficha_medica/<str:noExp>/<str:fecha>/",
          views.detalle_fichaTecnicaMed),
+         path("get_historial_medico/<str:noExp>/<str:fecha>/",
+         views.get_historialMedico),
     path("get_historia_clinica/<int:fk>", views.get_historialClinico),
+
     path("get_receta/<int:fk>", views.detalle_receta),
     path("get_ficha_psicologia/<str:noExp>/<str:fecha>/",
          views.get_FichaTecnica_indiv),
@@ -54,6 +57,7 @@ urlpatterns = [
     path("registrar_histOdonto/", views.crear_historialO),
     path("registrar_notaEvoOdont/", views.crear_notaEvolucionO),
     path("crear_nota_medica/", views.crear_notaMedica),
+    #Creo que voy a borrar getHistorialM..
     path("getHistorialM/", views.get_historialesMedicos),
     path("getHistorialOdonto/", views.get_historialesO),
     path("get_detalles_NM/<int:id_historial>", views.detalle_notaMedica),
