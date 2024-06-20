@@ -243,6 +243,7 @@ class NotaMedica(models.Model):
 
 
 class Receta(models.Model):
+    fecha = models.DateField(auto_now=False, auto_now_add=True)
     medicamento = models.JSONField()
     # nombreMedicamento, dosis
     notMed = models.ForeignKey(
