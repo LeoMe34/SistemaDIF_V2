@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useForm } from "react-hook-form"
-import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import { useAuth } from '../../Contexto/AuthContext';
 import PDFViewer from '../FormatoOdonto/PDFViewer';
 
@@ -14,7 +12,7 @@ export function HistoriaClinicaSimplificada() {
     const { token } = useAuth();
     const [sexo, setSexo] = useState(null)
     const [vidaSexual, setVidaSexual] = useState(null)
-    const showVidaSexual = vidaSexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '';
+    const showVidaSexual = vidaSexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '' && vidaSexualValue !== '0';
 
     const getFichasMedicas = async () => {
         try {
