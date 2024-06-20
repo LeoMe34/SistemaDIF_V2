@@ -192,8 +192,12 @@ export function MostrarExpedientes() {
                                 <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
                                 {userGroup == "Medico" && (
                                     <>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
+                                        {fichaMedica && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
+                                        )}
+                                        {historiaClinica && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
+                                        )}
                                         {notaMedica && (
                                             <p className="texto_2 cursor-pointer" onClick={() => handleNotaMedica(expediente.fecha)}>Nota Medica</p>
                                         )}
