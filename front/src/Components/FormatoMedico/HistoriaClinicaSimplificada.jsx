@@ -149,11 +149,13 @@ export function HistoriaClinicaSimplificada() {
                             <input className="entrada" id='referencia' name='referencia' type="text"
                                 value={convertirReferencia(historiaClinica?.referenciaMed?.referencia)} readOnly />
                         </div>
-                        <div className='col'>
-                            <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
-                            <input className="entrada" id='lugar' name='lugar' type="text"
-                                value={historiaClinica?.referenciaMed?.lugar_referencia} readOnly />
-                        </div>
+                        {convertirReferencia(historiaClinica?.referenciaMed?.referencia) == 'Sí' && (
+                            <div className='col'>
+                                <label className='etiqueta' htmlFor="lugar">Lugar de referencia:</label>
+                                <input className="entrada" id='lugar' name='lugar' type="text"
+                                    value={historiaClinica?.referenciaMed?.lugar_referencia} readOnly />
+                            </div>
+                        )}
                     </div>
                 </div>
 
