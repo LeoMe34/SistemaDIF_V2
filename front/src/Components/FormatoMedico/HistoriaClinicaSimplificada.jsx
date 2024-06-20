@@ -12,7 +12,10 @@ export function HistoriaClinicaSimplificada() {
     const { token } = useAuth();
     const [sexo, setSexo] = useState(null)
     const [vidaSexual, setVidaSexual] = useState(null)
-    const showVidaSexual = vidaSexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '' && vidaSexualValue !== '0';
+    const [otrosHereditarios, setHereditarios] = useState('')
+    const [otrosPersonales, setPersonales] = useState('')
+    const [otrosMetodo, setMetodo] = useState('')
+    const showVidaSexual = vidaSexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '' && vidaSexual !== '0';
 
     const getFichasMedicas = async () => {
         try {
@@ -52,6 +55,9 @@ export function HistoriaClinicaSimplificada() {
                 setHistoriaClinica(response.data);
                 const vida_Sexual = response.data.ginecobMed.vida_sexual
                 setVidaSexual(vida_Sexual)
+                setHereditarios(response.data.antHerediPatM.otros || '')
+                setPersonales(response.data.antPersoPatM.otros || '')
+                setMetodo(response.data.ginecobMed.otros || '')
 
                 console.log('Datos del historial clínico:', response.data);
             } catch (error) {
@@ -266,13 +272,16 @@ export function HistoriaClinicaSimplificada() {
                     </div>
                 </div>
 
-                <div className="container">
-                    <div className="col">
-                        <label className='form-check-label etiqueta' htmlFor="otros_ant">Otros</label>
-                        <textarea name="otros_ant" id="otros_ant" className="text-amplio"
-                            value={historiaClinica?.antHerediPatM?.otros} readOnly></textarea>
+                {otrosHereditarios !== '' && (
+                    <div className="container">
+                        <div className="col">
+                            <label className='form-check-label etiqueta' htmlFor="otros_ant">Otros</label>
+                            <textarea name="otros_ant" id="otros_ant" className="text-amplio"
+                                value={historiaClinica?.antHerediPatM?.otros} readOnly></textarea>
+                        </div>
                     </div>
-                </div>
+                )}
+
 
                 <h3 className='subtitulo_2'>Personales no patológicos</h3>
 
@@ -317,11 +326,13 @@ export function HistoriaClinicaSimplificada() {
                             <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
                                 value={historiaClinica?.antPersoPatM?.tendenciaDM} readOnly></textarea>
                         </div>
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="otros_antPat">Otros</label>
-                            <textarea name="otros_antPat" id="otros_antPat" className="text-amplio"
-                                value={historiaClinica?.antPersoPatM?.otros} readOnly></textarea>
-                        </div>
+                        {otrosPersonales !== '' && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="otros_antPat">Otros</label>
+                                <textarea name="otros_antPat" id="otros_antPat" className="text-amplio"
+                                    value={historiaClinica?.antPersoPatM?.otros} readOnly></textarea>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -447,11 +458,14 @@ export function HistoriaClinicaSimplificada() {
                                             <input className="entrada" id='quirurgico' name='quirurgico' type="text"
                                                 value={historiaClinica?.ginecobMed?.quirurgico} readOnly />
                                         </div>
-                                        <div className='col'>
-                                            <label className='etiqueta' htmlFor="otrosMP">Otros</label>
-                                            <input className="entrada" id='otrosMP' name='otrosMP' type="text"
-                                                value={historiaClinica?.ginecobMed?.otros} readOnly />
-                                        </div>
+                                        {otrosMetodo !== '' && (
+                                            <div className='col'>
+                                                <label className='etiqueta' htmlFor="otrosMP">Otros</label>
+                                                <input className="entrada" id='otrosMP' name='otrosMP' type="text"
+                                                    value={historiaClinica?.ginecobMed?.otros} readOnly />
+                                            </div>
+                                        )}
+
                                     </div>
                                 </div>
                             </div>
