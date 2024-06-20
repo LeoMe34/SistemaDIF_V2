@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria"
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
-import BuscarNotaMedica from '../FormatoMedico/BuscarNotaMedica';
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
 
 export function Receta() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const [noExpediente, setNotExpediente] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
     const [idHistorial, setIdHistorial] = useState(null)
     const [idNota, setIdNota] = useState(null)
     const [empleado, setEmpleado] = useState([]);
@@ -37,23 +36,31 @@ export function Receta() {
     }, [token]);
 
     const getExp = () => {
-        const storedData = localStorage.getItem('idHistorial');
+        const storedData = localStorage.getItem('noExp')
         if (storedData) {
-            setIdHistorial(JSON.parse(storedData));
+            setNotExpediente(JSON.parse(storedData))
         } else {
-            setIdHistorial(null);
+            setNotExpediente(null)
         }
-        console.log(idHistorial);
+        console.log(noExpediente)
     }
 
     useEffect(() => {
         getExp();
     }, []);
 
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
     const getIdNota = async () => {
         try {
-            //            const url = `http://127.0.0.1:8000/api/get_detalles_NM/?histMedic=${idHistorial}`
-            const respuesta = await axios.get(`http://127.0.0.1:8000/api/get_detalles_NM/${idHistorial}`, {
+            const respuesta = await axios.get(`http://127.0.0.1:8000/api/get_nota_medica/${noExpediente}/${fechaActual}`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
@@ -80,18 +87,15 @@ export function Receta() {
                 }
             })
             console.log(data)
-            localStorage.removeItem('idHistorial');
             localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
     }
 
-    const handleSeleccionNotaMedica = (idNota) => {
-        console.log("ID de la nota médica seleccionada:", idNota);
-        setIdNota(idNota)
-
-        // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
+    const handlePacienteSeleccionado = (noExp) => {
+        console.log("El noExp:", noExp);
+        setNotExpediente(noExp)
     };
 
     const validarTexto = (texto) => {
@@ -111,10 +115,10 @@ export function Receta() {
     })
 
     useEffect(() => {
-        if (idHistorial) {
+        if (noExpediente !== null) {
             getIdNota();
         }
-    }, [idHistorial]);
+    }, [noExpediente]);
 
     return (
         <div>
@@ -152,7 +156,9 @@ export function Receta() {
             </div>
 
             <div className='container'>
-                <BuscarNotaMedica getIdNotaMedica={handleSeleccionNotaMedica} />
+                {noExpediente == null && (
+                    <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                )}
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>

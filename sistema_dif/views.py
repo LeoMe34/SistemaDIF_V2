@@ -1196,6 +1196,7 @@ def get_historialMedico(request, noExp, fecha):
     serializer = HistorialMedicoSerializer(historialClinico)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historiales_relacionadas(request):
@@ -1285,6 +1286,21 @@ def eliminar_historialMedico(request, pk):
 def get_notasMedicas(request):
     queryset = NotaMedica.objects.all()
     serializer = NotaMedicaSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notaMedica(request, noExp, fecha):
+    try:
+        notaMedica = NotaMedica.objects.get(
+            histMedic__fichaMed__paciente=noExp, fecha_consulta=fecha)
+    except NotaMedica.DoesNotExist:
+        return Response({"error": "Nota médica no encontrada."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+    serializer = NotaMedicaSerializer(notaMedica)
     return Response(serializer.data)
 
 

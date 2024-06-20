@@ -9,7 +9,8 @@ urlpatterns = [
     path("login/", views.login_api),
     path("usuario/", views.get_datos_usuario),
     path("get_usuarios/<int:user_id>", views.get_usuarios),
-    path("get_usuario_noTrabajador/<str:noTrabajador>", views.get_usuario_noTrabajador),
+    path("get_usuario_noTrabajador/<str:noTrabajador>",
+         views.get_usuario_noTrabajador),
     path("get_all_usuarios/", views.get_all_usuarios),
     path("registrar/", views.registrar_api),
     path("logout/", knox_views.LogoutView.as_view()),
@@ -42,8 +43,10 @@ urlpatterns = [
          views.detalle_fichaTecnicaE),
     path("get_ficha_medica/<str:noExp>/<str:fecha>/",
          views.detalle_fichaTecnicaMed),
-         path("get_historial_medico/<str:noExp>/<str:fecha>/",
+    path("get_historial_medico/<str:noExp>/<str:fecha>/",
          views.get_historialMedico),
+    path("get_nota_medica/<str:noExp>/<str:fecha>/",
+         views.get_notaMedica),
     path("get_historia_clinica/<int:fk>", views.get_historialClinico),
 
     path("get_receta/<int:fk>", views.detalle_receta),
@@ -57,7 +60,7 @@ urlpatterns = [
     path("registrar_histOdonto/", views.crear_historialO),
     path("registrar_notaEvoOdont/", views.crear_notaEvolucionO),
     path("crear_nota_medica/", views.crear_notaMedica),
-    #Creo que voy a borrar getHistorialM..
+    # Creo que voy a borrar getHistorialM..
     path("getHistorialM/", views.get_historialesMedicos),
     path("getHistorialOdonto/", views.get_historialesO),
     path("get_detalles_NM/<int:id_historial>", views.detalle_notaMedica),
@@ -80,6 +83,7 @@ urlpatterns = [
     path("registrar_ficha_medicaO/", views.crear_FichaTecnicaMedOdonto),
     path("get_hist_odonto/<str:noExp>/<str:fecha>/", views.detalle_historialO),
     path("get_notaEvo_Odonto/<int:id_histOdonto>", views.detalle_notaEvolucionO),
-    path("get_fichaMed_Odonto/<int:id_notEvo>", views.detalle_fichaTecnicaMedOdonto),
+    path("get_fichaMed_Odonto/<int:id_notEvo>",
+         views.detalle_fichaTecnicaMedOdonto),
     path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
 ]
