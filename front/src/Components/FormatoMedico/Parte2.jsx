@@ -20,7 +20,7 @@ export function Parte2() {
     const menarcaValue = watch('menarca')
     const showUltimaMens = !isNaN(menarcaValue) && menarcaValue.trim() !== ''
     const vidaSexualValue = watch('vida_sexual')
-    const showVidaSexual = !isNaN(vidaSexualValue) && vidaSexualValue.trim() !== ''
+    const showVidaSexual = !isNaN(vidaSexualValue) && vidaSexualValue.trim() !== '' && vidaSexualValue !== '0'
     const [noExpediente, setNoExpediente] = useState(null)
     const [sexo, setSexo] = useState(null)
 
@@ -41,9 +41,14 @@ export function Parte2() {
     };
 
     const getNoExp = () => {
-        const storedData = localStorage.getItem('noExp');
-        setNoExpediente(JSON.parse(storedData));
-    };
+        const storedData = localStorage.getItem('noExp')
+        if (storedData) {
+            setNoExpediente(JSON.parse(storedData))
+        } else {
+            setNoExpediente(null)
+        }
+        console.log(noExpediente)
+    }
 
     useEffect(() => {
         if (token) {
@@ -52,23 +57,23 @@ export function Parte2() {
     }, [token]);
 
     const getPaciente = async () => {
-        if (noExpediente) {
-            try {
-                const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
-                const response = await axios.get(url, {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                });
-                setSexo(response.data.datosPersonalesPacient.sexo);
-            } catch (error) {
-                console.error("Ocurrió un error", error);
-            }
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setSexo(response.data.datosPersonalesPacient.sexo);
+        } catch (error) {
+            console.error("Ocurrió un error", error);
         }
     };
 
     useEffect(() => {
-        getPaciente();
+        if (noExpediente !== null) {
+            getPaciente();
+        }
     }, [noExpediente]);
 
     const validarParentesco = (parentesco) => {

@@ -25,6 +25,7 @@ export function Parte1() {
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
         setNotExpediente(noExpediente)
+        localStorage.setItem('noExp',JSON.stringify(noExpediente))
     };
 
     const validarNumeros = (numero) => {
