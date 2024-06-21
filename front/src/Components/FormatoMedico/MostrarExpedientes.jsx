@@ -264,9 +264,9 @@ export function MostrarExpedientes() {
                         </div>
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
-                                <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
-                                {userGroup == "Medico" && (
+                                {userGroup == "Medico" && fichaMedica && (
                                     <>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
                                         {fichaMedica && (
                                             <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
                                         )}
@@ -280,8 +280,9 @@ export function MostrarExpedientes() {
                                             <p className="texto_2 cursor-pointer" onClick={() => handleReceta(expediente.fecha)}>Recetas</p>
                                         )}
                                     </>)}
-                                {userGroup == "Odontologo" && (
+                                {userGroup == "Odontologo" && historiaOdonto && (
                                     <>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
                                         {historiaOdonto && (
                                             <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
                                         )}
