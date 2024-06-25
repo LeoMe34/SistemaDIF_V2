@@ -592,25 +592,51 @@ def get_fichasE_relacionadas(request):
 @permission_classes([IsAuthenticated])
 def filtrar_fichas_por_paciente(request, noExp):
     try:
-        fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
+        user = request.user
+        user_group = user.groups.first().name if user.groups.exists() else None
 
-        if not fichas_medicas.exists():
+        if user_group == "Medico":
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
+                paciente=noExp)
+            fichas_filtradas = []
+
+            for ficha in fichas_medicas:
+                if FichaTecnicaMedica.objects.filter(paciente=noExp, fecha=ficha.fecha).exists():
+                    fichas_filtradas.append(ficha)
+
+        elif user_group == "Odontologo":
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
+                paciente=noExp)
+            fichas_filtradas = []
+
+            for ficha in fichas_medicas:
+                if HistorialOdonto.objects.filter(paciente=noExp, fecha_elaboracion=ficha.fecha).exists():
+                    fichas_filtradas.append(ficha)
+
+        else:
             return Response(
-                {
-                    "error": "No se encontraron fichas médicas para el paciente especificado."
-                },
+                {"error": "No tiene permiso para acceder a estas fichas."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        if not fichas_filtradas:
+            return Response(
+                {"error": "No se encontraron fichas médicas para el paciente especificado."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = FichaTecnicaESerializer(fichas_medicas, many=True)
+        serializer = FichaTecnicaESerializer(fichas_filtradas, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    except FichaTecnicaEnfermeria.DoesNotExist:
+    except Empleado.DoesNotExist:
         return Response(
-            {
-                "error": "No se encontraron fichas médicas para el paciente especificado."
-            },
+            {"error": "No se encontró el empleado relacionado con este usuario."},
             status=status.HTTP_404_NOT_FOUND,
+        )
+    except Exception as e:
+        return Response(
+            {"error": f"Se produjo un error: {str(e)}"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
@@ -1182,6 +1208,7 @@ def get_historialesMedicos(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_historialMedico(request, noExp, fecha):
@@ -1340,7 +1367,7 @@ def buscar_notaMedica(request):
             "apellido_materno": nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
                 "apellidoM", ""
             ),
-            "fecha_nacimiento" :nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
+            "fecha_nacimiento": nota_medica.histMedic.fichaMed.paciente.datosPersonalesPacient.get(
                 "fechaDeNacimiento", ""
             ),
         }

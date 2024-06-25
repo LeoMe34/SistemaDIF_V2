@@ -53,32 +53,35 @@ export function MostrarExpedientes() {
     };
 
     const toggleExpediente = (expediente) => {
-        if (userGroup === "Medico" && expedienteSeleccionado === expediente.id) {
-            setExpedienteSeleccionado(null); // Si el expediente ya está seleccionado, lo cerramos
+        if (expedienteSeleccionado === expediente.id) {
+            // Si el expediente ya está seleccionado, lo cerramos
+            setExpedienteSeleccionado(null);
             setFichaMedica(null);
             setHistoriaClinica(null);
             setNotaMedica(null);
             setReceta(null);
-        } else {
-            setExpedienteSeleccionado(expediente.id); // Si no, lo seleccionamos
-            getFichasMedicas(expediente.fecha);
-            setFichaMedica(null);
-            setHistoriaClinica(null);
-            setNotaMedica(null);
-            setReceta(null);
-        }
-        if (userGroup === "Odontologo" && expedienteSeleccionado === expediente.id) {
-            setExpedienteSeleccionado(null); // Si el expediente ya está seleccionado, lo cerramos
             setHistoriaOdonto(null);
             setNotaEvolucion(null);
             setFichaMedicaOdonto(null);
         } else {
-            setExpedienteSeleccionado(expediente.id); // Si no, lo seleccionamos
-            getHistoriaOdonto(expediente.fecha);
+            // Si no, lo seleccionamos
+            setExpedienteSeleccionado(expediente.id);
+            if (userGroup === "Medico") {
+                getFichasMedicas(expediente.fecha);
+            } else if (userGroup === "Odontologo") {
+                getHistoriaOdonto(expediente.fecha);
+            }
+            // Restablecemos los estados para asegurarnos de que se actualicen correctamente
+            setFichaMedica(null);
+            setHistoriaClinica(null);
+            setNotaMedica(null);
+            setReceta(null);
+            setHistoriaOdonto(null);
             setNotaEvolucion(null);
             setFichaMedicaOdonto(null);
         }
     };
+
 
     //Medicina
     const getFichasMedicas = async (fecha) => {
