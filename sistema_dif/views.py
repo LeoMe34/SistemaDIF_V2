@@ -43,6 +43,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
+from datetime import date
 
 
 @api_view(["POST"])
@@ -580,8 +581,9 @@ def get_fichasE_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
+        hoy = date.today()
         ficha_tecnica = FichaTecnicaEnfermeria.objects.filter(
-            empleado=empleado)
+            empleado=empleado, fecha=hoy)
         serializer = FichaTecnicaESerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaEnfermeria.DoesNotExist:
@@ -698,8 +700,9 @@ def eliminar_fichaTecnicaE(request, pk):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_fichasTecnicasP(request):
-    queryset = FichaTecnicaPsicologia.objects.all()
-    serializer = FihaTecnicaPSerializer(queryset, many=True)
+    hoy = date.today()
+    fichaPsicologia = FichaTecnicaPsicologia.objects.filter(fecha_visita=hoy)
+    serializer = FihaTecnicaPSerializer(fichaPsicologia, many=True)
     return Response(serializer.data)
 
 
@@ -816,7 +819,9 @@ def get_fichasMed_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        ficha_tecnica = FichaTecnicaMedica.objects.filter(empleado=empleado)
+        hoy = date.today()
+        ficha_tecnica = FichaTecnicaMedica.objects.filter(
+            empleado=empleado, fecha=hoy)
         serializer = FichaTecnicaMedSerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaMedica.DoesNotExist:
@@ -921,7 +926,9 @@ def get_historialesO_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        historial_odonto = HistorialOdonto.objects.filter(empleado=empleado)
+        hoy = date.today()
+        historial_odonto = HistorialOdonto.objects.filter(
+            empleado=empleado, fecha_elaboracion=hoy)
         serializer = HistorialOdontoSerializer(historial_odonto, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -1231,7 +1238,9 @@ def get_historiales_relacionadas(request):
         usuario = request.user
         ficha_medica = FichaTecnicaMedica.objects.filter(
             empleado__usuario=usuario)
-        historiales = HistorialMedico.objects.filter(fichaMed__in=ficha_medica)
+        hoy = date.today()
+        historiales = HistorialMedico.objects.filter(
+            fichaMed__in=ficha_medica, fecha_elaboracion=hoy)
         # Serializar los historiales médicos junto con la información del paciente
         serialized_data = []
         for historial in historiales:
