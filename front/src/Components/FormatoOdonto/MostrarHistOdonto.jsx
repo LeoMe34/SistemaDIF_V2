@@ -133,11 +133,13 @@ export function MostrarHistOdonto() {
                                 value={convertirReferencia2(detalles.referencia?.referencia)} readOnly />
                         </div>
 
-                        <div className="col">
-                            <label className="etiqueta" htmlFor="referenciaLugar">Lugar de referencia</label>
-                            <input id="referenciaLugar" type="text" className="entrada" name='referenciaLugar'
-                                value={detalles.referencia?.referencia_lugar} readOnly />
-                        </div>
+                        {convertirReferencia2(detalles.referencia?.referencia) == 'Sí' && (
+                            <div className="col">
+                                <label className="etiqueta" htmlFor="referenciaLugar">Lugar de referencia</label>
+                                <input id="referenciaLugar" type="text" className="entrada" name='referenciaLugar'
+                                    value={detalles.referencia?.referencia_lugar} readOnly />
+                            </div>
+                        )}
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="subsecuente">Subsecuente</label>
@@ -246,7 +248,7 @@ export function MostrarHistOdonto() {
                                     <div className="col">
                                         <label className="etiqueta" htmlFor="cardiovascular">Cardiovasculares</label>
                                         <input id="cardiovascular" type="text" className="entrada" name='cardiovascular'
-                                            value={convertirReferencia(detalles.antHerediPato?.cardioH)} readOnly 
+                                            value={convertirReferencia(detalles.antHerediPato?.cardioH)} readOnly
                                         />
                                         {convertirReferencia(detalles.antHerediPato?.cardioH) == 'Sí' && (
                                             <div className="col">
@@ -354,27 +356,27 @@ export function MostrarHistOdonto() {
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="vacuna">Vacunas</label>
                                     <input id="vacuna" type="text" name="vacunas" className="entrada"
-                                        value={detalles.personNoPato?.vacuna} readOnly/>
+                                        value={detalles.personNoPato?.vacuna} readOnly />
                                 </div>
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="alimentacion">Alimentación</label>
                                     <input id="alimentacion" type="text" name="Alimentación" className="entrada"
-                                        value={detalles.personNoPato?.alimentacion} readOnly/>
+                                        value={detalles.personNoPato?.alimentacion} readOnly />
                                 </div>
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="fauna">Fauna nociva</label>
                                     <input id="fauna" type="text" name="fauna" className="entrada"
-                                        value={detalles.personNoPato?.fauna_nociva} readOnly/>
+                                        value={detalles.personNoPato?.fauna_nociva} readOnly />
                                 </div>
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="vivienda">Vivienda</label>
                                     <input id="vivienda" type="text" name="vivivenda" className="entrada"
-                                        value={detalles.personNoPato?.vivienda} readOnly/>
+                                        value={detalles.personNoPato?.vivienda} readOnly />
                                 </div>
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="higiene">Adicciones</label>
                                     <input id="adicc" type="text" name="adicciones" className="entrada"
-                                        value={detalles.personNoPato?.adicciones} readOnly/>
+                                        value={detalles.personNoPato?.adicciones} readOnly />
                                 </div>
 
                             </div>
@@ -388,19 +390,19 @@ export function MostrarHistOdonto() {
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="fechaDoc">Fecha de ultima Doc.</label>
                                     <input id="fechaDoc" type="date" name="fec" className="entrada"
-                                        value={detalles.antGinecob?.fecha_ult_doc} readOnly/>
+                                        value={detalles.antGinecob?.fecha_ult_doc} readOnly />
                                 </div>
 
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="fechaDoc">Fecha ultima regla</label>
                                     <input id="fechaDoc" type="date" name="fecha" className="entrada"
-                                        value={detalles.antGinecob?.fecha_ultima_regla} readOnly/>
+                                        value={detalles.antGinecob?.fecha_ultima_regla} readOnly />
                                 </div>
 
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="planiFami">Planificación familiar</label>
                                     <input id="planiFami" type="text" name="planificación" className="entrada"
-                                        value={detalles.antGinecob?.planificacion_fam} readOnly/>
+                                        value={detalles.antGinecob?.planificacion_fam} readOnly />
                                 </div>
                             </div>
                         </div>
@@ -412,7 +414,7 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="habitos">Habitos exteriores</label>
                             <textarea id="habitos" type="text" name="Habitos" className="entrada" rows="10" cols="30"
-                                value={detalles.habitos_exteriores} readOnly/>
+                                value={detalles.habitos_exteriores} readOnly />
                         </div>
                     </div>
 
@@ -422,18 +424,18 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="labio">Labios</label>
                             <input id="labio" type="text" name="labios" className="entrada"
-                                value={detalles.cabeza?.labios} readOnly/>
+                                value={detalles.cabeza?.labios} readOnly />
                         </div>
 
                         <div className="col">
                             <label className="etiqueta" htmlFor="mucosa">Mucosa oral</label>
                             <input id="mucosa" type="text" name="mucosa" className="entrada"
-                                value={detalles.cabeza?.mucosa} readOnly/>
+                                value={detalles.cabeza?.mucosa} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="encias">Encias</label>
                             <input id="encia" type="text" name="encias" className="entrada"
-                                value={detalles.cabeza?.encias} readOnly/>
+                                value={detalles.cabeza?.encias} readOnly />
                         </div>
                     </div>
 
@@ -441,17 +443,17 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="lengua">Lengua</label>
                             <input id="lengua" type="text" name="lengua" className="entrada"
-                                value={detalles.cabeza?.lengua} readOnly/>
+                                value={detalles.cabeza?.lengua} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="paladorB">Paladar blando</label>
                             <input id="paladorB" type="text" name="palador_blando" className="entrada"
-                                value={detalles.cabeza?.paladar_blando} readOnly/>
+                                value={detalles.cabeza?.paladar_blando} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="paladorD">Paladar duro</label>
                             <input id="paladorD" type="text" name="palador_duro" className="entrada"
-                                value={detalles.cabeza?.paladar_duro} readOnly/>
+                                value={detalles.cabeza?.paladar_duro} readOnly />
                         </div>
                     </div>
 
@@ -459,7 +461,7 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cuello">Cuello</label>
                             <input id="cuello" type="text" name="cuello" className="entrada"
-                                value={detalles.cuello_odont} readOnly/>
+                                value={detalles.cuello_odont} readOnly />
                         </div>
                     </div>
 
@@ -468,17 +470,17 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="respi">Respiratorio</label>
                             <input id="respi" type="text" name="respiratorio" className="entrada"
-                                value={detalles.aparatosSistemas?.respiratorio} readOnly/>
+                                value={detalles.aparatosSistemas?.respiratorio} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="digestivo">Digestivo</label>
                             <input id="digestivo" type="text" name="digestivo" className="entrada"
-                                value={detalles.aparatosSistemas?.digestivo} readOnly/>
+                                value={detalles.aparatosSistemas?.digestivo} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="neuro">Neurológico</label>
                             <input id="neuro" type="text" name="neurológico" className="entrada"
-                                value={detalles.aparatosSistemas?.neuro} readOnly/>
+                                value={detalles.aparatosSistemas?.neuro} readOnly />
                         </div>
                     </div>
 
@@ -486,12 +488,12 @@ export function MostrarHistOdonto() {
                         <div className="col">
                             <label className="etiqueta" htmlFor="cardio">Cardiovasculares</label>
                             <input id="cardio" type="text" placeholder="Cardiovasculares" className="entrada"
-                                value={detalles.aparatosSistemas?.cardioV} readOnly/>
+                                value={detalles.aparatosSistemas?.cardioV} readOnly />
                         </div>
                         <div className="col">
                             <label className="etiqueta" htmlFor="musco">Muscoesqueleto</label>
                             <input id="musco" type="text" name="Muscoesqueleto" className="entrada"
-                                value={detalles.aparatosSistemas?.muscoes} readOnly/>
+                                value={detalles.aparatosSistemas?.muscoes} readOnly />
                         </div>
                         <div className='col'></div>
                     </div>
@@ -499,7 +501,7 @@ export function MostrarHistOdonto() {
                         <div className='row'>
                             <div className="col">
                                 <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                                <PDFViewer detalles={detalles} token={token} readOnly/>
+                                <PDFViewer detalles={detalles} token={token} readOnly />
                             </div>
                         </div>
                     </div>
