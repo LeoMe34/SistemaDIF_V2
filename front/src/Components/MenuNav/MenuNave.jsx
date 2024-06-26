@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from 'axios';
+import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
 const isLoginPage = window.location.pathname === '/'
 
@@ -13,6 +14,7 @@ export function MenuNave() {
     const { token } = useAuth()
     const [idUser, setIdUser] = useState(null);
     const [userGroup, setUserGroup] = useState(null);
+    const setNoExpediente = useNoExpediente()
 
     useEffect(() => {
         const getIdUser = async () => {
@@ -48,8 +50,8 @@ export function MenuNave() {
     }
 
     const removerNoExp = () => {
-        console.log("si funciona")
-        localStorage.removeItem("noExp")
+        localStorage.removeItem("noExp")    
+        setNoExpediente("")    
     }
 
 
@@ -116,7 +118,7 @@ export function MenuNave() {
                     <h3 className="MenuNav">Odontologo</h3>
                     {linkArrayOdontologo.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
-                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
                                 <div className='LinkIcon'>
                                     {icon}
                                     <div>
