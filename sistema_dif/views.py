@@ -1039,7 +1039,7 @@ def get_ultima_nota_evolucion(request):
         )
         if ultima_nota.exists():  # Verificar si hay resultados
             serializer = NotaEvolucionOdontoSerializer(
-                ultima_nota.first()
+                ultima_nota.last()
             )  # Obtener el primer resultado
             return Response(serializer.data)
         else:

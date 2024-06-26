@@ -72,7 +72,7 @@ export function FichaMedica() {
                     }
                 })
             setIdNota(response.data.id)
-            console.log(idNota)
+            console.log(response.data.id)
         } catch (error) {
             console.error('Error al obtener ID del historial:', error);
         }
