@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Receta() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
-    const [idHistorial, setIdHistorial] = useState(null)
     const [idNota, setIdNota] = useState(null)
     const [empleado, setEmpleado] = useState([]);
     const navegador = useNavigate()
@@ -151,6 +151,12 @@ export function Receta() {
                 </nav>
             </div>
 
+            <div className="ml-10 container mt-2">
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
+
             <div className='m-2'>
                 <h3 className="subtitulo">Receta medica</h3>
             </div>
@@ -180,7 +186,6 @@ export function Receta() {
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                             <input className="datos_lectura" id='cedula' name='cedula' type="text"
                                 value={empleado.cedula} readOnly />
-                            <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
                 </div>

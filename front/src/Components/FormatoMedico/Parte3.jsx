@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -249,6 +250,12 @@ export function Parte3() {
     })
     return (
         <div>
+            <div className="ml-10 container mt-2">
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
+
             <div className='ml-10 container'>
                 <h3 className='subtitulo'>Interrogatorio</h3>
             </div>
@@ -429,7 +436,6 @@ export function Parte3() {
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                             <input className="datos_lectura" id='cedula' name='cedula' type="text"
                                 value={empleado.cedula} readOnly />
-                            <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
                 </div>

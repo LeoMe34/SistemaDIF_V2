@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useAuth } from "../../Contexto/AuthContext";
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 
 export function Parte2() {
     const { register, handleSubmit, watch, formState: { errors }, getValues } = useForm()
@@ -22,7 +23,17 @@ export function Parte2() {
     const vidaSexualValue = watch('vida_sexual')
     const showVidaSexual = !isNaN(vidaSexualValue) && vidaSexualValue.trim() !== '' && vidaSexualValue !== '0'
     const [noExpediente, setNoExpediente] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
     const [sexo, setSexo] = useState(null)
+
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
 
     const handleChangeDiabetes = (e) => {
         setShowPDiabetes(e.target.value === "True");
@@ -221,6 +232,13 @@ export function Parte2() {
 
     return (
         <div>
+
+            <div className="ml-10 container mt-2">
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
+
             <div className='ml-10 container'>
                 <h3 className='subtitulo'>Antecedentes</h3>
             </div>
