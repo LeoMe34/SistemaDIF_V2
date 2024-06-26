@@ -190,7 +190,7 @@ export function Parte3() {
             registrarHistOdonto(data)
             localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
 
-            navegador('/nota_subs1')
+            navegador('/nota_evo')
         }
     })
 

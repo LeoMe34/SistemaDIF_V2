@@ -160,7 +160,8 @@ export function MostrarExpedientes() {
                     Authorization: `Token ${token}`
                 }
             });
-            setNotaEvolucion(response.data);
+            setNotaEvolucion(response.data[0]);
+            console.log('Datos del historial odontologico:', response.data);
         } catch (error) {
             console.error('Error al obtener la nota médica:', error);
         }
@@ -173,7 +174,7 @@ export function MostrarExpedientes() {
                     Authorization: `Token ${token}`
                 }
             });
-            setFichaMedica(response.data);
+            setFichaMedicaOdonto(response.data);
             console.log('Datos de ficha médica:', response.data);
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
@@ -229,7 +230,6 @@ export function MostrarExpedientes() {
     useEffect(() => {
         if (userGroup === "Odontologo" && historiaOdonto?.id) {
             getNotaEvolucion(historiaOdonto.id);
-            console.log("3")
         }
     }, [historiaOdonto]);
 

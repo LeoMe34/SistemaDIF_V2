@@ -116,7 +116,7 @@ export function FichaMedica() {
         } else {
             try {
                 await registrarFicha(data)
-                navegador('/nota_evo')
+                navegador('/home_odontologo')
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');

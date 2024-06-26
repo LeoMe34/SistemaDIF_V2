@@ -385,18 +385,24 @@ const linkArrayOdontologo = [
         to: "/historial_odontologico_p1"
 
     },
-
+/*
     {
         label: "Nota Subsecuente",
         icon: <FaFileMedical />,
         to: "/nota_subs1"
 
     },
-
+*/
     {
         label: "Nota Evolución",
         icon: <FaFileMedical />,
         to: "/nota_evo"
+
+    },
+    {
+        label: "Ficha tecnica medica",
+        icon: <FaFileMedical />,
+        to: "/ficha_medica"
 
     },
 ]

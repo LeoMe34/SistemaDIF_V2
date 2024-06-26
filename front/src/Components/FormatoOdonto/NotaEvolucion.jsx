@@ -112,6 +112,7 @@ export function NotaEvolucion() {
         }
         else {
             registrarNotaEvoOdonto(data, idHistOdonto);
+            navegador("/ficha_medica")
         }
 
     }
