@@ -13,10 +13,21 @@ export function NotaEvolucion() {
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [idHistOdonto, setHistOdonto] = useState(null)
-    const { noExpediente } = useNoExpediente()
+    const [noExpediente, setNoExpediente] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
+
+    const getNoExp = () => {
+        const storedData = localStorage.getItem('noExp');
+        setNoExpediente(JSON.parse(storedData));
+    };
+
+    useEffect(() => {
+        if (token) {
+            getNoExp();
+        }
+    }, [token]);
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -141,7 +152,14 @@ export function NotaEvolucion() {
                 </nav>
             </div>
             <div className='mt-3 mb-5 container'>
-                <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
+                {noExpediente === null && (
+                    <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
+                )}
+
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+
             </div>
 
             <div className="mt-3 ml-10 container">

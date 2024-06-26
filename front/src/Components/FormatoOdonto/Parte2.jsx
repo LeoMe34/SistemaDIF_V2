@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from "axios";
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Parte2() {
     const navegador = useNavigate()
@@ -18,6 +19,16 @@ export function Parte2() {
     const [showPEpilepsia, setShowPEpilepsia] = useState(false)
     const [noExpediente, setNoExpediente] = useState(null)
     const [sexo, setSexo] = useState(null)
+    const [fechaActual, setFechaActual] = useState('')
+
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
 
     const handleChangeDiabetes = (e) => {
         setShowPDiabetes(e.target.value === "True");
@@ -164,6 +175,12 @@ export function Parte2() {
                 <CardPaciente />
     </div>*/}
             <h2 className='subtitulo'>Antecedentes</h2>
+
+            <div className="ml-10">
+                {noExpediente && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
 
             <div className='ml-10 container'>
                 <form className="row" onSubmit={enviar}>

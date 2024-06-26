@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Parte3() {
     const navegador = useNavigate()
@@ -14,6 +15,17 @@ export function Parte3() {
     const [historialO, setHistorialO] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
+    const [fechaActual, setFechaActual] = useState('')
+    const [noExpediente, setNoExpediente] = useState(null)
+
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
 
     const handleFileChange = (event) => {
         const archivos = event.target.files;
@@ -132,6 +144,17 @@ export function Parte3() {
         return textoRegex.test(texto)
     }
 
+    const getNoExp = () => {
+        const storedData = localStorage.getItem('noExp');
+        setNoExpediente(JSON.parse(storedData));
+    };
+
+    useEffect(() => {
+        if (token) {
+            getNoExp();
+        }
+    }, [token]);
+
     useEffect(() => {
         const storedData = localStorage.getItem('antecedentes');
         const storeData2 = localStorage.getItem('historialO')
@@ -197,6 +220,12 @@ export function Parte3() {
     return (
         <div>
             <div className="ml-5 container">
+                <div className="ml-10 mt-2">
+                    {noExpediente && fechaActual && (
+                        <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                    )}
+                </div>
+
                 <form className="row" onSubmit={enviar}>
                     <h3 className="subtitulo">Exploración fisica</h3>
                     <div className='row'>

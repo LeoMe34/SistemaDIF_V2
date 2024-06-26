@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Parte1() {
     const navegador = useNavigate()
@@ -60,7 +61,14 @@ export function Parte1() {
             <div className="ml-10 container">
 
                 <h3 className="subtitulo">Historial clinico dental</h3>
-                <BusquedaPaciente></BusquedaPaciente>
+                <div className="ml-10">
+                    <BusquedaPaciente></BusquedaPaciente>
+
+                    {noExpediente && fechaActual && (
+                        <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                    )}
+                </div>
+
                 <form onSubmit={enviar}>
                     <div className='row'>
                         <div className="col">
