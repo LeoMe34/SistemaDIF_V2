@@ -13,8 +13,11 @@ export function MostrarExpedientes() {
     const navegador = useNavigate();
     const [userGroup, setUserGroup] = useState(null);
     const [fichaMedica, setFichaMedica] = useState(null);
+    const [fichaMedicaOdonto, setFichaMedicaOdonto] = useState(null);
     const [historiaClinica, setHistoriaClinica] = useState(null);
+    const [historiaOdonto, setHistoriaOdonto] = useState(null);
     const [notaMedica, setNotaMedica] = useState(null);
+    const [notaEvolucion, setNotaEvolucion] = useState(null);
     const [receta, setReceta] = useState(null);
 
     useEffect(() => {
@@ -51,24 +54,39 @@ export function MostrarExpedientes() {
 
     const toggleExpediente = (expediente) => {
         if (expedienteSeleccionado === expediente.id) {
-            setExpedienteSeleccionado(null); // Si el expediente ya está seleccionado, lo cerramos
+            // Si el expediente ya está seleccionado, lo cerramos
+            setExpedienteSeleccionado(null);
             setFichaMedica(null);
             setHistoriaClinica(null);
             setNotaMedica(null);
             setReceta(null);
+            setHistoriaOdonto(null);
+            setNotaEvolucion(null);
+            setFichaMedicaOdonto(null);
         } else {
-            setExpedienteSeleccionado(expediente.id); // Si no, lo seleccionamos
-            getFichasMedicas(expediente.fecha);
+            // Si no, lo seleccionamos
+            setExpedienteSeleccionado(expediente.id);
+            if (userGroup === "Medico") {
+                getFichasMedicas(expediente.fecha);
+            } else if (userGroup === "Odontologo") {
+                getHistoriaOdonto(expediente.fecha);
+            }
+            // Restablecemos los estados para asegurarnos de que se actualicen correctamente
             setFichaMedica(null);
             setHistoriaClinica(null);
             setNotaMedica(null);
             setReceta(null);
+            setHistoriaOdonto(null);
+            setNotaEvolucion(null);
+            setFichaMedicaOdonto(null);
         }
     };
 
+
+    //Medicina
     const getFichasMedicas = async (fecha) => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fecha}`, {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fecha}/`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
@@ -120,6 +138,49 @@ export function MostrarExpedientes() {
         }
     };
 
+    //Odonto
+    const getHistoriaOdonto = async (fecha) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fecha}/`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setHistoriaOdonto(response.data);
+            console.log('Datos del historial odontologico:', response.data);
+        } catch (error) {
+            console.error('Error al obtener el historial clínico:', error);
+        }
+    };
+
+    const getNotaEvolucion = async (id) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/notas_evo_relacionadas/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setNotaEvolucion(response.data[0]);
+            console.log('Datos del historial odontologico:', response.data);
+        } catch (error) {
+            console.error('Error al obtener la nota médica:', error);
+        }
+    };
+
+    const getFichasMedicasOdonto = async (id) => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_fichaMed_Odonto/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setFichaMedicaOdonto(response.data);
+            console.log('Datos de ficha médica:', response.data);
+        } catch (error) {
+            console.error('Error al obtener ID del historial médico:', error);
+        }
+    };
+
     const handleEnfermeria = (fecha) => {
         navegador(`/mostrar_expediente/${fecha}`);
     };
@@ -155,24 +216,41 @@ export function MostrarExpedientes() {
     useEffect(() => {
         if (noExpediente) {
             getExpedientes();
+            console.log("1")
         }
     }, [noExpediente, token]);
 
     useEffect(() => {
-        if (fichaMedica?.id) {
+        if (userGroup === "Medico" && fichaMedica?.id) {
             getHistoriaClinica(fichaMedica.id);
+            console.log("2")
         }
     }, [fichaMedica]);
 
     useEffect(() => {
-        if (historiaClinica?.id) {
+        if (userGroup === "Odontologo" && historiaOdonto?.id) {
+            getNotaEvolucion(historiaOdonto.id);
+        }
+    }, [historiaOdonto]);
+
+    useEffect(() => {
+        if (userGroup === "Medico" && historiaClinica?.id) {
             getNotaMedica(historiaClinica.id);
+            console.log("4")
         }
     }, [historiaClinica]);
 
     useEffect(() => {
-        if (notaMedica?.id) {
+        if (userGroup === "Odontologo" && notaEvolucion?.id) {
+            getFichasMedicasOdonto(notaEvolucion.id);
+            console.log("5")
+        }
+    }, [notaEvolucion]);
+
+    useEffect(() => {
+        if (userGroup === "Medico" && notaMedica?.id) {
             getReceta(notaMedica.id);
+            console.log("6")
         }
     }, [notaMedica]);
 
@@ -189,11 +267,15 @@ export function MostrarExpedientes() {
                         </div>
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
-                                <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
-                                {userGroup == "Medico" && (
+                                {userGroup == "Medico" && fichaMedica && (
                                     <>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
+                                        {fichaMedica && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleFichaMedica(expediente.fecha)}>Ficha Tecnica Medica</p>
+                                        )}
+                                        {historiaClinica && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleHistorialMedico(expediente.fecha)}>Historial clinico</p>
+                                        )}
                                         {notaMedica && (
                                             <p className="texto_2 cursor-pointer" onClick={() => handleNotaMedica(expediente.fecha)}>Nota Medica</p>
                                         )}
@@ -201,12 +283,18 @@ export function MostrarExpedientes() {
                                             <p className="texto_2 cursor-pointer" onClick={() => handleReceta(expediente.fecha)}>Recetas</p>
                                         )}
                                     </>)}
-                                {userGroup == "Odontologo" && (
+                                {userGroup == "Odontologo" && historiaOdonto && (
                                     <>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoNotEvo(expediente.fecha)}>Nota evolucion</p>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoFichMed(expediente.fecha)}>Ficha tecnica medicina</p>
-                                        <p className="texto_2 cursor-pointer" onClick={() => handleOdontoNotEvo(expediente.fecha)}>Nota subsecuente</p>
+                                        <p className="texto_2 cursor-pointer" onClick={() => handleEnfermeria(expediente.fecha)}>Ficha Tecnica Enfermeria</p>
+                                        {historiaOdonto && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleOdonto(expediente.fecha)}>Historial clinico dental</p>
+                                        )}
+                                        {notaEvolucion && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleOdontoNotEvo(expediente.fecha)}>Nota evolucion</p>
+                                        )}
+                                        {fichaMedicaOdonto && (
+                                            <p className="texto_2 cursor-pointer" onClick={() => handleOdontoFichMed(expediente.fecha)}>Ficha tecnica medicina</p>
+                                        )}
                                     </>)}
 
                             </div>

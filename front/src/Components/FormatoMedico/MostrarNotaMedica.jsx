@@ -164,7 +164,6 @@ export function MostrarNotaMedica() {
                         <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                         <input className="datos_lectura" id='cedula' name='cedula' type="text" 
                         value={empleado.cedula_profesional} readOnly />
-                        <label className='etiqueta' htmlFor="firma">Firma:</label>
                     </div>
                 </div>
             </div>

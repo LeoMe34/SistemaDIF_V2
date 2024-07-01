@@ -145,7 +145,7 @@ export function MostrarReceta() {
             <div className="ml-10 mb-3 col">
                 <label className="etiqueta" htmlFor="tratamiento">Tratamiento</label>
                 <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="10" cols="30"
-                    value={receta?.medicamento?.tratamiento} readOnly/>
+                    value={receta?.medicamento?.tratamiento} readOnly />
             </div>
             <div className='ml-10 mb-2 container'>
                 <div className='row'>
@@ -156,13 +156,8 @@ export function MostrarReceta() {
                         <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                         <input className="datos_lectura" id='cedula' name='cedula' type="text"
                             value={empleado.cedula_profesional} readOnly />
-                        <label className='etiqueta-firma' htmlFor="firma">Firma:</label>
                     </div>
                 </div>
-            </div>
-
-            <div className="mb-3 text-center">
-                <button className="btn btn-guardar btn-lg btn-block">Guardar</button>
             </div>
         </div>
     )

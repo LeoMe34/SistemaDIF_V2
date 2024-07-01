@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { MensajeReceta } from '../../Modales/MensajeReceta';
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function NotasMedicas() {
     const navegador = useNavigate()
@@ -53,19 +54,17 @@ export function NotasMedicas() {
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
 
-    const getIdHistorialM = async (noExpediente) => {
+    const getIdHistorialM = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/getHistorialM/?no_expediente=${noExpediente}`,
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_historial_medico/${noExpediente}/${fechaActual}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 })
-            return response.data[0].id; // Devolvemos el ID del historial
+            setIdHistorial(response.data.id)
         } catch (error) {
             console.error('Error al obtener ID del historial médico:', error);
-            return null; // En caso de error, devolvemos null
-
         }
     }
 
@@ -112,15 +111,10 @@ export function NotasMedicas() {
     }, []);
 
     useEffect(() => {
-        const storedData = localStorage.getItem('noExp');
-        if (storedData) {
-            const noExpediente = JSON.parse(storedData);
-            getIdHistorialM(noExpediente).then((id) => {
-                setIdHistorial(id);
-                console.log(id);
-            });
+        if (noExpediente !== null) {
+            getIdHistorialM()
         }
-    }, []);
+    }, [noExpediente]);
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
@@ -174,11 +168,17 @@ export function NotasMedicas() {
                 </nav>
             </div>
 
+            <div className="ml-10 container mt-2">
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
+
             <h3 className='subtitulo'>Notas médicas</h3>
 
             <div className='ml-10 mb-5 container'>
                 <div className="ml-10 mb-3">
-                    {!noExpediente && (
+                    {noExpediente == null && (
                         <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                     )}
                 </div>
@@ -247,7 +247,6 @@ export function NotasMedicas() {
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                             <input className="datos_lectura" id='cedula' name='cedula' type="text"
                                 value={empleado.cedula} readOnly />
-                            <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
                 </div>

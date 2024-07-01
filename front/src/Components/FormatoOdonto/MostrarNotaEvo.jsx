@@ -101,8 +101,9 @@ export function MostrarNotaEvo() {
             </div>
 
             <div className="mt-3 ml-10 container">
-                <label htmlFor="fecha">Fecha: </label>
-                <input type="text" value={notaEvo?.fecha} readOnly/>
+                <label className='etiqueta' htmlFor="fecha">Fecha: </label>
+                <input className="entrada" id='fecha' name='fecha' type="date"
+                    value={notaEvo?.fecha} readOnly />
             </div>
 
             <h2 className='subtitulo'>Nota Evolución/Subsecuente</h2>
@@ -111,27 +112,27 @@ export function MostrarNotaEvo() {
                 <div className="col">
                     <label className="etiqueta mb-2" htmlFor="notas">Notas: </label>
                     <textarea id="notas" placeholder="Notas" className="text-amplio" rows="5"
-                        value={notaEvo?.notas} readOnly/>
+                        value={notaEvo?.notas} readOnly />
                 </div>
                 <div className="mt-2 col">
                     <label className="etiqueta mb-2" htmlFor="diagnostico">Diagnóstico:</label>
                     <textarea id="diagnostico" type="text" placeholder="diagnostico" className="entrada" rows="5"
-                        value={notaEvo?.diagnostico} readOnly/>
+                        value={notaEvo?.diagnostico} readOnly />
                 </div>
                 <div className="mt-2 col">
                     <label className="etiqueta mb-2" htmlFor="tratamiento">Tratamiento:</label>
                     <textarea id="tratamiento" type="text" placeholder="tratamiento" className="entrada" rows="5"
-                        value={notaEvo?.tratamiento} readOnly/>
+                        value={notaEvo?.tratamiento} readOnly />
                 </div>
                 <div className="mt-2 col">
                     <label className="etiqueta mb-2" htmlFor="plan">Plan a seguir:</label>
                     <textarea id="plan" type="text" placeholder="Plan" className="entrada" rows="5"
-                        value={notaEvo?.plan} readOnly/>
+                        value={notaEvo?.plan} readOnly />
                 </div>
                 <div className="mt-2 col">
                     <label className="etiqueta mb-2" htmlFor="tratamiento">Resumen de la consulta:</label>
                     <textarea id="resumen" type="text" placeholder="resumen" className="entrada" rows="5"
-                        value={notaEvo?.resumen_consulta} readOnly/>
+                        value={notaEvo?.resumen_consulta} readOnly />
                 </div>
             </div>
 
@@ -145,7 +146,6 @@ export function MostrarNotaEvo() {
                         <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                         <input className="datos_lectura" id='cedula' name='cedula' type="text"
                             value={empleado.cedula_profesional} readOnly />
-                        <label className='etiqueta' htmlFor="firma">Firma:</label>
                     </div>
                 </div>
             </div>

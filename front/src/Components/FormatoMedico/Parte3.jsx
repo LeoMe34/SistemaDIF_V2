@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -15,6 +16,7 @@ export function Parte3() {
     const navegador = useNavigate()
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [empleado, setEmpleado] = useState([]);
+    const [fechaActual, setFechaActual] = useState('')
 
     const getNoEmpleado = async () => {
         try {
@@ -53,15 +55,25 @@ export function Parte3() {
     }, []);
 
     useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
+
+    useEffect(() => {
+        //Creo que seria por el expediente y por el dia, pq solo hay una ficha por dia
         const getFichaMedica = async () => {
             try {
 
-                const response = await axios.get(`http://127.0.0.1:8000/api/getFichaMedica/?no_expediente=${noExpediente}`, {
+                const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fechaActual}/`, {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 });
-                setFichaMedica(response.data[0].id)
+                setFichaMedica(response.data.id)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -238,6 +250,12 @@ export function Parte3() {
     })
     return (
         <div>
+            <div className="ml-10 container mt-2">
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                )}
+            </div>
+
             <div className='ml-10 container'>
                 <h3 className='subtitulo'>Interrogatorio</h3>
             </div>
@@ -418,7 +436,6 @@ export function Parte3() {
                             <label className='etiqueta' htmlFor="cedula">Cédula:</label>
                             <input className="datos_lectura" id='cedula' name='cedula' type="text"
                                 value={empleado.cedula} readOnly />
-                            <label className='etiqueta' htmlFor="firma">Firma:</label>
                         </div>
                     </div>
                 </div>

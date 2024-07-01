@@ -27,7 +27,7 @@ export function CrearPaciente() {
     }
 
     const validarNombreCompleto = (nombreOApellido) => {
-        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ]{1,50}$/
+        const nombreCompletoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ\s]{1,50}$/
 
         return nombreCompletoRegex.test(nombreOApellido)
     }

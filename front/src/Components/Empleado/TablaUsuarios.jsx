@@ -64,9 +64,9 @@ export function TablaUsuarios() {
         <div className="container">
             <div className="">
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
-                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entarda" value={fecha} />
+                <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fecha} readOnly />
                 <label className="etiqueta" htmlFor="nombre_admin">Administrador</label>
-                <input type="text" id="nombre_admin" name="nombre_admin" className="entarda" value={nombre} readOnly />
+                <input type="text" id="nombre_admin" name="nombre_admin" className="entrada" value={nombre} readOnly />
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
@@ -84,7 +84,7 @@ export function TablaUsuarios() {
                             <tr key={index} onClick={() => handleClick(empleados.usuario)}>
                                 <td className="etiqueta">{empleados.no_trabajador}</td>
                                 <td className="etiqueta">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>
-                                <td className="etiqueta">{empleados.cedula}</td>
+                                <td className="etiqueta">{empleados.cedula_profesional}</td>
                                 <td className="etiqueta">{empleados.ocupacion}</td>
                                 <td className="etiqueta">{empleados.telefono}</td>
                             </tr>

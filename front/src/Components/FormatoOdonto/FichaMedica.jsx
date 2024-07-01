@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 
 export function FichaMedica() {
     const navegador = useNavigate()
@@ -14,6 +15,16 @@ export function FichaMedica() {
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
     const [idNota, setIdNota] = useState(null);
+    const [fechaActual, setFechaActual] = useState('')
+
+    useEffect(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        setFechaActual(formattedDate);
+    }, []);
 
     const getExp = () => {
         const storedData = localStorage.getItem('noExp')
@@ -61,7 +72,7 @@ export function FichaMedica() {
                     }
                 })
             setIdNota(response.data.id)
-            console.log(idNota)
+            console.log(response.data.id)
         } catch (error) {
             console.error('Error al obtener ID del historial:', error);
         }
@@ -116,7 +127,8 @@ export function FichaMedica() {
         } else {
             try {
                 await registrarFicha(data)
-                navegador('/nota_evo')
+                localStorage.removeItem("noExp")
+                navegador('/home_odontologo')
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
@@ -151,6 +163,9 @@ export function FichaMedica() {
                 <div className="ml-10">
                     {!noExpediente && (
                         <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                    )}
+                    {noExpediente !== null && fechaActual && (
+                        <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                     )}
                 </div>
 

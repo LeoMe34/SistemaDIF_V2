@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from 'axios';
+import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 
 const isLoginPage = window.location.pathname === '/'
 
@@ -13,6 +14,7 @@ export function MenuNave() {
     const { token } = useAuth()
     const [idUser, setIdUser] = useState(null);
     const [userGroup, setUserGroup] = useState(null);
+    const setNoExpediente = useNoExpediente()
 
     useEffect(() => {
         const getIdUser = async () => {
@@ -46,6 +48,12 @@ export function MenuNave() {
             console.error('Error al cerrar sesión:', error);
         }
     }
+
+    const removerNoExp = () => {
+        localStorage.removeItem("noExp")    
+        setNoExpediente("")    
+    }
+
 
     return (
 
@@ -110,7 +118,7 @@ export function MenuNave() {
                     <h3 className="MenuNav">Odontologo</h3>
                     {linkArrayOdontologo.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
-                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
                                 <div className='LinkIcon'>
                                     {icon}
                                     <div>
@@ -129,7 +137,7 @@ export function MenuNave() {
                     <h3 className="MenuNav">Medico</h3>
                     {linkArrayMedico.map(({ icon, label, to }) => (
                         <div className='LinkContainer' key={label}>
-                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                            <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
                                 <div className='LinkIcon'>
                                     {icon}
                                     <div>
@@ -379,18 +387,24 @@ const linkArrayOdontologo = [
         to: "/historial_odontologico_p1"
 
     },
-
+/*
     {
         label: "Nota Subsecuente",
         icon: <FaFileMedical />,
         to: "/nota_subs1"
 
     },
-
+*/
     {
         label: "Nota Evolución",
         icon: <FaFileMedical />,
         to: "/nota_evo"
+
+    },
+    {
+        label: "Ficha tecnica medica",
+        icon: <FaFileMedical />,
+        to: "/ficha_medica"
 
     },
 ]
@@ -399,35 +413,34 @@ const linkArrayMedico = [
     {
         label: "Home",
         icon: <FaHome />,
-        to: "/home_medico"
+        to: "/home_medico",
 
     },
 
     {
         label: "Ficha Medico",
         icon: <FaFileMedical />,
-        to: "/ficha_tecnica_medico"
-
+        to: "/ficha_tecnica_medico",
     },
 
     {
         label: "Historial Clinico",
         icon: <FaFileMedical />,
-        to: "/historial_clinico_p1"
+        to: "/historial_clinico_p1",
 
     },
 
     {
         label: "Notas Medicas",
         icon: <FaFileMedical />,
-        to: "/notas_medicas"
+        to: "/notas_medicas",
 
     },
 
     {
         label: "Receta",
         icon: <FaFileMedical />,
-        to: "/receta"
+        to: "/receta",
 
     },
 

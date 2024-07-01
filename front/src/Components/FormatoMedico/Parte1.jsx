@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function Parte1() {
     const navegador = useNavigate()
@@ -24,6 +25,7 @@ export function Parte1() {
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
         setNotExpediente(noExpediente)
+        localStorage.setItem('noExp',JSON.stringify(noExpediente))
     };
 
     const validarNumeros = (numero) => {
@@ -110,8 +112,11 @@ export function Parte1() {
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
-                {!noExpediente && (
+                {noExpediente ===null && (
                     <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
+                )}
+                {noExpediente !== null && fechaActual && (
+                    <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                 )}
 
                 <form onSubmit={enviar}>

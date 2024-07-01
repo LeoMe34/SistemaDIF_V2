@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
+import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 
 export function FichaTecnica() {
     const navegador = useNavigate()
@@ -142,6 +143,9 @@ export function FichaTecnica() {
             <div className="ml-10 container">
                 <div className="ml-10">
                     <BusquedaPaciente></BusquedaPaciente>
+                    {noExpediente && fechaActual && (
+                        <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
+                    )}
                 </div>
 
                 <form onSubmit={enviar}>
