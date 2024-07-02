@@ -8,6 +8,7 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import jsPDF from "jspdf";
+import { ubuntuBold, ubuntuRegular } from "../../Fuentes/Base64";
 
 export function FichaTecnicaMedico() {
     const navegador = useNavigate()
@@ -20,6 +21,8 @@ export function FichaTecnicaMedico() {
     const [detallePaciente, setDetallePaciente] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
 
+    const logoDif = "../Logos/LOGO DIF.jpeg"
+    const logoAyuntamiento = "../Logos/LOGO-AYUNTAMIENTO2.png"
 
     const getNoEmpleado = async () => {
         try {
@@ -46,7 +49,7 @@ export function FichaTecnicaMedico() {
             await getDetallesPaciente();
         };
         fetchData();
-    }, [token,noExpediente, fechaActual]);
+    }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
         const today = new Date();
@@ -89,8 +92,16 @@ export function FichaTecnicaMedico() {
 
     const generarPDF = async (data) => {
         const documento = new jsPDF();
-        documento.setFontSize(20);
-        documento.text('FICHA TÉCNICA DE CONSULTA MÉDICA \t', 40, 30);
+        documento.addFileToVFS('Ubuntu-Bold.ttf', ubuntuBold);
+        documento.addFont('Ubuntu-Bold.ttf', 'Ubuntu-Bold', 'normal')
+
+        documento.addFileToVFS('Ubuntu-Regular.ttf', ubuntuRegular);
+        documento.addFont('Ubuntu-Regular.ttf', 'Ubuntu-Regular', 'normal')
+
+        documento.setFont('Ubuntu-Bold');
+        documento.setFontSize(18);
+        documento.text('FICHA TÉCNICA DE CONSULTA MÉDICA \t', 45, 30);
+        documento.setFont('Ubuntu-Regular');
         documento.setFontSize(12);
 
         // Función para añadir texto con ajuste de líneas y posición Y
@@ -100,15 +111,20 @@ export function FichaTecnicaMedico() {
             return lines.length * 10; // Devuelve el aumento en Y basado en la altura de línea
         };
 
+        documento.addImage(logoDif, 'jpeg', 10, 10, 20, 20)
+        documento.addImage(logoAyuntamiento, 'png', 180, 10, 23, 20)
+
         let yPosition = 50;
         const maxWidth = 180; // Ancho máximo para el ajuste de texto
 
         yPosition += addTextWithWrap(`NOMBRE DEL PACIENTE: ${detallePaciente?.datosPersonalesPacient?.nombre} ${detallePaciente?.datosPersonalesPacient?.apellidoP} ${detallePaciente?.datosPersonalesPacient?.apellidoM}`, 20, yPosition, maxWidth);
         yPosition += addTextWithWrap(`NÚMERO DE EXPEDIENTE: ${noExpediente}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`EDAD: ${detallePaciente?.datosPersonalesPacient?.edad}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`PESO: ${detalleEnfermeria?.datosFisicos?.peso}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`SEXO: ${detallePaciente?.datosPersonalesPacient?.sexo}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`TALLA: ${detalleEnfermeria?.datosFisicos?.talla}`, 20, yPosition, maxWidth);
+        documento.text(`EDAD: ${detallePaciente?.datosPersonalesPacient?.edad}`, 20, yPosition);
+        documento.text(`PESO: ${detalleEnfermeria?.datosFisicos?.peso}`, 120, yPosition);
+        yPosition += 10
+        documento.text(`SEXO: ${detallePaciente?.datosPersonalesPacient?.sexo}`, 20, yPosition);
+        documento.text(`TALLA: ${detalleEnfermeria?.datosFisicos?.talla}`, 120, yPosition);
+        yPosition += 10
         yPosition += addTextWithWrap(`DIRECCIÓN: ${detallePaciente?.datosDireccionPacient?.direccion}`, 20, yPosition, maxWidth);
         yPosition += addTextWithWrap(`LUGAR DE NACIMIENTO: ${"!"}`, 20, yPosition, maxWidth);
         yPosition += addTextWithWrap(`FECHA DE NACIMIENTO: ${detallePaciente?.datosPersonalesPacient?.fechaDeNacimiento}`, 20, yPosition, maxWidth);
@@ -116,14 +132,33 @@ export function FichaTecnicaMedico() {
         yPosition += addTextWithWrap(`NÚMERO DE TELEFONO: ${detallePaciente?.datosContactoPacient?.telefono}`, 20, yPosition, maxWidth);
         yPosition += addTextWithWrap(`PROFESIÓN: ${"!"}`, 20, yPosition, maxWidth);
         yPosition += addTextWithWrap(`CORREO ELECTRÓNICO: ${detallePaciente?.datosContactoPacient?.correo}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`DIAGNÓSTICO MÉDICO: ${data.diagnostico}`, 20, yPosition, maxWidth);
-        yPosition += addTextWithWrap(`OBSERVACIONES: ${data.observacion}`, 20, yPosition, maxWidth);
+        yPosition += addTextWithWrap(`DIAGNÓSTICO MÉDICO: ${data.diagnostico}`, 20, yPosition, maxWidth);        
+        yPosition += addTextWithWrap(`OBSERVACIONES: ${data.observacion}`, 20, yPosition, maxWidth);        
         yPosition += addTextWithWrap(`MOTIVO DE LA CONSULTA: ${data.motivo_consulta}`, 20, yPosition, maxWidth);
 
         documento.text(`${nombreE}`, 90, yPosition + 30);
         documento.text(`MÉDICO RESPONSABLE`, 85, yPosition + 40);
+
+        documento.setTextColor(139, 37, 113)
         documento.setFontSize(10);
         documento.text('Veracruz esq. Rubí s/n Col.Tierra y Libertad Coatzacoalcos, Ver. C.P.96588 Tel.2139175', 35, 270);
+        const pageHeight = documento.internal.pageSize.getHeight();
+
+        // Definir colores y posiciones
+        const rectHeight = 3;
+        const spacing = 3; // Espacio entre los rectángulos
+        const colors = ['#3EBAB0', '#EC9723', '#EE759E', '#8B2571']; // Colores en formato hexadecimal
+
+        // Definir anchos y posiciones para cada rectángulo
+        const rectWidths = [20, 20, 20, 90];
+        let xPosition = 25; // Posición inicial x
+
+        // Dibujar rectángulos
+        rectWidths.forEach((width, index) => {
+            documento.setFillColor(colors[index]);
+            documento.rect(xPosition, pageHeight - 20, width, rectHeight, 'F');
+            xPosition += width + spacing; // Actualizar la posición x para el siguiente rectángulo
+        });
 
         documento.save(`Ficha_Tecnica_Medico_${noExpediente}.pdf`);
     }
