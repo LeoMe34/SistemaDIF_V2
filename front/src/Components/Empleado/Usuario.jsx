@@ -31,14 +31,14 @@ export function Usuario() {
             });
             const no_Empleado = response.data.user_info.no_trabajador
             const nombre = response.data.user_info.nombre_empleado
-            const cedula = response.data.user_info.cedula_profesional
             const correo = response.data.user_info.email
             setNoEmpleado(no_Empleado)
             setNombre(nombre)
-            setCedula(cedula)
             setEmail(correo)
             setId(response.data.user_info.id)
             console.log(response)
+            console.log(cedula);
+
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
         }
@@ -54,6 +54,7 @@ export function Usuario() {
             });
             setDetalleEmpleado(response.data)
             setTelefono(response.data.telefono)
+            setCedula(response.data.cedula_profesional)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener los datos del empleado:', error);
@@ -108,14 +109,14 @@ export function Usuario() {
     const mostrarInputsContraseña = () => {
         cambiarContrasenia((token), () => {
             setMostrarInputs(true);
-        });        
+        });
     };
 
     const handleModificarContrasenia = async (data) => {
         console.log(detalleEmpleado.id)
         try {
             const response = await axios.put(`http://127.0.0.1:8000/api/cambiar_contrasenia/${id}`, {
-                password: contraseña              
+                password: contraseña
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -127,18 +128,17 @@ export function Usuario() {
             console.error('Error al guardar cambios:', error);
         }
     }
-
+    console.log(cedula);
     return (
         <div className='container'>
-            <h2 className="subtitulo">Perfil de usuario</h2>
             <div className="card-user">
                 <div className="img">
                     <img src="../Logos/LOGO DIF.jpeg" alt="Logo del DIF" className="img-logos mx-2" />
 
                 </div>
                 <div className="content">
-                    <h2>Nombre del empleado</h2>
-                    <p>posición en el DIF</p>
+                    <h2>Perfil del empleado</h2>
+                    <p>Datos registrados en el DIF</p>
                     <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="cedula">Cédula profesional:</label>
@@ -187,14 +187,14 @@ export function Usuario() {
                         <div className="center container pt-1 mb-3 ml-10">
                             <div className="col">
                                 <label className='etiqueta-user' htmlFor="nueva_contra">Nueva contraseña: </label>
-                                <input className="entrada" type="password" id="nueva_contra" placeholder="Nueva contraseña" 
-                                 onChange={handleContraseña}/>
+                                <input className="entrada" type="password" id="nueva_contra" placeholder="Nueva contraseña"
+                                    onChange={handleContraseña} />
                             </div>
 
                             <div className="col">
                                 <label className='etiqueta-user' htmlFor="confirmar_contra">Confirmar contraseña: </label>
-                                <input className="entrada" type="password" id="confirmar_contra" placeholder="Confirmar contraseña" 
-                                 onChange={handleConfirmarContra}/>
+                                <input className="entrada" type="password" id="confirmar_contra" placeholder="Confirmar contraseña"
+                                    onChange={handleConfirmarContra} />
                             </div>
 
                             <div className="col">

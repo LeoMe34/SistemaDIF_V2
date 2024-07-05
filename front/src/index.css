@@ -78,17 +78,17 @@ textarea {
   margin-left: 20px;
 }
 
-.texto_1{
+.texto_1 {
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
-  font-size: 20px;  
-  margin-bottom: 10px;  
+  font-size: 20px;
+  margin-bottom: 10px;
   margin-left: 20px;
 }
 
-.texto_2{
+.texto_2 {
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
-  font-size: 16px;  
-  margin-bottom: 10px;  
+  font-size: 16px;
+  margin-bottom: 10px;
   margin-left: 20px;
 }
 
@@ -431,7 +431,6 @@ textarea {
   justify-content: center;
   align-items: center;
   padding-bottom: 10px;
-  border-bottom: 2px solid;
   border-bottom-right-radius: 21px;
   padding: .5em 2ex;
 
@@ -443,30 +442,25 @@ textarea {
     padding: calc(6px) 0;
     height: 55px;
 
-    .imgContent {
-      padding: 8px 16px;
+    .LinkIconProfile {
+      padding: 0px 16px;
       display: flex;
 
-      img {
-        max-width: 120%;
-        height: auto;
+      svg {
+        font-size: 95px;
+        color: #DF4D72;
       }
     }
 
-    span {
-      font-size: 25px;
-      color: #DF4D72;
-      display: block;
-    }
-
-    :hover {
+    &:hover .LinkIconProfile svg {
       color: #812A71;
-      cursor: pointer;
     }
 
     &.active {
-      span {
-        color: #812A71;
+      .LinkIconProfile {
+        svg {
+          color: #812A71;
+        }
       }
     }
 
@@ -476,34 +470,24 @@ textarea {
 }
 
 
-.Collapsible {
-  margin: 8px 0;
-  padding: 0 15%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 22px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid;
-  border-bottom-right-radius: 21px;
-
-  :hover {
-    color: #812A71;
-    cursor: pointer;
-  }
-
-}
-
 .MenuNav {
   margin: 8px 0;
   padding: 0 15%;
   border: none;
-  text-align: left;
+  text-align: center;
   outline: none;
   font-size: 22px;
   padding-bottom: 10px;
   border-bottom: 2px solid;
   border-bottom-right-radius: 21px;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
 }
 
 .LinkContainer {
@@ -512,32 +496,34 @@ textarea {
   padding-top: 15px;
 
 
-
   .Links {
     display: flex;
     align-items: center;
     text-decoration: none;
     padding: calc(6px) 0;
-    height: 55px;
+    height: 80px;
 
     .LinkIcon {
-      padding: 8px 16px;
+      padding: 0px 16px;
       display: flex;
 
-      :hover {
-        color: #812A71;
-        cursor: pointer;
-      }
 
       span {
-        font-size: 15px;
+        font-size: 20px;
         color: #DF4D72;
       }
 
       svg {
-        font-size: 25px;
+        padding-right: 15px;
+        font-size: 45px;
         color: #DF4D72;
       }
+    }
+
+    &:hover .LinkIcon span,
+    &:hover .LinkIcon svg {
+      color: #812A71;
+      background-color: #26c2ff;
     }
 
     &.active {
@@ -553,6 +539,7 @@ textarea {
     }
   }
 }
+
 
 .odontoContent {
   display: flex;
@@ -638,7 +625,7 @@ textarea {
   margin-top: 20px;
 }
 
-.folder{
+.folder {
   margin-left: 20px;
   font-size: 100px;
   color: #812A71

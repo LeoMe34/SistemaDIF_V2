@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
-import { FaFileMedical, FaHome } from "react-icons/fa";
+import { HiUserCircle } from "react-icons/hi";
+import { GiMedicines } from "react-icons/gi";
+import { FaFileMedical, FaHospitalUser, FaNotesMedical } from "react-icons/fa";
+import { FaUserDoctor, FaUser, FaHouseMedical, FaBriefcaseMedical } from "react-icons/fa6";
 import { NavLink, useNavigate } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import { useAuth } from '../../Contexto/AuthContext';
@@ -61,14 +64,11 @@ export function MenuNave() {
 
         <div className="menu">
 
-            {linkArrayUser.map(({ photo, label, to }) => (
-                <div className='logoContent' key={label}>
+            {linkArrayUser.map(({ icon, to }) => (
+                <div className='logoContent' key={icon}>
                     <NavLink to={to} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
-                        <div className='imgContent'>
-                            {photo}
-                        </div>
-                        <div>
-                            <span>{label}</span>
+                        <div className='LinkIconProfile'>
+                            {icon}
                         </div>
                     </NavLink>
                 </div>
@@ -138,16 +138,16 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Medico</h3>
                     {linkArrayMedico.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+
+                                    <span>{label}</span>
+
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
             )}
@@ -264,29 +264,16 @@ export function MenuNave() {
                 </div>
             )}
 
-            <div className='logoContent'>
-                <NavLink to='/' onClick={handleLogout} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
-                    <div className='imgContent'>
-                        <IoIosLogOut />
-                    </div>
-                    <span>Cerrar Sesión</span>
-                </NavLink>
-
-            </div>
-
-            {/* {linkArrayLogOut.map(({ icon, label, to }) => (
+            {linkArrayExit.map(({ label, icon }) => (
                 <div className='LinkContainer' key={label}>
-                    <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                    <NavLink to='/' onClick={handleLogout} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                         <div className='LinkIcon'>
                             {icon}
-                            <div>
-                                <span>{label}</span>
-                            </div>
+                            <span>{label}</span>
                         </div>
                     </NavLink>
                 </div>
-           ))*/
-            }
+            ))}
 
 
         </div >
@@ -295,9 +282,16 @@ export function MenuNave() {
 
 const linkArrayUser = [
     {
-        label: "Usuario",
-        photo: <img src="../Logos/cuenta.png" alt="user" />,
+        icon: <HiUserCircle />,
         to: "/usuario"
+
+    },
+]
+
+const linkArrayExit = [
+    {
+        label: "Cerrar sesión",
+        icon: <IoIosLogOut />,
 
     },
 ]
@@ -306,19 +300,19 @@ const linkArrayUser = [
 const linkArrayAdmin = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_administrador"
 
     },
     {
         label: "Crear Usuario",
-        icon: <FaFileMedical />,
+        icon: <FaUserDoctor />,
         to: "/crear_usuario"
 
     },
     {
         label: "Crear Empleado",
-        icon: <FaFileMedical />,
+        icon: <FaUser />,
         to: "/crear_empleado"
 
     },
@@ -327,14 +321,14 @@ const linkArrayAdmin = [
 const linkArrayRecep = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_recepcion_medica"
 
     },
 
     {
         label: "Crear Paciente",
-        icon: <FaFileMedical />,
+        icon: <FaHospitalUser />,
         to: "/crear_paciente"
 
     },
@@ -344,14 +338,14 @@ const linkArrayRecep = [
 const linkArrayRecepPsico = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_recepcion_psicologia"
 
     },
 
     {
         label: "Crear Paciente",
-        icon: <FaFileMedical />,
+        icon: <FaHospitalUser />,
         to: "/crear_paciente_psicologia"
 
     },
@@ -361,7 +355,7 @@ const linkArrayRecepPsico = [
 const linkArrayEnfermero = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_enfermeria"
 
     },
@@ -378,7 +372,7 @@ const linkArrayEnfermero = [
 const linkArrayOdontologo = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_odontologo"
 
     },
@@ -413,8 +407,8 @@ const linkArrayOdontologo = [
 
 const linkArrayMedico = [
     {
-        label: "Home",
-        icon: <FaHome />,
+        label: "Inicio",
+        icon: <FaHouseMedical />,
         to: "/home_medico",
 
     },
@@ -427,21 +421,21 @@ const linkArrayMedico = [
 
     {
         label: "Historial Clinico",
-        icon: <FaFileMedical />,
+        icon: < FaBriefcaseMedical />,
         to: "/historial_clinico_p1",
 
     },
 
     {
         label: "Notas Medicas",
-        icon: <FaFileMedical />,
+        icon: <FaNotesMedical />,
         to: "/notas_medicas",
 
     },
 
     {
-        label: "Receta",
-        icon: <FaFileMedical />,
+        label: "Receta Medica",
+        icon: <GiMedicines />,
         to: "/receta",
 
     },
@@ -451,7 +445,7 @@ const linkArrayMedico = [
 const linkArrayPsico = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_psicologia"
 
     },
@@ -468,7 +462,7 @@ const linkArrayPsico = [
 const linkArrayNutri = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_nutricion"
 
     },
@@ -485,7 +479,7 @@ const linkArrayNutri = [
 const linkArrayOftal = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_oftalmologo"
 
     },
@@ -502,7 +496,7 @@ const linkArrayOftal = [
 const linkArrayAudio = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_audiologo"
 
     },
