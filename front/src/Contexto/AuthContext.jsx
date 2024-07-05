@@ -9,14 +9,15 @@ export const AuthProvider = ({ children }) => {
     const login = (newToken) => {
         setToken(newToken);
         localStorage.setItem('token', newToken);
-        setTimeout(()=>{
+        setTimeout(() => {
             window.location.reload()
-        },100)
+        }, 100)
     };
 
     const logout = () => {
         setToken(null);
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
     };
 
     return (

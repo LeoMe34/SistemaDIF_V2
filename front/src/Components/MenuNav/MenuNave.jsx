@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
 import { FaFileMedical, FaHome } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from 'axios';
@@ -11,10 +11,12 @@ const isLoginPage = window.location.pathname === '/'
 
 
 export function MenuNave() {
-    const { token } = useAuth()
+    const { token, logout } = useAuth()
     const [idUser, setIdUser] = useState(null);
     const [userGroup, setUserGroup] = useState(null);
     const setNoExpediente = useNoExpediente()
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const getIdUser = async () => {
@@ -37,21 +39,18 @@ export function MenuNave() {
 
     }, [token]);
 
-    const logout = async () => {
+    const handleLogout = async () => {
         try {
-            await axios.post("http://127.0.0.1:8000/api/logout/", null, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            })
+            await logout(); // Usa la función de logout proporcionada por el contexto
+            // setNoExpediente("");  Limpia el contexto de NoExpediente si es necesario
+            navigate('/'); // Redirige a la página de inicio de sesión
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
         }
     }
 
-    const removerNoExp = () => {
-        localStorage.removeItem("noExp")    
-        setNoExpediente("")    
+    if (!token) {
+        return null; // Si no hay token, no renderizar el menú
     }
 
 
@@ -263,7 +262,7 @@ export function MenuNave() {
             )}
 
             <div className='logoContent'>
-                <NavLink to='/' onClick={logout} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
+                <NavLink to='/' onClick={handleLogout} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
                     <div className='imgContent'>
                         <IoIosLogOut />
                     </div>
@@ -387,14 +386,14 @@ const linkArrayOdontologo = [
         to: "/historial_odontologico_p1"
 
     },
-/*
-    {
-        label: "Nota Subsecuente",
-        icon: <FaFileMedical />,
-        to: "/nota_subs1"
-
-    },
-*/
+    /*
+        {
+            label: "Nota Subsecuente",
+            icon: <FaFileMedical />,
+            to: "/nota_subs1"
+    
+        },
+    */
     {
         label: "Nota Evolución",
         icon: <FaFileMedical />,
