@@ -52,7 +52,10 @@ export function MenuNave() {
     if (!token) {
         return null; // Si no hay token, no renderizar el menú
     }
-
+    const removerNoExp = () => {
+        localStorage.removeItem("noExp")
+        setNoExpediente("")
+    }
 
     return (
 
