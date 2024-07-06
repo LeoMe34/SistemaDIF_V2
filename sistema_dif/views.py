@@ -1506,3 +1506,14 @@ def eliminar_receta(request, pk):
 
     receta.delete()
     return Response(status=204)
+
+
+# APIS para los graficos
+@api_view(["GET"])
+def get_graficosDatos_enfermeria(request):
+    try:
+        data = FichaTecnicaEnfermeria.objects.all()
+        serializer = FichaTecnicaESerializer(data, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

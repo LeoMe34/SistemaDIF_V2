@@ -37,7 +37,7 @@ function AuthContent() {
 
   return (
     <main>
-      {!isLoginPage && token && <NavBarSimple />}
+      {/*{!isLoginPage && token && <NavBarSimple />}*/}
       <div className={isLoginPage || !token ? '' : 'sidebarState'}>
         {!isLoginPage && token && <MenuNave />}
         <Rutas />

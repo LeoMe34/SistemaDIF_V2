@@ -137,8 +137,8 @@ export function Usuario() {
 
                 </div>
                 <div className="content">
-                    <h2>Perfil del empleado</h2>
-                    <p>Datos registrados en el DIF</p>
+                    <h2>Perfil Usuario</h2>
+                    <p>Empleado del DIF</p>
                     <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="cedula">Cédula profesional:</label>

@@ -49,6 +49,9 @@ textarea {
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
+  background-color: #DF4D72;
+  border-radius: 10px;
+  color: #ffffff;
 }
 
 .titulo {
@@ -65,8 +68,11 @@ textarea {
   font-size: large;
   margin-top: 20px;
   margin-bottom: 20px;
-  text-align: left;
+  text-align: center;
   margin-left: 20px;
+  background-color: #DF4D72;
+  border-radius: 20px;
+  color: #ffffff;
 }
 
 .subtitulo_3 {
@@ -99,6 +105,8 @@ textarea {
   font-family: 'Ubuntu-Regular', Arial, Helvetica, sans-serif;
   font-size: large;
 }
+
+
 
 .img-logos {
   width: 50px;
@@ -417,7 +425,7 @@ textarea {
 
 .sidebarState {
   display: grid;
-  grid-template-columns: 200px auto;
+  grid-template-columns: 210px auto;
 }
 
 .menu {
@@ -449,6 +457,7 @@ textarea {
       svg {
         font-size: 95px;
         color: #DF4D72;
+        transition: 0.3s;
       }
     }
 
@@ -498,43 +507,52 @@ li {
 
   .Links {
     display: flex;
-    align-items: center;
     text-decoration: none;
     padding: calc(6px) 0;
     height: 80px;
 
     .LinkIcon {
-      padding: 0px 16px;
+      padding: 0 16px;
       display: flex;
+      align-items: center;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
 
-
-      span {
+      span,
+      svg {
         font-size: 20px;
         color: #DF4D72;
+        transition: color 0.3s;
+      }
+
+      span {
+        margin-left: 10px;
+        font-size: 15px;
+
       }
 
       svg {
-        padding-right: 15px;
-        font-size: 45px;
-        color: #DF4D72;
+        font-size: 40px;
       }
+
+      &:hover {
+        background-color: #812A71;
+      }
+
+      &:hover span,
+      &:hover svg {
+        color: #ffffff;
+      }
+
+
     }
 
-    &:hover .LinkIcon span,
-    &:hover .LinkIcon svg {
-      color: #812A71;
-      background-color: #26c2ff;
-    }
+    &.active .LinkIcon {
+      background-color: #812A71;
 
-    &.active {
-      .LinkIcon {
-        span {
-          color: #812A71;
-        }
-
-        svg {
-          color: #812A71;
-        }
+      span,
+      svg {
+        color: #ffffff;
       }
     }
   }
@@ -643,6 +661,17 @@ li {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.graficButton {
+  background-color: transparent;
+  border: none;
+
+  svg {
+    color: #812A71;
+    font-size: 40px;
+    margin-left: 9px;
+  }
 }
 
 /*
