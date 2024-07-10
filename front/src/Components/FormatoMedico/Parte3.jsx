@@ -193,7 +193,7 @@ export function Parte3() {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
 
         return textoRegex.test(texto)
-    }
+    }    
 
     const enviar = handleSubmit(async data => {
         const padecimientoValido = validarTexto(data.padecimiento)
