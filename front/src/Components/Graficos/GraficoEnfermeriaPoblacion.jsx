@@ -5,9 +5,10 @@ import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
+import { left } from '@popperjs/core';
 
-const GraficosEnfermeria = () => {
-    const [chartData, setChartData] = useState([]);
+const GraficosEnfermeriaPoblacion = () => {
+    const [data, setData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
@@ -16,33 +17,8 @@ const GraficosEnfermeria = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfermeria/');
-                console.log('Response Data:', response.data);
-                const servicioMap = {
-                    1: 'Consulta',
-                    2: 'Curación',
-                    3: 'Retiro de puntos',
-                    4: 'Aplicación de medicamentos',
-                    5: 'DxTx'
-                };
-
-                // Procesar los datos para contar los pacientes por tipo de servicio
-                const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.servicio_enfermeria];
-                    if (serviceType) {
-                        acc[serviceType] = (acc[serviceType] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
-
-                // Convertir el objeto en un array adecuado para ECharts
-                const chartDataArray = Object.keys(serviceCounts).map(key => ({
-                    name: key,
-                    value: serviceCounts[key],
-                }));
-
-                console.log('Processed Chart Data:', chartDataArray);
-                setChartData(chartDataArray);
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfPob/');
+                setData(response.data);
             } catch (error) {
                 console.error('Error en obtener los datos del grafico enfermeria:', error);
             }
@@ -51,37 +27,37 @@ const GraficosEnfermeria = () => {
     }, []);
 
     useEffect(() => {
-        if (chartData.length === 0) {
+        if (data.length === 0) {
             return; // No renderizar el gráfico si no hay datos
         }
 
-        const chartDom = document.getElementById('main');
+        const chartDom = document.getElementById('graficoPoblacion');
         const myChart = echarts.init(chartDom);
         let option;
 
-        if (chartType == 'bar') {
+        if (chartType === 'bar') {
             option = {
                 title: {
-                    text: 'Cantidad de Personas por servicio de enferemeria',
+                    text: 'Cantidad de Personas por tipo de población',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'axis',
+                    trigger: 'item',
                 },
                 xAxis: {
                     type: 'category',
-                    data: chartData.map(item => item.name),
+                    data: ['Embarazada', 'Adulto Mayor', 'Discapacitado'],
                 },
                 yAxis: {
                     type: 'value',
                 },
                 series: [
                     {
-                        data: chartData.map(item => item.value),
+                        data: [data.embarazada_true, data.adultoM_true, data.discapacitado_true],
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1'];
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -99,11 +75,11 @@ const GraficosEnfermeria = () => {
         } else {
             option = {
                 title: {
-                    text: 'Cantidad de Personas por servicio de enferemeria',
+                    text: 'Conteo de Población',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'item'
                 },
                 legend: {
                     top: '5%',
@@ -111,15 +87,15 @@ const GraficosEnfermeria = () => {
                 },
                 series: [
                     {
-                        name: 'Tipo de servicio',
+                        name: 'Población',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
-                        data: chartData.map(item => ({
-                            value: item.value,
-                            name: item.name
-                        })),
-
+                        data: [
+                            { value: data.embarazada_true, name: 'Embarazada' },
+                            { value: data.adultoM_true, name: 'Adulto Mayor' },
+                            { value: data.discapacitado_true, name: 'Discapacitado' }
+                        ],
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
@@ -134,7 +110,7 @@ const GraficosEnfermeria = () => {
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
                                 return colorList[params.dataIndex];
                             }
                         },
@@ -155,7 +131,7 @@ const GraficosEnfermeria = () => {
         return () => {
             myChart.dispose();
         };
-    }, [chartData, showLabels, chartType]);
+    }, [data, showLabels, chartType]);
 
     const handleDownload = () => {
         if (chartInstance) {
@@ -184,8 +160,8 @@ const GraficosEnfermeria = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
-            <div id="main" style={{ width: '95%', height: '350px' }}></div>
+            <div id="graficoPoblacion" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
 
-export default GraficosEnfermeria;
+export default GraficosEnfermeriaPoblacion;

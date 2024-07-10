@@ -413,7 +413,7 @@ export function Parte3() {
                     <div className='row'>
                         <div className="col">
                             <label className="etiqueta" htmlFor="estGab">Estudios gabinete</label>
-                            <span className="ml-10" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
+                            <span className="" style={{ display: 'block' }}>Cargue los estudios en formato PDF</span>
                             <label htmlFor="fileInput" className="btn btn-cargar">
                                 Elegir archivo(s)
                             </label>
@@ -429,7 +429,7 @@ export function Parte3() {
 
                 <div className='ml-10 mb-5 container'>
                     <div className='row'>
-                        <div className='col'>
+                        <div className='col-medic'>
                             <label className='etiqueta' htmlFor="medico">Médico:</label>
                             <input className="datos_lectura" id='medico' name='medico' type="text"
                                 value={empleado.nombre_empleado} readOnly />
