@@ -25,7 +25,7 @@ export function Parte1() {
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
         setNotExpediente(noExpediente)
-        localStorage.setItem('noExp',JSON.stringify(noExpediente))
+        localStorage.setItem('noExp', JSON.stringify(noExpediente))
     };
 
     const validarNumeros = (numero) => {
@@ -112,7 +112,7 @@ export function Parte1() {
 
             <div>
                 <h3 className='subtitulo'>Historia Clínica Simplificada</h3>
-                {noExpediente ===null && (
+                {noExpediente === null && (
                     <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                 )}
                 {noExpediente !== null && fechaActual && (

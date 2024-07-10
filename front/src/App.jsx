@@ -1,11 +1,6 @@
 import './App.css'
 import { Footer } from './Partials/Footer'
-
-
-
-//import { NavBarSimple } from './Partials/NavBarSimple';
 //import { NavBarBusqueda } from './Partials/NavBarBusqueda';
-
 import { Rutas } from './Routes/Rutas';
 
 import 'bootstrap/dist/css/bootstrap.min.css'; // Importa el archivo CSS de Bootstrap
@@ -13,61 +8,42 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Importa el archivo JavaSc
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Toaster } from 'react-hot-toast'
 import styled from "styled-components";
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { MenuNave } from "./Components/MenuNav/MenuNave"
 import { NavBarSimple } from "./Partials/NavBarSimple"
-import { AuthProvider } from './Contexto/AuthContext';
+import { AuthProvider, useAuth } from './Contexto/AuthContext';
 import { NoExpedienteProvider } from './Contexto/NoExpedienteContext';
 import { UsuarioIdProvider } from './Contexto/UsuarioIdContext';
 
 function App() {
-
-  const isLoginPage = window.location.pathname === '/'
   return (
-    <>
-      <AuthProvider>
-        <BrowserRouter>
-          <UsuarioIdProvider>
-            <NoExpedienteProvider>
-              <main>
-                {!isLoginPage && <NavBarSimple />}
-                <div className={isLoginPage ? '' : 'sidebarState'}>
-                  {!isLoginPage && <MenuNave />}
-                  <Rutas />
-
-                </div>
-              </main>
-
-
-              <footer>
-                <Footer />
-              </footer>
-            </NoExpedienteProvider>
-          </UsuarioIdProvider>
-          <Toaster />
-        </BrowserRouter>
-      </AuthProvider>
-    </>
-
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <UsuarioIdProvider>
+          <NoExpedienteProvider>
+            <AuthContent />
+            <Footer />
+            <Toaster />
+          </NoExpedienteProvider>
+        </UsuarioIdProvider>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
+function AuthContent() {
+  const { token } = useAuth();
+  const isLoginPage = window.location.pathname === '/';
 
-export default App
-{/*
-    <div>
-      <header>
-        {/*<NavBarBusqueda />
-        <NavBarSimple />}
-      </header>
-
-      <div>
-        <Rutas>
-        </Rutas>
+  return (
+    <main>
+      {/*{!isLoginPage && token && <NavBarSimple />}*/}
+      <div className={isLoginPage || !token ? '' : 'sidebarState'}>
+        {!isLoginPage && token && <MenuNave />}
+        <Rutas />
       </div>
+    </main>
+  );
+}
 
-      <footer>
-        <Footer />
-      </footer>
-
-      </div>*/}
+export default App;

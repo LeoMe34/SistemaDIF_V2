@@ -7,7 +7,7 @@ export function MostrarUsuario() {
     const { token } = useAuth()
 
     const [datosUsuario, setDatosUsuario] = useState({});
-    
+
     const [idUsuario, setIdUsuario] = useState(null)
 
     const navegador = useNavigate()
@@ -43,7 +43,7 @@ export function MostrarUsuario() {
 
     const eliminarUsuario = async () => {
         try {
-            const response = await axios.patch(`http://127.0.0.1:8000/api/eliminar_usuario/${idUsuario}`,null, {
+            const response = await axios.patch(`http://127.0.0.1:8000/api/eliminar_usuario/${idUsuario}`, null, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
@@ -57,15 +57,14 @@ export function MostrarUsuario() {
 
     return (
         <div className='container'>
-            <h2 className="subtitulo">Perfil de usuario</h2>
             <div className="card-user">
                 <div className="img">
                     <img src="../Logos/LOGO DIF.jpeg" alt="Logo del DIF" className="img-logos mx-2" />
 
                 </div>
                 <div className="content">
-                    <h2>Nombre del empleado</h2>
-                    <p>posición en el DIF</p>
+                    <h2>Perfil de empleado</h2>
+                    <p>Datos del empleado en el DIF</p>
                     <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="cedula">Cédula profesional:</label>

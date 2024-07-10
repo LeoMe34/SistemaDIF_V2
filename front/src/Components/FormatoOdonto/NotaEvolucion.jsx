@@ -151,6 +151,7 @@ export function NotaEvolucion() {
                     </ol>
                 </nav>
             </div>
+            <h2 className='subtitulo'>Nota Evolución</h2>
             <div className='mt-3 mb-5 container'>
                 {noExpediente === null && (
                     <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
@@ -170,7 +171,6 @@ export function NotaEvolucion() {
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>
-                <h2 className='subtitulo'>Nota Evolución</h2>
 
                 <div className="mt-3 ml-10 container">
                     <div className="col">

@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosLogOut } from "react-icons/io";
-import { FaFileMedical, FaHome } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
+import { HiUserCircle } from "react-icons/hi";
+import { GiMedicines } from "react-icons/gi";
+import { RiPsychotherapyFill } from "react-icons/ri";
+import { TbNurse } from "react-icons/tb";
+import { FaFileMedical, FaHospitalUser, FaNotesMedical } from "react-icons/fa";
+import { FaUserDoctor, FaUser, FaHouseMedical, FaBriefcaseMedical, FaTeeth } from "react-icons/fa6";
+import { NavLink, useNavigate } from 'react-router-dom';
 import Collapsible from 'react-collapsible';
 import { useAuth } from '../../Contexto/AuthContext';
 import axios from 'axios';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
+import { BsFileBarGraphFill } from "react-icons/bs";
 
 const isLoginPage = window.location.pathname === '/'
 
 
 export function MenuNave() {
-    const { token } = useAuth()
+    const { token, logout } = useAuth()
     const [idUser, setIdUser] = useState(null);
     const [userGroup, setUserGroup] = useState(null);
     const setNoExpediente = useNoExpediente()
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const getIdUser = async () => {
@@ -37,36 +45,33 @@ export function MenuNave() {
 
     }, [token]);
 
-    const logout = async () => {
+    const handleLogout = async () => {
         try {
-            await axios.post("http://127.0.0.1:8000/api/logout/", null, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            })
+            await logout(); // Usa la función de logout proporcionada por el contexto
+            // setNoExpediente("");  Limpia el contexto de NoExpediente si es necesario
+            navigate('/'); // Redirige a la página de inicio de sesión
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
         }
     }
 
-    const removerNoExp = () => {
-        localStorage.removeItem("noExp")    
-        setNoExpediente("")    
+    if (!token) {
+        return null; // Si no hay token, no renderizar el menú
     }
-
+    const removerNoExp = () => {
+        localStorage.removeItem("noExp")
+        setNoExpediente("")
+    }
 
     return (
 
         <div className="menu">
 
-            {linkArrayUser.map(({ photo, label, to }) => (
-                <div className='logoContent' key={label}>
+            {linkArrayUser.map(({ icon, to }) => (
+                <div className='logoContent' key={icon}>
                     <NavLink to={to} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
-                        <div className='imgContent'>
-                            {photo}
-                        </div>
-                        <div>
-                            <span>{label}</span>
+                        <div className='LinkIconProfile'>
+                            {icon}
                         </div>
                     </NavLink>
                 </div>
@@ -83,16 +88,14 @@ export function MenuNave() {
                 <div>
                     <h3 className="MenuNav">Administrador</h3>
                     {linkArrayAdmin.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label} >
+                        <li className='LinkContainer' key={label} >
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>)}
 
@@ -100,16 +103,14 @@ export function MenuNave() {
                 <div>
                     <h3 className="MenuNav">Enfermero</h3>
                     {linkArrayEnfermero.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>)}
 
@@ -117,16 +118,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Odontologo</h3>
                     {linkArrayOdontologo.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
             )}
@@ -136,16 +135,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Medico</h3>
                     {linkArrayMedico.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`} onClick={removerNoExp}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
             )}
@@ -154,16 +151,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Psicologo</h3>
                     {linkArrayPsico.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
 
@@ -173,16 +168,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Nutriologo</h3>
                     {linkArrayNutri.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
 
@@ -192,16 +185,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Oftalmólogo</h3>
                     {linkArrayOftal.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
 
@@ -211,16 +202,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Audiólogo</h3>
                     {linkArrayAudio.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
 
@@ -230,16 +219,14 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Recepcionista</h3>
                     {linkArrayRecep.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
             )}
@@ -248,43 +235,28 @@ export function MenuNave() {
                 <div >
                     <h3 className="MenuNav">Recepcionista</h3>
                     {linkArrayRecepPsico.map(({ icon, label, to }) => (
-                        <div className='LinkContainer' key={label}>
+                        <li className='LinkContainer' key={label}>
                             <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
-                                <div className='LinkIcon'>
+                                <a className='LinkIcon'>
                                     {icon}
-                                    <div>
-                                        <span>{label}</span>
-                                    </div>
-                                </div>
+                                    <span>{label}</span>
+                                </a>
                             </NavLink>
-                        </div>
+                        </li>
                     ))}
                 </div>
             )}
 
-            <div className='logoContent'>
-                <NavLink to='/' onClick={logout} className={({ isActive }) => `Link${isActive ? ` active` : ``}`}>
-                    <div className='imgContent'>
-                        <IoIosLogOut />
-                    </div>
-                    <span>Cerrar Sesión</span>
-                </NavLink>
-
-            </div>
-
-            {/* {linkArrayLogOut.map(({ icon, label, to }) => (
+            {linkArrayExit.map(({ label, icon }) => (
                 <div className='LinkContainer' key={label}>
-                    <NavLink to={to} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
+                    <NavLink to='/' onClick={handleLogout} className={({ isActive }) => `Links${isActive ? ` active` : ``}`}>
                         <div className='LinkIcon'>
                             {icon}
-                            <div>
-                                <span>{label}</span>
-                            </div>
+                            <span>{label}</span>
                         </div>
                     </NavLink>
                 </div>
-           ))*/
-            }
+            ))}
 
 
         </div >
@@ -293,9 +265,16 @@ export function MenuNave() {
 
 const linkArrayUser = [
     {
-        label: "Usuario",
-        photo: <img src="../Logos/cuenta.png" alt="user" />,
+        icon: <HiUserCircle />,
         to: "/usuario"
+
+    },
+]
+
+const linkArrayExit = [
+    {
+        label: "Cerrar sesión",
+        icon: <IoIosLogOut />,
 
     },
 ]
@@ -304,20 +283,26 @@ const linkArrayUser = [
 const linkArrayAdmin = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_administrador"
 
     },
     {
         label: "Crear Usuario",
-        icon: <FaFileMedical />,
+        icon: <FaUserDoctor />,
         to: "/crear_usuario"
 
     },
     {
         label: "Crear Empleado",
-        icon: <FaFileMedical />,
+        icon: <FaUser />,
         to: "/crear_empleado"
+
+    },
+    {
+        label: "Graficas",
+        icon: <BsFileBarGraphFill />,
+        to: "/graficas_grl"
 
     },
 ]
@@ -325,14 +310,14 @@ const linkArrayAdmin = [
 const linkArrayRecep = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_recepcion_medica"
 
     },
 
     {
         label: "Crear Paciente",
-        icon: <FaFileMedical />,
+        icon: <FaHospitalUser />,
         to: "/crear_paciente"
 
     },
@@ -342,14 +327,14 @@ const linkArrayRecep = [
 const linkArrayRecepPsico = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_recepcion_psicologia"
 
     },
 
     {
         label: "Crear Paciente",
-        icon: <FaFileMedical />,
+        icon: <FaHospitalUser />,
         to: "/crear_paciente_psicologia"
 
     },
@@ -359,14 +344,14 @@ const linkArrayRecepPsico = [
 const linkArrayEnfermero = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_enfermeria"
 
     },
 
     {
         label: "Ficha Enfermeria",
-        icon: <FaFileMedical />,
+        icon: <TbNurse />,
         to: "/ficha_tecnica_enfermeria"
 
     },
@@ -376,33 +361,33 @@ const linkArrayEnfermero = [
 const linkArrayOdontologo = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_odontologo"
 
     },
 
     {
         label: "Historial Dental",
-        icon: <FaFileMedical />,
+        icon: <FaTeeth />,
         to: "/historial_odontologico_p1"
 
     },
-/*
-    {
-        label: "Nota Subsecuente",
-        icon: <FaFileMedical />,
-        to: "/nota_subs1"
-
-    },
-*/
+    /*
+        {
+            label: "Nota Subsecuente",
+            icon: <FaFileMedical />,
+            to: "/nota_subs1"
+    
+        },
+    */
     {
         label: "Nota Evolución",
-        icon: <FaFileMedical />,
+        icon: <FaNotesMedical />,
         to: "/nota_evo"
 
     },
     {
-        label: "Ficha tecnica medica",
+        label: "Ficha medica",
         icon: <FaFileMedical />,
         to: "/ficha_medica"
 
@@ -411,8 +396,8 @@ const linkArrayOdontologo = [
 
 const linkArrayMedico = [
     {
-        label: "Home",
-        icon: <FaHome />,
+        label: "Inicio",
+        icon: <FaHouseMedical />,
         to: "/home_medico",
 
     },
@@ -425,21 +410,21 @@ const linkArrayMedico = [
 
     {
         label: "Historial Clinico",
-        icon: <FaFileMedical />,
+        icon: < FaBriefcaseMedical />,
         to: "/historial_clinico_p1",
 
     },
 
     {
         label: "Notas Medicas",
-        icon: <FaFileMedical />,
+        icon: <FaNotesMedical />,
         to: "/notas_medicas",
 
     },
 
     {
-        label: "Receta",
-        icon: <FaFileMedical />,
+        label: "Receta Medica",
+        icon: <GiMedicines />,
         to: "/receta",
 
     },
@@ -449,14 +434,14 @@ const linkArrayMedico = [
 const linkArrayPsico = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_psicologia"
 
     },
 
     {
         label: "Ficha Psicologia",
-        icon: <FaFileMedical />,
+        icon: <RiPsychotherapyFill />,
         to: "/ficha_tecnica_psicologia"
 
     },
@@ -466,7 +451,7 @@ const linkArrayPsico = [
 const linkArrayNutri = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_nutricion"
 
     },
@@ -483,7 +468,7 @@ const linkArrayNutri = [
 const linkArrayOftal = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_oftalmologo"
 
     },
@@ -500,7 +485,7 @@ const linkArrayOftal = [
 const linkArrayAudio = [
     {
         label: "Home",
-        icon: <FaHome />,
+        icon: <FaHouseMedical />,
         to: "/home_audiologo"
 
     },
