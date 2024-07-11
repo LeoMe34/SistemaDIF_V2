@@ -5,11 +5,13 @@ import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
+import generarPDF from "./HistorialClinicoPDF";
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
     const [datos, setDatos] = useState(null);
     const [datos2, setDatos2] = useState(null);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [noExpediente, setNoExpediente] = useState(null)
     const [fichaMedica, setFichaMedica] = useState(null);
     const { token } = useAuth()
@@ -17,6 +19,7 @@ export function Parte3() {
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [empleado, setEmpleado] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
+    const [detallePaciente, setDetallePaciente] = useState([]);
 
     const getNoEmpleado = async () => {
         try {
@@ -193,7 +196,44 @@ export function Parte3() {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
 
         return textoRegex.test(texto)
-    }    
+    }
+
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+
+    useEffect(() => {
+        getDetallesPaciente();
+        getDetallesEnfermeria();
+    }, [token, noExpediente, fechaActual]);
+
 
     const enviar = handleSubmit(async data => {
         const padecimientoValido = validarTexto(data.padecimiento)
@@ -245,6 +285,7 @@ export function Parte3() {
         }
         else {
             registrarHistorial(data);
+            generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
             navegador('/notas_medicas')
         }
     })
