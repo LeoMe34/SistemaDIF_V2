@@ -13,6 +13,9 @@
 10. npm install react-collapsible --save
 11. npm install sweetalert2
 12. npm install --save sweetalert2 sweetalert2-react-content
+13. npm install echarts axios
+14. npm install jspdf jspdf-autotable
+
 ## Actualizar Vite
 13. npm install -g create-vite 
 14. npm install vite-plugin-react@latest
@@ -23,6 +26,7 @@
 17. pip install django-rest-knox
 18. pip install django-cors-headers
 19. pip install coreapi
+20. pip install djangorestframework-simplejwt
 
 ## Correr front 
 npm run dev
