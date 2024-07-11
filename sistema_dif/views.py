@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Case, When, Value as V
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated
@@ -1517,3 +1517,22 @@ def get_graficosDatos_enfermeria(request):
         return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def grafico_poblacion(request):
+    data = FichaTecnicaEnfermeria.objects.aggregate(
+        embarazada_true=Count(Case(When(datosDemograficos__embarazada=True, then=1))),
+        adultoM_true=Count(Case(When(datosDemograficos__adulto_mayor=True, then=1))),
+        discapacitado_true=Count(
+            Case(When(datosDemograficos__discapacitado=True, then=1))
+        ),
+    )
+
+    return Response(
+        {
+            "embarazada_true": data["embarazada_true"],
+            "adultoM_true": data["adultoM_true"],
+            "discapacitado_true": data["discapacitado_true"],
+        }
+    )

@@ -274,10 +274,11 @@ export function FichaTecnicaMedico() {
                             {errors.observacion && <span>Es necesario este campo</span>}
                         </div>
                     </div>
-
-                    <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
-                    <input className="datos_lectura" id='medico' name='medico' type="text"
-                        value={nombreE} readOnly />
+                    <div className="ficha-medico">
+                        <label className="mt-3 etiqueta" htmlFor="medico">Médico responsable</label>
+                        <input className="datos_lectura" id='medico' name='medico' type="text"
+                            value={nombreE} readOnly />
+                    </div>
 
                     {/*Seccion del boton*/}
                     <div className="pt-1 mb-3 text-center">

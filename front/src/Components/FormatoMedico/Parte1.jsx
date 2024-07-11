@@ -131,12 +131,16 @@ export function Parte1() {
                                     {...register("fecha", { required: true })} />
                             </div>
                             <div className='col'>
-                                <label className='etiqueta' htmlFor="num_consultorio">N° consultorio:
-                                    <span className='etiqueta_obligatoria'>*</span>
-                                </label>
-                                <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
-                                    {...register("no_consultorio", { required: true })} />
-                                {errors.no_consultorio && <span>Es necesario este campo</span>}
+                                <div className='animacionLabel'>
+                                    <label className='etiqueta' htmlFor="num_consultorio" for='num_consultorio'>N° consultorio:
+                                        <span className='etiqueta_obligatoria'>*</span>
+                                    </label>
+                                    <input className="entrada" id='num_consultorio' name='num_consultorio' type="text"
+                                        {...register("no_consultorio", { required: true })} />
+                                    {errors.no_consultorio && <span>Es necesario este campo</span>}
+
+                                </div>
+
                             </div>
                             <div className='col'>
                                 <label className='etiqueta' htmlFor="referencia">Referencia:

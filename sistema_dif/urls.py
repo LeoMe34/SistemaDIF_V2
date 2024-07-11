@@ -71,4 +71,5 @@ urlpatterns = [
     path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
     # Rutas de apis graficos
     path("get_graficosEnfermeria/", views.get_graficosDatos_enfermeria),
+    path("get_graficosEnfPob/", views.grafico_poblacion),
 ]

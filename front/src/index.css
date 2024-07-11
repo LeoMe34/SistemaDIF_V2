@@ -12,12 +12,13 @@
 
 label,
 input {
-  width: 200px;
+  width: 300px;
   /* Ancho de cada etiqueta */
   margin-left: 20px;
   display: block;
 
 }
+
 
 textarea {
   margin-left: 20px;
@@ -26,6 +27,7 @@ textarea {
   resize: none;
 
 }
+
 
 .custom-link a {
   text-decoration: none;
@@ -49,8 +51,8 @@ textarea {
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
+  border-radius: 900px;
   background-color: #DF4D72;
-  border-radius: 10px;
   color: #ffffff;
 }
 
@@ -66,12 +68,12 @@ textarea {
 .subtitulo_2 {
   font-family: 'Ubuntu-Bold', Arial, Helvetica, sans-serif;
   font-size: large;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 75px;
+  margin-bottom: 25px;
+  margin-left: 35px;
   text-align: center;
-  margin-left: 20px;
-  background-color: #DF4D72;
-  border-radius: 20px;
+  border-radius: 900px;
+  background-color: #ff9472;
   color: #ffffff;
 }
 
@@ -320,7 +322,7 @@ textarea {
 
 .entrada:read-only {
   background-color: #f9c6d3;
-  border-color: #f9c6d3;
+  border-color: #812A71;
 }
 
 .text-amplio {
@@ -577,7 +579,7 @@ li {
 .card-user {
   align-items: center;
   justify-content: center;
-  width: 1250px;
+  width: 1150px;
   height: 640px;
   background: #fff;
   margin-bottom: 200px;
@@ -666,11 +668,34 @@ li {
 .graficButton {
   background-color: transparent;
   border: none;
+  transition: 0.2s;
 
   svg {
     color: #812A71;
     font-size: 40px;
     margin-left: 9px;
+    transition: 0.2s;
+  }
+}
+
+
+.entrada:focus,
+.opciones:focus,
+.text-amplio:focus {
+  border: 2px solid #812A71;
+}
+
+h4 {
+  border-color: #00adf1;
+}
+
+.ficha-medico {
+  border-color: #812A71;
+  background-color: #ff9472;
+  border-radius: 20px;
+
+  .datos_lectura {
+    background-color: transparent;
   }
 }
 

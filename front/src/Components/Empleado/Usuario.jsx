@@ -158,13 +158,13 @@ export function Usuario() {
                             <input className="entrada" id='area' name='area' type="text" value={detalleEmpleado.area} readOnly />
                         </div>
                          */}
+                    </div>
+
+                    <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="rol">Rol:</label>
                             <input className="entrada" id='rol' name='rol' type="text" value={detalleEmpleado.ocupacion} readOnly />
                         </div>
-                    </div>
-
-                    <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="correo">Correo electronico:</label>
                             {editando ? (

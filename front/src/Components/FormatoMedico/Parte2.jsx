@@ -410,7 +410,7 @@ export function Parte2() {
                             {errors.tabaquismoAA && <span>Es necesario este campo</span>}
                         </div>
                         <div className="col">
-                            <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas,medicamentos
+                            <label className="etiqueta" htmlFor="tendenciaDM">Tendencia a drogas o medicamentos
                                 <span className='etiqueta_obligatoria'>*</span>
                             </label>
                             <textarea name="tendenciaDM" id="tendenciaDM" className="text-amplio"
