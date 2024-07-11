@@ -248,7 +248,7 @@ export function HistoriaClinicaSimplificada() {
                             <label className="etiqueta" htmlFor="cancer">Cancer</label>
                             <input className="entrada" id='cancer' name='cancer' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer)} readOnly />
-                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension) == 'Sí' && (
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.cancer) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cancer">Parentesco</label>
                                     <textarea name="par_cancer" id="par_cancer" className="text-amplio"
@@ -261,7 +261,7 @@ export function HistoriaClinicaSimplificada() {
                             <label className="etiqueta" htmlFor="cardiopatia">Cardiopatia Isquémica</label>
                             <input className="entrada" id='cardiopatia' name='cardiopatia' type="text"
                                 value={convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia)} readOnly />
-                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.hipertension) == 'Sí' && (
+                            {convertirAntecedentes(historiaClinica?.antHerediPatM?.cardiopatia) == 'Sí' && (
                                 <div className="col">
                                     <label className="etiqueta" htmlFor="par_cardiopatia">Parentesco</label>
                                     <textarea name="par_cardiopatia" id="par_cardiopatia" className="text-amplio"
