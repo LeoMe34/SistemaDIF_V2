@@ -63,8 +63,30 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
         return lines.length * 10; // Devuelve el aumento en Y basado en la altura de línea
     };
 
+    const drawFooter = (yPosition) => {
+        const rectHeight = 3;
+        const spacing = 3; // Espacio entre los rectángulos
+        const colors = ['#3EBAB0', '#EC9723', '#EE759E', '#8B2571']; // Colores en formato hexadecimal
+        const rectWidths = [20, 20, 20, 90];
+        let xPosition = 25; // Posición inicial x
+
+        documento.setTextColor(139, 37, 113);
+        documento.setFontSize(10);
+        documento.text('Veracruz esq. Rubí s/n Col.Tierra y Libertad Coatzacoalcos, Ver. C.P.96588 Tel.2139175', 35, yPosition - 5);
+
+        rectWidths.forEach((width, index) => {
+            documento.setFillColor(colors[index]);
+            documento.rect(xPosition, yPosition, width, rectHeight, 'F');
+            xPosition += width + spacing; // Actualizar la posición x para el siguiente rectángulo            
+        });
+
+        documento.setTextColor(0, 0, 0);
+        documento.setFontSize(12);
+    };
+
     const checkAddPage = (currentY, heightToAdd) => {
         if (currentY + heightToAdd > pageHeight - 20) { // 20 para margen inferior
+            drawFooter(pageHeight - 20); // Dibujar los rectángulos en la parte inferior antes de agregar una nueva página
             documento.addPage();
             return 20; // posición y para la nueva página
         }
@@ -95,12 +117,11 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
 
     let yPosition = 50;
     const maxWidth = 180;
-
-    yPosition += addTextWithWrap(`NOMBRE DEL PACIENTE: ${detallePaciente?.datosPersonalesPacient?.nombre} ${detallePaciente?.datosPersonalesPacient?.apellidoP} ${detallePaciente?.datosPersonalesPacient?.apellidoM}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`FECHA DE ELABORACION: ${datos.fecha}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`NÚMERO DE EXPEDIENTE: ${noExpediente}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`N° CONSULLTORIO: ${datos.no_consultorio}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`NOMBRE DEL PACIENTE: ${detallePaciente?.datosPersonalesPacient?.nombre} ${detallePaciente?.datosPersonalesPacient?.apellidoP} ${detallePaciente?.datosPersonalesPacient?.apellidoM}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`INFORMANTE: ${datos.informante}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
@@ -117,7 +138,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = checkAddPage(yPosition, 10);
 
     documento.setFont('Ubuntu-Bold');
-    documento.setFontSize(16);
+    documento.setFontSize(14);
     yPosition += addTextWithWrap('HEREDITARIOS Y FAMILIARES', 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     documento.setFont('Ubuntu-Regular');
@@ -154,7 +175,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
 
 
     documento.setFont('Ubuntu-Bold');
-    documento.setFontSize(16);
+    documento.setFontSize(14);
     yPosition += addTextWithWrap('PERSONALES NO PATÓLOGICOS\t', 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     documento.setFont('Ubuntu-Regular');
@@ -178,7 +199,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = checkAddPage(yPosition, 10);
 
     documento.setFont('Ubuntu-Bold');
-    documento.setFontSize(16);
+    documento.setFontSize(14);
     yPosition += addTextWithWrap('PERSONALES PATÓLOGICOS\t', 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     documento.setFont('Ubuntu-Regular');
@@ -198,7 +219,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
 
     if (detallePaciente.sexo === "Femenino") {
         documento.setFont('Ubuntu-Bold');
-        documento.setFontSize(16);
+        documento.setFontSize(14);
         yPosition += addTextWithWrap('GINECOBSTETRICOS\t', 20, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
         documento.setFont('Ubuntu-Regular');
@@ -251,7 +272,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     }
 
     documento.setFont('Ubuntu-Bold');
-    documento.setFontSize(16);
+    documento.setFontSize(14);
     yPosition += addTextWithWrap('INTERROGATORIO\t', 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     documento.setFont('Ubuntu-Regular');
@@ -267,7 +288,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = checkAddPage(yPosition, 10);
 
     documento.setFont('Ubuntu-Bold');
-    documento.setFontSize(16);
+    documento.setFontSize(14);
     yPosition += addTextWithWrap('EXPLORACIÓN FÍSICA\t', 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     documento.setFont('Ubuntu-Regular');
@@ -315,8 +336,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
         return (maxWidth - textWidth) / 2;
     };
 
-    yPosition += addTextWithWrap(`FECHA DE ELABORACION: ${datos.fecha}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
+    yPosition = pageHeight - 60;
     yPosition += addTextWithWrap(` ${empleado.nombre_empleado}`, getCenteredXPosition(empleado.nombre_empleado, maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`${empleado.cedula}`, getCenteredXPosition(empleado.cedula, maxWidth) + 20, yPosition, maxWidth);
@@ -324,24 +344,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition += addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
-
-    documento.setTextColor(139, 37, 113);
-    documento.setFontSize(10);
-    yPosition = checkAddPage(yPosition, 10);
-    documento.text('Veracruz esq. Rubí s/n Col.Tierra y Libertad Coatzacoalcos, Ver. C.P.96588 Tel.2139175', 35, yPosition);
-
-    yPosition = checkAddPage(yPosition, 10);
-    const rectHeight = 3;
-    const spacing = 3; // Espacio entre los rectángulos
-    const colors = ['#3EBAB0', '#EC9723', '#EE759E', '#8B2571']; // Colores en formato hexadecimal
-    const rectWidths = [20, 20, 20, 90];
-    let xPosition = 25; // Posición inicial x
-
-    rectWidths.forEach((width, index) => {
-        documento.setFillColor(colors[index]);
-        documento.rect(xPosition, yPosition, width, rectHeight, 'F');
-        xPosition += width + spacing; // Actualizar la posición x para el siguiente rectángulo
-    });
+    drawFooter(pageHeight - 20);
 
     documento.save(`HISTORIAL_CLINICO_${noExpediente}.pdf`);
 };
