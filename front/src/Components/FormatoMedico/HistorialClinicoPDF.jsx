@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import { ubuntuBold, ubuntuRegular } from './../../Fuentes/Base64'; // Ajusta el path según sea necesario
+import 'jspdf-autotable';
 
 const logoDif = "../Logos/LOGO DIF.jpeg"
 const logoAyuntamiento = "../Logos/LOGO-AYUNTAMIENTO2.png"
@@ -39,7 +40,7 @@ const convertirFamilia = (familia) => {
     return opciones[familia];
 };
 
-const convertirDisfuncional= (disfuncional) => {
+const convertirDisfuncional = (disfuncional) => {
     const opciones = {
         "si": 'Sí',
         "no": 'No',
@@ -69,6 +70,19 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
         }
         return currentY;
     };
+
+    const datosFisicos = [
+        ['ESTATURA', 'PESO', 'IMC', 'TEMPERATURA', 'PRESIÓN ARTERIAL', 'FRECUENCIA CARDIACA', 'FRECUENCIA RESPIRATORIA'],
+        [
+            `${detalleEnfermeria.datosFisicos.talla}`,
+            `${detalleEnfermeria.datosFisicos.peso}`,
+            `${detalleEnfermeria.datosFisicos.imc}`,
+            `${detalleEnfermeria.signosVitales.temperatura}`,
+            `${detalleEnfermeria.signosVitales.presion}`,
+            `${detalleEnfermeria.signosVitales.frecuenciaC}`,
+            `${detalleEnfermeria.signosVitales.frecuenciaR}`
+        ]
+    ];
 
     documento.setFont('Ubuntu-Bold');
     documento.setFontSize(18);
@@ -259,21 +273,19 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     documento.setFont('Ubuntu-Regular');
     documento.setFontSize(12);
 
+    documento.autoTable({
+        startY: yPosition,
+        head: [datosFisicos[0]],
+        body: [datosFisicos[1]],
+        theme: 'plain',
+        styles: { halign: 'center' },
+        headStyles: { fillColor: '#8B2571', textColor: '#FFFFFF' }, // Color de fondo y color de la letra del encabezado
+        margin: { top: 10, bottom: 10, left: 20, right: 10 }, // Margen izquierdo para ajustar la posición X
+    });
+
+    yPosition = documento.previousAutoTable.finalY + 10;
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`ESTATURA: ${detalleEnfermeria.datosFisicos.talla}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`PESO: ${detalleEnfermeria.datosFisicos.peso}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`IMC: ${detalleEnfermeria.datosFisicos.imc}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`TEMPERATURA: ${detalleEnfermeria.signosVitales.temperatura}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`PRESION ARTERIAL: ${detalleEnfermeria.signosVitales.presion}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`FRECUENCIA CARDIACA: ${detalleEnfermeria.signosVitales.frecuenciaC}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`FRECUENCIA RESPIRATORIA: ${detalleEnfermeria.signosVitales.frecuenciaR}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
+
     yPosition += addTextWithWrap(`INSPECCION GENERAL: ${data.inspeccion_gral}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`CABEZA: ${data.cabeza}`, 20, yPosition, maxWidth);
@@ -298,11 +310,18 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition += addTextWithWrap(`PRONOSTICO: ${data.pronostico}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
+    const getCenteredXPosition = (text, maxWidth) => {
+        const textWidth = documento.getTextWidth(text);
+        return (maxWidth - textWidth) / 2;
+    };
+
     yPosition += addTextWithWrap(`FECHA DE ELABORACION: ${datos.fecha}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`MEDICO RESPONSABLE: ${empleado.nombre_empleado}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(` ${empleado.nombre_empleado}`, getCenteredXPosition(empleado.nombre_empleado, maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`CEDULA: ${empleado.cedula}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`${empleado.cedula}`, getCenteredXPosition(empleado.cedula, maxWidth) + 20, yPosition, maxWidth);
+    yPosition = checkAddPage(yPosition, 10);
+    yPosition += addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
 
