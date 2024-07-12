@@ -72,4 +72,6 @@ urlpatterns = [
     # Rutas de apis graficos
     path("get_graficosEnfermeria/", views.get_graficosDatos_enfermeria),
     path("get_graficosEnfPob/", views.grafico_poblacion),
+    path("get_graficosOdontAntH/", views.grafico_odontAntH),
+    path("get_graficosOdontAntPP/", views.grafico_odontAntP),
 ]

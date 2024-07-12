@@ -678,6 +678,29 @@ li {
   }
 }
 
+.areas {
+  margin-bottom: 50px;
+}
+
+.areaButton {
+  background-color: #DF4D72;
+  border: none;
+  border-radius: 15px;
+  font-size: 20px;
+  color: #ffffff;
+
+  svg {
+    color: #ffffff;
+    font-size: 70px;
+    margin-left: 9px;
+  }
+
+  &:hover {
+    transition: 0.2s;
+    background-color: #812A71;
+  }
+}
+
 
 .entrada:focus,
 .opciones:focus,

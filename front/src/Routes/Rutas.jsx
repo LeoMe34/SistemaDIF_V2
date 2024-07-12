@@ -57,6 +57,8 @@ import { V_MostrarFichaMedOdonto } from '../Views/FormatoOdonto/V_MostrarFichaMe
 
 import { V_MostrarFTP } from '../Views/FormatoPsico/V_MostrarFTP'
 import { V_Graficas } from '../Views/Empleado/V_Graficas'
+import { V_GraficoMed } from '../Views/Empleado/V_GraficoMed'
+import { V_GraficasOdonto } from '../Views/Empleado/V_GraficasOdonto'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../Contexto/AuthContext';
@@ -100,6 +102,9 @@ export function Rutas() {
                             <Route path='/crear_empleado' element={<V_CrearEmpleado />} />
                             <Route path='/crear_usuario' element={<V_CrearUsuario />} />
                             <Route path='/graficas_grl' element={<V_Graficas />} />
+                            <Route path='/graficas_odonto' element={<V_GraficasOdonto />} />
+                            <Route path='/graficas_med' element={<V_GraficoMed />} />
+
                             <Route path='/home_administrador' element={<V_HomeAdmin />} />
                             <Route path='/usuario/:id' element={<V_MostrarUsuario />} />
                         </>

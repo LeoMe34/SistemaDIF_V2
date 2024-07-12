@@ -198,8 +198,8 @@ export function Parte2() {
                                         {...register("diabetesH", { required: true })}
                                         onChange={handleChangeDiabetes}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.diabetesH && <span>Es necesario este campo</span>}
                                     {showPDiabetes && (
@@ -221,8 +221,8 @@ export function Parte2() {
                                         {...register("hipertH", { required: true })}
                                         onChange={handleChangeHipertension}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.hipertH && <span>Es necesario este campo</span>}
 
@@ -245,8 +245,8 @@ export function Parte2() {
                                         {...register("cancerH", { required: true })}
                                         onChange={handleChangeCancer}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.cancer && <span>Es necesario este campo</span>}
 
@@ -269,8 +269,8 @@ export function Parte2() {
                                         {...register("tuberculoH", { required: true })}
                                         onChange={handleChangeTuberculosis}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.tuberculoH && <span>Es necesario este campo</span>}
 
@@ -297,8 +297,8 @@ export function Parte2() {
                                         {...register("asmaH", { required: true })}
                                         onChange={handleChangeAsma}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.asmaH && <span>Es necesario este campo</span>}
 
@@ -321,8 +321,8 @@ export function Parte2() {
                                         {...register("cardioH", { required: true })}
                                         onChange={handleChangeCardiovasculares}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.cardioH && <span>Es necesario este campo</span>}
 
@@ -345,8 +345,8 @@ export function Parte2() {
                                         {...register("epilepsiaH", { required: true })}
                                         onChange={handleChangeEpilepsia}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.epilepsiaH && <span>Es necesario este campo</span>}
 
@@ -375,8 +375,8 @@ export function Parte2() {
                                     <select name="diabetes" id="diabetes" className="opciones"
                                         {...register("diabetes", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.diabetes && <span>Es necesario este campo</span>}
 
@@ -388,8 +388,8 @@ export function Parte2() {
                                     <select name="hipertension" id="hipertension" className="opciones"
                                         {...register("hipert", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.hipert && <span>Es necesario este campo</span>}
 
@@ -401,8 +401,8 @@ export function Parte2() {
                                     <select name="cancer" id="cancer" className="opciones"
                                         {...register("cancer", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.cancer && <span>Es necesario este campo</span>}
                                 </div>
@@ -413,8 +413,8 @@ export function Parte2() {
                                     <select name="tubercolosis" id="tubercolosis" className="opciones"
                                         {...register("tuberculo", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.tuberculo && <span>Es necesario este campo</span>}
                                 </div>
@@ -431,8 +431,8 @@ export function Parte2() {
                                     <select name="transfusiones" id="transfusiones" className="opciones"
                                         {...register("transfusion", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.transfusion && <span>Es necesario este campo</span>}
 
@@ -444,8 +444,8 @@ export function Parte2() {
                                     <select name="quirurgicos" id="quirurgicos" className="opciones"
                                         {...register("quirurgicos", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.quirurgicos && <span>Es necesario este campo</span>}
 
@@ -457,8 +457,8 @@ export function Parte2() {
                                     <select name="anestesicos" id="anestesicos" className="opciones"
                                         {...register("anestesicos", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.anestesicos && <span>Es necesario este campo</span>}
                                 </div>
@@ -469,8 +469,8 @@ export function Parte2() {
                                     <select name="alergicos" id="alergicos" className="opciones"
                                         {...register("alergicos", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.alergicos && <span>Es necesario este campo</span>}
                                 </div>
@@ -487,8 +487,8 @@ export function Parte2() {
                                     <select name="traumaticos" id="traumaticos" className="opciones"
                                         {...register("trauma", { required: true })}>
                                         <option value="" disabled selected>Elija la opción</option>
-                                        <option value="True">Si</option>
-                                        <option value="False">No</option>
+                                        <option value={true}>Si</option>
+                                        <option value={false}>No</option>
                                     </select>
                                     {errors.trauma && <span>Es necesario este campo</span>}
                                 </div>

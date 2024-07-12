@@ -1536,3 +1536,57 @@ def grafico_poblacion(request):
             "discapacitado_true": data["discapacitado_true"],
         }
     )
+
+
+@api_view(["GET"])
+def grafico_odontAntH(request):
+    data = HistorialOdonto.objects.aggregate(
+        diabetes_true=Count(Case(When(antHerediPato__diabetesH=True, then=1))),
+        hipert_true=Count(Case(When(antHerediPato__hipertH=True, then=1))),
+        tuber_true=Count(Case(When(antHerediPato__tuberculoH=True, then=1))),
+        cancer_true=Count(Case(When(antHerediPato__cancerH=True, then=1))),
+        cardio_true=Count(Case(When(antHerediPato__cardioH=True, then=1))),
+        asma_true=Count(Case(When(antHerediPato__asmaH=True, then=1))),
+        epilepsia_true=Count(Case(When(antHerediPato__epilepsiaH=True, then=1))),
+    )
+
+    return Response(
+        {
+            "diabetes_true": data["diabetes_true"],
+            "hipert_true": data["hipert_true"],
+            "tuber_true": data["tuber_true"],
+            "cancer_true": data["cancer_true"],
+            "cardio_true": data["cardio_true"],
+            "asma_true": data["asma_true"],
+            "epilepsia_true": data["epilepsia_true"],
+        }
+    )
+
+
+@api_view(["GET"])
+def grafico_odontAntP(request):
+    data = HistorialOdonto.objects.aggregate(
+        diabetes_true=Count(Case(When(antPersonPato__diabetes=True, then=1))),
+        hipert_true=Count(Case(When(antPersonPato__hipert=True, then=1))),
+        tuber_true=Count(Case(When(antPersonPato__tuberculo=True, then=1))),
+        cancer_true=Count(Case(When(antPersonPato__cancer=True, then=1))),
+        trans_true=Count(Case(When(antPersonPato__transfusion=True, then=1))),
+        quirurgicos_true=Count(Case(When(antPersonPato__quirurgicos=True, then=1))),
+        anestesicos_true=Count(Case(When(antPersonPato__anestesicos=True, then=1))),
+        alergicos_true=Count(Case(When(antPersonPato__alergicos=True, then=1))),
+        trauma_true=Count(Case(When(antPersonPato__trauma=True, then=1))),
+    )
+
+    return Response(
+        {
+            "diabetes_true": data["diabetes_true"],
+            "hipert_true": data["hipert_true"],
+            "tuber_true": data["tuber_true"],
+            "cancer_true": data["cancer_true"],
+            "trans_true": data["trans_true"],
+            "quirurgicos_true": data["quirurgicos_true"],
+            "anestesicos_true": data["anestesicos_true"],
+            "alergicos_true": data["alergicos_true"],
+            "trauma_true": data["trauma_true"],
+        }
+    )
