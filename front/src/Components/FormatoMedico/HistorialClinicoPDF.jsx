@@ -56,6 +56,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     documento.addFont('Ubuntu-Regular.ttf', 'Ubuntu-Regular', 'normal');
 
     const pageHeight = documento.internal.pageSize.getHeight();
+    const pageWidth = documento.internal.pageSize.width;
 
     const addTextWithWrap = (text, x, y, maxWidth) => {
         const lines = documento.splitTextToSize(text, maxWidth);
@@ -115,26 +116,28 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     documento.addImage(logoDif, 'jpeg', 10, 10, 20, 20)
     documento.addImage(logoAyuntamiento, 'png', 180, 10, 23, 20)
 
+    const mitadPagina = pageWidth / 2
     let yPosition = 50;
     const maxWidth = 180;
-    yPosition += addTextWithWrap(`FECHA DE ELABORACION: ${datos.fecha}`, 20, yPosition, maxWidth);
+    addTextWithWrap(`FECHA DE ELABORACION: ${datos.fecha}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`N° CONSULTORIO: ${datos.no_consultorio}`, mitadPagina, yPosition, maxWidth);
+    yPosition = checkAddPage(yPosition, 10);
+
+    yPosition += addTextWithWrap(`NOMBRE DEL PACIENTE: ${detallePaciente?.datosPersonalesPacient?.nombre} ${detallePaciente?.datosPersonalesPacient?.apellidoP} ${detallePaciente?.datosPersonalesPacient?.apellidoM}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`NÚMERO DE EXPEDIENTE: ${noExpediente}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`NOMBRE DEL PACIENTE: ${detallePaciente?.datosPersonalesPacient?.nombre} ${detallePaciente?.datosPersonalesPacient?.apellidoP} ${detallePaciente?.datosPersonalesPacient?.apellidoM}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`INFORMANTE: ${datos.informante}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
-    yPosition += addTextWithWrap(`TIPO DE FAMILIA: ${convertirTipoFam(datos.tipo_familia)}`, 20, yPosition, maxWidth);
+    addTextWithWrap(`TIPO DE FAMILIA: ${convertirTipoFam(datos.tipo_familia)}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`ROL DE MADRE: ${convertirRolMadre(datos.rol_madre)}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`ROL DE MADRE: ${convertirRolMadre(datos.rol_madre)}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
+
     yPosition += addTextWithWrap(`FAMILIAR RESPONSABLE DEL PACIENTE`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`FAMILIA: ${convertirFamilia(datos.familia)}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`DISFUNCIONALES FAMILIARES: ${convertirDisfuncional(datos.disfuncional)}`, 20, yPosition, maxWidth);
+    addTextWithWrap(`FAMILIA: ${convertirFamilia(datos.familia)}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`DISFUNCIONALES FAMILIARES: ${convertirDisfuncional(datos.disfuncional)}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
     documento.setFont('Ubuntu-Bold');
@@ -147,29 +150,29 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition += addTextWithWrap(`DIABETES MELITUS: ${convertirAntecedentes(datos2.diabetes)}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     if (convertirAntecedentes(datos2.diabetes) == 'Sí') {
-        yPosition += addTextWithWrap(`PARENTESCO: ${datos2.par_diabetes}`, 20, yPosition, maxWidth);
+        addTextWithWrap(`PARENTESCO: ${datos2.par_diabetes}`, mitadPagina, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
     yPosition += addTextWithWrap(`HIPERTENSIÓN ARTERIAL: ${convertirAntecedentes(datos2.hipertension)}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     if (convertirAntecedentes(datos2.hipertension) == 'Sí') {
-        yPosition += addTextWithWrap(`PARENTESCO: ${datos2.par_hipertension}`, 20, yPosition, maxWidth);
+        addTextWithWrap(`PARENTESCO: ${datos2.par_hipertension}`, mitadPagina, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
     yPosition += addTextWithWrap(`CARDIOPATIA ISQUEMICA: ${convertirAntecedentes(datos2.cardiopatia)}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     if (convertirAntecedentes(datos2.cardiopatia) == 'Sí') {
-        yPosition += addTextWithWrap(`PARENTESCO: ${datos2.par_cardiopatia}`, 20, yPosition, maxWidth);
+        addTextWithWrap(`PARENTESCO: ${datos2.par_cardiopatia}`, mitadPagina, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
     yPosition += addTextWithWrap(`CANCER: ${convertirAntecedentes(datos2.cancer)}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     if (convertirAntecedentes(datos2.cancer) == 'Sí') {
-        yPosition += addTextWithWrap(`PARENTESCO: ${datos2.par_cancer}`, 20, yPosition, maxWidth);
+        addTextWithWrap(`PARENTESCO: ${datos2.par_cancer}`, mitadPagina, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
-    if (datos2.otros_ant_par !== '') {
-        yPosition += addTextWithWrap(`OTROS: ${datos2.otros_ant_par}`, 20, yPosition, maxWidth);
+    if (datos2.otros_ant_par) {
+        yPosition += addTextWithWrap(`OTROS: ${datos2.otros_ant_par}`, mitadPagina, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
 
@@ -181,19 +184,19 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     documento.setFont('Ubuntu-Regular');
     documento.setFontSize(12);
 
-    yPosition += addTextWithWrap(`ESTADO CIVIL: ${detallePaciente.datosPersonalesPacient.estadoCivil}`, 20, yPosition, maxWidth);
+    addTextWithWrap(`ESTADO CIVIL: ${detallePaciente.datosPersonalesPacient.estadoCivil}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`ESCOLARIDAD: ${detalleEnfermeria.datosDemograficos.escolaridad}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`RELIGIÓN: ${detalleEnfermeria.datosDemograficos.religion}`, 20, yPosition, maxWidth);
+
+    addTextWithWrap(`RELIGIÓN: ${detalleEnfermeria.datosDemograficos.religion}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`OCUPACIÓN: ${detallePaciente.datosPersonalesPacient.ocupacion}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`ALIMENTACIÓN: ${datos2.alimentacion}`, 20, yPosition, maxWidth);
+
+    addTextWithWrap(`ALIMENTACIÓN: ${datos2.alimentacion}`, 20, yPosition, maxWidth);
+    yPosition += addTextWithWrap(`HABITACIÓN: ${datos2.habitacion}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
+
     yPosition += addTextWithWrap(`LUGAR Y FECHA DE NACIMIENTO: !, ${detallePaciente.datosPersonalesPacient.fechaDeNacimiento}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`ESCOLARIDAD: ${detalleEnfermeria.datosDemograficos.escolaridad}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`OCUPACIÓN: ${detallePaciente.datosPersonalesPacient.ocupacion}`, 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
-    yPosition += addTextWithWrap(`HABITACIÓN: ${datos2.habitacion}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`HIGIENE PERSONAL: ${datos2.higiene}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
@@ -211,7 +214,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = checkAddPage(yPosition, 10);
     yPosition += addTextWithWrap(`TENDENCIAS A DROGAS, MEDICAMENTOS: ${datos2.tendenciaDM}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    if (datos2.otros_antPat !== '') {
+    if (datos2.otros_antPat) {
         yPosition += addTextWithWrap(`OTROS: ${datos2.otros_antPat}`, 20, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
     }
@@ -264,7 +267,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
             yPosition = checkAddPage(yPosition, 10);
             yPosition += addTextWithWrap(`QUIRURGICOS: ${datos2.quirurgico}`, 20, yPosition, maxWidth);
             yPosition = checkAddPage(yPosition, 10);
-            if (datos2.otrosMP !== '') {
+            if (datos2.otrosMP) {
                 yPosition += addTextWithWrap(`OTROS: ${datos2.otrosMP}`, 20, yPosition, maxWidth);
                 yPosition = checkAddPage(yPosition, 10);
             }
