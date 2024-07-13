@@ -107,20 +107,19 @@ const generarPDF = (detallePaciente, detalleEnfermeria, noExpediente, data, nomb
         return (maxWidth - textWidth) / 2;
     };
 
-    const requiredSpaceForFooter = 30; // Espacio requerido para el nombre, cédula y título del médico
-    if (yPosition + requiredSpaceForFooter > pageHeight - 60) {
+    const requiredSpaceForFooter = 10; // Espacio requerido para el nombre, cédula y título del médico
+    if (yPosition + requiredSpaceForFooter > pageHeight - 10) {
         drawFooter(pageHeight - 20); // Dibujar el pie de página actual
         documento.addPage();
         yPosition = 20; // Nueva posición Y en la nueva página
     }
 
-    yPosition = pageHeight - 60;
+    yPosition = pageHeight - 50;
     yPosition = addTextWithWrap(` ${nombreE}`, getCenteredXPosition(nombreE, maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition = addTextWithWrap(`${cedula}`, getCenteredXPosition(cedula, maxWidth) + 20, yPosition, maxWidth);
+    yPosition = addTextWithWrap(`${cedula}`, getCenteredXPosition(cedula, maxWidth) + 20, yPosition-3, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition = addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition, maxWidth);
-    yPosition = checkAddPage(yPosition, 10);
+    yPosition = addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition-3, maxWidth);    
 
     drawFooter(pageHeight - 20);
 
