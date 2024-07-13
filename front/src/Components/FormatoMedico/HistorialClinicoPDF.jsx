@@ -107,6 +107,36 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
         ]
     ];
 
+    const datosGineco = [
+        ['N° EMBARAZOS', 'FECHA DE ULTIMO PARTO', 'N° DE PAREJAS', 'METODO DE P.F.'],
+        [
+            `${datos2.num_embarazos}`,
+            `${datos2.ultimo_parto}`,
+            `${datos2.num_parejas}`,
+        ],
+        ['PARTOS', 'N° HIJOS', 'HETEROSEXUALES', 'DIU'],
+        [
+            `${datos2.partos}`,
+            `${datos2.num_hijos}`,
+            `${datos2.heterosexuales}`,
+            `${datos2.diu}`,
+        ],
+        ['ABORTOS', 'MACROSOMICOS VIVOS', 'HOMOSEXUALES', 'HORMONALES'],
+        [
+            `${datos2.abortos}`,
+            `${datos2.macrosomicos}`,
+            `${datos2.homosexuales}`,
+            `${datos2.hormonales}`,
+        ],
+        ['CESAREA', 'BAJO PESO AL NACER', 'BISEXUALES', 'QUIRURGICOS'],
+        [
+            `${datos2.cesarea}`,
+            `${datos2.bajo_peso}`,
+            `${datos2.bisexuales}`,
+            `${datos2.quirurgico}`,
+        ]
+    ];
+
     documento.setFont('Ubuntu-Bold');
     documento.setFontSize(18);
     documento.text('HISTORIA CLINICA SIMPLIFICADA \t', 45, 30);
@@ -220,7 +250,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     }
 
 
-    if (detallePaciente.sexo === "Femenino") {
+    if (detallePaciente.datosPersonalesPacient.sexo === "Femenino") {
         documento.setFont('Ubuntu-Bold');
         documento.setFontSize(14);
         yPosition += addTextWithWrap('GINECOBSTETRICOS\t', 20, yPosition, maxWidth);
@@ -234,41 +264,53 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
         yPosition = checkAddPage(yPosition, 10);
         yPosition += addTextWithWrap(`ULTIMA MENSTRUACIÓN ${datos2.menstruacion} AÑOS`, 20, yPosition, maxWidth);
         yPosition = checkAddPage(yPosition, 10);
-        if (datos2.vida_sexual !== null && !isNaN(vidaSexual) && vidaSexual.trim() !== '' && vidaSexual !== '0') {
-            yPosition += addTextWithWrap(`N° EMBARAZOS: ${datos2.num_embarazos}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`PARTOS: ${datos2.partos}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`ABORTOS: ${datos2.abortos}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`CESAREAS: ${datos2.cesarea}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`FECHA DE ULTIMO PARTO: ${datos2.ultimo_parto}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`N° HIJOS: ${datos2.num_hijos}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`MACROSOMICOS VIVOS: ${datos2.macrosomicos}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`BAJO PESO AL NACER: ${datos2.bajo_peso}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`N° DE PAREJAS: ${datos2.num_parejas}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`HETEROSEXUALES: ${datos2.heterosexuales}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`HOMOSEXUALES: ${datos2.homosexuales}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`BISEXUALES: ${datos2.bisexuales}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`METODO DE P.F.`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`DIU: ${datos2.diu}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`HORMONALES: ${datos2.hormonales}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
-            yPosition += addTextWithWrap(`QUIRURGICOS: ${datos2.quirurgico}`, 20, yPosition, maxWidth);
-            yPosition = checkAddPage(yPosition, 10);
+
+        if (datos2.vida_sexual !== null && !isNaN(datos2.vida_sexual) && datos2.vida_sexual.trim() !== '' && datos2.vida_sexual !== '0') {
+            yPosition -= 5
+            documento.autoTable({
+                startY: yPosition,
+                head: [datosGineco[0]],
+                body: [datosGineco[1]],
+                theme: 'plain',
+                styles: { halign: 'center' },
+                headStyles: { fillColor: '#8B2571', textColor: '#FFFFFF' }, // Color de fondo y color de la letra del encabezado
+                margin: { top: 5, bottom: 10, left: 20, right: 10 }, // Margen izquierdo para ajustar la posición X                
+            });
+            yPosition += 15
+            documento.autoTable({
+                startY: yPosition,
+                head: [datosGineco[2]],
+                body: [datosGineco[3]],
+                theme: 'plain',
+                styles: { halign: 'center' },
+                headStyles: { fillColor: '#8B2571', textColor: '#FFFFFF' }, // Color de fondo y color de la letra del encabezado
+                margin: { top: 10, bottom: 10, left: 20, right: 10 }, // Margen izquierdo para ajustar la posición X
+            });
+            yPosition += 15
+            documento.autoTable({
+                startY: yPosition,
+                head: [datosGineco[4]],
+                body: [datosGineco[5]],
+                theme: 'plain',
+                styles: { halign: 'center' },
+                headStyles: { fillColor: '#8B2571', textColor: '#FFFFFF' }, // Color de fondo y color de la letra del encabezado
+                margin: { top: 10, bottom: 10, left: 20, right: 10 }, // Margen izquierdo para ajustar la posición X
+            });
+
+            yPosition += 15
+            documento.autoTable({
+                startY: yPosition,
+                head: [datosGineco[6]],
+                body: [datosGineco[7]],
+                theme: 'plain',
+                styles: { halign: 'center' },
+                headStyles: { fillColor: '#8B2571', textColor: '#FFFFFF' }, // Color de fondo y color de la letra del encabezado
+                margin: { top: 10, bottom: 10, left: 20, right: 10 }, // Margen izquierdo para ajustar la posición X
+            });
+
+            yPosition += 20
             if (datos2.otrosMP) {
-                yPosition += addTextWithWrap(`OTROS: ${datos2.otrosMP}`, 20, yPosition, maxWidth);
+                yPosition += addTextWithWrap(`OTROS METODOS DE PLANIFICACION: ${datos2.otrosMP}`, 20, yPosition, maxWidth);
                 yPosition = checkAddPage(yPosition, 10);
             }
         }
