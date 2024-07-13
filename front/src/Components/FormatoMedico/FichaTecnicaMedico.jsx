@@ -131,7 +131,7 @@ export function FichaTecnicaMedico() {
             await registrarFicha(data);
             localStorage.setItem('noExp', JSON.stringify(noExpediente));
             generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-            //navegador('/historial_clinico_p1');
+            navegador('/historial_clinico_p1');
         }
     });
 
