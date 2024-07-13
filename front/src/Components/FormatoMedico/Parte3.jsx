@@ -286,7 +286,7 @@ export function Parte3() {
         else {
             registrarHistorial(data);
             generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
-            //navegador('/notas_medicas')
+            navegador('/notas_medicas')
         }
     })
     return (
