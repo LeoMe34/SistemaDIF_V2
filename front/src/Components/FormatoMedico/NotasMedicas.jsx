@@ -146,7 +146,9 @@ export function NotasMedicas() {
         const diagnosticoValido = validarTexto(data.diagnostico)
         const tratamientoValido = validarTexto(data.tratamiento)
         const observacionesValido = validarTexto(data.observaciones)
-        if (!servicioValido) {
+        if(!noExpediente){
+            toast.error("Seleccione un paciente");
+        } else if (!servicioValido) {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de servicio");
         } else if (!diagnosticoValido) {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de diagnóstico");
