@@ -159,7 +159,7 @@ export function NotasMedicas() {
             registrarNota(data, idHistorial);
             localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
             generarPDF(detallePaciente, noExpediente, data, empleado)
-            //MensajeReceta(navegador)
+            MensajeReceta(navegador)
         }
     }
     return (
