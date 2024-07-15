@@ -60,8 +60,7 @@ const generarPDF = (detallePaciente, detalleEnfermeria, noExpediente, data, nomb
 
     documento.addImage(logoDif, 'jpeg', 10, 10, 20, 20)
     documento.addImage(logoAyuntamiento, 'png', 180, 10, 23, 20)
-
-    const mitadPagina = pageWidth / 2
+    
     const cuartoPagina = pageWidth / 4
     let yPosition = 40;
     const maxWidth = 180;
