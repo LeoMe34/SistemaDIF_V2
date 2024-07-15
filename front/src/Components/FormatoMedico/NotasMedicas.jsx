@@ -7,12 +7,14 @@ import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { MensajeReceta } from '../../Modales/MensajeReceta';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import generarPDF from "./NotaMedicaPDF";
 
 export function NotasMedicas() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
+    const [detallePaciente, setDetallePaciente] = useState([]);
     const [idHistorial, setIdHistorial] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
     const [horaActual, setHoraActual] = useState('');
@@ -33,9 +35,25 @@ export function NotasMedicas() {
         }
     };
 
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
     useEffect(() => {
         getNoEmpleado();
-    }, [token]);
+        getDetallesPaciente()
+    }, [token, noExpediente]);
 
     const getExp = () => {
         const storedData = localStorage.getItem('noExp')
@@ -49,6 +67,7 @@ export function NotasMedicas() {
 
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
+        setNotExpediente(noExpediente)
         setIdNota(noExpediente)
 
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
@@ -139,7 +158,8 @@ export function NotasMedicas() {
         else {
             registrarNota(data, idHistorial);
             localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
-            MensajeReceta(navegador)
+            generarPDF(detallePaciente, noExpediente, data, empleado)
+            //MensajeReceta(navegador)
         }
     }
     return (
@@ -178,7 +198,7 @@ export function NotasMedicas() {
 
             <div className='ml-10 mb-5 container'>
                 <div className="ml-10 mb-3">
-                    {noExpediente == null && (
+                    {noExpediente === null && (
                         <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                     )}
                 </div>
