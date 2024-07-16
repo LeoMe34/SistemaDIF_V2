@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import generarPDF from './HistorialClinicoDentalPDF';
 
 export function Parte3() {
     const navegador = useNavigate()
@@ -14,6 +15,9 @@ export function Parte3() {
     const [antecedentes, setAntecedentes] = useState(null);
     const [historialO, setHistorialO] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
+    const [empleado, setEmpleado] = useState([]);
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
     const [noExpediente, setNoExpediente] = useState(null)
@@ -43,6 +47,7 @@ export function Parte3() {
             });
             const no_Empleado = response.data.user_info.no_trabajador
             setNoEmpleado(no_Empleado)
+            setEmpleado(response.data.user_info)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -72,7 +77,7 @@ export function Parte3() {
                 cardioV: data.cardioV,
                 muscoes: data.muscoes
             }));
-            formData.append('padecimiento_actual', historialO.padecimiento,);
+            formData.append('padecimiento_actual', historialO.padecimiento);
             formData.append('habitos_exteriores', data.habitos_ext);
             formData.append('cabeza', JSON.stringify({
                 labios: data.labios,
@@ -149,11 +154,46 @@ export function Parte3() {
         setNoExpediente(JSON.parse(storedData));
     };
 
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
     useEffect(() => {
         if (token) {
             getNoExp();
         }
     }, [token]);
+
+    useEffect(() => {
+        getDetallesPaciente();
+        getDetallesEnfermeria();
+    }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
         const storedData = localStorage.getItem('antecedentes');
@@ -212,7 +252,7 @@ export function Parte3() {
         else {
             registrarHistOdonto(data)
             localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
-
+            generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria,fechaActual)
             navegador('/nota_evo')
         }
     })
