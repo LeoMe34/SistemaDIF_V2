@@ -103,7 +103,7 @@ const generarPDF = (detallePaciente, noExpediente, historialO, antecedentes, dat
     yPosition = checkAddPage(yPosition, 10);
     addTextWithWrap(`EDAD: ${detallePaciente?.datosPersonalesPacient?.edad}`, tercioPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition = addTextWithWrap(`ESTADO CIVIL ${"!"}`, tercioPagina * 2, yPosition, maxWidth);
+    yPosition = addTextWithWrap(`ESTADO CIVIL ${detallePaciente?.datosPersonalesPacient?.estadoCivil}`, tercioPagina * 2, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition = addTextWithWrap(`DOMICILIO: ${detallePaciente?.datosDireccionPacient?.direccion}, Col.${detallePaciente?.datosDireccionPacient?.colonia}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
