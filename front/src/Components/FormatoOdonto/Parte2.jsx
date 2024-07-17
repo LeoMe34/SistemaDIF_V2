@@ -31,31 +31,31 @@ export function Parte2() {
     }, []);
 
     const handleChangeDiabetes = (e) => {
-        setShowPDiabetes(e.target.value === "True");
+        setShowPDiabetes(e.target.value === "true");
     };
 
     const handleChangeHipertension = (e) => {
-        setShowPHiper(e.target.value === "True");
+        setShowPHiper(e.target.value === "true");
     };
 
     const handleChangeCancer = (e) => {
-        setShowPCancer(e.target.value === "True");
+        setShowPCancer(e.target.value === "true");
     };
 
     const handleChangeCardiovasculares = (e) => {
-        setShowPCardio(e.target.value === "True");
+        setShowPCardio(e.target.value === "true");
     };
 
     const handleChangeTuberculosis = (e) => {
-        setShowPTuber(e.target.value === "True");
+        setShowPTuber(e.target.value === "true");
     };
 
     const handleChangeAsma = (e) => {
-        setShowPAsma(e.target.value === "True");
+        setShowPAsma(e.target.value === "true");
     };
 
     const handleChangeEpilepsia = (e) => {
-        setShowPEpilepsia(e.target.value === "True");
+        setShowPEpilepsia(e.target.value === "true");
     };
 
     const getNoExp = () => {
