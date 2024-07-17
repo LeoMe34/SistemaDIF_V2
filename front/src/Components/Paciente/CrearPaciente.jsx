@@ -38,6 +38,12 @@ export function CrearPaciente() {
         return ocupacionRegex.test(ocupacion)
     }
 
+    const validarLugarNacimiento = (lugar) => {
+        const lugarRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ][A-Za-zÁÉÍÓÚáéíóúüñÑ\s/,.-:()]*$/
+
+        return lugarRegex.test(lugar)
+    }
+
     const validarOtraNacion = (nacionalidad) => {
         const nacionRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9.,\s-]{1,30}$/
 
@@ -196,6 +202,7 @@ export function CrearPaciente() {
                     apellidoP: data.apellidoP,
                     apellidoM: data.apellidoM,
                     fechaDeNacimiento: data.fechaNacimiento,
+                    lugarNacimiento: data.lugarNacimiento,
                     edad: data.edad,
                     sexo: data.sexo,
                     nacionalidad: data.nacionalidad,
@@ -237,6 +244,7 @@ export function CrearPaciente() {
         const direccionValida = validarDireccion(data.direccion)
         const correoValido = data.correo ? validarCorreo(data.correo) : true
         const anioNacimientoValido = validarAnio()
+        const lugarNacimientoValido = validarLugarNacimiento(data.lugarNacimiento)
         let curpDuplicada = pacientes.some((paciente) => paciente.curp === data.curp)
 
         if (!curpValida) {
@@ -244,6 +252,8 @@ export function CrearPaciente() {
         } else if (curpDuplicada) {
             toast.error('Esta CURP fue registrada anteriormente')
         } else if (!fechaNacimientoValida) {
+            toast.error('La fecha de nacimiento debe ser anterior a la actual')
+        } else if (!lugarNacimientoValido) {
             toast.error('La fecha de nacimiento debe ser anterior a la actual')
         } else if (!anioNacimientoValido) {
             toast.error('La fecha de nacimiento puede comprender los úlltimos 100 años')
@@ -290,16 +300,18 @@ export function CrearPaciente() {
             <h3 className="mt-4 mb-4 titulo">Paciente nuevo</h3>
             <form onSubmit={enviar}>
                 <div className="ml-10 mt-2 container">
-                    <div className="row">
-                        <div className="col">
-                            <label className="form-label etiqueta" htmlFor="curp">CURP
-                                <span className='etiqueta_obligatoria'>*</span>
-                            </label>
-                            <input id="curp" type="text" placeholder="CURP" className="entrada"
-                                {...register("curp", { required: true })} />
-                            {errors.curp && <span>Es necesario este campo</span>}
-                        </div>
+                    <div className="col">
+                        <label className="form-label etiqueta" htmlFor="curp">CURP
+                            <span className='etiqueta_obligatoria'>*</span>
+                        </label>
+                        <input id="curp" type="text" placeholder="CURP" className="entrada"
+                            {...register("curp", { required: true })} />
+                        {errors.curp && <span>Es necesario este campo</span>}
+                    </div>
+                </div>
 
+                <div className="ml-10 mt-2 container">
+                    <div className="row">
                         <div className="col">
                             <label className="form-label etiqueta" htmlFor="fechaNacimiento">Fecha de nacimiento
                                 <span className='etiqueta_obligatoria'>*</span>
@@ -307,6 +319,15 @@ export function CrearPaciente() {
                             <input id="fechaNacimiento" type="date" placeholder="dd/mm/aaaa" className="entrada"
                                 {...register("fechaNacimiento", { required: true })} />
                             {errors.fechaNacimiento && <span>Es necesario este campo</span>}
+                        </div>
+
+                        <div className="col">
+                            <label className="form-label etiqueta" htmlFor="lugarNacimiento">Lugar de nacimiento
+                                <span className='etiqueta_obligatoria'>*</span>
+                            </label>
+                            <input id="lugarNacimiento" type="text" className="entrada"
+                                {...register("lugarNacimiento", { required: true })} />
+                            {errors.lugarNacimiento && <span>Es necesario este campo</span>}
                         </div>
 
                         <div className="col">

@@ -228,7 +228,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = addTextWithWrap(`HABITACIÓN: ${datos2.habitacion}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
 
-    yPosition = addTextWithWrap(`LUGAR Y FECHA DE NACIMIENTO: !, ${detallePaciente.datosPersonalesPacient.fechaDeNacimiento}`, 20, yPosition, maxWidth);
+    yPosition = addTextWithWrap(`LUGAR Y FECHA DE NACIMIENTO: ${detallePaciente.datosPersonalesPacient.lugarNacimiento}, ${detallePaciente.datosPersonalesPacient.fechaDeNacimiento}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     yPosition = addTextWithWrap(`HIGIENE PERSONAL: ${datos2.higiene}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
@@ -395,7 +395,7 @@ const generarPDF = (detallePaciente, noExpediente, datos, datos2, data, empleado
     yPosition = checkAddPage(yPosition, 10);
     yPosition = addTextWithWrap(`${empleado.cedula}`, getCenteredXPosition(empleado.cedula, maxWidth) + 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition = addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition, maxWidth);    
+    yPosition = addTextWithWrap(`MEDICO RESPONSABLE`, getCenteredXPosition("MEDICO RESPONSABLE", maxWidth) + 20, yPosition, maxWidth);
 
     drawFooter(pageHeight - 20);
 
