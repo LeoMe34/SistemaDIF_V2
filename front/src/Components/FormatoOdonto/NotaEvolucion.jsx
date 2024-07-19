@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
+import generarPDF from "./ConsentimientoPDF";
 
 export function NotaEvolucion() {
     const navegador = useNavigate()
@@ -14,6 +15,7 @@ export function NotaEvolucion() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [idHistOdonto, setHistOdonto] = useState(null)
     const [noExpediente, setNoExpediente] = useState(null)
+    const [detallePaciente, setDetallePaciente] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
@@ -23,11 +25,30 @@ export function NotaEvolucion() {
         setNoExpediente(JSON.parse(storedData));
     };
 
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
     useEffect(() => {
         if (token) {
             getNoExp();
         }
     }, [token]);
+
+    useEffect(() => {
+        getDetallesPaciente()
+    }, [token, noExpediente]);
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -123,6 +144,7 @@ export function NotaEvolucion() {
         }
         else {
             registrarNotaEvoOdonto(data, idHistOdonto);
+            generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
             navegador("/ficha_medica")
         }
 
