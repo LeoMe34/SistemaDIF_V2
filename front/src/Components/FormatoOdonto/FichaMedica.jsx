@@ -6,12 +6,15 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
+import generarPDF from "./FichaMedicaPDF";
 
 export function FichaMedica() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
     const [idNota, setIdNota] = useState(null);
@@ -35,6 +38,41 @@ export function FichaMedica() {
         }
         console.log(noExpediente)
     }
+
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    useEffect(() => {
+        getDetallesEnfermeria();
+        getDetallesPaciente();
+    }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -128,6 +166,7 @@ export function FichaMedica() {
             try {
                 await registrarFicha(data)
                 localStorage.removeItem("noExp")
+                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
                 navegador('/home_odontologo')
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
