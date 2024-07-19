@@ -6,15 +6,32 @@ import { useState, useEffect } from 'react';
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BuscarPacientePsico from '../Paciente/BuscarPacientePsico'
 import { toast } from 'react-hot-toast'
+import generarPDF from './FichaTecnicaPsicologiaPDF';
 
 export function FichaTecnicaPsicologia() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
+    const [detallePaciente, setDetallePaciente] = useState([]);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [empleado, setEmpleado] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
+
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -35,7 +52,8 @@ export function FichaTecnicaPsicologia() {
         };
 
         getNoEmpleado();
-    }, [token]);
+        getDetallesPaciente()
+    }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
         const today = new Date();
@@ -132,6 +150,7 @@ export function FichaTecnicaPsicologia() {
         }
         else {
             registrarFicha(data)
+            generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
             navegador("/home_psicologia")
         }
 
