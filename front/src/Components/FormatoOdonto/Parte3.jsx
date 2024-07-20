@@ -1,4 +1,3 @@
-{/*import { NavBarBusqueda } from "../../Partials/NavBarBusqueda"*/ }
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../Contexto/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import generarPDF from './HistorialClinicoDentalPDF';
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function Parte3() {
     const navegador = useNavigate()
@@ -16,6 +16,7 @@ export function Parte3() {
     const [historialO, setHistorialO] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [empleado, setEmpleado] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
     const [detallePaciente, setDetallePaciente] = useState([]);
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
@@ -48,6 +49,8 @@ export function Parte3() {
             const no_Empleado = response.data.user_info.no_trabajador
             setNoEmpleado(no_Empleado)
             setEmpleado(response.data.user_info)
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -138,6 +141,9 @@ export function Parte3() {
                 }
             })
             console.log(respuesta.data)
+            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
+            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -252,8 +258,6 @@ export function Parte3() {
         else {
             registrarHistOdonto(data)
             localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
-            generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria,fechaActual)
-            navegador('/nota_evo')
         }
     })
 
