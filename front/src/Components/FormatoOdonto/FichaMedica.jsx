@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 import generarPDF from "./FichaMedicaPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function FichaMedica() {
     const navegador = useNavigate()
@@ -17,6 +18,7 @@ export function FichaMedica() {
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
+    const [userGroup, setUserGroup] = useState(null);
     const [idNota, setIdNota] = useState(null);
     const [fechaActual, setFechaActual] = useState('')
 
@@ -87,6 +89,8 @@ export function FichaMedica() {
                 const cedula = response.data.user_info.cedula
                 setNombreE(nombre)
                 setCedula(cedula)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -130,6 +134,9 @@ export function FichaMedica() {
                 }
             })
             console.log(data)
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -166,8 +173,6 @@ export function FichaMedica() {
             try {
                 await registrarFicha(data)
                 localStorage.removeItem("noExp")
-                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-                navegador('/home_odontologo')
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
