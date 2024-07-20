@@ -8,6 +8,7 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import generarPDF from "./FichaTecnicaPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function FichaTecnicaMedico() {
     const navegador = useNavigate()
@@ -17,6 +18,7 @@ export function FichaTecnicaMedico() {
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
+    const [userGroup, setUserGroup] = useState(null);
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [detallePaciente, setDetallePaciente] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
@@ -35,6 +37,8 @@ export function FichaTecnicaMedico() {
             setNoEmpleado(no_Empleado)
             setNombreE(nombre)
             setCedula(cedula)
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -105,6 +109,9 @@ export function FichaTecnicaMedico() {
                 }
             })
             console.log(data)
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -130,8 +137,6 @@ export function FichaTecnicaMedico() {
         } else {
             await registrarFicha(data);
             localStorage.setItem('noExp', JSON.stringify(noExpediente));
-            generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-            navegador('/historial_clinico_p1');
         }
     });
 

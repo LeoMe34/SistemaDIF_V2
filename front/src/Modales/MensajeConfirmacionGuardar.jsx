@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const MySwal = withReactContent(Swal)
 
-export const mensajeConfirmacionGuardar = (tipoDato, rol, navegador) => {
+export const mensajeConfirmacionGuardar = (tipoDato, rol, navegador, callback) => {
     MySwal.fire({
         title: `¿Estas seguro de guardar los datos de${tipoDato}?`,
         showDenyButton: true,        
@@ -14,6 +14,7 @@ export const mensajeConfirmacionGuardar = (tipoDato, rol, navegador) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             Swal.fire("¡Se ha guardado con éxito!", "", "success").then(() => {
+                if(callback) callback();
                 switch (tipoDato) {
                     case ' la ficha tecnica':
                         if (rol === "Enfermero") {
