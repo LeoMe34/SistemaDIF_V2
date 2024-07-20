@@ -9,6 +9,8 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import generarPDF from "./ConsentimientoPDF";
 
+//NO SE REGISTRA
+
 export function NotaEvolucion() {
     const navegador = useNavigate()
     const { token } = useAuth()
