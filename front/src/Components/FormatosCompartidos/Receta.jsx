@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import generarPDF from "./RecetaPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function Receta() {
     const { token } = useAuth()
@@ -16,6 +17,7 @@ export function Receta() {
     const [fechaActual, setFechaActual] = useState('')
     const [idNota, setIdNota] = useState(null)
     const [empleado, setEmpleado] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
     const navegador = useNavigate()
 
     const getNoEmpleado = async () => {
@@ -27,6 +29,8 @@ export function Receta() {
                 }
             });
             setEmpleado(response.data.user_info)
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -105,6 +109,9 @@ export function Receta() {
                 }
             })
             console.log(data)
+            mensajeConfirmacionGuardar(' la receta', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
+            })
             localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
@@ -130,8 +137,6 @@ export function Receta() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
         } else {
             registrarReceta(data)
-            generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
-            navegador("/home_medico")
         }
     })
 
