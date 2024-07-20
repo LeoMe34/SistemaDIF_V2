@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
 import generarPDF from "./HistorialClinicoPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function Parte3() {
     const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -18,6 +19,7 @@ export function Parte3() {
     const navegador = useNavigate()
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [empleado, setEmpleado] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
     const [fechaActual, setFechaActual] = useState('')
     const [detallePaciente, setDetallePaciente] = useState([]);
 
@@ -30,6 +32,8 @@ export function Parte3() {
                 }
             });
             setEmpleado(response.data.user_info)
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -186,6 +190,9 @@ export function Parte3() {
                 }
             })
             console.log(respuesta.data)
+            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
+            })
         } catch (error) {
             console.error("Ocurrió un error", error);
 
@@ -285,8 +292,6 @@ export function Parte3() {
         }
         else {
             registrarHistorial(data);
-            generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
-            navegador('/notas_medicas')
         }
     })
     return (
