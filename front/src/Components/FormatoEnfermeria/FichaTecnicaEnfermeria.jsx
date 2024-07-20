@@ -6,12 +6,14 @@ import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function FichaTecnicaEnfermeria() {
     const navegador = useNavigate()
     const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm()
     const { noExpediente } = useNoExpediente()
+    const [userGroup, setUserGroup] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombreE, setNombreE] = useState(null);
 
@@ -28,6 +30,8 @@ export function FichaTecnicaEnfermeria() {
                 const nombre = response.data.user_info.nombre_empleado
                 setNoEmpleado(no_Empleado)
                 setNombreE(nombre)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -90,7 +94,8 @@ export function FichaTecnicaEnfermeria() {
                 }
             })
             console.log(data)
-            navegador("/home_enfermeria")
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador)
+            //navegador("/home_enfermeria")
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
