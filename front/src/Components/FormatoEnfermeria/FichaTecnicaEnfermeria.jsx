@@ -94,8 +94,7 @@ export function FichaTecnicaEnfermeria() {
                 }
             })
             console.log(data)
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador)
-            //navegador("/home_enfermeria")
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador)            
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
