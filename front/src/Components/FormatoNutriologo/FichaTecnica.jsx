@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import generarPDF from "./FichaTecnicaPDF";
 
 export function FichaTecnica() {
     const navegador = useNavigate()
@@ -16,6 +17,8 @@ export function FichaTecnica() {
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [detallePaciente, setDetallePaciente] = useState([]);
     const [showReferencia, setShowReferencia] = useState(false)
     const [fechaActual, setFechaActual] = useState('')
     const [grupo, setGrupo] = useState('')
@@ -23,6 +26,36 @@ export function FichaTecnica() {
     const handleReferencia = (e) => {
         setShowReferencia(e.target.value === "1");
     };
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getDetallesPaciente = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/detalle_paciente/${noExpediente}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetallePaciente(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    }
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -47,7 +80,9 @@ export function FichaTecnica() {
         };
 
         getNoEmpleado();
-    }, [token]);
+        getDetallesEnfermeria();
+        getDetallesPaciente();
+    }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
         const today = new Date();
@@ -109,6 +144,7 @@ export function FichaTecnica() {
                 } else if (grupo === 'audiologo') {
                     navegador('/home_audiologo');
                 } else if (grupo === 'Nutriologo') {
+                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
                     navegador('/home_nutricion');
                 }
             } catch (error) {
