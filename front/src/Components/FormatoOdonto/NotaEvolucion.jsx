@@ -5,12 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
-import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import generarPDF from "./ConsentimientoPDF";
-
-//NO SE REGISTRA
-//No recupera el noExp, no se si ponerlo con el contexto
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function NotaEvolucion() {
     const navegador = useNavigate()
@@ -22,6 +19,7 @@ export function NotaEvolucion() {
     const [fechaActual, setFechaActual] = useState('')
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
+    const [userGroup, setUserGroup] = useState(null);
 
     const getNoExp = () => {
         const storedData = localStorage.getItem('noExp');
@@ -66,6 +64,8 @@ export function NotaEvolucion() {
                 const cedula = response.data.user_info.cedula
                 setNombreE(nombre)
                 setCedula(cedula)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -84,7 +84,7 @@ export function NotaEvolucion() {
         setFechaActual(formattedDate);
     }, []);
 
-   
+
     const getIdHistorialOdonto = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}`,
@@ -99,7 +99,7 @@ export function NotaEvolucion() {
             console.error('Error al obtener ID del historial:', error);
         }
     }
-    
+
     useEffect(() => {
         if (noExpediente !== null) {
             getIdHistorialOdonto()
@@ -160,9 +160,10 @@ export function NotaEvolucion() {
             toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de resumen de la consulta");
         }
         else {
-            registrarNotaEvoOdonto(data);
-            generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
-            navegador("/ficha_medica")
+            mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
+                registrarNotaEvoOdonto(data);
+                generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
+            })
         }
 
     }
