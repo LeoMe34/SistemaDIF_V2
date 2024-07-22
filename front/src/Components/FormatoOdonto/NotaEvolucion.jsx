@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast'
 import generarPDF from "./ConsentimientoPDF";
 
 //NO SE REGISTRA
+//No recupera el noExp, no se si ponerlo con el contexto
 
 export function NotaEvolucion() {
     const navegador = useNavigate()
@@ -83,20 +84,34 @@ export function NotaEvolucion() {
         setFechaActual(formattedDate);
     }, []);
 
-    const getIdHistorialOdonto = async (noExpediente) => {
+   
+    const getIdHistorialOdonto = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/getNotaEvo/?no_expediente=${noExpediente}`,
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}`,
                 {
                     headers: {
                         Authorization: `Token ${token}`
                     }
                 })
-            setHistOdonto(response.data[0].id)
+            setHistOdonto(response.data.id)
             console.log(idHistOdonto)
         } catch (error) {
             console.error('Error al obtener ID del historial:', error);
         }
     }
+    
+    useEffect(() => {
+        if (noExpediente !== null) {
+            getIdHistorialOdonto()
+        }
+    }, [noExpediente]);
+
+    const handlePacienteSeleccionado = (noExpediente) => {
+        console.log("No exp", noExpediente);
+        setNoExpediente(noExpediente)
+        localStorage.setItem('noExp', JSON.stringify(noExpediente))
+    };
+
 
     const registrarNotaEvoOdonto = async (data) => {
         try {
@@ -145,7 +160,7 @@ export function NotaEvolucion() {
             toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de resumen de la consulta");
         }
         else {
-            registrarNotaEvoOdonto(data, idHistOdonto);
+            registrarNotaEvoOdonto(data);
             generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
             navegador("/ficha_medica")
         }
@@ -178,7 +193,7 @@ export function NotaEvolucion() {
             <h2 className='subtitulo'>Nota Evolución</h2>
             <div className='mt-3 mb-5 container'>
                 {noExpediente === null && (
-                    <BusquedaPaciente getIdHistorialMedico={getIdHistorialOdonto} />
+                    <BusquedaPaciente getIdHistorialMedico={handlePacienteSeleccionado} />
                 )}
 
                 {noExpediente !== null && fechaActual && (
