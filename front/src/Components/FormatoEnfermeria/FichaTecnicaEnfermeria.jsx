@@ -94,7 +94,6 @@ export function FichaTecnicaEnfermeria() {
                 }
             })
             console.log(data)
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador)            
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -155,7 +154,9 @@ export function FichaTecnicaEnfermeria() {
             toast.error("Ingrese sólo letras en el campo de escolaridad")
         }
         else {
-            registrarFicha(data)
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                registrarFicha(data)
+            })
         }
     })
 
