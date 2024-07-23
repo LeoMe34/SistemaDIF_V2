@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast'
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function CrearPaciente() {
     const navegador = useNavigate()
@@ -13,7 +14,27 @@ export function CrearPaciente() {
     const [mounted, setMounted] = useState(false);
     const [mostrarOtraNacion, setMostrarOtraNacion] = useState(false)
     const [pacientes, setPacientes] = useState([])
+    const [userGroup, setUserGroup] = useState(null);
 
+    useEffect(() => {
+        const getNoEmpleado = async () => {
+            try {
+
+                const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });                
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
+                console.log(response)
+            } catch (error) {
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+
+        getNoEmpleado();
+    }, [token]);
 
     const validarCURP = (curp) => {
         const curpRegex = /^[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[A-Z0-9]{1}[0-9]$/;
@@ -276,8 +297,9 @@ export function CrearPaciente() {
         } else if (!ocupacionValida) {
             toast.error('Ocupación no valida, ocupe solo letras')
         } else {
-            registrarPaciente(data)
-            navegador("/home_recepcion_medica")
+            mensajeConfirmacionGuardar('l paciente', userGroup, navegador, () => {
+                registrarPaciente(data)                
+            })            
         }
 
     })
