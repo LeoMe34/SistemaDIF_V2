@@ -7,14 +7,14 @@ const MySwal = withReactContent(Swal)
 export const mensajeConfirmacionGuardar = (tipoDato, rol, navegador, callback) => {
     MySwal.fire({
         title: `¿Estas seguro de guardar los datos de${tipoDato}?`,
-        showDenyButton: true,        
+        showDenyButton: true,
         confirmButtonText: "Si",
         denyButtonText: `No`
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             Swal.fire("¡Se ha guardado con éxito!", "", "success").then(() => {
-                if(callback) callback();
+                if (callback) callback();
                 switch (tipoDato) {
                     case ' la ficha tecnica':
                         if (rol === "Enfermero") {
@@ -49,6 +49,19 @@ export const mensajeConfirmacionGuardar = (tipoDato, rol, navegador, callback) =
                         if (rol === "Medico") {
                             navegador("/home_medico")
                         }
+                        break;
+                    case 'l paciente':
+                        if (rol === "Recepcion") {
+                            navegador("/home_recepcion_medica")
+                        } else if (rol === "recepcion_psico") {
+                            navegador("/home_recepcion_psicologia")
+                        }
+                        break;
+                    case 'l empleado':
+                        navegador("/home_administrador")
+                        break;
+                    case 'l usuario':
+                        navegador("/crear_empleado")
                         break;
                 }
             })

@@ -1,4 +1,3 @@
-{/*import { NavBarSimple } from "../../Partials/NavBarSimple"*/ }
 import axios from 'axios';
 import { useForm } from "react-hook-form"
 import { useState, useEffect } from 'react';
@@ -7,6 +6,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 import BuscarUsuario from './BuscarUsuario';
 import { useUsuarioId } from '../../Contexto/UsuarioIdContext';
 import { toast } from 'react-hot-toast'
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function CrearEmpleado() {
     const navegador = useNavigate()
@@ -39,8 +39,7 @@ export function CrearEmpleado() {
             const noTrabajadorRegistrado = respuesta.data
             if (noTrabajadorRegistrado) {
                 console.log("Usuario registrado correctamente");
-                localStorage.removeItem("noTrabajador")
-                navegador("/crear_empleado");
+                localStorage.removeItem("noTrabajador")                
                 return {
                     usuarioID: noTrabajadorRegistrado.usuarioId,
                     ocupacionNombre: noTrabajadorRegistrado.ocupacion
@@ -151,7 +150,7 @@ export function CrearEmpleado() {
 
 
     const handlePacienteSeleccionado = (noTrabajadorSeleccionado) => {
-        console.log("No trabajador", noTrabajadorSeleccionado);        
+        console.log("No trabajador", noTrabajadorSeleccionado);
         setValue("no_trabajador", noTrabajadorSeleccionado)
     };
 
@@ -179,10 +178,12 @@ export function CrearEmpleado() {
             else {
                 try {
                     console.log(data);
-                    const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
-                    console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
-                    await unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
-                    navegador("/home_administrador")
+                    mensajeConfirmacionGuardar('l empleado', null, navegador, () => {
+                        const empleadoRegistrado = registrarEmpleado(data); // Espera a que se registre el empleado
+                        console.log(usuarioId, empleadoRegistrado.ocupacionNombre);                        
+                        unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado                    
+                    })
+
                 } catch (error) {
                     console.error('Error al registrar empleado:', error);
                 }
@@ -191,10 +192,12 @@ export function CrearEmpleado() {
             setValue('cedula_profesional', 'N/A')
             try {
                 console.log(data);
-                const empleadoRegistrado = await registrarEmpleado(data); // Espera a que se registre el empleado
-                console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
-                await unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
-                navegador("/home_administrador")
+                mensajeConfirmacionGuardar('l empleado', navegador, () => {
+                    const empleadoRegistrado = registrarEmpleado(data); // Espera a que se registre el empleado
+                    console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
+                    unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
+                })
+
             } catch (error) {
                 console.error('Error al registrar empleado:', error);
             }

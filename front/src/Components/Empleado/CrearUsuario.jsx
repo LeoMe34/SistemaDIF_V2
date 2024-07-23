@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom"
 import { useAuth } from '../../Contexto/AuthContext';
 import { toast } from 'react-hot-toast'
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function CrearUsuario() {
     const [usuario, setUsuario] = useState('')
@@ -98,9 +99,11 @@ export function CrearUsuario() {
         }
         else {
             try {
-                await registrarUsuario()
-                localStorage.setItem('noTrabajador', JSON.stringify(usuario));
-                toast.success("Usuario registrado con éxito")
+                mensajeConfirmacionGuardar('l usuario', null, navegador, () => {
+                    registrarUsuario()
+                    localStorage.setItem('noTrabajador', JSON.stringify(usuario));
+                    toast.success("Usuario registrado con éxito")
+                })
             } catch (error) {
                 console.error('Error al registrar empleado:', error);
             }
