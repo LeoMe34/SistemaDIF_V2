@@ -5,6 +5,7 @@ import { useAuth } from '../../Contexto/AuthContext';
 import axios from "axios";
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import { mensajeConfirmacionSiguiente } from '../../Modales/MensajeConfirmacionSiguiente';
 
 export function Parte2() {
     const navegador = useNavigate()
@@ -20,6 +21,7 @@ export function Parte2() {
     const [noExpediente, setNoExpediente] = useState(null)
     const [sexo, setSexo] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
+    const [userGroup, setUserGroup] = useState(null);
 
     useEffect(() => {
         const today = new Date();
@@ -29,6 +31,26 @@ export function Parte2() {
         const formattedDate = `${year}-${month}-${day}`;
         setFechaActual(formattedDate);
     }, []);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
+
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     const handleChangeDiabetes = (e) => {
         setShowPDiabetes(e.target.value === "true");
@@ -144,13 +166,15 @@ export function Parte2() {
             if (!planificacionValido) {
                 toast.error("Ingrese solo caracteres alfanuméricos en el campo de planificación familiar");
             } else {
-                localStorage.setItem('antecedentes', JSON.stringify(data))
-                navegador("/historial_odontologico_p3")
+                mensajeConfirmacionSiguiente('diagnostico', userGroup, navegador, () => {
+                    localStorage.setItem('antecedentes', JSON.stringify(data))
+                })
             }
         }
         else {
-            localStorage.setItem('antecedentes', JSON.stringify(data))
-            navegador("/historial_odontologico_p3")
+            mensajeConfirmacionSiguiente('diagnostico', userGroup, navegador, () => {
+                localStorage.setItem('antecedentes', JSON.stringify(data))
+            })
         }
     })
 

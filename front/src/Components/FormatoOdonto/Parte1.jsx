@@ -1,18 +1,42 @@
-{/*import { NavBarBusqueda } from "../../Partials/NavBarBusqueda"*/ }
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
+import axios from 'axios';
 import { toast } from 'react-hot-toast'
+import { useAuth } from "../../Contexto/AuthContext";
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import { mensajeConfirmacionSiguiente } from '../../Modales/MensajeConfirmacionSiguiente';
 
 export function Parte1() {
     const navegador = useNavigate()
+    const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const { noExpediente } = useNoExpediente()
     const [fechaActual, setFechaActual] = useState('')
     const [showReferencia, setShowReferencia] = useState(false)
+    const [userGroup, setUserGroup] = useState(null);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
+
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     useEffect(() => {
         const today = new Date();
@@ -47,11 +71,12 @@ export function Parte1() {
             toast.error("En el campo de padecimiento solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         }
         else {
-            const historialOdonto = { ...data, noExpediente }
+            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                const historialOdonto = { ...data, noExpediente }
 
-            localStorage.setItem('historialO', JSON.stringify(historialOdonto))
-            localStorage.setItem('noExp', JSON.stringify(noExpediente))
-            navegador("/historial_odontologico_p2")
+                localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+                localStorage.setItem('noExp', JSON.stringify(noExpediente))
+            })
         }
 
     })
@@ -75,7 +100,7 @@ export function Parte1() {
                             <label className="etiqueta" htmlFor="fechaAct">Fecha: </label>
                             <input id="fechaAlt" type="date" placeholder="aaaa/mm/dd" className="entrada"
                                 value={fechaActual} readOnly
-                                {...register("fecha_elaboracion", { required: true })} />
+                                {...register("fecha_elaboracion")} />
                         </div>
 
                         <div className="col">

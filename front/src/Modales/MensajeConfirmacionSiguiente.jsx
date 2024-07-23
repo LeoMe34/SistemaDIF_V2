@@ -20,7 +20,7 @@ export const mensajeConfirmacionSiguiente = (tipoDato, rol, navegador, callback)
                         if (rol === "Medico") {
                             navegador("/historial_clinico_p2")
                         } else if (rol === "Odontologo") {
-                            navegador("/home_odontologo")
+                            navegador("/historial_odontologico_p2")
                         }
                         break;
                     case 'diagnostico':
