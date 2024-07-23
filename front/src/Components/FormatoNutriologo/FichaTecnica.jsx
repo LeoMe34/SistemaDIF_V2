@@ -8,6 +8,7 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import generarPDF from "./FichaTecnicaPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function FichaTecnica() {
     const navegador = useNavigate()
@@ -138,15 +139,12 @@ export function FichaTecnica() {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
             try {
-                await registrarFicha(data);
-                if (grupo === 'oftalmologo') {
-                    navegador('/home_oftalmologo');
-                } else if (grupo === 'audiologo') {
-                    navegador('/home_audiologo');
-                } else if (grupo === 'Nutriologo') {
-                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-                    navegador('/home_nutricion');
-                }
+                mensajeConfirmacionGuardar(' la ficha tecnica', grupo, navegador, () => {
+                    registrarFicha(data);
+                    if (grupo === 'Nutriologo') {
+                        generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                    }
+                })
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
