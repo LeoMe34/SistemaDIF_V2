@@ -7,6 +7,7 @@ import { useNoExpediente } from '../../Contexto/NoExpedienteContext';
 import BuscarPacientePsico from '../Paciente/BuscarPacientePsico'
 import { toast } from 'react-hot-toast'
 import generarPDF from './FichaTecnicaPsicologiaPDF';
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function FichaTecnicaPsicologia() {
     const navegador = useNavigate()
@@ -16,6 +17,7 @@ export function FichaTecnicaPsicologia() {
     const [detallePaciente, setDetallePaciente] = useState([]);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [empleado, setEmpleado] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
     const [fechaActual, setFechaActual] = useState('')
 
     const getDetallesPaciente = async () => {
@@ -45,6 +47,8 @@ export function FichaTecnicaPsicologia() {
                 const no_Empleado = response.data.user_info.no_trabajador
                 setNoEmpleado(no_Empleado)
                 setEmpleado(response.data.user_info)
+                const group_usuario = response.data.user_info.name
+                setUserGroup(group_usuario)
                 console.log(response)
             } catch (error) {
                 console.error('Error al obtener ID de empleado:', error);
@@ -149,9 +153,10 @@ export function FichaTecnicaPsicologia() {
             toast.error("Debe seleccionar un paciente");
         }
         else {
-            registrarFicha(data)
-            generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
-            navegador("/home_psicologia")
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                registrarFicha(data)
+                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
+            })
         }
 
     })
