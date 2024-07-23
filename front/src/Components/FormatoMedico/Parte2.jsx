@@ -6,6 +6,7 @@ import axios from "axios";
 import { useAuth } from "../../Contexto/AuthContext";
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from "../FormatoEnfermeria/CardFichaEnfermeria";
+import { mensajeConfirmacionSiguiente } from '../../Modales/MensajeConfirmacionSiguiente';
 
 export function Parte2() {
     const { register, handleSubmit, watch, formState: { errors }, getValues } = useForm()
@@ -25,6 +26,27 @@ export function Parte2() {
     const [noExpediente, setNoExpediente] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
     const [sexo, setSexo] = useState(null)
+    const [userGroup, setUserGroup] = useState(null);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
+
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     useEffect(() => {
         const today = new Date();
@@ -212,21 +234,21 @@ export function Parte2() {
                     toast.error("Ingrese solo caracteres alfanuméricos en el campo de otros métodos de planificación familiar");
                 }
                 else {
-                    localStorage.setItem('datos2', JSON.stringify(data));
-
-                    navegador('/historial_clinico_p3');
+                    mensajeConfirmacionSiguiente('diagnostico', userGroup, navegador, () => {
+                        localStorage.setItem('datos2', JSON.stringify(data));
+                    })
                 }
             }
             else {
-                localStorage.setItem('datos2', JSON.stringify(data));
-
-                navegador('/historial_clinico_p3');
+                mensajeConfirmacionSiguiente('diagnostico', userGroup, navegador, () => {
+                    localStorage.setItem('datos2', JSON.stringify(data));
+                })
             }
         }
         else {
-            localStorage.setItem('datos2', JSON.stringify(data));
-
-            navegador('/historial_clinico_p3');
+            mensajeConfirmacionSiguiente('diagnostico', userGroup, navegador, () => {
+                localStorage.setItem('datos2', JSON.stringify(data));
+            })
         }
     });
 

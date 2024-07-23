@@ -2,15 +2,40 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form"
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { toast } from 'react-hot-toast'
+import { useAuth } from "../../Contexto/AuthContext";
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
+import { mensajeConfirmacionSiguiente } from '../../Modales/MensajeConfirmacionSiguiente';
 
 export function Parte1() {
     const navegador = useNavigate()
+    const { token } = useAuth()
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [noExpediente, setNotExpediente] = useState(null)
     const [fechaActual, setFechaActual] = useState('')
     const [showReferencia, setShowReferencia] = useState(false)
+    const [userGroup, setUserGroup] = useState(null);
+
+    const getNoEmpleado = async () => {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
+            console.log(response)
+        } catch (error) {
+            console.error('Error al obtener ID de empleado:', error);
+        }
+    };
+
+    useEffect(() => {
+        getNoEmpleado();
+    }, [token]);
 
     const getExp = () => {
         const storedData = localStorage.getItem('noExp')
@@ -74,19 +99,17 @@ export function Parte1() {
                 toast.error("Ingrese solo caracteres alfanuméricos y signos de puntuación en el campo de lugar de referencia")
             }
             else {
-                const datosCompletos = { ...data, noExpediente };
-
-                localStorage.setItem('datos', JSON.stringify(datosCompletos));
-
-                navegador('/historial_clinico_p2');
+                mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                    const datosCompletos = { ...data, noExpediente };
+                    localStorage.setItem('datos', JSON.stringify(datosCompletos));
+                })
             }
         }
         else {
-            const datosCompletos = { ...data, noExpediente };
-
-            localStorage.setItem('datos', JSON.stringify(datosCompletos));
-
-            navegador('/historial_clinico_p2');
+            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                const datosCompletos = { ...data, noExpediente };
+                localStorage.setItem('datos', JSON.stringify(datosCompletos));
+            })
         }
     });
 
@@ -128,7 +151,7 @@ export function Parte1() {
                                 <label className='etiqueta' htmlFor="fecha">Fecha:</label>
                                 <input className="entrada" id='fecha' name='fecha' type="date"
                                     value={fechaActual} readOnly
-                                    {...register("fecha", { required: true })} />
+                                    {...register("fecha")} />
                             </div>
                             <div className='col'>
                                 <div className='animacionLabel'>
