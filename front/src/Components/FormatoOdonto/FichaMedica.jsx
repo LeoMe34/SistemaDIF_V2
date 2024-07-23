@@ -134,9 +134,6 @@ export function FichaMedica() {
                 }
             })
             console.log(data)
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -171,8 +168,11 @@ export function FichaMedica() {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
             try {
-                await registrarFicha(data)
-                localStorage.removeItem("noExp")
+                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                    registrarFicha(data)
+                    localStorage.removeItem("noExp")
+                })
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');

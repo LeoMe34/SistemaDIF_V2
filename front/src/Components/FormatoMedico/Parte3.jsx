@@ -190,9 +190,6 @@ export function Parte3() {
                 }
             })
             console.log(respuesta.data)
-            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
-            })
         } catch (error) {
             console.error("Ocurrió un error", error);
 
@@ -291,7 +288,11 @@ export function Parte3() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de pronóstico");
         }
         else {
-            registrarHistorial(data);
+            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
+                registrarHistorial(data)
+            })
+
         }
     })
     return (

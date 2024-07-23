@@ -109,9 +109,6 @@ export function Receta() {
                 }
             })
             console.log(data)
-            mensajeConfirmacionGuardar(' la receta', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
-            })
             localStorage.removeItem('noExp');
         } catch (error) {
             console.error("Ocurrió un error", error);
@@ -136,7 +133,10 @@ export function Receta() {
         } else if (!tratamientoValido) {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
         } else {
-            registrarReceta(data)
+            mensajeConfirmacionGuardar(' la receta', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
+                registrarReceta(data)
+            })
         }
     })
 

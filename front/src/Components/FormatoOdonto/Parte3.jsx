@@ -141,9 +141,6 @@ export function Parte3() {
                 }
             })
             console.log(respuesta.data)
-            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
-            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -256,8 +253,11 @@ export function Parte3() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de muscuesqueleto");
         }
         else {
-            registrarHistOdonto(data)
-            localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
+                registrarHistOdonto(data)
+                localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+            })
         }
     })
 

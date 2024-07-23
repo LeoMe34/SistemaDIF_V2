@@ -8,6 +8,7 @@ import { MensajeReceta } from '../../Modales/MensajeReceta';
 import { toast } from 'react-hot-toast'
 import { CardFichaEnfermeria } from '../FormatoEnfermeria/CardFichaEnfermeria';
 import generarPDF from "./NotaMedicaPDF";
+import { mensajeConfirmacionGuardar } from '../../Modales/MensajeConfirmacionGuardar';
 
 export function NotasMedicas() {
     const navegador = useNavigate()
@@ -19,6 +20,7 @@ export function NotasMedicas() {
     const [fechaActual, setFechaActual] = useState('')
     const [horaActual, setHoraActual] = useState('');
     const [empleado, setEmpleado] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -29,6 +31,8 @@ export function NotasMedicas() {
                 }
             });
             setEmpleado(response.data.user_info)
+            const group_usuario = response.data.user_info.name
+            setUserGroup(group_usuario)
             console.log(response)
         } catch (error) {
             console.error('Error al obtener ID de empleado:', error);
@@ -146,7 +150,7 @@ export function NotasMedicas() {
         const diagnosticoValido = validarTexto(data.diagnostico)
         const tratamientoValido = validarTexto(data.tratamiento)
         const observacionesValido = validarTexto(data.observaciones)
-        if(!noExpediente){
+        if (!noExpediente) {
             toast.error("Seleccione un paciente");
         } else if (!servicioValido) {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de servicio");
@@ -158,10 +162,12 @@ export function NotasMedicas() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de observaciones");
         }
         else {
-            registrarNota(data, idHistorial);
-            localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
-            generarPDF(detallePaciente, noExpediente, data, empleado)
-            MensajeReceta(navegador)
+            mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
+                registrarNota(data, idHistorial);
+                localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+                generarPDF(detallePaciente, noExpediente, data, empleado)
+                MensajeReceta(navegador)
+            })
         }
     }
     return (

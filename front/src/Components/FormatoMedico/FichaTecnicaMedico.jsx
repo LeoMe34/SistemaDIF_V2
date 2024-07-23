@@ -109,9 +109,6 @@ export function FichaTecnicaMedico() {
                 }
             })
             console.log(data)
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-            })
         } catch (error) {
             console.error("Ocurrió un error", error);
         }
@@ -135,8 +132,11 @@ export function FichaTecnicaMedico() {
         } else if (!observacionValido) {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
         } else {
-            await registrarFicha(data);
-            localStorage.setItem('noExp', JSON.stringify(noExpediente));
+            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                registrarFicha(data);
+                localStorage.setItem('noExp', JSON.stringify(noExpediente));
+            })
         }
     });
 
