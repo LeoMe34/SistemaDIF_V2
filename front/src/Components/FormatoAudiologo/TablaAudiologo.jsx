@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import generarPDF from "./HojaDiariaPDF";
 
 export function TablaAudiologo() {
     const { token } = useAuth()
@@ -115,6 +116,11 @@ export function TablaAudiologo() {
                 <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
                 <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
 
+                <button className="ml-10 btn btn-guardar btn-lg btn-block"
+                    onClick={() => generarPDF(nombre, cedula, fichasMedicas, detallesPacientes, fechaActual)}>
+                    Descargar hoja diaria en PDF
+                </button>
+
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
@@ -141,8 +147,8 @@ export function TablaAudiologo() {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table>                
             </div>
-        </div>
+        </div >
     );
 };
