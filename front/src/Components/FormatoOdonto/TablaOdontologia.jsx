@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
-
+import generarPDF from "./HojaDiariaPDF";
 
 export function TablaOdontologia() {
     const { token } = useAuth()
@@ -136,6 +136,10 @@ export function TablaOdontologia() {
                 <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
                 <label className="etiqueta">Localidad sede: Coatzacoalcos</label>
 
+                <button className="ml-10 btn btn-guardar btn-lg btn-block"
+                    onClick={() => generarPDF(nombre, cedula, historialOdonto, diagnosticos, detallesPacientes, fechaActual)}>
+                    Descargar hoja diaria en PDF
+                </button>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
