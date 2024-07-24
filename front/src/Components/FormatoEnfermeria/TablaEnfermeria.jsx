@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import generarPDF from "./HojaDiariaPDF";
 
 export function TablaEnfermeria() {
     const { token } = useAuth()
@@ -119,6 +120,11 @@ export function TablaEnfermeria() {
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
                 <label className="etiqueta" htmlFor="nombre_enfermero">Enfermero(a) responsable: </label>
                 <input type="text" id="nombre_enfermero" name="nombre_enfermero" className="entrada" value={nombre} readOnly />
+
+                <button className="ml-10 btn btn-guardar btn-lg btn-block"
+                    onClick={() => generarPDF(nombre, fichasTecnicas, detallesPacientes, fechaActual)}>
+                    Descargar hoja diaria en PDF
+                </button>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
