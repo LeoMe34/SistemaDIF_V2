@@ -103,7 +103,7 @@ const generarPDF = (nombre, fichaTecnica, detallesPacientes, fechaActual) => {
 
     documento.setFont('Ubuntu-Bold');
     documento.setFontSize(18);
-    documento.text('HOJA DIARIA ENFERMERIA', getCenteredXPosition('HOJA DIARIA AUDIOLOGIA', maxWidth) + 20, 30);
+    documento.text('HOJA DIARIA ENFERMERIA', getCenteredXPosition('HOJA DIARIA ENFERMERIA', maxWidth) + 20, 30);
     documento.setFont('Ubuntu-Regular');
     documento.setFontSize(12);
 
