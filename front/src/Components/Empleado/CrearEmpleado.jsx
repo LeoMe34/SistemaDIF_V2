@@ -215,6 +215,11 @@ export function CrearEmpleado() {
                                 <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                             </a>
                         </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\crear_usuario">
+                                Crear usuario
+                            </a>
+                        </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Crear empleado</li>
                     </ol>
                 </nav>

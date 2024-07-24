@@ -131,15 +131,28 @@ export function Usuario() {
     console.log(cedula);
     return (
         <div className='container'>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_administrador">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>                        
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Perfil de usuario</li>
+                    </ol>
+                </nav>
+            </div>
+
             <div className="card-user">
                 <div className="img">
                     <img src="../Logos/LOGO DIF.jpeg" alt="Logo del DIF" className="img-logos mx-2" />
-
                 </div>
+                
                 <div className="content">
-                    <h2>Perfil Usuario</h2>
+                    <h2>Perfil de Usuario</h2>
                     <p>Empleado del DIF</p>
-                    <div className="center container">
+                    <div className="center">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="cedula">Cédula profesional:</label>
                             <input className="entrada" id='cedula' name='cedula' type="text" value={cedula} readOnly />
@@ -160,7 +173,7 @@ export function Usuario() {
                          */}
                     </div>
 
-                    <div className="center container">
+                    <div className="center">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="rol">Rol:</label>
                             <input className="entrada" id='rol' name='rol' type="text" value={detalleEmpleado.ocupacion} readOnly />
@@ -184,7 +197,7 @@ export function Usuario() {
                     </div>
 
                     {mostrarInputs && (
-                        <div className="center container pt-1 mb-3 ml-10">
+                        <div className="center pt-1 mb-3">
                             <div className="col">
                                 <label className='etiqueta-user' htmlFor="nueva_contra">Nueva contraseña: </label>
                                 <input className="entrada" type="password" id="nueva_contra" placeholder="Nueva contraseña"
@@ -205,24 +218,24 @@ export function Usuario() {
                         </div>
                     )}
 
-                    <div className="center container pt-1 mb-3 ml-10">
+                    <div className="center pt-1 mb-3">
                         <div className="col">
                             {editando ? (
                                 <div>
-                                    <button className="btn btn-guardar btn-lg btn-block" onClick={handleGuardarCambios}>
+                                    <button className="btn m-3 btn-guardar btn-lg btn-block" onClick={handleGuardarCambios}>
                                         Guardar cambios
                                     </button>
 
-                                    <button className="btn ml-10 btn-cancelar btn-lg btn-block" onClick={handleGuardarCambios}>
+                                    <button className="btn m-3 btn-cancelar btn-lg btn-block" onClick={handleGuardarCambios}>
                                         Cancelar
                                     </button>
                                 </div>
                             ) : (
                                 <div>
-                                    <button className="btn btn-guardar btn-lg btn-block" onClick={handleEditarPerfil}>
+                                    <button className="btn m-3 btn-guardar btn-lg btn-block" onClick={handleEditarPerfil}>
                                         Editar perfil
                                     </button>
-                                    <button className="btn ml-10 btn-guardar btn-lg btn-block" onClick={mostrarInputsContraseña}>
+                                    <button className="btn m-3 btn-guardar btn-lg btn-block" onClick={mostrarInputsContraseña}>
                                         Cambiar contraseña
                                     </button>
                                 </div>
