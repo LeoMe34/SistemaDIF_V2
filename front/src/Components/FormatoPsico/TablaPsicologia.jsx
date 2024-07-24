@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import BuscarPacientePsico from "../Paciente/BuscarPacientePsico";
 import generarPDF from "./HojaDiariaPDF";
+import generarExcel from "./HojaDiariaExcel";
 
 export function TablaPsicologia() {
     const { token } = useAuth()
@@ -145,6 +146,11 @@ export function TablaPsicologia() {
                 <button className="ml-10 btn btn-guardar btn-lg btn-block"
                     onClick={() => generarPDF(nombre, cedula, fichalPsico, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en PDF
+                </button>
+
+                <button className="ml-10 btn btn-guardar btn-lg btn-block"
+                    onClick={() => generarExcel(nombre, cedula, fichalPsico, detallesPacientes, fechaActual)}>
+                    Descargar hoja diaria en Excel
                 </button>
 
 
