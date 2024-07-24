@@ -13,13 +13,14 @@ const GrafOdontAnt = () => {
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
+    const [year, setYear] = useState('');
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/', {
-                    params: { month }
+                    params: { month, year }
                 });
                 setData(response.data);
             } catch (error) {
@@ -27,7 +28,7 @@ const GrafOdontAnt = () => {
             }
         };
         fetchData();
-    }, [month]);
+    }, [month, year]);
 
     useEffect(() => {
         if (data.length === 0) {
@@ -167,15 +168,30 @@ const GrafOdontAnt = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
-            <label htmlFor="month-select" >Seleccionar mes:</label>
-            <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
-                <option value="">Todos los meses</option>
-                {[...Array(12)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                        {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
-                    </option>
-                ))}
-            </select>
+            <div className='row'>
+                <div className='col'>
+                    <label htmlFor="month-select" >Seleccionar mes:</label>
+                    <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                        <option value="">Todos los meses</option>
+                        {[...Array(12)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                                {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className='col'>
+                    <label htmlFor="year-select">Seleccionar año:</label>
+                    <select className="opciones" id="year-select" value={year} onChange={(e) => setYear(e.target.value)}>
+                        <option value="">Todos los años</option>
+                        {[...Array(10)].map((_, i) => (
+                            <option key={i} value={2020 + i}>
+                                {2020 + i}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
             <div id="graficoAntH" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
