@@ -6,40 +6,32 @@ import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 
-const GraficosEnfermeria = () => {
+const GraficosMedFam = () => {
     const [chartData, setChartData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
-    const [month, setMonth] = useState('');
-
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfermeria/', {
-                    params: { month }
-                });
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosMed/');
                 console.log('Response Data:', response.data);
                 const servicioMap = {
-                    1: 'Consulta',
-                    2: 'Curación',
-                    3: 'Retiro de puntos',
-                    4: 'Aplicación de medicamentos',
-                    5: 'DxTx'
+                    0: 'Nuclear',
+                    1: 'Extensa',
+                    2: 'Compuesta',
                 };
 
-                // Procesar los datos para contar los pacientes por tipo de servicio
                 const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.servicio_enfermeria];
+                    const serviceType = servicioMap[item.datosFamiliares.tipo_familia];
                     if (serviceType) {
                         acc[serviceType] = (acc[serviceType] || 0) + 1;
                     }
                     return acc;
                 }, {});
 
-                // Convertir el objeto en un array adecuado para ECharts
                 const chartDataArray = Object.keys(serviceCounts).map(key => ({
                     name: key,
                     value: serviceCounts[key],
@@ -48,15 +40,15 @@ const GraficosEnfermeria = () => {
                 console.log('Processed Chart Data:', chartDataArray);
                 setChartData(chartDataArray);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico enfermeria:', error);
+                console.error('Error en obtener los datos del grafico medicina:', error);
             }
         };
         fetchData();
-    }, [month]);
+    }, []);
 
     useEffect(() => {
         if (chartData.length === 0) {
-            return; // No renderizar el gráfico si no hay datos
+            return;
         }
 
         const chartDom = document.getElementById('main');
@@ -66,7 +58,7 @@ const GraficosEnfermeria = () => {
         if (chartType == 'bar') {
             option = {
                 title: {
-                    text: 'Cantidad de Personas por servicio de enferemeria',
+                    text: 'Pacientes por su tipo de familia',
                     left: 'center',
                 },
                 tooltip: {
@@ -85,7 +77,7 @@ const GraficosEnfermeria = () => {
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1'];
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -94,7 +86,7 @@ const GraficosEnfermeria = () => {
                             position: 'top',
                             color: '#000',
                             fontSize: 12,
-                            formatter: '{c}' // Muestra el valor directamente
+                            formatter: '{c}'
                         },
                     },
 
@@ -103,7 +95,7 @@ const GraficosEnfermeria = () => {
         } else {
             option = {
                 title: {
-                    text: 'Cantidad de Personas por servicio de enferemeria',
+                    text: 'Pacientes por su tipo de familia',
                     left: 'center',
                 },
                 tooltip: {
@@ -115,7 +107,7 @@ const GraficosEnfermeria = () => {
                 },
                 series: [
                     {
-                        name: 'Tipo de servicio',
+                        name: 'Tipo de familia',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
@@ -138,7 +130,7 @@ const GraficosEnfermeria = () => {
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
                                 return colorList[params.dataIndex];
                             }
                         },
@@ -188,17 +180,8 @@ const GraficosEnfermeria = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
-            <label htmlFor="month-select" >Seleccionar mes:</label>
-            <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
-                <option value="">Todos los meses</option>
-                {[...Array(12)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                        {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
-                    </option>
-                ))}
-            </select>
             <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
 
-export default GraficosEnfermeria;
+export default GraficosMedFam;
