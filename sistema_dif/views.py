@@ -1511,9 +1511,21 @@ def eliminar_receta(request, pk):
 # APIS para los graficos
 @api_view(["GET"])
 def get_graficosDatos_enfermeria(request):
+    month = request.GET.get("month")
+
     try:
-        data = FichaTecnicaEnfermeria.objects.all()
-        serializer = FichaTecnicaESerializer(data, many=True)
+        queryset = FichaTecnicaEnfermeria.objects.all()
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = FichaTecnicaESerializer(queryset, many=True)
         return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -1521,7 +1533,19 @@ def get_graficosDatos_enfermeria(request):
 
 @api_view(["GET"])
 def grafico_poblacion(request):
-    data = FichaTecnicaEnfermeria.objects.aggregate(
+    month = request.GET.get("month")
+
+    try:
+        month = int(month) if month else None
+    except ValueError:
+        return Response({"error": "Invalid month"}, status=400)
+
+    queryset = FichaTecnicaEnfermeria.objects.all()
+
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    data = queryset.aggregate(
         embarazada_true=Count(Case(When(datosDemograficos__embarazada=True, then=1))),
         adultoM_true=Count(Case(When(datosDemograficos__adulto_mayor=True, then=1))),
         discapacitado_true=Count(
@@ -1529,18 +1553,24 @@ def grafico_poblacion(request):
         ),
     )
 
-    return Response(
-        {
-            "embarazada_true": data["embarazada_true"],
-            "adultoM_true": data["adultoM_true"],
-            "discapacitado_true": data["discapacitado_true"],
-        }
-    )
+    return Response(data)
 
 
 @api_view(["GET"])
 def grafico_odontAntH(request):
-    data = HistorialOdonto.objects.aggregate(
+    month = request.GET.get("month")
+
+    try:
+        month = int(month) if month else None
+    except ValueError:
+        return Response({"error": "Invalid month"}, status=400)
+
+    queryset = HistorialOdonto.objects.all()
+
+    if month:
+        queryset = queryset.filter(fecha_elaboracion__month=month)
+
+    data = queryset.aggregate(
         diabetes_true=Count(Case(When(antHerediPato__diabetesH=True, then=1))),
         hipert_true=Count(Case(When(antHerediPato__hipertH=True, then=1))),
         tuber_true=Count(Case(When(antHerediPato__tuberculoH=True, then=1))),
@@ -1550,22 +1580,24 @@ def grafico_odontAntH(request):
         epilepsia_true=Count(Case(When(antHerediPato__epilepsiaH=True, then=1))),
     )
 
-    return Response(
-        {
-            "diabetes_true": data["diabetes_true"],
-            "hipert_true": data["hipert_true"],
-            "tuber_true": data["tuber_true"],
-            "cancer_true": data["cancer_true"],
-            "cardio_true": data["cardio_true"],
-            "asma_true": data["asma_true"],
-            "epilepsia_true": data["epilepsia_true"],
-        }
-    )
+    return Response(data)
 
 
 @api_view(["GET"])
 def grafico_odontAntP(request):
-    data = HistorialOdonto.objects.aggregate(
+    month = request.GET.get("month")
+
+    try:
+        month = int(month) if month else None
+    except ValueError:
+        return Response({"error": "Invalid month"}, status=400)
+
+    queryset = HistorialOdonto.objects.all()
+
+    if month:
+        queryset = queryset.filter(fecha_elaboracion__month=month)
+
+    data = queryset.aggregate(
         diabetes_true=Count(Case(When(antPersonPato__diabetes=True, then=1))),
         hipert_true=Count(Case(When(antPersonPato__hipert=True, then=1))),
         tuber_true=Count(Case(When(antPersonPato__tuberculo=True, then=1))),
@@ -1577,16 +1609,26 @@ def grafico_odontAntP(request):
         trauma_true=Count(Case(When(antPersonPato__trauma=True, then=1))),
     )
 
-    return Response(
-        {
-            "diabetes_true": data["diabetes_true"],
-            "hipert_true": data["hipert_true"],
-            "tuber_true": data["tuber_true"],
-            "cancer_true": data["cancer_true"],
-            "trans_true": data["trans_true"],
-            "quirurgicos_true": data["quirurgicos_true"],
-            "anestesicos_true": data["anestesicos_true"],
-            "alergicos_true": data["alergicos_true"],
-            "trauma_true": data["trauma_true"],
-        }
-    )
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_graficosDatos_medico(request):
+    month = request.GET.get("month")
+
+    try:
+        queryset = HistorialMedico.objects.all()
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha_elaboracion__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = HistorialMedicoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

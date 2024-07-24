@@ -5,10 +5,9 @@ import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
-import { left } from '@popperjs/core';
 
-const GrafOdontAnt = () => {
-    const [data, setData] = useState([]);
+const GraficosMedFam = () => {
+    const [chartData, setChartData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
@@ -18,49 +17,70 @@ const GrafOdontAnt = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosMed/', {
                     params: { month }
                 });
-                setData(response.data);
+                console.log('Response Data:', response.data);
+                const servicioMap = {
+                    0: 'Nuclear',
+                    1: 'Extensa',
+                    2: 'Compuesta',
+                };
+
+                const serviceCounts = response.data.reduce((acc, item) => {
+                    const serviceType = servicioMap[item.datosFamiliares.tipo_familia];
+                    if (serviceType) {
+                        acc[serviceType] = (acc[serviceType] || 0) + 1;
+                    }
+                    return acc;
+                }, {});
+
+                const chartDataArray = Object.keys(serviceCounts).map(key => ({
+                    name: key,
+                    value: serviceCounts[key],
+                }));
+
+                console.log('Processed Chart Data:', chartDataArray);
+                setChartData(chartDataArray);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico odonto:', error);
+                console.error('Error en obtener los datos del grafico medicina:', error);
             }
         };
         fetchData();
     }, [month]);
 
     useEffect(() => {
-        if (data.length === 0) {
-            return; // No renderizar el gráfico si no hay datos
+        if (chartData.length === 0) {
+            return;
         }
 
-        const chartDom = document.getElementById('graficoAntH');
+        const chartDom = document.getElementById('main');
         const myChart = echarts.init(chartDom);
         let option;
 
-        if (chartType === 'bar') {
+        if (chartType == 'bar') {
             option = {
                 title: {
-                    text: 'Cantidad de Personas con Antecedentes hereditarios',
+                    text: 'Pacientes por su tipo de familia',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'item',
+                    trigger: 'axis',
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['Diabetes', 'Hipertensión', 'Tuberculosis', 'Cancer', 'Cardiovascular', 'Asma', 'Epilepsia'],
+                    data: chartData.map(item => item.name),
                 },
                 yAxis: {
                     type: 'value',
                 },
                 series: [
                     {
-                        data: [data.diabetes_true, data.hipert_true, data.tuber_true, data.cancer_true, data.cardio_true, data.asma_true, data.epilepsia_true],
+                        data: chartData.map(item => item.value),
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#FF7F50', '#87CEFA', '#32CD32', '#92A8D1'];
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -69,7 +89,7 @@ const GrafOdontAnt = () => {
                             position: 'top',
                             color: '#000',
                             fontSize: 12,
-                            formatter: '{c}' // Muestra el valor directamente
+                            formatter: '{c}'
                         },
                     },
 
@@ -78,11 +98,11 @@ const GrafOdontAnt = () => {
         } else {
             option = {
                 title: {
-                    text: 'Cantidad de Personas con Antecedentes hereditarios',
+                    text: 'Pacientes por su tipo de familia',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'item'
+                    trigger: 'axis'
                 },
                 legend: {
                     top: '5%',
@@ -90,19 +110,15 @@ const GrafOdontAnt = () => {
                 },
                 series: [
                     {
-                        name: 'Pacientes',
+                        name: 'Tipo de familia',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
-                        data: [
-                            { value: data.diabetes_true, name: 'Diabetes' },
-                            { value: data.hipert_true, name: 'Hipertensión' },
-                            { value: data.tuber_true, name: 'Tuberculosis' },
-                            { value: data.cancer_true, name: 'Cancer' },
-                            { value: data.cardio_true, name: 'Cardiovascular' },
-                            { value: data.asma_true, name: 'Asma' },
-                            { value: data.epilepsia_true, name: 'Epilepsia' },
-                        ],
+                        data: chartData.map(item => ({
+                            value: item.value,
+                            name: item.name
+                        })),
+
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
@@ -117,7 +133,7 @@ const GrafOdontAnt = () => {
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#FF7F50', '#87CEFA', '#32CD32', '#92A8D1'];
+                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
                                 return colorList[params.dataIndex];
                             }
                         },
@@ -138,7 +154,7 @@ const GrafOdontAnt = () => {
         return () => {
             myChart.dispose();
         };
-    }, [data, showLabels, chartType]);
+    }, [chartData, showLabels, chartType]);
 
     const handleDownload = () => {
         if (chartInstance) {
@@ -176,8 +192,8 @@ const GrafOdontAnt = () => {
                     </option>
                 ))}
             </select>
-            <div id="graficoAntH" style={{ width: '95%', height: '350px' }}></div>
+            <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
 
-export default GrafOdontAnt;
+export default GraficosMedFam;

@@ -1,33 +1,33 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
-import { left } from '@popperjs/core';
 
 const GraficosEnfermeriaPoblacion = () => {
     const [data, setData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
-
+    const [month, setMonth] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfPob/');
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfPob/', {
+                    params: { month }
+                });
                 setData(response.data);
             } catch (error) {
                 console.error('Error en obtener los datos del grafico enfermeria:', error);
             }
         };
         fetchData();
-    }, []);
+    }, [month]);
 
     useEffect(() => {
-        if (data.length === 0) {
+        if (!data.embarazada_true && !data.adultoM_true && !data.discapacitado_true) {
             return; // No renderizar el gráfico si no hay datos
         }
 
@@ -69,7 +69,6 @@ const GraficosEnfermeriaPoblacion = () => {
                             formatter: '{c}' // Muestra el valor directamente
                         },
                     },
-
                 ],
             };
         } else {
@@ -124,7 +123,6 @@ const GraficosEnfermeriaPoblacion = () => {
             };
         }
 
-        console.log('Chart Option:', option);
         myChart.setOption(option);
         setChartInstance(myChart);
 
@@ -160,8 +158,19 @@ const GraficosEnfermeriaPoblacion = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
+            <label htmlFor="month-select" >Seleccionar mes:</label>
+            <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                <option value="">Todos los meses</option>
+                {[...Array(12)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                        {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
+                    </option>
+                ))}
+            </select>
             <div id="graficoPoblacion" style={{ width: '95%', height: '350px' }}></div>
-        </div>);
+
+        </div>
+    );
 };
 
 export default GraficosEnfermeriaPoblacion;

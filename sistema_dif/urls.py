@@ -74,4 +74,5 @@ urlpatterns = [
     path("get_graficosEnfPob/", views.grafico_poblacion),
     path("get_graficosOdontAntH/", views.grafico_odontAntH),
     path("get_graficosOdontAntPP/", views.grafico_odontAntP),
+    path("get_graficosMed/", views.get_graficosDatos_medico),
 ]
