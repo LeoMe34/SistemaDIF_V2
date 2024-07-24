@@ -27,6 +27,7 @@
 18. pip install django-cors-headers
 19. pip install coreapi
 20. pip install djangorestframework-simplejwt
+21. npm install xlsx
 
 ## Correr front 
 npm run dev
