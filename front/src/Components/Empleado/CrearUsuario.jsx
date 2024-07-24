@@ -116,23 +116,18 @@ export function CrearUsuario() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
-                            <a href="\home_recepcion">
+                            <a href="\home_administrador">
                                 <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                             </a>
-                        </li>
-                        <li className="breadcrumb-item custom-link" aria-current="page">
-                            <a href="\crear_empleado">
-                                Crear empleado
-                            </a>
-                        </li>
-                        <li className="breadcrumb-item pag-actual" aria-current="page">Registrar usuario</li>
+                        </li>                        
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Crear usuario</li>
                     </ol>
                 </nav>
             </div>
 
             <div className="ml-10 container mt-3">
                 <form onSubmit={enviar}>
-                    <h3 className="titulo">Registrar usuario</h3>
+                    <h3 className="titulo">Crear usuario</h3>
 
                     <div className='row'>
                         <div className='mt-3 mb-2 col'>
