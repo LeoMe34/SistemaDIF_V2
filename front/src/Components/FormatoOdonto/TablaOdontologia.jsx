@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
 import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import generarPDF from "./HojaDiariaPDF";
+import generarExcel from "./HojaDiariaExcel";
 
 export function TablaOdontologia() {
     const { token } = useAuth()
@@ -139,6 +140,11 @@ export function TablaOdontologia() {
                 <button className="ml-10 btn btn-guardar btn-lg btn-block"
                     onClick={() => generarPDF(nombre, cedula, historialOdonto, diagnosticos, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en PDF
+                </button>
+
+                <button className="ml-10 btn btn-guardar btn-lg btn-block"
+                    onClick={() => generarExcel(nombre, cedula, historialOdonto, diagnosticos, detallesPacientes, fechaActual)}>
+                    Descargar hoja diaria en Excel
                 </button>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
