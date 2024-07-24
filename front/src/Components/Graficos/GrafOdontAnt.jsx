@@ -12,19 +12,22 @@ const GrafOdontAnt = () => {
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
+    const [month, setMonth] = useState('');
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/');
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/', {
+                    params: { month }
+                });
                 setData(response.data);
             } catch (error) {
                 console.error('Error en obtener los datos del grafico odonto:', error);
             }
         };
         fetchData();
-    }, []);
+    }, [month]);
 
     useEffect(() => {
         if (data.length === 0) {
@@ -164,6 +167,15 @@ const GrafOdontAnt = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
+            <label htmlFor="month-select" >Seleccionar mes:</label>
+            <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                <option value="">Todos los meses</option>
+                {[...Array(12)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                        {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
+                    </option>
+                ))}
+            </select>
             <div id="graficoAntH" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
