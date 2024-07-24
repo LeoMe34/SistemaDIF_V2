@@ -40,9 +40,9 @@ const generarExcel = (nombre, cedula, fichasMedicas, detallesPacientes, fechaAct
 
     const worksheet = utils.aoa_to_sheet(datos);
     const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, 'Hoja Diaria Audiología');
+    utils.book_append_sheet(workbook, worksheet, 'Hoja Diaria Nutrición');
 
-    writeFile(workbook, `HOJA_DIARIA_AUDIOLOGIA_${nombre}_${fechaActual}.xlsx`);
+    writeFile(workbook, `HOJA_DIARIA_NUTRICION_${nombre}_${fechaActual}.xlsx`);
 };
 
 export default generarExcel;
