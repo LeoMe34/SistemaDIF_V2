@@ -212,8 +212,7 @@ const GraficosEnfermeria = () => {
     return (
         <div>
             <div>
-            <button onClick={() => generarExcelFTE(fichas, detallePaciente)} className='btn btn-guardar'>Descargar las fichas en excel</button>
-                <button onClick='' className='m-3 btn btn-guardar'>Descargar las hojas diarias en excel</button>
+                <button onClick={() => generarExcelFTE(fichas, detallePaciente)} className='btn btn-guardar'>Descargar las fichas en excel</button>
             </div>
 
             <div className='mt-2 mb-2 row'>
