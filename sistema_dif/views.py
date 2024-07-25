@@ -687,6 +687,22 @@ def detalle_fichaTecnicaE(request, noExp, fecha):
     serializer = FichaTecnicaESerializer(fichaTecnicaE)
     return Response(serializer.data)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaE_fecha(request, year, month):
+    try:        
+        # Filtrar las fichas técnicas por año y mes
+        fichasTecnicasE = FichaTecnicaEnfermeria.objects.filter(            
+            fecha__year=year, 
+            fecha__month=month
+        )
+    except:
+        return Response(status=404)
+
+    # Serializar el queryset con many=True para obtener todas las fichas técnicas del mes
+    serializer = FichaTecnicaESerializer(fichasTecnicasE, many=True)
+    return Response(serializer.data)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
