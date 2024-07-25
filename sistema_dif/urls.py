@@ -37,8 +37,7 @@ urlpatterns = [
     path("registrar_ficha_enfermeria/", views.crear_FichaTecnicaE),
     path("fichas_por_paciente/<str:noExp>", views.filtrar_fichas_por_paciente),
     # path("fichasMed_por_paciente/<str:noExp>", views.filtrar_fichasM_por_paciente),
-    path("get_ficha_enfermeria/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaE),
-    path('get_ficha_tecnica_fecha/<int:year>/<int:month>/',views.detalle_fichaTecnicaE_fecha),
+    path("get_ficha_enfermeria/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaE),    
 
     path("get_ficha_medica/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaMed),    
     path("get_historial_medico/<str:noExp>/<str:fecha>/",

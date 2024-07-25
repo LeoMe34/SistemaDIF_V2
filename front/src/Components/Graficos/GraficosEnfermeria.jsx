@@ -5,6 +5,8 @@ import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
+import { useAuth } from '../../Contexto/AuthContext';
+import generarExcelFTE from '../ExcelAdmin/FichaTecnicaEnfermeriaExcel'
 
 const GraficosEnfermeria = () => {
     const [chartData, setChartData] = useState([]);
@@ -13,8 +15,9 @@ const GraficosEnfermeria = () => {
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
-
-
+    const { token } = useAuth()
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [fichas, setFichas] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,6 +25,7 @@ const GraficosEnfermeria = () => {
                 const response = await axios.get('http://127.0.0.1:8000/api/get_graficosEnfermeria/', {
                     params: { month, year }
                 });
+                setFichas(response.data)
                 console.log('Response Data:', response.data);
                 const servicioMap = {
                     1: 'Consulta',
@@ -180,16 +184,39 @@ const GraficosEnfermeria = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
 
+    const getDetallesPaciente = async () => {
+        try {
+            const promises = fichas.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${ficha.paciente}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePaciente(detalles);
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+        }
+    };
+
+    useEffect(() => {
+        if (fichas.length > 0) {
+            getDetallesPaciente();
+        }
+    }, [token, fichas]);
+
     return (
         <div>
-            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
-            <button onClick={toggleLabels} className='graficButton'>
-                {showLabels ? <FaEyeSlash /> : <FaEye />}
-            </button>
-            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
-                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
-            </button>
-            <div className='row'>
+            <div>
+            <button onClick={() => generarExcelFTE(fichas, detallePaciente)} className='btn btn-guardar'>Descargar las fichas en excel</button>
+                <button onClick='' className='m-3 btn btn-guardar'>Descargar las hojas diarias en excel</button>
+            </div>
+
+            <div className='mt-2 mb-2 row'>
                 <div className='col'>
                     <label htmlFor="month-select" >Seleccionar mes:</label>
                     <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
@@ -213,6 +240,15 @@ const GraficosEnfermeria = () => {
                     </select>
                 </div>
             </div>
+
+            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
+            <button onClick={toggleLabels} className='graficButton'>
+                {showLabels ? <FaEyeSlash /> : <FaEye />}
+            </button>
+            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
+                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
+            </button>
+
             <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>);
 };
