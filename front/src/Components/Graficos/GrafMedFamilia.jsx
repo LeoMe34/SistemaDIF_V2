@@ -1,10 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
+import { useAuth } from '../../Contexto/AuthContext';
+import generarExcelFTM from '../ExcelAdmin/FichaTecnicaMedicaExcel'
 
 const GraficosMedFam = () => {
     const [chartData, setChartData] = useState([]);
@@ -13,7 +14,11 @@ const GraficosMedFam = () => {
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
-
+    const { token } = useAuth();
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [detalleFicha, setDetalleFicha] = useState([]);
+    const [medico, setMedico] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,6 +53,7 @@ const GraficosMedFam = () => {
             }
         };
         fetchData();
+        getDetallesFichas();
     }, [month, year]);
 
     useEffect(() => {
@@ -59,7 +65,7 @@ const GraficosMedFam = () => {
         const myChart = echarts.init(chartDom);
         let option;
 
-        if (chartType == 'bar') {
+        if (chartType === 'bar') {
             option = {
                 title: {
                     text: 'Pacientes por su tipo de familia',
@@ -93,7 +99,6 @@ const GraficosMedFam = () => {
                             formatter: '{c}'
                         },
                     },
-
                 ],
             };
         } else {
@@ -103,11 +108,11 @@ const GraficosMedFam = () => {
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'item',
                 },
                 legend: {
                     top: '5%',
-                    left: 'center'
+                    left: 'center',
                 },
                 series: [
                     {
@@ -117,34 +122,33 @@ const GraficosMedFam = () => {
                         avoidLabelOverlap: false,
                         data: chartData.map(item => ({
                             value: item.value,
-                            name: item.name
+                            name: item.name,
                         })),
-
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
                             },
                             label: {
                                 show: true,
                                 fontSize: 40,
-                                fontWeight: 'bold'
-                            }
+                                fontWeight: 'bold',
+                            },
                         },
                         itemStyle: {
                             color: (params) => {
                                 const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
-                                return colorList[params.dataIndex];
-                            }
+                                return colorList[params.dataIndex % colorList.length];
+                            },
                         },
                         label: {
                             show: showLabels,
                             position: 'center',
-                            formatter: '{b}: {c} ({d}%)'
-                        }
-                    }
-                ]
+                            formatter: '{b}: {c} ({d}%)',
+                        },
+                    },
+                ],
             };
         }
 
@@ -162,7 +166,7 @@ const GraficosMedFam = () => {
             const imgURL = chartInstance.getDataURL({
                 type: 'png',
                 pixelRatio: 2,
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
             });
             const link = document.createElement('a');
             link.href = imgURL;
@@ -175,41 +179,136 @@ const GraficosMedFam = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
 
-    return (
+    const getDetallesPaciente = async () => {
+        try {
+            const promises = detalleFicha.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${ficha.paciente}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePaciente(detalles);
+            console.log("AAAAA" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const promises = detalleFicha.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha}/`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetalleEnfermeria(detalles);
+            console.log("EEEE" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesFichas = async () => {
+        try {
+            const urlFichas = 'http://127.0.0.1:8000/api/get_fichas_medicas_fecha/';
+            const responseFichas = await axios.get(urlFichas, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const fichas = responseFichas.data;
+
+            const fichasMedico = await Promise.all(fichas.map(async ficha => {
+                const urlUsuario = `http://127.0.0.1:8000/api/get_empleado_group/${ficha.empleado}`;
+                const responseUsuario = await axios.get(urlUsuario, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+
+                const empleado = responseUsuario.data; // Asumiendo que solo hay un usuario que coincide con el noTrabajador
+                console.log(responseUsuario.data)
+                // Verificar si el empleado pertenece al grupo "Medico"
+                
+                if (empleado.groups && empleado.groups.includes('Medico')) {
+                    return ficha;
+                } else {
+                    return null;
+                }                
+            }));
+
+        // Filtrar los resultados nulos
+        const fichasMedicoFiltradas = fichasMedico.filter(ficha => ficha !== null);
+
+        setDetalleFicha(fichasMedicoFiltradas);
+        console.log("Fichas del Médico:", fichasMedicoFiltradas);
+    } catch (error) {
+        console.error('Ocurrió un error', error);
+    }
+};
+
+useEffect(() => {
+    if (detalleFicha.length > 0) {
+        getDetallesPaciente();
+        getDetallesEnfermeria();
+    }
+}, [token, detalleFicha]);
+
+return (
+    <div>
+
         <div>
-            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
-            <button onClick={toggleLabels} className='graficButton'>
-                {showLabels ? <FaEyeSlash /> : <FaEye />}
-            </button>
-            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
-                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
-            </button>
-            <div className='row'>
-                <div className='col'>
-                    <label htmlFor="month-select" >Seleccionar mes:</label>
-                    <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
-                        <option value="">Todos los meses</option>
-                        {[...Array(12)].map((_, i) => (
-                            <option key={i + 1} value={i + 1}>
-                                {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='col'>
-                    <label htmlFor="year-select">Seleccionar año:</label>
-                    <select className="opciones" id="year-select" value={year} onChange={(e) => setYear(e.target.value)}>
-                        <option value="">Todos los años</option>
-                        {[...Array(10)].map((_, i) => (
-                            <option key={i} value={2020 + i}>
-                                {2020 + i}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+            <button onClick={() => generarExcelFTM(detallePaciente, detalleFicha, detalleEnfermeria)} className='btn btn-guardar'>Descargar las fichas en excel</button>
+        </div>
+
+        <div className='mt-2 mb-2 row'>
+            <div className='col'>
+                <label htmlFor="month-select">Seleccionar mes:</label>
+                <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                    <option value="">Todos los meses</option>
+                    {[...Array(12)].map((_, i) => (
+                        <option key={i + 1} value={i + 1}>
+                            {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
+                        </option>
+                    ))}
+                </select>
             </div>
-            <div id="main" style={{ width: '95%', height: '350px' }}></div>
-        </div>);
+            <div className='col'>
+                <label htmlFor="year-select">Seleccionar año:</label>
+                <select className="opciones" id="year-select" value={year} onChange={(e) => setYear(e.target.value)}>
+                    <option value="">Todos los años</option>
+                    {[...Array(10)].map((_, i) => (
+                        <option key={i} value={2020 + i}>
+                            {2020 + i}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        </div>
+
+        <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
+        <button onClick={toggleLabels} className='graficButton'>
+            {showLabels ? <FaEyeSlash /> : <FaEye />}
+        </button>
+        <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
+            {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
+        </button>
+
+        <div id="main" style={{ width: '95%', height: '350px' }}></div>
+    </div>
+);
 };
 
 export default GraficosMedFam;

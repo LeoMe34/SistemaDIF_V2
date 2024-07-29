@@ -21,6 +21,7 @@ urlpatterns = [
     path("get_empleado/", views.detalle_empleado),
     path("get_todos_empleados/", views.get_empleados),
     path("get_empleado/<str:noTrabajador>", views.get_empleado),
+    path("get_empleado_group/<str:noTrabajador>", views.get_empleado_group),
     path("editar_empleado/<int:user_id>", views.modificar_empleado),
     path("eliminar_usuario/<int:pk>", views.eliminar_usuario),
     path("crear_grupo/", views.agregar_grupo),
@@ -39,7 +40,7 @@ urlpatterns = [
     # path("fichasMed_por_paciente/<str:noExp>", views.filtrar_fichasM_por_paciente),
     path("get_ficha_enfermeria/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaE),    
 
-    path("get_ficha_medica/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaMed),    
+    path("get_ficha_medica/<str:noExp>/<str:fecha>/",views.detalle_fichaTecnicaMed),   
     path("get_historial_medico/<str:noExp>/<str:fecha>/",
          views.get_historialMedico),
     path("get_nota_medica/<str:noExp>/<str:fecha>/", views.get_notaMedica),
@@ -83,4 +84,6 @@ urlpatterns = [
     path("get_graficosOdontAntH/", views.grafico_odontAntH),
     path("get_graficosOdontAntPP/", views.grafico_odontAntP),
     path("get_graficosMed/", views.get_graficosDatos_medico),
+
+    path("get_fichas_medicas_fecha/", views.get_fichaMed_fecha),
 ]
