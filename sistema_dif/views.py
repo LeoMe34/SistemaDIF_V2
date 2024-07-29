@@ -1536,13 +1536,23 @@ def eliminar_receta(request, pk):
     return Response(status=204)
 
 
-# APIS para los graficos
+# APIS para los graficos---------------
 @api_view(["GET"])
 def get_graficosDatos_enfermeria(request):
     month = request.GET.get("month")
+    year = request.GET.get("year")
 
     try:
         queryset = FichaTecnicaEnfermeria.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
 
         if month:
             try:
@@ -1595,13 +1605,22 @@ def get_fichaMed_fecha(request):
 @api_view(["GET"])
 def grafico_poblacion(request):
     month = request.GET.get("month")
+    year = request.GET.get("year")
 
     try:
         month = int(month) if month else None
     except ValueError:
         return Response({"error": "Invalid month"}, status=400)
 
+    try:
+        year = int(year) if year else None
+    except:
+        return Response({"error": "Invalid year"}, status=400)
+
     queryset = FichaTecnicaEnfermeria.objects.all()
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
 
     if month:
         queryset = queryset.filter(fecha__month=month)
@@ -1622,13 +1641,22 @@ def grafico_poblacion(request):
 @api_view(["GET"])
 def grafico_odontAntH(request):
     month = request.GET.get("month")
+    year = request.GET.get("year")
 
     try:
         month = int(month) if month else None
     except ValueError:
         return Response({"error": "Invalid month"}, status=400)
 
+    try:
+        year = int(year) if year else None
+    except:
+        return Response({"error": "Invalid year"}, status=400)
+
     queryset = HistorialOdonto.objects.all()
+
+    if year:
+        queryset = queryset.filter(fecha_elaboracion__year=year)
 
     if month:
         queryset = queryset.filter(fecha_elaboracion__month=month)
@@ -1650,13 +1678,22 @@ def grafico_odontAntH(request):
 @api_view(["GET"])
 def grafico_odontAntP(request):
     month = request.GET.get("month")
+    year = request.GET.get("year")
 
     try:
         month = int(month) if month else None
     except ValueError:
         return Response({"error": "Invalid month"}, status=400)
 
+    try:
+        year = int(year) if year else None
+    except:
+        return Response({"error": "Invalid year"}, status=400)
+
     queryset = HistorialOdonto.objects.all()
+
+    if year:
+        queryset = queryset.filter(fecha_elaboracion__year=year)
 
     if month:
         queryset = queryset.filter(fecha_elaboracion__month=month)
@@ -1682,9 +1719,19 @@ def grafico_odontAntP(request):
 @api_view(["GET"])
 def get_graficosDatos_medico(request):
     month = request.GET.get("month")
+    year = request.GET.get("year")
 
     try:
         queryset = HistorialMedico.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha_elaboracion__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
 
         if month:
             try:
