@@ -86,4 +86,5 @@ urlpatterns = [
     path("get_graficosMed/", views.get_graficosDatos_medico),
 
     path("get_fichas_medicas_fecha/", views.get_fichaMed_fecha),
+    path("get_historial_medico_fecha/", views.get_historial_fecha),
 ]

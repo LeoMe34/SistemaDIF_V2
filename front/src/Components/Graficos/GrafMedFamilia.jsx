@@ -6,6 +6,7 @@ import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
 import generarExcelFTM from '../ExcelAdmin/FichaTecnicaMedicaExcel'
+import generarExcelHCM from '../ExcelAdmin/HistorialClinicoExcel'
 
 const GraficosMedFam = () => {
     const [chartData, setChartData] = useState([]);
@@ -18,7 +19,7 @@ const GraficosMedFam = () => {
     const [detallePaciente, setDetallePaciente] = useState([]);
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [detalleFicha, setDetalleFicha] = useState([]);
-    const [medico, setMedico] = useState([]);
+    const [detalleHistorial, setDetalleHistorial] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -241,74 +242,94 @@ const GraficosMedFam = () => {
                 const empleado = responseUsuario.data; // Asumiendo que solo hay un usuario que coincide con el noTrabajador
                 console.log(responseUsuario.data)
                 // Verificar si el empleado pertenece al grupo "Medico"
-                
+
                 if (empleado.groups && empleado.groups.includes('Medico')) {
                     return ficha;
                 } else {
                     return null;
-                }                
+                }
             }));
 
-        // Filtrar los resultados nulos
-        const fichasMedicoFiltradas = fichasMedico.filter(ficha => ficha !== null);
+            // Filtrar los resultados nulos
+            const fichasMedicoFiltradas = fichasMedico.filter(ficha => ficha !== null);
 
-        setDetalleFicha(fichasMedicoFiltradas);
-        console.log("Fichas del Médico:", fichasMedicoFiltradas);
-    } catch (error) {
-        console.error('Ocurrió un error', error);
-    }
-};
+            setDetalleFicha(fichasMedicoFiltradas);
+            console.log("Fichas del Médico:", fichasMedicoFiltradas);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
 
-useEffect(() => {
-    if (detalleFicha.length > 0) {
-        getDetallesPaciente();
-        getDetallesEnfermeria();
-    }
-}, [token, detalleFicha]);
+    const getDetallesHistorial = async () => {
+        try {
+            const urlHistorial = 'http://127.0.0.1:8000/api/get_historial_medico_fecha/';
+            const responseHistorial = await axios.get(urlHistorial, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const historial = responseHistorial.data;
 
-return (
-    <div>
+            setDetalleHistorial(historial);
+            console.log("Historial Médico:", historial);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
 
+    useEffect(() => {
+        if (detalleFicha.length > 0) {
+            getDetallesPaciente();
+            getDetallesEnfermeria();
+            getDetallesHistorial();
+        }
+    }, [token, detalleFicha]);
+
+    return (
         <div>
-            <button onClick={() => generarExcelFTM(detallePaciente, detalleFicha, detalleEnfermeria)} className='btn btn-guardar'>Descargar las fichas en excel</button>
-        </div>
 
-        <div className='mt-2 mb-2 row'>
-            <div className='col'>
-                <label htmlFor="month-select">Seleccionar mes:</label>
-                <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
-                    <option value="">Todos los meses</option>
-                    {[...Array(12)].map((_, i) => (
-                        <option key={i + 1} value={i + 1}>
-                            {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
-                        </option>
-                    ))}
-                </select>
+            <div>
+                <button onClick={() => generarExcelFTM(detallePaciente, detalleFicha, detalleEnfermeria)} className='btn btn-guardar'>Descargar las fichas en excel</button>
+                <button onClick={() => generarExcelHCM(detallePaciente, detalleHistorial, detalleEnfermeria, detalleFicha)} className='btn btn-guardar m-2'>Descargar los historiales en excel</button>
             </div>
-            <div className='col'>
-                <label htmlFor="year-select">Seleccionar año:</label>
-                <select className="opciones" id="year-select" value={year} onChange={(e) => setYear(e.target.value)}>
-                    <option value="">Todos los años</option>
-                    {[...Array(10)].map((_, i) => (
-                        <option key={i} value={2020 + i}>
-                            {2020 + i}
-                        </option>
-                    ))}
-                </select>
+
+            <div className='mt-2 mb-2 row'>
+                <div className='col'>
+                    <label htmlFor="month-select">Seleccionar mes:</label>
+                    <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
+                        <option value="">Todos los meses</option>
+                        {[...Array(12)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                                {new Date(0, i).toLocaleString('es-ES', { month: 'long' })}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className='col'>
+                    <label htmlFor="year-select">Seleccionar año:</label>
+                    <select className="opciones" id="year-select" value={year} onChange={(e) => setYear(e.target.value)}>
+                        <option value="">Todos los años</option>
+                        {[...Array(10)].map((_, i) => (
+                            <option key={i} value={2020 + i}>
+                                {2020 + i}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
+
+            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
+            <button onClick={toggleLabels} className='graficButton'>
+                {showLabels ? <FaEyeSlash /> : <FaEye />}
+            </button>
+            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
+                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
+            </button>
+
+            <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>
-
-        <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
-        <button onClick={toggleLabels} className='graficButton'>
-            {showLabels ? <FaEyeSlash /> : <FaEye />}
-        </button>
-        <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
-            {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
-        </button>
-
-        <div id="main" style={{ width: '95%', height: '350px' }}></div>
-    </div>
-);
+    );
 };
 
 export default GraficosMedFam;

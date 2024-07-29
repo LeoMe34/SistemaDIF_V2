@@ -1256,6 +1256,38 @@ def get_historialesMedicos(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_historial_fecha(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        queryset = HistorialMedico.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha_elaboracion__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha_elaboracion__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = HistorialMedicoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
