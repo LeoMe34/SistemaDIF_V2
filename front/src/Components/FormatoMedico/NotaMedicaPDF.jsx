@@ -54,7 +54,7 @@ const generarPDF = (detallePaciente, noExpediente, data, empleado) => {
 
     documento.setFont('Ubuntu-Bold');
     documento.setFontSize(18);
-    documento.text('FICHA TÉCNICA DE CONSULTA MÉDICA \t', 45, 30);
+    documento.text('NOTA MEDICA \t', 45, 30);
     documento.setFont('Ubuntu-Regular');
     documento.setFontSize(12);
 
