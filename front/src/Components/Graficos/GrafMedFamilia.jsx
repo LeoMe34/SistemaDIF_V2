@@ -7,6 +7,8 @@ import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
 import generarExcelFTM from '../ExcelAdmin/FichaTecnicaMedicaExcel'
 import generarExcelHCM from '../ExcelAdmin/HistorialClinicoExcel'
+import generarExcelNM from '../ExcelAdmin/NotaMedicaExcel'
+import generarExcelRM from '../ExcelAdmin/RecetasExcel';
 
 const GraficosMedFam = () => {
     const [chartData, setChartData] = useState([]);
@@ -20,6 +22,8 @@ const GraficosMedFam = () => {
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [detalleFicha, setDetalleFicha] = useState([]);
     const [detalleHistorial, setDetalleHistorial] = useState([]);
+    const [detalleNotas, setDetalleNotas] = useState([]);
+    const [detalleRecetas, setDetalleRecetas] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -278,11 +282,49 @@ const GraficosMedFam = () => {
         }
     };
 
+    const getDetallesNotas = async () => {
+        try {
+            const urlNota = 'http://127.0.0.1:8000/api/get_nota_medica_fecha/';
+            const responseNota = await axios.get(urlNota, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const notas = responseNota.data;
+
+            setDetalleNotas(notas);
+            console.log("Notas Medicas:", notas);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesRecetas = async () => {
+        try {
+            const urlReceta= 'http://127.0.0.1:8000/api/get_receta_fecha/';
+            const responseReceta = await axios.get(urlReceta, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const receta = responseReceta.data;
+
+            setDetalleRecetas(receta);
+            console.log("Recetas Medicas:", receta);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
     useEffect(() => {
         if (detalleFicha.length > 0) {
             getDetallesPaciente();
             getDetallesEnfermeria();
             getDetallesHistorial();
+            getDetallesNotas();
+            getDetallesRecetas();
         }
     }, [token, detalleFicha]);
 
@@ -292,6 +334,8 @@ const GraficosMedFam = () => {
             <div>
                 <button onClick={() => generarExcelFTM(detallePaciente, detalleFicha, detalleEnfermeria)} className='btn btn-guardar'>Descargar las fichas en excel</button>
                 <button onClick={() => generarExcelHCM(detallePaciente, detalleHistorial, detalleEnfermeria, detalleFicha)} className='btn btn-guardar m-2'>Descargar los historiales en excel</button>
+                <button onClick={() => generarExcelNM(detallePaciente, detalleNotas, detalleFicha)} className='btn btn-guardar m-2'>Descargar las notas en excel</button>
+                <button onClick={() => generarExcelRM(detallePaciente, detalleRecetas, detalleFicha)} className='btn btn-guardar m-2'>Descargar las recetas en excel</button>
             </div>
 
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
