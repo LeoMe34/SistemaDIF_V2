@@ -215,6 +215,15 @@ const GraficosEnfermeria = () => {
                 <button onClick={() => generarExcelFTE(fichas, detallePaciente)} className='btn btn-guardar'>Descargar las fichas en excel</button>
             </div>
 
+            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
+            <button onClick={toggleLabels} className='graficButton'>
+                {showLabels ? <FaEyeSlash /> : <FaEye />}
+            </button>
+            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
+                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
+            </button>
+
+
             <div className='mt-2 mb-2 row'>
                 <div className='col'>
                     <label htmlFor="month-select" >Seleccionar mes:</label>
@@ -239,14 +248,6 @@ const GraficosEnfermeria = () => {
                     </select>
                 </div>
             </div>
-
-            <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
-            <button onClick={toggleLabels} className='graficButton'>
-                {showLabels ? <FaEyeSlash /> : <FaEye />}
-            </button>
-            <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
-                {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
-            </button>
 
             <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>);

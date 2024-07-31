@@ -27,7 +27,7 @@ export function GraficoOdonto() {
                 <GrafAntPP />
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
 
-                <div className='mt-2 mb-2'>
+                <div className='center col'>
                     <Link to={"/graficas_grl"}>
                         <button className='areaButton m-3'><TbNurse />Enfermeria</button>
                     </Link>

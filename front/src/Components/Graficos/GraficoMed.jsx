@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { TbNurse } from "react-icons/tb";
 import { FaTeeth } from "react-icons/fa6";
 import GraficosMedFam from './GrafMedFamilia';
-
+import GraficosMedEst from './GraficoMedEstudio';
 
 export function GraficoMed() {
 
@@ -25,8 +25,9 @@ export function GraficoMed() {
             <div className='container'>
                 <h2 className='subtitulo'>Medicina</h2>
                 <GraficosMedFam />
+                <GraficosMedEst />
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
-                <div className='mt-2 mb-2'>
+                <div className='center col'>
                     <Link to={"/graficas_grl"}>
                         <button className='areaButton m-3'><TbNurse />Enfermeria</button>
                     </Link>

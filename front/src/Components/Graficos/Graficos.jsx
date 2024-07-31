@@ -23,9 +23,8 @@ export function GraficosAreas() {
                 <h2 className='subtitulo'>Enfermeria</h2>
                 <GraficosEnfermeria />
                 <GraficosEnfermeriaPoblacion />
-
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
-                <div className='areas mt-2 mb-2'>
+                <div className='center col'>
                     <Link to={"/graficas_odonto"}>
                         <button className='areaButton m-3'><FaTeeth /> Odontologia</button>
                     </Link>
