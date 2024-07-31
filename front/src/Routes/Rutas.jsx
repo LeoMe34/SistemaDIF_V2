@@ -59,6 +59,10 @@ import { V_MostrarFTP } from '../Views/FormatoPsico/V_MostrarFTP'
 import { V_Graficas } from '../Views/Empleado/V_Graficas'
 import { V_GraficoMed } from '../Views/Empleado/V_GraficoMed'
 import { V_GraficasOdonto } from '../Views/Empleado/V_GraficasOdonto'
+import { V_GraficasPsico } from '../Views/Empleado/V_GraficasPsico'
+import { V_GraficoNutri } from '../Views/Empleado/V_GraficoNutri'
+import { V_GraficoOft } from '../Views/Empleado/V_GraficoOft'
+import { V_GraficoAud } from '../Views/Empleado/V_GraficoAud'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../Contexto/AuthContext';
@@ -104,6 +108,10 @@ export function Rutas() {
                             <Route path='/graficas_grl' element={<V_Graficas />} />
                             <Route path='/graficas_odonto' element={<V_GraficasOdonto />} />
                             <Route path='/graficas_med' element={<V_GraficoMed />} />
+                            <Route path='/graficas_psic' element={<V_GraficasPsico />} />
+                            <Route path='/graficas_nutri' element={< V_GraficoNutri />} />
+                            <Route path='/graficas_oft' element={< V_GraficoOft />} />
+                            <Route path='/graficas_aud' element={< V_GraficoAud />} />
 
                             <Route path='/home_administrador' element={<V_HomeAdmin />} />
                             <Route path='/usuario/:id' element={<V_MostrarUsuario />} />

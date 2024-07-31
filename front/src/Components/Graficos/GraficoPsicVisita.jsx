@@ -5,33 +5,37 @@ import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
+import generarExcelFTP from '../FormatoPsico/FichaTecPsicoExcel';
 
-
-const GraficosMedEst = () => {
+const GraficosPsicVisita = () => {
     const [chartData, setChartData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
+    const { token } = useAuth();
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detallePsicologia, setDetallePsicologia] = useState([]);
+    const [detalleFicha, setDetalleFicha] = useState([]);
+    const [detalleHistorial, setDetalleHistorial] = useState([]);
+    const [detalleNotas, setDetalleNotas] = useState([]);
+    const [detalleRecetas, setDetalleRecetas] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosMed/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/get_grafPsico/', {
                     params: { month, year }
                 });
                 console.log('Response Data:', response.data);
                 const servicioMap = {
-                    0: 'Ninguno',
-                    1: 'Laboratorios',
-                    2: 'Ultrasonido',
-                    3: 'Tomografía',
-                    4: 'Rayos X',
+                    1: 'Primera visita',
+                    2: 'Subsecuente',
                 };
 
                 const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.estudiosExter.estudios];
+                    const serviceType = servicioMap[item.visita.tipo_visita];
                     if (serviceType) {
                         acc[serviceType] = (acc[serviceType] || 0) + 1;
                     }
@@ -46,10 +50,11 @@ const GraficosMedEst = () => {
                 console.log('Processed Chart Data:', chartDataArray);
                 setChartData(chartDataArray);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico medicina:', error);
+                console.error('Error en obtener los datos del grafico piscologia:', error);
             }
         };
         fetchData();
+        getDetallesFichas();
     }, [month, year]);
 
     useEffect(() => {
@@ -57,14 +62,14 @@ const GraficosMedEst = () => {
             return;
         }
 
-        const chartDom = document.getElementById('est');
+        const chartDom = document.getElementById('main');
         const myChart = echarts.init(chartDom);
         let option;
 
         if (chartType === 'bar') {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Tipos de visita en pacientes',
                     left: 'center',
                 },
                 tooltip: {
@@ -83,7 +88,7 @@ const GraficosMedEst = () => {
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF6F61', '#6B5B95'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -100,7 +105,7 @@ const GraficosMedEst = () => {
         } else {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Tipos de visita en pacientes',
                     left: 'center',
                 },
                 tooltip: {
@@ -112,7 +117,7 @@ const GraficosMedEst = () => {
                 },
                 series: [
                     {
-                        name: 'Estudios',
+                        name: 'Tipo de visita',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
@@ -134,7 +139,7 @@ const GraficosMedEst = () => {
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -175,8 +180,100 @@ const GraficosMedEst = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
 
+    const getDetallesPaciente = async () => {
+        try {
+            const promises = detalleFicha.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${ficha.paciente}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePaciente(detalles);
+            console.log("AAAAA" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesPsicologia = async () => {
+        try {
+            const promises = detalleFicha.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/get_ficha_psicologia/${ficha.paciente}/${ficha.fecha}/`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePsicologia(detalles);
+            console.log("EEEE" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesFichas = async () => {
+        try {
+            const urlFichas = 'http://127.0.0.1:8000/api/get_fichaPsico_fecha/';
+            const responseFichas = await axios.get(urlFichas, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const fichas = responseFichas.data;
+
+            const fichasPsico = await Promise.all(fichas.map(async ficha => {
+                const urlUsuario = `http://127.0.0.1:8000/api/get_empleado_group/${ficha.empleado}`;
+                const responseUsuario = await axios.get(urlUsuario, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+
+                const empleado = responseUsuario.data; // Asumiendo que solo hay un usuario que coincide con el noTrabajador
+                console.log(responseUsuario.data)
+                // Verificar si el empleado pertenece al grupo "Medico"
+
+                if (empleado.groups && empleado.groups.includes('Psicologo')) {
+                    return ficha;
+                } else {
+                    return null;
+                }
+            }));
+
+            // Filtrar los resultados nulos
+            const fichasPsicoFiltradas = fichasPsico.filter(ficha => ficha !== null);
+
+            setDetalleFicha(fichasPsicoFiltradas);
+            console.log("Fichas del Psicologo:", fichasPsicoFiltradas);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+
+    useEffect(() => {
+        if (detalleFicha.length > 0) {
+            getDetallesPaciente();
+            getDetallesPsicologia();
+        }
+    }, [token, detalleFicha]);
+
     return (
         <div>
+
+            <div>
+                <button onClick={() => generarExcelFTP(detallePaciente, detalleFicha)} className='btn btn-guardar'>Descargar las fichas en excel</button>
+            </div>
 
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
@@ -185,6 +282,7 @@ const GraficosMedEst = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
+
 
             <div className='mt-2 mb-2 row'>
                 <div className='col'>
@@ -211,9 +309,10 @@ const GraficosMedEst = () => {
                 </div>
             </div>
 
-            <div id="est" style={{ width: '95%', height: '350px' }}></div>
+
+            <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>
     );
 };
 
-export default GraficosMedEst;
+export default GraficosPsicVisita;

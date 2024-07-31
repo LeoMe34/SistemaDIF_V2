@@ -2,6 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TbNurse } from "react-icons/tb";
 import { FaUserDoctor } from "react-icons/fa6";
+import { RiPsychotherapyLine } from "react-icons/ri";
+import { GiFruitBowl } from "react-icons/gi";
+import { SlEyeglass } from "react-icons/sl";
+import { IoEarOutline } from "react-icons/io5";
 import GrafOdontAnt from './GrafOdontAnt';
 import GrafAntPP from './GrafOdontAntPP';
 export function GraficoOdonto() {
@@ -33,6 +37,18 @@ export function GraficoOdonto() {
                     </Link>
                     <Link to={"/graficas_med"}>
                         <button className='areaButton'><FaUserDoctor />Medicina</button>
+                    </Link>
+                    <Link to={"/graficas_psic"}>
+                        <button className='areaButton'>< RiPsychotherapyLine />Psicologia</button>
+                    </Link>
+                    <Link to={"/graficas_nutri"}>
+                        <button className='areaButton'>< GiFruitBowl />Nutriología</button>
+                    </Link>
+                    <Link to={"/graficas_oft"}>
+                        <button className='areaButton'>< SlEyeglass />Oftalmología</button>
+                    </Link>
+                    <Link to={"/graficas_aud"}>
+                        <button className='areaButton'>< IoEarOutline />Audiología</button>
                     </Link>
 
                 </div>

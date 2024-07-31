@@ -1,89 +1,67 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
-import { useAuth } from '../../Contexto/AuthContext';
+import { left } from '@popperjs/core';
 
-
-const GraficosMedEst = () => {
-    const [chartData, setChartData] = useState([]);
+const GrafMedHeri = () => {
+    const [data, setData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosMed/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/get_grafMedHer/', {
                     params: { month, year }
                 });
-                console.log('Response Data:', response.data);
-                const servicioMap = {
-                    0: 'Ninguno',
-                    1: 'Laboratorios',
-                    2: 'Ultrasonido',
-                    3: 'Tomografía',
-                    4: 'Rayos X',
-                };
-
-                const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.estudiosExter.estudios];
-                    if (serviceType) {
-                        acc[serviceType] = (acc[serviceType] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
-
-                const chartDataArray = Object.keys(serviceCounts).map(key => ({
-                    name: key,
-                    value: serviceCounts[key],
-                }));
-
-                console.log('Processed Chart Data:', chartDataArray);
-                setChartData(chartDataArray);
+                setData(response.data);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico medicina:', error);
+                console.error('Error en obtener los datos del grafico odonto:', error);
             }
         };
         fetchData();
     }, [month, year]);
 
     useEffect(() => {
-        if (chartData.length === 0) {
-            return;
+        if (data.length === 0) {
+            return; // No renderizar el gráfico si no hay datos
         }
 
-        const chartDom = document.getElementById('est');
+        const chartDom = document.getElementById('graficoMedH');
         const myChart = echarts.init(chartDom);
         let option;
 
         if (chartType === 'bar') {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Cantidad de Personas con Antecedentes hereditarios',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'axis',
+                    trigger: 'item',
                 },
                 xAxis: {
                     type: 'category',
-                    data: chartData.map(item => item.name),
+                    data: ['Diabetes', 'Hipertensión', 'Cardiopatia', 'Cancer'],
                 },
                 yAxis: {
                     type: 'value',
                 },
                 series: [
                     {
-                        data: chartData.map(item => item.value),
+                        data: [data.diabetes_true, data.hipert_true, data.cardio_true, data.cancer_true],
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#FF7F50',];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -92,59 +70,62 @@ const GraficosMedEst = () => {
                             position: 'top',
                             color: '#000',
                             fontSize: 12,
-                            formatter: '{c}'
+                            formatter: '{c}' // Muestra el valor directamente
                         },
                     },
+
                 ],
             };
         } else {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Cantidad de Personas con Antecedentes hereditarios',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'item',
+                    trigger: 'item'
                 },
                 legend: {
                     top: '5%',
-                    left: 'center',
+                    left: 'center'
                 },
                 series: [
                     {
-                        name: 'Estudios',
+                        name: 'Pacientes',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
-                        data: chartData.map(item => ({
-                            value: item.value,
-                            name: item.name,
-                        })),
+                        data: [
+                            { value: data.diabetes_true, name: 'Diabetes' },
+                            { value: data.hipert_true, name: 'Hipertensión' },
+                            { value: data.cardio_true, name: 'Cardiopatia' },
+                            { value: data.cancer_true, name: 'Cancer' },
+                        ],
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
                             },
                             label: {
                                 show: true,
                                 fontSize: 40,
-                                fontWeight: 'bold',
-                            },
+                                fontWeight: 'bold'
+                            }
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
-                                return colorList[params.dataIndex % colorList.length];
-                            },
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#FF7F50'];
+                                return colorList[params.dataIndex];
+                            }
                         },
                         label: {
                             show: showLabels,
                             position: 'center',
-                            formatter: '{b}: {c} ({d}%)',
-                        },
-                    },
-                ],
+                            formatter: '{b}: {c} ({d}%)'
+                        }
+                    }
+                ]
             };
         }
 
@@ -155,14 +136,14 @@ const GraficosMedEst = () => {
         return () => {
             myChart.dispose();
         };
-    }, [chartData, showLabels, chartType]);
+    }, [data, showLabels, chartType]);
 
     const handleDownload = () => {
         if (chartInstance) {
             const imgURL = chartInstance.getDataURL({
                 type: 'png',
                 pixelRatio: 2,
-                backgroundColor: '#fff',
+                backgroundColor: '#fff'
             });
             const link = document.createElement('a');
             link.href = imgURL;
@@ -177,7 +158,6 @@ const GraficosMedEst = () => {
 
     return (
         <div>
-
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
                 {showLabels ? <FaEyeSlash /> : <FaEye />}
@@ -185,10 +165,9 @@ const GraficosMedEst = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
-
-            <div className='mt-2 mb-2 row'>
+            <div className='row'>
                 <div className='col'>
-                    <label htmlFor="month-select">Seleccionar mes:</label>
+                    <label htmlFor="month-select" >Seleccionar mes:</label>
                     <select className="opciones" id="month-select" value={month} onChange={(e) => setMonth(e.target.value)}>
                         <option value="">Todos los meses</option>
                         {[...Array(12)].map((_, i) => (
@@ -210,10 +189,8 @@ const GraficosMedEst = () => {
                     </select>
                 </div>
             </div>
-
-            <div id="est" style={{ width: '95%', height: '350px' }}></div>
-        </div>
-    );
+            <div id="graficoMedH" style={{ width: '95%', height: '350px' }}></div>
+        </div>);
 };
 
-export default GraficosMedEst;
+export default GrafMedHeri;

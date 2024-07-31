@@ -5,9 +5,9 @@ import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
+import generarExcelFTP from '../FormatoPsico/FichaTecPsicoExcel';
 
-
-const GraficosMedEst = () => {
+const GraficosPsicConsulta = () => {
     const [chartData, setChartData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
@@ -18,20 +18,30 @@ const GraficosMedEst = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosMed/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/get_grafPsico/', {
                     params: { month, year }
                 });
                 console.log('Response Data:', response.data);
                 const servicioMap = {
-                    0: 'Ninguno',
-                    1: 'Laboratorios',
-                    2: 'Ultrasonido',
-                    3: 'Tomografía',
-                    4: 'Rayos X',
+                    1: 'TDAH',
+                    2: 'Duelo',
+                    3: 'Problemas de pareja',
+                    4: 'Ansiedad',
+                    5: 'Problema conductual',
+                    6: 'Transtorno depresivo',
+                    7: 'Problema de aprendizaje',
+                    8: 'Separación de padres',
+                    9: 'Manejo de impulsos',
+                    10: 'Abuso sexual',
+                    11: 'Autoestima',
+                    12: 'Audiencia',
+                    13: 'Brigada',
+                    14: 'Terapia grupal',
+                    15: 'Otro',
                 };
 
                 const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.estudiosExter.estudios];
+                    const serviceType = servicioMap[item.visita.tipo_consulta];
                     if (serviceType) {
                         acc[serviceType] = (acc[serviceType] || 0) + 1;
                     }
@@ -46,7 +56,7 @@ const GraficosMedEst = () => {
                 console.log('Processed Chart Data:', chartDataArray);
                 setChartData(chartDataArray);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico medicina:', error);
+                console.error('Error en obtener los datos del grafico piscologia:', error);
             }
         };
         fetchData();
@@ -57,14 +67,14 @@ const GraficosMedEst = () => {
             return;
         }
 
-        const chartDom = document.getElementById('est');
+        const chartDom = document.getElementById('psicConlt');
         const myChart = echarts.init(chartDom);
         let option;
 
         if (chartType === 'bar') {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Tipos de visita en pacientes',
                     left: 'center',
                 },
                 tooltip: {
@@ -83,7 +93,9 @@ const GraficosMedEst = () => {
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF6F61', '#6B5B95', '#20B2AA', '#FF7F50', '#87CEFA', '#32CD32',
+                                    '#9370DB', '#1E90FF', '#6A5ACD', '#8B008B', '#FF6347', '#228B22', '#F4A460',
+                                    '#008080', '#40E0D0'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -100,21 +112,22 @@ const GraficosMedEst = () => {
         } else {
             option = {
                 title: {
-                    text: 'Estudios traidos por pacientes',
+                    text: 'Tipos de visita en pacientes',
                     left: 'center',
                 },
                 tooltip: {
                     trigger: 'item',
                 },
                 legend: {
-                    top: '5%',
+                    top: '7%',
                     left: 'center',
                 },
                 series: [
                     {
-                        name: 'Estudios',
+                        name: 'Tipo de visita',
                         type: 'pie',
                         radius: ['40%', '70%'],
+                        center: ['50%', '60%'],
                         avoidLabelOverlap: false,
                         data: chartData.map(item => ({
                             value: item.value,
@@ -134,7 +147,9 @@ const GraficosMedEst = () => {
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                const colorList = ['#FF6F61', '#6B5B95', '#20B2AA', '#FF7F50', '#87CEFA', '#32CD32',
+                                    '#9370DB', '#1E90FF', '#6A5ACD', '#8B008B', '#FF6347', '#228B22', '#F4A460',
+                                    '#008080', '#40E0D0'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -177,7 +192,6 @@ const GraficosMedEst = () => {
 
     return (
         <div>
-
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
                 {showLabels ? <FaEyeSlash /> : <FaEye />}
@@ -185,6 +199,7 @@ const GraficosMedEst = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
+
 
             <div className='mt-2 mb-2 row'>
                 <div className='col'>
@@ -211,9 +226,10 @@ const GraficosMedEst = () => {
                 </div>
             </div>
 
-            <div id="est" style={{ width: '95%', height: '350px' }}></div>
+
+            <div id="psicConlt" style={{ width: '95%', height: '350px' }}></div>
         </div>
     );
 };
 
-export default GraficosMedEst;
+export default GraficosPsicConsulta;

@@ -428,7 +428,8 @@ def get_empleado(request, noTrabajador):
         return Response(
             {"error": "No se encontró un empleado asociado al usuario"}, status=404
         )
-    
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_empleado_group(request, noTrabajador):
@@ -436,10 +437,10 @@ def get_empleado_group(request, noTrabajador):
         # Obtener el empleado asociado al usuario
         empleado = Empleado.objects.get(no_trabajador=noTrabajador)
         user = User.objects.get(username=empleado.usuario)
-        groups = user.groups.values_list('name', flat=True)
+        groups = user.groups.values_list("name", flat=True)
 
         empleado_data = EmpleadoSerializer(empleado).data
-        empleado_data['groups'] = list(groups)
+        empleado_data["groups"] = list(groups)
 
         return Response(empleado_data)
     except Empleado.DoesNotExist:
@@ -633,8 +634,7 @@ def filtrar_fichas_por_paciente(request, noExp):
         user_group = user.groups.first().name if user.groups.exists() else None
 
         if user_group == "Medico":
-            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
-                paciente=noExp)
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
             fichas_filtradas = []
 
             for ficha in fichas_medicas:
@@ -644,8 +644,7 @@ def filtrar_fichas_por_paciente(request, noExp):
                     fichas_filtradas.append(ficha)
 
         elif user_group == "Odontologo":
-            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
-                paciente=noExp)
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
             fichas_filtradas = []
 
             for ficha in fichas_medicas:
@@ -756,8 +755,7 @@ def get_fichasTP_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        fichasT_psico = FichaTecnicaPsicologia.objects.filter(
-            empleado=empleado)
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
         serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
         return Response(serializer.data)
     except FichaTecnicaPsicologia.DoesNotExist:
@@ -861,8 +859,7 @@ def get_fichasMed_relacionadas(request):
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
         hoy = date.today()
-        ficha_tecnica = FichaTecnicaMedica.objects.filter(
-            empleado=empleado, fecha=hoy)
+        ficha_tecnica = FichaTecnicaMedica.objects.filter(empleado=empleado, fecha=hoy)
         serializer = FichaTecnicaMedSerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaMedica.DoesNotExist:
@@ -911,13 +908,13 @@ def crear_FichaTecnicaMed(request):
 @permission_classes([IsAuthenticated])
 def detalle_fichaTecnicaMed(request, noExp, fecha):
     try:
-        fichaTecnicaE = FichaTecnicaMedica.objects.get(
-            paciente=noExp, fecha=fecha)
+        fichaTecnicaE = FichaTecnicaMedica.objects.get(paciente=noExp, fecha=fecha)
     except FichaTecnicaMedica.DoesNotExist:
         return Response(status=404)
 
     serializer = FichaTecnicaMedSerializer(fichaTecnicaE)
     return Response(serializer.data)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
@@ -1048,8 +1045,7 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list(
-                "histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -1066,8 +1062,7 @@ def get_notasEvolucionO(request):
 def get_notasEvolucionO_relacionada(request, pk):
     try:
         historial = HistorialOdonto.objects.get(id=pk)
-        notas_historial = NotaEvolucionOdonto.objects.filter(
-            histlOdonto=historial)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
         serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -1118,8 +1113,7 @@ def crear_notaEvolucionO(request):
 @permission_classes([IsAuthenticated])
 def detalle_notaEvolucionO(request, id_histOdonto):
     try:
-        notaEvolucionO = NotaEvolucionOdonto.objects.get(
-            histlOdonto=id_histOdonto)
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(histlOdonto=id_histOdonto)
     except NotaEvolucionOdontoSerializer.DoesNotExist:
         return Response(status=404)
 
@@ -1135,8 +1129,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1212,8 +1205,7 @@ def modificar_fichaTecnicaMedOdonto(request, pk):
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = FichaTecnicaMedOdontoSerializer(
-        fichaTecnicaMO, data=request.data)
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1255,6 +1247,7 @@ def get_historialesMedicos(request):
             {"error": "Debe proporcionar un número de expediente del paciente"},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -1310,8 +1303,7 @@ def get_historialMedico(request, noExp, fecha):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        ficha_medica = FichaTecnicaMedica.objects.filter(
-            empleado__usuario=usuario)
+        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
         hoy = date.today()
         historiales = HistorialMedico.objects.filter(
             fichaMed__in=ficha_medica, fecha_elaboracion=hoy
@@ -1398,6 +1390,7 @@ def get_notasMedicas(request):
     queryset = NotaMedica.objects.all()
     serializer = NotaMedicaSerializer(queryset, many=True)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -1550,6 +1543,7 @@ def get_recetas(request):
     serializer = RecetaSerializer(queryset, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_receta_fecha(request):
@@ -1699,6 +1693,39 @@ def get_fichaMed_fecha(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_fichaPsico_fecha(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        queryset = FichaTecnicaPsicologia.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha_visita__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha_visita__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = FihaTecnicaPSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
 def grafico_poblacion(request):
     month = request.GET.get("month")
     year = request.GET.get("year")
@@ -1722,10 +1749,8 @@ def grafico_poblacion(request):
         queryset = queryset.filter(fecha__month=month)
 
     data = queryset.aggregate(
-        embarazada_true=Count(
-            Case(When(datosDemograficos__embarazada=True, then=1))),
-        adultoM_true=Count(
-            Case(When(datosDemograficos__adulto_mayor=True, then=1))),
+        embarazada_true=Count(Case(When(datosDemograficos__embarazada=True, then=1))),
+        adultoM_true=Count(Case(When(datosDemograficos__adulto_mayor=True, then=1))),
         discapacitado_true=Count(
             Case(When(datosDemograficos__discapacitado=True, then=1))
         ),
@@ -1764,8 +1789,7 @@ def grafico_odontAntH(request):
         cancer_true=Count(Case(When(antHerediPato__cancerH=True, then=1))),
         cardio_true=Count(Case(When(antHerediPato__cardioH=True, then=1))),
         asma_true=Count(Case(When(antHerediPato__asmaH=True, then=1))),
-        epilepsia_true=Count(
-            Case(When(antHerediPato__epilepsiaH=True, then=1))),
+        epilepsia_true=Count(Case(When(antHerediPato__epilepsiaH=True, then=1))),
     )
 
     return Response(data)
@@ -1800,12 +1824,9 @@ def grafico_odontAntP(request):
         tuber_true=Count(Case(When(antPersonPato__tuberculo=True, then=1))),
         cancer_true=Count(Case(When(antPersonPato__cancer=True, then=1))),
         trans_true=Count(Case(When(antPersonPato__transfusion=True, then=1))),
-        quirurgicos_true=Count(
-            Case(When(antPersonPato__quirurgicos=True, then=1))),
-        anestesicos_true=Count(
-            Case(When(antPersonPato__anestesicos=True, then=1))),
-        alergicos_true=Count(
-            Case(When(antPersonPato__alergicos=True, then=1))),
+        quirurgicos_true=Count(Case(When(antPersonPato__quirurgicos=True, then=1))),
+        anestesicos_true=Count(Case(When(antPersonPato__anestesicos=True, then=1))),
+        alergicos_true=Count(Case(When(antPersonPato__alergicos=True, then=1))),
         trauma_true=Count(Case(When(antPersonPato__trauma=True, then=1))),
     )
 
@@ -1839,6 +1860,71 @@ def get_graficosDatos_medico(request):
                 )
 
         serializer = HistorialMedicoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_graficosDatos_medHer(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+    except ValueError:
+        return Response({"error": "Invalid month"}, status=400)
+
+    try:
+        year = int(year) if year else None
+    except:
+        return Response({"error": "Invalid year"}, status=400)
+
+    queryset = HistorialMedico.objects.all()
+
+    if year:
+        queryset = queryset.filter(fecha_elaboracion__year=year)
+
+    if month:
+        queryset = queryset.filter(fecha_elaboracion__month=month)
+
+    data = queryset.aggregate(
+        diabetes_true=Count(Case(When(antHerediPatM__diabetes="True", then=1))),
+        hipert_true=Count(Case(When(antHerediPatM__hipertension="True", then=1))),
+        cardio_true=Count(Case(When(antHerediPatM__cardiopatia="True", then=1))),
+        cancer_true=Count(Case(When(antHerediPatM__cancer="True", then=1))),
+    )
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_graficoPsico(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        queryset = FichaTecnicaPsicologia.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha_visita__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha_visita__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = FihaTecnicaPSerializer(queryset, many=True)
         return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
