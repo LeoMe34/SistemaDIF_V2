@@ -6,7 +6,9 @@ export function HomeNutricion() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <i className="bi bi-house-fill color-icono"></i>&nbsp;
-                        <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
+                        <a href="/home_nutricion">
+                            <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
+                        </a>
                     </ol>
                 </nav>
             </div>

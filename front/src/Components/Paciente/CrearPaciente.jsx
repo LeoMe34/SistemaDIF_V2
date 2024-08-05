@@ -310,7 +310,7 @@ export function CrearPaciente() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
-                            <a href="\home_recepcion">
+                            <a href="\home_recepcion_medica">
                                 <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                             </a>
                         </li>

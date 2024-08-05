@@ -187,7 +187,7 @@ export function NotasMedicas() {
                             </a>
                         </li>
                         <li className="breadcrumb-item custom-link" aria-current="page">
-                            <a href="\historia_clinica_simplificada">
+                            <a href="\historial_clinico_p1">
                                 Historia Clínica Simplificada
                             </a>
                         </li>

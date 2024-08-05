@@ -33,19 +33,19 @@ export function GraficosAreas() {
                         <button className='areaButton m-3'><FaTeeth /> Odontologia</button>
                     </Link>
                     <Link to={"/graficas_med"}>
-                        <button className='areaButton'><FaUserDoctor />Medicina</button>
+                        <button className='areaButton m-3'><FaUserDoctor />Medicina</button>
                     </Link>
                     <Link to={"/graficas_psic"}>
-                        <button className='areaButton'>< RiPsychotherapyLine />Psicologia</button>
+                        <button className='areaButton m-3'>< RiPsychotherapyLine />Psicologia</button>
                     </Link>
                     <Link to={"/graficas_nutri"}>
-                        <button className='areaButton'>< GiFruitBowl />Nutriología</button>
+                        <button className='areaButton m-3'>< GiFruitBowl />Nutriología</button>
                     </Link>
                     <Link to={"/graficas_oft"}>
-                        <button className='areaButton'>< SlEyeglass />Oftalmología</button>
+                        <button className='areaButton m-3'>< SlEyeglass />Oftalmología</button>
                     </Link>
                     <Link to={"/graficas_aud"}>
-                        <button className='areaButton'>< IoEarOutline />Audiología</button>
+                        <button className='areaButton m-3'>< IoEarOutline />Audiología</button>
                     </Link>
                 </div>
             </div>

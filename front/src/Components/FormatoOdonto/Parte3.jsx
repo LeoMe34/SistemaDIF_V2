@@ -263,6 +263,19 @@ export function Parte3() {
 
     return (
         <div>
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="/home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Historial clinico dental</li>
+                    </ol>
+                </nav>
+            </div>
+
             <div className="ml-5 container">
                 <div className="ml-10 mt-2">
                     {noExpediente && fechaActual && (

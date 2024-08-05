@@ -187,20 +187,27 @@ export function FichaMedica() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
-                            {/*El home al que regrese dependera del tipo de  usuario, si es medico, odontologo o nutriologo*/}
-                            <a href="\">
+                            <a href="\home_odontologo">
                                 <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                             </a>
                         </li>
-                        <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de consulta médica</li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\historial_odontologico_p1">
+                                Historial clinico dental
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\nota_evo">
+                                Nota evolución
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica</li>
                     </ol>
                 </nav>
             </div>
 
             <div className='m-2'>
                 <h3 className="subtitulo">Ficha técnica de consulta médica</h3>
-                {/*Nutricion, medicina, odontologo */}
-
             </div>
 
             <div className="ml-10 container">

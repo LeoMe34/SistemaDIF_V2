@@ -158,10 +158,21 @@ export function FichaTecnica() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
-                            {/*El home al que regrese dependera del tipo de  usuario, si es medico, odontologo o nutriologo*/}
-                            <a href="\">
-                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
-                            </a>
+                            {grupo === 'audiologo' &&
+                                <a href="/home_audiologo">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
+                            {grupo === 'Nutriologo' &&
+                                <a href="/home_nutricion">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
+                            {grupo === 'oftalmologo' &&
+                                <a href="/home_oftalmologo">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
                         </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de consulta médica</li>
                     </ol>
