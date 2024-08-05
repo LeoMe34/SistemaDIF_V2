@@ -298,6 +298,22 @@ export function Parte3() {
     return (
         <div>
             <div className="ml-10 container mt-2">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="\home_medico">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item custom-link" aria-current="page">
+                            <a href="\ficha_tecnica_medico">
+                                Ficha técnica de consulta médica
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Historia Clínica Simplificada</li>
+                    </ol>
+                </nav>
+
                 {noExpediente !== null && fechaActual && (
                     <CardFichaEnfermeria noExp={noExpediente} fecha={fechaActual}></CardFichaEnfermeria>
                 )}
