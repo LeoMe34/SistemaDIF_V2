@@ -159,9 +159,12 @@ export function FichaTecnica() {
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
                             {/*El home al que regrese dependera del tipo de  usuario, si es medico, odontologo o nutriologo*/}
-                            <a href="\">
-                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
-                            </a>
+                            {grupo === 'audiologo' &&
+                                <a href="/home_audiologo">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
+
                         </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de consulta médica</li>
                     </ol>
