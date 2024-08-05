@@ -5,6 +5,8 @@ import { FaTeeth, FaUserDoctor } from "react-icons/fa6";
 import { RiPsychotherapyLine } from "react-icons/ri";
 import { GiFruitBowl } from "react-icons/gi";
 import { SlEyeglass } from "react-icons/sl";
+import GraficosAudEdad from './GraficoAudEdad';
+import GraficoSexoAud from './GraficoAudSex';
 
 export function GraficoAud() {
 
@@ -26,6 +28,8 @@ export function GraficoAud() {
             <div className='container'>
                 <h2 className='subtitulo'>Audiología</h2>
 
+                <GraficosAudEdad />
+                <GraficoSexoAud />
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
                 <div className='center col'>
                     <Link to={"/graficas_grl"}>

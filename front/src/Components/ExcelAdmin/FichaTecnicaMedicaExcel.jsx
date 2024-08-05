@@ -4,8 +4,8 @@ const generarExcelFTM = (detallesPacientes, detalleFicha, detalleEnfermeria) => 
     const datos = [
         [],
         ['Fecha', 'No.Expediente', 'Nombre', 'Lugar de nacimiento', 'Fecha de nacimiento', 'Edad', 'Peso', 'Sexo',
-            'Talla', 'Ocupación', 'Dirección', 'Telefono', 'Correo', 'Diagnóstico medico', 'Observaciones', 
-            'Motivo de la consulta','Empleado'],
+            'Talla', 'Ocupación', 'Dirección', 'Telefono', 'Correo', 'Diagnóstico medico', 'Observaciones',
+            'Motivo de la consulta', 'Empleado'],
         ...detalleFicha.map((fichas, index) => [
             fichas.fecha,
             fichas.paciente,

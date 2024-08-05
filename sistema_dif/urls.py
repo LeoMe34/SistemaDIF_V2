@@ -78,6 +78,12 @@ urlpatterns = [
     path("get_graficosMed/", views.get_graficosDatos_medico),
     path("get_grafMedHer/", views.get_graficosDatos_medHer),
     path("get_grafPsico/", views.get_graficoPsico),
+    path("get_graficosNutriologo/", views.get_graficosNutriologo),
+    path("get_graficosNutriSex/", views.get_sexo_graficosNutriologo),
+    path("get_graficosOftEdad/", views.get_graficosOftEdad),
+    path("get_graficosOftSex/", views.get_GraficoOftSex),
+    path("get_graficosAudEdad/", views.get_graficosAudioEdad),
+    path("get_graficosAudSex/", views.get_GraficoAudioSex),
     #
     path("get_fichas_medicas_fecha/", views.get_fichaMed_fecha),
     path("get_historial_medico_fecha/", views.get_historial_fecha),

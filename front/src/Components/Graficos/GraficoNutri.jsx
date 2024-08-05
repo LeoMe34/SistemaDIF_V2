@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TbNurse } from "react-icons/tb";
 import { FaTeeth, FaUserDoctor } from "react-icons/fa6";
 import { SlEyeglass } from "react-icons/sl";
 import { IoEarOutline } from "react-icons/io5";
 import { RiPsychotherapyLine } from "react-icons/ri";
-
+import { useAuth } from '../../Contexto/AuthContext';
+import axios from 'axios';
+import * as echarts from 'echarts';
+import generarExcelFTM from '../ExcelAdmin/FichaTecnicaMedicaExcel';
+import GraficosNutriologo from './GraficoNutriEdad';
+import GraficoSexoNutriologo from './GraficoNutriSex';
 
 
 export function GraficoNutri() {
@@ -28,6 +33,9 @@ export function GraficoNutri() {
             <div className='container'>
                 <h2 className='subtitulo'>Nutriología</h2>
 
+
+                <GraficosNutriologo />
+                <GraficoSexoNutriologo />
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
                 <div className='center col'>
                     <Link to={"/graficas_grl"}>

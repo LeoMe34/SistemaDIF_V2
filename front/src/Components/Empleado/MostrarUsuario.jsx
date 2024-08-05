@@ -79,13 +79,13 @@ export function MostrarUsuario() {
                             <input className="entrada" id='num_emp' name='num_emp' type="text" value={datosUsuario.no_trabajador} readOnly />
                         </div>
 
+                    </div>
+
+                    <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="rol">Rol:</label>
                             <input className="entrada" id='rol' name='rol' type="text" value={datosUsuario.ocupacion} readOnly />
                         </div>
-                    </div>
-
-                    <div className="center container">
                         <div className="col">
                             <label className='etiqueta-user' htmlFor="correo">Correo electronico:</label>
 

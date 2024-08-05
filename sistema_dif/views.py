@@ -1928,3 +1928,189 @@ def get_graficoPsico(request):
         return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_graficosNutriologo(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="Nutriologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    age_counts = queryset.values("paciente__datosPersonalesPacient__edad").annotate(
+        count=Count("paciente__datosPersonalesPacient__edad")
+    )
+
+    data = [
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
+        for item in age_counts
+    ]
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_sexo_graficosNutriologo(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    # Filtrar los datos por ocupación del empleado 'nutriologo'
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="Nutriologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    # Contar la cantidad de hombres y mujeres
+    sexo_counts = queryset.values("paciente__datosPersonalesPacient__sexo").annotate(
+        count=Count("paciente__datosPersonalesPacient__sexo")
+    )
+
+    # Formatear los datos para la respuesta
+    data = [
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
+        for item in sexo_counts
+        if item["paciente__datosPersonalesPacient__sexo"] is not None
+    ]
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_graficosOftEdad(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="oftalmologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    age_counts = queryset.values("paciente__datosPersonalesPacient__edad").annotate(
+        count=Count("paciente__datosPersonalesPacient__edad")
+    )
+
+    data = [
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
+        for item in age_counts
+    ]
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_GraficoOftSex(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="oftalmologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    sexo_counts = queryset.values("paciente__datosPersonalesPacient__sexo").annotate(
+        count=Count("paciente__datosPersonalesPacient__sexo")
+    )
+
+    data = [
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
+        for item in sexo_counts
+        if item["paciente__datosPersonalesPacient__sexo"] is not None
+    ]
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_graficosAudioEdad(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="audiologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    age_counts = queryset.values("paciente__datosPersonalesPacient__edad").annotate(
+        count=Count("paciente__datosPersonalesPacient__edad")
+    )
+
+    data = [
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
+        for item in age_counts
+    ]
+
+    return Response(data)
+
+
+@api_view(["GET"])
+def get_GraficoAudioSex(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        month = int(month) if month else None
+        year = int(year) if year else None
+    except ValueError:
+        return Response({"error": "Invalid month or year"}, status=400)
+
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="audiologo")
+
+    if year:
+        queryset = queryset.filter(fecha__year=year)
+    if month:
+        queryset = queryset.filter(fecha__month=month)
+
+    sexo_counts = queryset.values("paciente__datosPersonalesPacient__sexo").annotate(
+        count=Count("paciente__datosPersonalesPacient__sexo")
+    )
+
+    data = [
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
+        for item in sexo_counts
+        if item["paciente__datosPersonalesPacient__sexo"] is not None
+    ]
+
+    return Response(data)

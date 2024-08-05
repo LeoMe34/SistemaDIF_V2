@@ -5,9 +5,10 @@ import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
-import generarExcelFTP from '../FormatoPsico/FichaTecPsicoExcel';
 
-const GraficosPsicVisita = () => {
+import generarExcelFTM from '../ExcelAdmin/FichaTecnicaMedicaExcel';
+
+const GraficosNutriologo = () => {
     const [chartData, setChartData] = useState([]);
     const [chartInstance, setChartInstance] = useState(null);
     const [showLabels, setShowLabels] = useState(true);
@@ -16,48 +17,31 @@ const GraficosPsicVisita = () => {
     const [year, setYear] = useState('');
     const { token } = useAuth();
     const [detallePaciente, setDetallePaciente] = useState([]);
-    const [detallePsicologia, setDetallePsicologia] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
     const [detalleFicha, setDetalleFicha] = useState([]);
-
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_grafPsico/', {
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosNutriologo/', {
                     params: { month, year }
                 });
-                console.log('Response Data:', response.data);
-                const servicioMap = {
-                    1: 'Primera visita',
-                    2: 'Subsecuente',
-                };
-
-                const serviceCounts = response.data.reduce((acc, item) => {
-                    const serviceType = servicioMap[item.visita.tipo_visita];
-                    if (serviceType) {
-                        acc[serviceType] = (acc[serviceType] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
-
-                const chartDataArray = Object.keys(serviceCounts).map(key => ({
-                    name: key,
-                    value: serviceCounts[key],
+                const ageCounts = response.data.map(item => ({
+                    name: item.age,
+                    value: item.count,
                 }));
 
-                console.log('Processed Chart Data:', chartDataArray);
-                setChartData(chartDataArray);
+                setChartData(ageCounts);
             } catch (error) {
-                console.error('Error en obtener los datos del grafico piscologia:', error);
+                console.error('Error en obtener los datos del grafico nutriologo:', error);
             }
         };
         fetchData();
-        getDetallesFichas();
     }, [month, year]);
 
     useEffect(() => {
         if (chartData.length === 0) {
-            return;
+            return; // No renderizar el gráfico si no hay datos
         }
 
         const chartDom = document.getElementById('main');
@@ -67,7 +51,7 @@ const GraficosPsicVisita = () => {
         if (chartType === 'bar') {
             option = {
                 title: {
-                    text: 'Tipos de visita en pacientes',
+                    text: 'Distribución de edades de los pacientes por nutriólogo',
                     left: 'center',
                 },
                 tooltip: {
@@ -86,7 +70,7 @@ const GraficosPsicVisita = () => {
                         type: 'bar',
                         itemStyle: {
                             color: function (params) {
-                                const colorList = ['#FF6F61', '#6B5B95'];
+                                const colorList = ['#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1'];
                                 return colorList[params.dataIndex % colorList.length];
                             },
                         },
@@ -95,63 +79,63 @@ const GraficosPsicVisita = () => {
                             position: 'top',
                             color: '#000',
                             fontSize: 12,
-                            formatter: '{c}'
+                            formatter: '{c}' // Muestra el valor directamente
                         },
                     },
+
                 ],
             };
         } else {
             option = {
                 title: {
-                    text: 'Tipos de visita en pacientes',
+                    text: 'Distribución de edades de los pacientes por nutriólogo',
                     left: 'center',
                 },
                 tooltip: {
-                    trigger: 'item',
+                    trigger: 'item'
                 },
                 legend: {
                     top: '5%',
-                    left: 'center',
+                    left: 'center'
                 },
                 series: [
                     {
-                        name: 'Tipo de visita',
+                        name: 'Edad',
                         type: 'pie',
                         radius: ['40%', '70%'],
                         avoidLabelOverlap: false,
                         data: chartData.map(item => ({
                             value: item.value,
-                            name: item.name,
+                            name: item.name
                         })),
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
                             },
                             label: {
                                 show: true,
                                 fontSize: 40,
-                                fontWeight: 'bold',
-                            },
+                                fontWeight: 'bold'
+                            }
                         },
                         itemStyle: {
                             color: (params) => {
-                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32'];
-                                return colorList[params.dataIndex % colorList.length];
-                            },
+                                const colorList = ['#FF7F50', '#87CEFA', '#32CD32', '#FF6F61', '#6B5B95',];
+                                return colorList[params.dataIndex];
+                            }
                         },
                         label: {
                             show: showLabels,
                             position: 'center',
-                            formatter: '{b}: {c} ({d}%)',
-                        },
-                    },
-                ],
+                            formatter: '{b}: {c} ({d}%)'
+                        }
+                    }
+                ]
             };
         }
 
-        console.log('Chart Option:', option);
         myChart.setOption(option);
         setChartInstance(myChart);
 
@@ -165,7 +149,7 @@ const GraficosPsicVisita = () => {
             const imgURL = chartInstance.getDataURL({
                 type: 'png',
                 pixelRatio: 2,
-                backgroundColor: '#fff',
+                backgroundColor: '#fff'
             });
             const link = document.createElement('a');
             link.href = imgURL;
@@ -177,6 +161,10 @@ const GraficosPsicVisita = () => {
     const toggleLabels = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
+
+    useEffect(() => {
+        getDetallesFichas();
+    });
 
     const getDetallesPaciente = async () => {
         try {
@@ -198,10 +186,10 @@ const GraficosPsicVisita = () => {
         }
     };
 
-    const getDetallesPsicologia = async () => {
+    const getDetallesEnfermeria = async () => {
         try {
             const promises = detalleFicha.map(ficha => {
-                const url = `http://127.0.0.1:8000/api/get_ficha_psicologia/${ficha.paciente}/${ficha.fecha}/`;
+                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha}/`;
                 return axios.get(url, {
                     headers: {
                         Authorization: `Token ${token}`,
@@ -211,7 +199,7 @@ const GraficosPsicVisita = () => {
 
             const responses = await Promise.all(promises);
             const detalles = responses.map(response => response.data);
-            setDetallePsicologia(detalles);
+            setDetalleEnfermeria(detalles);
             console.log("EEEE" + detalles)
         } catch (error) {
             console.error('Ocurrió un error', error);
@@ -220,7 +208,7 @@ const GraficosPsicVisita = () => {
 
     const getDetallesFichas = async () => {
         try {
-            const urlFichas = 'http://127.0.0.1:8000/api/get_fichaPsico_fecha/';
+            const urlFichas = 'http://127.0.0.1:8000/api/get_fichas_medicas_fecha/';
             const responseFichas = await axios.get(urlFichas, {
                 params: { month, year },
                 headers: {
@@ -229,7 +217,7 @@ const GraficosPsicVisita = () => {
             });
             const fichas = responseFichas.data;
 
-            const fichasPsico = await Promise.all(fichas.map(async ficha => {
+            const fichasMedico = await Promise.all(fichas.map(async ficha => {
                 const urlUsuario = `http://127.0.0.1:8000/api/get_empleado_group/${ficha.empleado}`;
                 const responseUsuario = await axios.get(urlUsuario, {
                     headers: {
@@ -239,9 +227,8 @@ const GraficosPsicVisita = () => {
 
                 const empleado = responseUsuario.data; // Asumiendo que solo hay un usuario que coincide con el noTrabajador
                 console.log(responseUsuario.data)
-                // Verificar si el empleado pertenece al grupo "Medico"
 
-                if (empleado.groups && empleado.groups.includes('Psicologo')) {
+                if (empleado.groups && empleado.groups.includes('Nutriologo')) {
                     return ficha;
                 } else {
                     return null;
@@ -249,10 +236,10 @@ const GraficosPsicVisita = () => {
             }));
 
             // Filtrar los resultados nulos
-            const fichasPsicoFiltradas = fichasPsico.filter(ficha => ficha !== null);
+            const fichasMedicoFiltradas = fichasMedico.filter(ficha => ficha !== null);
 
-            setDetalleFicha(fichasPsicoFiltradas);
-            console.log("Fichas del Psicologo:", fichasPsicoFiltradas);
+            setDetalleFicha(fichasMedicoFiltradas);
+            console.log("Fichas del Nutriologo:", fichasMedicoFiltradas);
         } catch (error) {
             console.error('Ocurrió un error', error);
         }
@@ -262,17 +249,15 @@ const GraficosPsicVisita = () => {
     useEffect(() => {
         if (detalleFicha.length > 0) {
             getDetallesPaciente();
-            getDetallesPsicologia();
+            getDetallesEnfermeria();
         }
     }, [token, detalleFicha]);
 
     return (
         <div>
-
             <div>
-                <button onClick={() => generarExcelFTP(detallePaciente, detalleFicha)} className='btn btn-guardar'>Descargar las fichas en excel</button>
+                <button onClick={() => generarExcelFTM(detallePaciente, detalleFicha, detalleEnfermeria)} className='btn btn-guardar'>Descargar las fichas en excel</button>
             </div>
-
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
                 {showLabels ? <FaEyeSlash /> : <FaEye />}
@@ -280,7 +265,6 @@ const GraficosPsicVisita = () => {
             <button onClick={() => setChartType(chartType === 'bar' ? 'pie' : 'bar')} className='graficButton'>
                 {chartType === 'bar' ? <FaChartPie /> : <MdBarChart />}
             </button>
-
 
             <div className='mt-2 mb-2 row'>
                 <div className='col'>
@@ -307,10 +291,9 @@ const GraficosPsicVisita = () => {
                 </div>
             </div>
 
-
             <div id="main" style={{ width: '95%', height: '350px' }}></div>
         </div>
     );
 };
 
-export default GraficosPsicVisita;
+export default GraficosNutriologo;

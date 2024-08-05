@@ -5,8 +5,8 @@ import { FaTeeth, FaUserDoctor } from "react-icons/fa6";
 import { GiFruitBowl } from "react-icons/gi";
 import { IoEarOutline } from "react-icons/io5";
 import { RiPsychotherapyLine } from "react-icons/ri";
-
-
+import GraficosOftEdad from './GraficoOftEdad';
+import GraficoSexoOft from './GraficoOftSex';
 
 export function GraficoOft() {
 
@@ -28,6 +28,8 @@ export function GraficoOft() {
             <div className='container'>
                 <h2 className='subtitulo'>Oftalmología</h2>
 
+                <GraficosOftEdad />
+                <GraficoSexoOft />
                 <h3 className='subtitulo_2'>Áreas Medicas</h3>
                 <div className='center col'>
                     <Link to={"/graficas_grl"}>
