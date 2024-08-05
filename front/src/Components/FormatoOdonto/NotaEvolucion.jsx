@@ -178,16 +178,11 @@ export function NotaEvolucion() {
                             </a>
                         </li>
                         <li className="breadcrumb-item custom-link" aria-current="page">
-                            <a href="\antecedente">
-                                Antecedentes
+                            <a href="\historial_odontologico_p1">
+                            Historial clinico dental
                             </a>
-                        </li>
-                        <li className="breadcrumb-item custom-link" aria-current="page">
-                            <a href="\hist_dent">
-                                Historial clinico dental
-                            </a>
-                        </li>
-                        <li className="breadcrumb-item pag-actual" aria-current="page">Nota Evolución</li>
+                        </li>                        
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Nota evolución</li>
                     </ol>
                 </nav>
             </div>

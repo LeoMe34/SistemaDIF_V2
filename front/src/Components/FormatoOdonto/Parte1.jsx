@@ -83,9 +83,22 @@ export function Parte1() {
 
     return (
         <div>
-            <div className="ml-10 container">
+            <div className="mt-3 ml-10 container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item custom-link">
+                            <a href="/home_odontologo">
+                                <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                            </a>
+                        </li>
+                        <li className="breadcrumb-item pag-actual" aria-current="page">Historial clinico dental</li>
+                    </ol>
+                </nav>
+            </div>
 
-                <h3 className="subtitulo">Historial clinico dental</h3>
+            <h3 className="subtitulo">Historial clinico dental</h3>
+
+            <div className="ml-10 container">
                 <div className="ml-10">
                     <BusquedaPaciente></BusquedaPaciente>
 
