@@ -168,7 +168,11 @@ export function FichaTecnica() {
                                     <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                                 </a>
                             }
-
+                            {grupo === 'oftalmologo' &&
+                                <a href="/home_oftalmologo">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
                         </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Ficha técnica de consulta médica</li>
                     </ol>
