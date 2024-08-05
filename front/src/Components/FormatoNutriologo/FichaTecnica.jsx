@@ -158,9 +158,13 @@ export function FichaTecnica() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item custom-link">
-                            {/*El home al que regrese dependera del tipo de  usuario, si es medico, odontologo o nutriologo*/}
                             {grupo === 'audiologo' &&
                                 <a href="/home_audiologo">
+                                    <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
+                                </a>
+                            }
+                            {grupo === 'Nutriologo' &&
+                                <a href="/home_nutricion">
                                     <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                                 </a>
                             }
