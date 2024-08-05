@@ -8,7 +8,9 @@ export function HomeRecepcionGral() {
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <i className="bi bi-house-fill color-icono"></i>&nbsp;
-                        <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
+                        <a href="/home_recepcion_medica">
+                            <li className="breadcrumb-item active pag-actual" aria-current="page">Home</li>
+                        </a>
                     </ol>
                 </nav>
             </div>
