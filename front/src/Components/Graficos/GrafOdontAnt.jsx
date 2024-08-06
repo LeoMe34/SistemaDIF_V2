@@ -1,11 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
-import { left } from '@popperjs/core';
+import { useAuth } from '../../Contexto/AuthContext';
+import generarExcelHCO from '../ExcelAdmin/HistorialOdontoExcel';
+import generarExcelNE from '../ExcelAdmin/NotaEvolucionExcel';
 
 const GrafOdontAnt = () => {
     const [data, setData] = useState([]);
@@ -14,20 +15,30 @@ const GrafOdontAnt = () => {
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
-
+    const { token } = useAuth();
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [detalleHistorial, setDetalleHistorial] = useState([]);
+    const [detalleNota, setDetalleNota] = useState([]);
+    const [detalleFicha, setDetalleFicha] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/', {
-                    params: { month, year }
-                });
+                const params = {};
+                if (month) params.month = month;
+                if (year) params.year = year;
+
+                const response = await axios.get('http://127.0.0.1:8000/api/get_graficosOdontAntH/', { params });
                 setData(response.data);
             } catch (error) {
                 console.error('Error en obtener los datos del grafico odonto:', error);
             }
         };
+
+        setData([]);  // Limpia los datos anteriores
         fetchData();
+        getHistorialOdonto();
     }, [month, year]);
 
     useEffect(() => {
@@ -73,7 +84,6 @@ const GrafOdontAnt = () => {
                             formatter: '{c}' // Muestra el valor directamente
                         },
                     },
-
                 ],
             };
         } else {
@@ -159,8 +169,124 @@ const GrafOdontAnt = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
 
+    const getHistorialOdonto = async () => {
+        try {
+            const params = {};
+            if (month) params.month = month;
+            if (year) params.year = year;
+
+            const response = await axios.get('http://127.0.0.1:8000/api/get_historial_odonto_fecha/', {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+
+            setDetalleHistorial(response.data);
+            console.log("Historial:", response.data);
+        } catch (error) {
+            console.error('Ocurrió un error al obtener el historial odontológico:', error);
+        }
+    };
+
+    const getDetallesPaciente = async () => {
+        try {
+            const promises = detalleHistorial.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${ficha.paciente}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePaciente(detalles);
+            console.log("Detalles Paciente:", detalles);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const promises = detalleHistorial.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha_elaboracion}/`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetalleEnfermeria(detalles);
+            console.log("Detalles Enfermería:", detalles);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesNotas = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_nota_odonto_fecha/`;
+            const responses = await axios.get(url, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            setDetalleNota(responses.data);
+            console.log("Detalles Notas:", detalles);
+        } catch (error) {
+            console.error('Ocurrió un error al obtener las notas de evolución:', error);
+        }
+    };
+
+
+    const getDetallesFichas = async () => {
+        try {
+            const promises = detalleNota.map(nota => {
+                const url = `http://127.0.0.1:8000/api/get_fichaMed_Odonto/${nota.id}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetalleFicha(detalles);
+            console.log("Detalles Fichas:", detalles);
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    useEffect(() => {
+        if (detalleHistorial.length > 0) {
+            getDetallesPaciente();
+            getDetallesEnfermeria();
+            getDetallesNotas();
+        }
+    }, [token, detalleHistorial]);
+
+    useEffect(() => {
+        if (detalleNota.length > 0) {
+            getDetallesFichas();
+        }
+    }, [token, detalleNota]);
+
     return (
         <div>
+            <div>
+                <button onClick={() => generarExcelHCO(detallePaciente, detalleHistorial, detalleEnfermeria)} className='btn btn-guardar m-2'>Descargar historiales odontologicos</button>
+                <button onClick={() => generarExcelNE(detallePaciente, detalleNota, detalleHistorial)} className='btn btn-guardar m-2'>Descargar notas de evolucion</button>
+            </div>
+
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
                 {showLabels ? <FaEyeSlash /> : <FaEye />}
@@ -193,7 +319,8 @@ const GrafOdontAnt = () => {
                 </div>
             </div>
             <div id="graficoAntH" style={{ width: '95%', height: '350px' }}></div>
-        </div>);
+        </div>
+    );
 };
 
 export default GrafOdontAnt;

@@ -8,7 +8,7 @@ const convertirAntecedentes = (tieneRef) => {
     return opciones[tieneRef];
 };
 
-const generarExcelHCM = (detallesPacientes, detalleHistorial, detalleEnfermeria, detalleFicha) => {
+const generarExcelHCO = (detallesPacientes, detalleHistorial, detalleEnfermeria) => {
     const datos = [
         [],
         ['Datos del paciente', 'Antecedentes patologicos', 'Antecedentes personales patologicos',
@@ -22,10 +22,71 @@ const generarExcelHCM = (detallesPacientes, detalleHistorial, detalleEnfermeria,
             'Vacunas', 'Alimentacion', 'Fauna nosiva', 'Vivienda', 'Adicciones',
             'Ultima regla', 'Ultimo doc', 'Planificacion familiar',
             'Respiratorio', 'Digestivo', 'Neurologico', 'Cardiovascular', 'Musculoesqueletico',
-            'PESO', 'TALLA', 'FRECUENCIA RESPIRATORIA', 'FRECUENCIA CARDIACA', 'PRESIÓN ARTERIAL', 'TEMPERATURA', 'GLICEMIA',
+            'Peso', 'Talla', 'Frecuencia respiratoria', 'Frecuencia cardiaca', 'Presion arterial', 'Temperatura', 'Glicemia',
             'Padecimiento actual', 'Habitos exteriores', 'Labios', 'Mucosa oral', 'Encias', 'Lengua', 'Paladar duro', 'Paladar blando',
             'Cuello', 'Estudios de gabinetes', 'Medico'],
         ...detalleHistorial.map((fichas, index) => [
+            fichas.fecha_elaboracion,
+            fichas.paciente,
+            `${detallesPacientes[index]?.datosPersonalesPacient.nombre} ${detallesPacientes[index]?.datosPersonalesPacient.apellidoP} ${detallesPacientes[index]?.datosPersonalesPacient.apellidoM}`,
+            detallesPacientes[index]?.datosPersonalesPacient.sexo,
+            detallesPacientes[index]?.datosPersonalesPacient.edad,
+            detallesPacientes[index]?.datosPersonalesPacient.estadoCivil,
+            `${detallesPacientes[index]?.datosDireccionPacient.direccion}, ${detallesPacientes[index]?.datosDireccionPacient.colonia}`,
+            fichas.antHerediPato.diabetesH,
+            fichas.antHerediPato.diabetes_parentesco,
+            fichas.antHerediPato.hipertH,
+            fichas.antHerediPato.hipert_parentesco,
+            fichas.antHerediPato.tuberculoH,
+            fichas.antHerediPato.tuberculo_parentesco,
+            fichas.antHerediPato.cancerH,
+            fichas.antHerediPato.cancer_parentesco,
+            fichas.antHerediPato.cardioH,
+            fichas.antHerediPato.cardio_parentesco,
+            fichas.antHerediPato.asmaH,
+            fichas.antHerediPato.asma_parentesco,
+            fichas.antHerediPato.epilepsiaH,
+            fichas.antHerediPato.epilepsia_parentesco,
+            fichas.antPersonPato.diabetes,
+            fichas.antPersonPato.hipert,
+            fichas.antPersonPato.tuberculo,
+            fichas.antPersonPato.cancer,
+            fichas.antPersonPato.transfusion,
+            fichas.antPersonPato.quirurgicos,
+            fichas.antPersonPato.anestesicos,
+            fichas.antPersonPato.alergicos,
+            fichas.antPersonPato.trauma,
+            fichas.personNoPato.vacuna,
+            fichas.personNoPato.alimentacion,
+            fichas.personNoPato.fauna_nociva,
+            fichas.personNoPato.vivienda,
+            fichas.personNoPato.adicciones,
+            fichas.antGinecob.fecha_ultima_regla,
+            fichas.antGinecob.fecha_ult_doc,
+            fichas.antGinecob.planificacion_fam,
+            fichas.aparatosSistemas.respiratorio,
+            fichas.aparatosSistemas.digestivo,
+            fichas.aparatosSistemas.neuro,
+            fichas.aparatosSistemas.cardioV,
+            fichas.aparatosSistemas.muscoes,
+            detalleEnfermeria[index]?.datosFisicos?.peso,
+            detalleEnfermeria[index]?.datosFisicos?.talla,
+            detalleEnfermeria[index]?.signosVitales?.frecuenciaR,
+            detalleEnfermeria[index]?.signosVitales?.frecuenciaC,
+            detalleEnfermeria[index]?.signosVitales?.presion,
+            detalleEnfermeria[index]?.signosVitales?.temperatura,
+            detalleEnfermeria[index]?.signosVitales?.glicemia,
+            fichas.padecimiento_actual,
+            fichas.habitos_exteriores,
+            fichas.cabeza.labios,
+            fichas.cabeza.mucosa,
+            fichas.cabeza.encias,
+            fichas.cabeza.lengua,
+            fichas.cabeza.paladar_duro,
+            fichas.cabeza.paladar_blando,
+            fichas.cuello_odont,
+            fichas.referencia.estudios,
+            fichas.empleado
         ]),
     ];
 
@@ -45,9 +106,9 @@ const generarExcelHCM = (detallesPacientes, detalleHistorial, detalleEnfermeria,
     worksheet['!merges'] = merges;
 
     const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, 'Historiales Clinicos');
+    utils.book_append_sheet(workbook, worksheet, 'Historiales Odontologicos');
 
-    writeFile(workbook, `HISTORIAL_CLINICO_MEDICO.xlsx`);
+    writeFile(workbook, `HISTORIAL_CLINICO_Odontologico.xlsx`);
 };
 
-export default generarExcelHCM;
+export default generarExcelHCO;
