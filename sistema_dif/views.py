@@ -1111,10 +1111,10 @@ def crear_notaEvolucionO(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def detalle_notaEvolucionO(request, id_histOdonto):
+def detalle_notaEvolucionO(request, id):
     try:
-        notaEvolucionO = NotaEvolucionOdonto.objects.get(histlOdonto=id_histOdonto)
-    except NotaEvolucionOdontoSerializer.DoesNotExist:
+        notaEvolucionO = NotaEvolucionOdonto.objects.get(histlOdonto=id)
+    except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
     serializer = NotaEvolucionOdontoSerializer(notaEvolucionO)
@@ -1825,6 +1825,39 @@ def get_histOdonto_fecha(request):
         return Response(serializer.data)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_notaOdonto_fecha(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        queryset = NotaEvolucionOdonto.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = NotaEvolucionOdontoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 @api_view(["GET"])
