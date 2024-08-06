@@ -1794,6 +1794,38 @@ def grafico_odontAntH(request):
 
     return Response(data)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_histOdonto_fecha(request):
+    month = request.GET.get("month")
+    year = request.GET.get("year")
+
+    try:
+        queryset = HistorialOdonto.objects.all()
+
+        if year:
+            try:
+                year = int(year)
+                queryset = queryset.filter(fecha_elaboracion__year=year)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid year"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(fecha_elaboracion__month=month)
+            except ValueError:
+                return Response(
+                    {"error": "Invalid month"}, status=status.HTTP_400_BAD_REQUEST
+                )
+
+        serializer = HistorialOdontoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(["GET"])
 def grafico_odontAntP(request):

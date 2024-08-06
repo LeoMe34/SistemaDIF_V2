@@ -5,7 +5,9 @@ import * as echarts from 'echarts';
 import { FaEye, FaEyeSlash, FaChartPie } from "react-icons/fa";
 import { MdBarChart } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
+import { useAuth } from '../../Contexto/AuthContext';
 import { left } from '@popperjs/core';
+import generarExcelHCO from '../ExcelAdmin/HistorialOdontoExcel'
 
 const GrafOdontAnt = () => {
     const [data, setData] = useState([]);
@@ -14,7 +16,10 @@ const GrafOdontAnt = () => {
     const [chartType, setChartType] = useState('bar');
     const [month, setMonth] = useState('');
     const [year, setYear] = useState('');
-
+    const { token } = useAuth();
+    const [detallePaciente, setDetallePaciente] = useState([]);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [detalleHistorial, setDetalleHistorial] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,6 +33,7 @@ const GrafOdontAnt = () => {
             }
         };
         fetchData();
+        getHistorialOdonto();
     }, [month, year]);
 
     useEffect(() => {
@@ -159,8 +165,76 @@ const GrafOdontAnt = () => {
         setShowLabels(prevShowLabels => !prevShowLabels);
     };
 
+    const getHistorialOdonto = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_historial_odonto_fecha/`;
+            const response = await axios.get(url, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            
+            setDetalleHistorial(response.data);
+            console.log("Historial:", response.data);
+        } catch (error) {
+            console.error('Ocurrió un error al obtener el historial odontológico:', error);
+        }
+    };    
+
+    const getDetallesPaciente = async () => {
+        try {
+            const promises = detalleHistorial.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/detalle_paciente/${ficha.paciente}`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetallePaciente(detalles);
+            console.log("AAAAA" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    const getDetallesEnfermeria = async () => {
+        try {
+            const promises = detalleHistorial.map(ficha => {
+                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha_elaboracion}/`;
+                return axios.get(url, {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            });
+
+            const responses = await Promise.all(promises);
+            const detalles = responses.map(response => response.data);
+            setDetalleEnfermeria(detalles);
+            console.log("EEEE" + detalles)
+        } catch (error) {
+            console.error('Ocurrió un error', error);
+        }
+    };
+
+    useEffect(() => {
+        if (detalleHistorial.length > 0) {
+            getDetallesPaciente();
+            getDetallesEnfermeria();
+        }
+    }, [token, detalleHistorial]);
+
     return (
         <div>
+            <div>
+                <button onClick={() => generarExcelHCO(detallePaciente, detalleHistorial, detalleEnfermeria)} className='btn btn-guardar'>Descargar historiales odontologicos</button>
+            </div>
+
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
             <button onClick={toggleLabels} className='graficButton'>
                 {showLabels ? <FaEyeSlash /> : <FaEye />}
