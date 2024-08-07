@@ -206,19 +206,14 @@ const GraficosMedFam = () => {
 
     const getDetallesEnfermeria = async () => {
         try {
-            const promises = detalleFicha.map(ficha => {
-                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha}/`;
-                return axios.get(url, {
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    },
-                });
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria_fecha/`;
+            const responses = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
             });
-
-            const responses = await Promise.all(promises);
-            const detalles = responses.map(response => response.data);
-            setDetalleEnfermeria(detalles);
-            console.log("EEEE" + detalles)
+            setDetalleEnfermeria(responses.data);
+            console.log("EEEE" + responses.data)
         } catch (error) {
             console.error('Ocurrió un error', error);
         }
@@ -302,7 +297,7 @@ const GraficosMedFam = () => {
 
     const getDetallesRecetas = async () => {
         try {
-            const urlReceta= 'http://127.0.0.1:8000/api/get_receta_fecha/';
+            const urlReceta = 'http://127.0.0.1:8000/api/get_receta_fecha/';
             const responseReceta = await axios.get(urlReceta, {
                 params: { month, year },
                 headers: {
