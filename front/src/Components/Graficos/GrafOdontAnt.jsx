@@ -7,6 +7,7 @@ import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../../Contexto/AuthContext';
 import generarExcelHCO from '../ExcelAdmin/HistorialOdontoExcel';
 import generarExcelNE from '../ExcelAdmin/NotaEvolucionExcel';
+import generarExcelFTO from '../ExcelAdmin/FichaTecnicaOdontoExcel';
 
 const GrafOdontAnt = () => {
     const [data, setData] = useState([]);
@@ -211,19 +212,16 @@ const GrafOdontAnt = () => {
 
     const getDetallesEnfermeria = async () => {
         try {
-            const promises = detalleHistorial.map(ficha => {
-                const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${ficha.paciente}/${ficha.fecha_elaboracion}/`;
-                return axios.get(url, {
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    },
-                });
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria_fecha/`;
+            const responses = await axios.get(url, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
             });
 
-            const responses = await Promise.all(promises);
-            const detalles = responses.map(response => response.data);
-            setDetalleEnfermeria(detalles);
-            console.log("Detalles Enfermería:", detalles);
+            setDetalleEnfermeria(responses.data);
+            console.log("Detalles Enfermería:", responses.data);
         } catch (error) {
             console.error('Ocurrió un error', error);
         }
@@ -245,22 +243,17 @@ const GrafOdontAnt = () => {
         }
     };
 
-
     const getDetallesFichas = async () => {
         try {
-            const promises = detalleNota.map(nota => {
-                const url = `http://127.0.0.1:8000/api/get_fichaMed_Odonto/${nota.id}`;
-                return axios.get(url, {
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    },
-                });
+            const url = `http://127.0.0.1:8000/api/get_ficha_odonto_fecha/`;
+            const responses = await axios.get(url, {
+                params: { month, year },
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
             });
-
-            const responses = await Promise.all(promises);
-            const detalles = responses.map(response => response.data);
-            setDetalleFicha(detalles);
-            console.log("Detalles Fichas:", detalles);
+            setDetalleFicha(responses.data);
+            console.log("Detalles Fichas:", responses.data);
         } catch (error) {
             console.error('Ocurrió un error', error);
         }
@@ -285,6 +278,7 @@ const GrafOdontAnt = () => {
             <div>
                 <button onClick={() => generarExcelHCO(detallePaciente, detalleHistorial, detalleEnfermeria)} className='btn btn-guardar m-2'>Descargar historiales odontologicos</button>
                 <button onClick={() => generarExcelNE(detallePaciente, detalleNota, detalleHistorial)} className='btn btn-guardar m-2'>Descargar notas de evolucion</button>
+                <button onClick={() => generarExcelFTO(detallePaciente, detalleFicha, detalleEnfermeria, detalleHistorial)} className='btn btn-guardar m-2'>Descargar fichas tecnicas</button>
             </div>
 
             <button onClick={handleDownload} className='graficButton'><IoMdDownload /></button>
