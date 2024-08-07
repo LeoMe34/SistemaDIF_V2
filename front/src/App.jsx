@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Importa el archivo JavaSc
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Toaster } from 'react-hot-toast'
 import styled from "styled-components";
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation  } from 'react-router-dom'
 import { MenuNave } from "./Components/MenuNav/MenuNave"
 import { NavBarSimple } from "./Partials/NavBarSimple"
 import { AuthProvider, useAuth } from './Contexto/AuthContext';
@@ -33,13 +33,15 @@ function App() {
 
 function AuthContent() {
   const { token } = useAuth();
-  const isLoginPage = window.location.pathname === '/';
+  const location = useLocation()
+  const isLoginPage = location.pathname === '/';
+  const isPageNotFound = location.pathname === '/404' || location.pathname === '*';
 
   return (
     <main>
       {/*{!isLoginPage && token && <NavBarSimple />}*/}
-      <div className={isLoginPage || !token ? '' : 'sidebarState'}>
-        {!isLoginPage && token && <MenuNave />}
+      <div className={isLoginPage || isPageNotFound || !token ? '' : 'sidebarState'}>
+        {!isLoginPage && !isPageNotFound && token && <MenuNave />}
         <Rutas />
       </div>
     </main>

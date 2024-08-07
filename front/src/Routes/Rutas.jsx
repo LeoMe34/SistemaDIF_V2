@@ -63,6 +63,9 @@ import { V_GraficasPsico } from '../Views/Empleado/V_GraficasPsico'
 import { V_GraficoNutri } from '../Views/Empleado/V_GraficoNutri'
 import { V_GraficoOft } from '../Views/Empleado/V_GraficoOft'
 import { V_GraficoAud } from '../Views/Empleado/V_GraficoAud'
+
+import { PageNotFound } from '../Modales/PageNotFound'
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../Contexto/AuthContext';
@@ -209,8 +212,9 @@ export function Rutas() {
                             <Route path='/mostrar_paciente/:noExpediente' element={<V_MostrarPacientePsico />} />
                         </>
                     )}
-                    {/*<Route path='/antecedente' element={<V_Antecedentes />} />
-                    <Route path='/hist_dent' element={<V_HistClinDent />} />*/}
+
+                    <Route path='*' element={<PageNotFound />} />
+
                 </Routes>
             </div>
         </div>
