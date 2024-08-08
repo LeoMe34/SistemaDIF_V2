@@ -933,11 +933,24 @@ def filtrar_fichasM_por_paciente(request, noExp):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_FichaTecnicaMed(request):
+    fecha = request.data.get("fecha")
+
+    if not fecha:
+        return Response({"error": "La fecha es requerida."}, status=400)
+
+    # Verificar si existe una FichaTecnicaEnfermeria para la fecha proporcionada
+    existe_ficha_enfermeria = FichaTecnicaEnfermeria.objects.filter(fecha=fecha).exists()
+    if not existe_ficha_enfermeria:
+        return Response({"error": "No existe una FichaTecnicaEnfermeria para la fecha proporcionada."}, status=400)
+
+    # Validar y crear FichaTecnicaMed
     serializer = FichaTecnicaMedSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
+        
     return Response(serializer.errors, status=400)
+
 
 
 @api_view(["GET"])

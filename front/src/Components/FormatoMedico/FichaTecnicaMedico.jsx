@@ -74,7 +74,8 @@ export function FichaTecnicaMedico() {
             setDetalleEnfermeria(respuesta.data)
 
         } catch (error) {
-            console.error("Ocurrió un error", error);
+            console.error("Ocurrió un error", error);            
+            setDetalleEnfermeria(null)
         }
     }
 
@@ -132,11 +133,16 @@ export function FichaTecnicaMedico() {
         } else if (!observacionValido) {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
         } else {
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-                registrarFicha(data);
-                localStorage.setItem('noExp', JSON.stringify(noExpediente));
-            })
+            if(detalleEnfermeria !== null){
+                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                    registrarFicha(data);
+                    localStorage.setItem('noExp', JSON.stringify(noExpediente));
+                })
+            } else{
+                toast.error("Necesita haber una ficha de enfermeria")
+            }
+            
         }
     });
 
@@ -174,7 +180,7 @@ export function FichaTecnicaMedico() {
                     <label className='etiqueta' htmlFor="fecha">Fecha: </label>
                     <input className="entrada" id='fecha' name='fecha' type="date"
                         value={fechaActual} readOnly
-                        {...register("fecha", { required: true })} />
+                        {...register("fecha", { required: false })} />
 
                     <div className="mt-2 row">
                         <div className="col">
