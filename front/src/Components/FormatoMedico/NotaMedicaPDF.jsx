@@ -4,7 +4,7 @@ import { ubuntuBold, ubuntuRegular } from './../../Fuentes/Base64'; // Ajusta el
 const logoDif = "../Logos/LOGO DIF.jpeg"
 const logoAyuntamiento = "../Logos/LOGO-AYUNTAMIENTO2.png"
 
-const generarPDF = (detallePaciente, noExpediente, data, empleado) => {
+const generarPDF = (detallePaciente, noExpediente, data, empleado, fechaActual, horaActual) => {
     const documento = new jsPDF();
     documento.addFileToVFS('Ubuntu-Bold.ttf', ubuntuBold);
     documento.addFont('Ubuntu-Bold.ttf', 'Ubuntu-Bold', 'normal');
@@ -69,9 +69,9 @@ const generarPDF = (detallePaciente, noExpediente, data, empleado) => {
     yPosition = checkAddPage(yPosition, 10);
     yPosition = addTextWithWrap(`NÚMERO DE EXPEDIENTE: ${noExpediente}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    addTextWithWrap(`FECHA: ${data.fecha}`, 20, yPosition, maxWidth);
+    addTextWithWrap(`FECHA: ${fechaActual}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
-    yPosition = addTextWithWrap(`HORA: ${data.hora}`, mitadPagina, yPosition, maxWidth);
+    yPosition = addTextWithWrap(`HORA: ${horaActual}`, mitadPagina, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);
     addTextWithWrap(`EDAD: ${detallePaciente?.datosPersonalesPacient?.edad}`, 20, yPosition, maxWidth);
     yPosition = checkAddPage(yPosition, 10);

@@ -187,7 +187,7 @@ export function NotasMedicas() {
                     mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
                         registrarNota(data, idHistorial);
                         localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
-                        generarPDF(detallePaciente, noExpediente, data, empleado)
+                        generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual, horaActual)
                         MensajeReceta(navegador)
                     })
                 } else {
