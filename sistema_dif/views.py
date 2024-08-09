@@ -1563,6 +1563,12 @@ def get_notaMedica(request, noExp, fecha):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_notaMedica(request):
+    id_Historial = request.data.get('histMedic')
+    if id_Historial:
+        historial_ocupado = NotaMedica.objects.filter(histMedic = id_Historial)
+        if historial_ocupado:
+            return Response({"error": "Ya existe una nota medica con ese historial"}, status=400)
+    
     serializer = NotaMedicaSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

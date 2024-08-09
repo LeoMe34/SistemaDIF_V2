@@ -72,7 +72,7 @@ export function NotasMedicas() {
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
         setNotExpediente(noExpediente)
-        setIdNota(noExpediente)
+        //setIdNota(noExpediente)
 
         // Aquí podrías hacer algo con el ID de la nota médica seleccionada, como guardarlo en el estado del componente Receta
     };
@@ -86,8 +86,27 @@ export function NotasMedicas() {
                     }
                 })
             setIdHistorial(response.data.id)
+            console.log(response.data.id)
         } catch (error) {
+            setIdHistorial(null)
             console.error('Error al obtener ID del historial médico:', error);
+        }
+    }
+
+    const getNotaDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_detalles_NM/${idHistorial}`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+            console.log(respuesta.data)
+
+        } catch (error) {
+            return false
+            console.error("Ocurrió un error", error);
         }
     }
 
@@ -113,8 +132,8 @@ export function NotasMedicas() {
                 diagnostico: data.diagnostico,
                 tratamiento: data.tratamiento,
                 observaciones: data.observaciones,
-                fecha_consulta: data.fecha,
-                hora_consulta: data.hora,
+                fecha_consulta: fechaActual,
+                hora_consulta: horaActual,
                 servicio: data.servicio,
                 histMedic: idHistorial
             }, {
@@ -162,12 +181,23 @@ export function NotasMedicas() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de observaciones");
         }
         else {
-            mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
-                registrarNota(data, idHistorial);
-                localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
-                generarPDF(detallePaciente, noExpediente, data, empleado)
-                MensajeReceta(navegador)
-            })
+            if (idHistorial !== null) {
+                const notaDuplicado = await getNotaDuplicado();
+                if (!notaDuplicado) {
+                    mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
+                        registrarNota(data, idHistorial);
+                        localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+                        generarPDF(detallePaciente, noExpediente, data, empleado)
+                        MensajeReceta(navegador)
+                    })
+                } else {
+                    toast.error("Ya existe una nota del paciente con la fecha de hoy");
+                }
+
+            } else {
+                toast.error("Necesita existir un historial previo")
+            }
+
         }
     }
     return (
@@ -218,13 +248,13 @@ export function NotasMedicas() {
                             <label className='etiqueta' htmlFor="fecha">Fecha:</label>
                             <input className="entrada" id='fecha' name='fecha' type="date"
                                 value={fechaActual} readOnly
-                                {...register("fecha", { required: true })} />
+                                {...register("fecha", { required: false })} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="hora">Hora:</label>
                             <input className="entrada" id='hora' name='hora' type="time"
                                 value={horaActual} readOnly
-                                {...register("hora", { required: true })} />
+                                {...register("hora", { required: false })} />
                         </div>
                         <div className='col'>
                             <label className='etiqueta' htmlFor="servicio">Servicio
