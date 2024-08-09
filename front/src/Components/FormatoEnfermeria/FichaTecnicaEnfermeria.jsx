@@ -16,6 +16,7 @@ export function FichaTecnicaEnfermeria() {
     const [userGroup, setUserGroup] = useState(null);
     const [noEmpleado, setNoEmpleado] = useState(null);
     const [nombreE, setNombreE] = useState(null);
+    const [fechaActual, setFechaActual] = useState('')    
 
     useEffect(() => {
         const getNoEmpleado = async () => {
@@ -47,8 +48,8 @@ export function FichaTecnicaEnfermeria() {
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         const formattedDate = `${year}-${month}-${day}`;
-        setValue("fecha", formattedDate);
-    }, [setValue]);
+        setFechaActual(formattedDate);
+    }, []);
 
     useEffect(() => {
         const peso = watch('peso');
@@ -63,7 +64,7 @@ export function FichaTecnicaEnfermeria() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_enfermeria/"
             const respuesta = await axios.post(url, {
-                fecha: data.fecha,
+                fecha: fechaActual,
                 "signosVitales": {
                     presion: data.presion,
                     frecuenciaC: data.frecuencia_cardiaca,
@@ -98,6 +99,22 @@ export function FichaTecnicaEnfermeria() {
             console.error("Ocurrió un error", error);
         }
     }
+
+    const getFichaDuplicada = async () => {
+        try {
+
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+            console.log(response.data)
+        } catch (error) {
+            console.error('Error al obtener la ficha', error);
+            return false
+        }
+    };
 
     const validarPesoYTalla = (pesoYTalla) => {
         const pesoYTallaRegex = /^[0-9.]{1,10}$/
@@ -154,9 +171,15 @@ export function FichaTecnicaEnfermeria() {
             toast.error("Ingrese sólo letras en el campo de escolaridad")
         }
         else {
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                registrarFicha(data)
-            })
+            const fichaDuplicada = await getFichaDuplicada();
+            if (!fichaDuplicada) {
+                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                    registrarFicha(data)
+                })
+            } else {
+                toast.error("El paciente ya tiene una ficha de hoy")
+            }
+
         }
     })
 
@@ -194,7 +217,8 @@ export function FichaTecnicaEnfermeria() {
                         <div className='col'>
                             <label className='etiqueta' htmlFor="fecha">Fecha: </label>
                             <input className="entrada" id='fecha' name='fecha' type="date"
-                                {...register("fecha", { required: true })} readOnly />
+                                value={fechaActual} readOnly
+                                {...register("fecha", { required: false })} />
                         </div>
 
                         <div className='col'>

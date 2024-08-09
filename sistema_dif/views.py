@@ -687,10 +687,30 @@ def filtrar_fichas_por_paciente(request, noExp):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_FichaTecnicaE(request):
+    fecha = request.data.get("fecha")
+    paciente_id = request.data.get("paciente")
+
+    if not fecha:
+        return Response({"error": "La fecha es requerida."}, status=400)
+    
+    if not paciente_id:
+        return Response({"error": "El ID del paciente es requerido."}, status=400)
+
+    # Verificar si ya existe una ficha para el paciente en la misma fecha
+    existe_ficha_en_la_misma_fecha = FichaTecnicaEnfermeria.objects.filter(
+        paciente=paciente_id,
+        fecha=fecha
+    ).exists()
+
+    if existe_ficha_en_la_misma_fecha:
+        return Response({"error": "Ya existe una ficha técnica registrada para este paciente en la misma fecha."}, status=400)
+
+    # Si no existe, procedemos a crear la nueva ficha técnica
     serializer = FichaTecnicaESerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
+        
     return Response(serializer.errors, status=400)
 
 
@@ -985,6 +1005,7 @@ def verificar_ficha_enfermeria(request, ficha_enfermeria_id):
         return Response({"en_uso": True}, status=200) #Si se esta ocupando en otra
     
     return Response({"en_uso": False}, status=200)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
