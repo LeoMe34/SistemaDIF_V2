@@ -232,6 +232,23 @@ export function Parte3() {
         }
     }
 
+    const getHistorialDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_historial_medico/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+            console.log(respuesta.data)
+
+        } catch (error) {
+            return false
+            console.error("Ocurrió un error", error);
+        }
+    }
+
 
     useEffect(() => {
         getDetallesPaciente();
@@ -288,10 +305,16 @@ export function Parte3() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de pronóstico");
         }
         else {
-            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
-                registrarHistorial(data)
-            })
+            const historialDuplicado = await getHistorialDuplicado();
+            if (!historialDuplicado) {
+                mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                    registrarHistorial(data)
+                    generarPDF(detallePaciente, noExpediente, datos, datos2, data, empleado, detalleEnfermeria)
+                })
+            } else {
+                toast.error("Ya existe un historial de este paciente en esta fecha")
+            }
+
 
         }
     })
