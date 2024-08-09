@@ -39,6 +39,7 @@ export function FichaTecnica() {
             setDetalleEnfermeria(respuesta.data)
 
         } catch (error) {
+            setDetalleEnfermeria(null)
             console.error("Ocurrió un error", error);
         }
     }
@@ -98,7 +99,7 @@ export function FichaTecnica() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/"
             const respuesta = await axios.post(url, {
-                fecha: data.fecha,
+                fecha: fechaActual,
                 diagnostico: data.diagnostico,
                 motivo_consulta: data.motivo_consulta,
                 observacion: data.observacion,
@@ -108,7 +109,8 @@ export function FichaTecnica() {
                     lugar_referencia: data.lugar_ref
                 },
                 paciente: noExpediente,
-                empleado: noEmpleado
+                empleado: noEmpleado,
+                ficha_enfermeria: detalleEnfermeria.id  // ID de la ficha de enfermería
             }, {
                 headers: {
                     Authorization: `Token ${token}`
@@ -119,6 +121,21 @@ export function FichaTecnica() {
             console.error("Ocurrió un error", error);
         }
     }
+
+    const verificarFichaEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/verificar_enfermeria_medicina/${detalleEnfermeria.id}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return respuesta.data.en_uso;
+        } catch (error) {
+            console.error("Error al verificar la ficha de enfermería:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,1000}$/
@@ -139,12 +156,22 @@ export function FichaTecnica() {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
             try {
-                mensajeConfirmacionGuardar(' la ficha tecnica', grupo, navegador, () => {
-                    registrarFicha(data);
-                    if (grupo === 'Nutriologo') {
-                        generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                if (detalleEnfermeria !== null) {
+                    const enUso = await verificarFichaEnfermeria();
+
+                    if (enUso) {
+                        toast.error("La ficha de enfermería ya está en uso.");
+                    } else {
+                        mensajeConfirmacionGuardar(' la ficha tecnica', grupo, navegador, () => {
+                            registrarFicha(data);
+                            if (grupo === 'Nutriologo') {
+                                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                            }
+                        })
                     }
-                })
+                } else {
+                    toast.error("Necesita haber una ficha de enfermería");
+                }
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');
@@ -199,7 +226,7 @@ export function FichaTecnica() {
                             <label className='etiqueta' htmlFor="fecha">Fecha</label>
                             <input className="entrada" id='fecha' name='fecha' type="date"
                                 value={fechaActual} readOnly
-                                {...register("fecha", { required: true })} />
+                                {...register("fecha", { required: false })} />
                         </div>
 
                         <div className='mt-2 col'>

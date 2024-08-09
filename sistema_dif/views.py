@@ -934,17 +934,34 @@ def filtrar_fichasM_por_paciente(request, noExp):
 @permission_classes([IsAuthenticated])
 def crear_FichaTecnicaMed(request):
     fecha = request.data.get("fecha")
+    ficha_enfermeria_id = request.data.get("ficha_enfermeria")
+    paciente_id = request.data.get("paciente")
+    empleado_id = request.data.get("empleado")
 
     if not fecha:
         return Response({"error": "La fecha es requerida."}, status=400)
+    
+    if not ficha_enfermeria_id:
+        return Response({"error": "El ID de la ficha de enfermería es requerido."}, status=400)
 
-    # Verificar si existe una FichaTecnicaEnfermeria para la fecha proporcionada
-    existe_ficha_enfermeria = FichaTecnicaEnfermeria.objects.filter(fecha=fecha).exists()
-    if not existe_ficha_enfermeria:
-        return Response({"error": "No existe una FichaTecnicaEnfermeria para la fecha proporcionada."}, status=400)
+    try:
+        ficha_enfermeria = FichaTecnicaEnfermeria.objects.get(id=ficha_enfermeria_id)
+    except FichaTecnicaEnfermeria.DoesNotExist:
+        return Response({"error": "La ficha de enfermería no existe."}, status=404)
 
-    # Validar y crear FichaTecnicaMed
+    empleado = Empleado.objects.get(no_trabajador=empleado_id)
+    rol_usuario = request.user.groups.first()  # Asumiendo que el usuario pertenece a un solo grupo
+
+    existe_ficha_med_mismo_rol = FichaTecnicaMedica.objects.filter(
+        ficha_enfermeria=ficha_enfermeria, 
+        empleado__usuario__groups=rol_usuario
+    ).exists()
+
+    if existe_ficha_med_mismo_rol:
+        return Response({"error": "Ya existe una ficha técnica médica vinculada a esta ficha de enfermería con el mismo rol."}, status=400)
+
     serializer = FichaTecnicaMedSerializer(data=request.data)
+    
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
@@ -952,6 +969,22 @@ def crear_FichaTecnicaMed(request):
     return Response(serializer.errors, status=400)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def verificar_ficha_enfermeria(request, ficha_enfermeria_id):
+    ficha_enfermeria = get_object_or_404(FichaTecnicaEnfermeria, id=ficha_enfermeria_id)
+    rol_usuario = request.user.groups.first()  # Asumiendo que el usuario pertenece a un solo grupo
+
+    # Verificar si ya existe una ficha médica vinculada con el mismo rol
+    existe_ficha_med_mismo_rol = FichaTecnicaMedica.objects.filter(
+        ficha_enfermeria=ficha_enfermeria, 
+        empleado__usuario__groups=rol_usuario
+    ).exists()
+
+    if existe_ficha_med_mismo_rol:
+        return Response({"en_uso": True}, status=200) #Si se esta ocupando en otra
+    
+    return Response({"en_uso": False}, status=200)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

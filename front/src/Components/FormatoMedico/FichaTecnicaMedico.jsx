@@ -72,9 +72,10 @@ export function FichaTecnicaMedico() {
                 }
             });
             setDetalleEnfermeria(respuesta.data)
+            console.log(respuesta.data)
 
         } catch (error) {
-            console.error("Ocurrió un error", error);            
+            console.error("Ocurrió un error", error);
             setDetalleEnfermeria(null)
         }
     }
@@ -96,24 +97,44 @@ export function FichaTecnicaMedico() {
 
     const registrarFicha = async (data) => {
         try {
-            const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/"
-            const respuesta = await axios.post(url, {
-                fecha: data.fecha,
+            const url = "http://127.0.0.1:8000/api/registrar_ficha_medica/";
+            const payload = {
+                fecha: fechaActual,
                 diagnostico: data.diagnostico,
                 motivo_consulta: data.motivo_consulta,
                 observacion: data.observacion,
-                paciente: noExpediente,
-                empleado: noEmpleado
-            }, {
+                paciente: noExpediente,  // Número de expediente del paciente
+                empleado: noEmpleado,  // ID del empleado que registra la ficha
+                ficha_enfermeria: detalleEnfermeria.id  // ID de la ficha de enfermería
+            };
+
+            const respuesta = await axios.post(url, payload, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
-            })
-            console.log(data)
+            });
+
+            console.log("Ficha registrada:", respuesta.data);
         } catch (error) {
-            console.error("Ocurrió un error", error);
+            console.error("Ocurrió un error al registrar la ficha médica:", error);
         }
-    }
+    };
+
+    const verificarFichaEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/verificar_enfermeria_medicina/${detalleEnfermeria.id}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return respuesta.data.en_uso;
+        } catch (error) {
+            console.error("Error al verificar la ficha de enfermería:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
+
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
@@ -121,28 +142,33 @@ export function FichaTecnicaMedico() {
         return textoRegex.test(texto)
     }
 
-    const enviar = handleSubmit(async data => {
+    const enviar = handleSubmit(async (data) => {
         const diagnosticoValido = validarTexto(data.diagnostico);
         const motivoValido = validarTexto(data.motivo_consulta);
         const observacionValido = validarTexto(data.observacion);
 
         if (!diagnosticoValido) {
-            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de diagnóstico solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else if (!motivoValido) {
-            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de motivo solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else if (!observacionValido) {
-            toast.error("En el campo de observación solo se puede ingresar caracteres alfanumericos y signos de puntuación como: .-:,;()/");
+            toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
-            if(detalleEnfermeria !== null){
-                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-                    registrarFicha(data);
-                    localStorage.setItem('noExp', JSON.stringify(noExpediente));
-                })
-            } else{
-                toast.error("Necesita haber una ficha de enfermeria")
+            if (detalleEnfermeria !== null) {
+                const enUso = await verificarFichaEnfermeria();
+
+                if (enUso) {
+                    toast.error("La ficha de enfermería ya está en uso.");
+                } else {
+                    mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                        registrarFicha(data);  // Llama a la función para registrar la ficha
+                        generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula);  // Genera el PDF con los datos
+                        localStorage.setItem('noExp', JSON.stringify(noExpediente));  // Guarda el número de expediente en el almacenamiento local
+                    });
+                }
+            } else {
+                toast.error("Necesita haber una ficha de enfermería");
             }
-            
         }
     });
 
@@ -152,7 +178,7 @@ export function FichaTecnicaMedico() {
             <div className="mt-3 ml-10 container">
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item custom-link">                            
+                        <li className="breadcrumb-item custom-link">
                             <a href="\home_medico">
                                 <i className="bi bi-house-fill color-icono"></i>&nbsp;Home
                             </a>
