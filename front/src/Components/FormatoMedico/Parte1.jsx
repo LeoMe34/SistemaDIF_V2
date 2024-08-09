@@ -16,6 +16,7 @@ export function Parte1() {
     const [fechaActual, setFechaActual] = useState('')
     const [showReferencia, setShowReferencia] = useState(false)
     const [userGroup, setUserGroup] = useState(null);
+    const [fichaMedica, setFichaMedica] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -86,6 +87,60 @@ export function Parte1() {
             setShowReferencia(false)
         }
     };
+
+    const getFichaOcupada = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_historia_clinica/${fichaMedica}`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+
+        } catch (error) {
+            return false
+        }
+    }
+
+    const getHistorialDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_historial_medico/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+            console.log(respuesta.data)
+
+        } catch (error) {
+            return false
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    useEffect(() => {
+        //Creo que seria por el expediente y por el dia, pq solo hay una ficha por dia
+        const getFichaMedica = async () => {
+            try {
+
+                const response = await axios.get(`http://127.0.0.1:8000/api/get_ficha_medica/${noExpediente}/${fechaActual}/`, {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+                setFichaMedica(response.data.id)
+                console.log(response)
+            } catch (error) {
+                setFichaMedica(null)
+                console.error('Error al obtener ID de empleado:', error);
+            }
+        };
+
+        getFichaMedica();
+    }, [noExpediente, fechaActual]);
+
     const enviar = handleSubmit(async data => {
         const noConsultorioValido = validarNumeros(data.no_consultorio)
         const informanteValido = validarTexto(data.informante)
@@ -99,17 +154,50 @@ export function Parte1() {
                 toast.error("Ingrese solo caracteres alfanuméricos y signos de puntuación en el campo de lugar de referencia")
             }
             else {
-                mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                    const datosCompletos = { ...data, noExpediente };
-                    localStorage.setItem('datos', JSON.stringify(datosCompletos));
-                })
+
+                if (fichaMedica !== null) {
+                    const fichaOcupada = await getFichaOcupada()
+                    const historialDuplicado = await getHistorialDuplicado();
+                    //Si no es una ficha ocupada
+                    if (!fichaOcupada) {
+                        if (!historialDuplicado) {
+                            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                                const datosCompletos = { ...data, noExpediente };
+                                localStorage.setItem('datos', JSON.stringify(datosCompletos));
+                            })
+                        } else {
+                            toast.error("Ya existe un historial de este paciente en esta fecha")
+                        }
+                    } else {
+                        toast.error("La ficha medica se ha ocupado previamente")
+                    }
+                } else {
+                    toast.error("Necesita haber una ficha medica registrada")
+                }
+
+
             }
         }
         else {
-            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                const datosCompletos = { ...data, noExpediente };
-                localStorage.setItem('datos', JSON.stringify(datosCompletos));
-            })
+            if (fichaMedica !== null) {
+                const fichaOcupada = await getFichaOcupada()
+                const historialDuplicado = await getHistorialDuplicado();
+
+                if (!fichaOcupada) {
+                    if (!historialDuplicado) {
+                        mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                            const datosCompletos = { ...data, noExpediente };
+                            localStorage.setItem('datos', JSON.stringify(datosCompletos));
+                        })
+                    } else {
+                        toast.error("Ya existe un historial de este paciente en esta fecha")
+                    }
+                } else {
+                    toast.error("La ficha medica se ha ocupado previamente")
+                }
+            } else {
+                toast.error("Necesita haber una ficha medica registrada")
+            }
         }
     });
 

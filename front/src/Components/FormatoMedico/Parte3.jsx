@@ -83,6 +83,7 @@ export function Parte3() {
                 setFichaMedica(response.data.id)
                 console.log(response)
             } catch (error) {
+                setFichaMedica(null)
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
@@ -247,8 +248,7 @@ export function Parte3() {
             return false
             console.error("Ocurrió un error", error);
         }
-    }
-
+    }    
 
     useEffect(() => {
         getDetallesPaciente();
@@ -314,8 +314,6 @@ export function Parte3() {
             } else {
                 toast.error("Ya existe un historial de este paciente en esta fecha")
             }
-
-
         }
     })
     return (
