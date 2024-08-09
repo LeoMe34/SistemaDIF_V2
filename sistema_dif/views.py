@@ -1444,6 +1444,16 @@ def get_historialClinico(request, fk):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_historialMedico(request):
+    noExp = request.data.get('noExp')
+    fecha_elaboracion = request.data.get('fecha_elaboracion')
+    
+    if noExp and fecha_elaboracion:        
+        # Verificar si ya existe un historial médico para el paciente en la fecha dada
+        historial_existente = HistorialMedico.objects.filter(fichaMed__paciente=noExp, fecha_elaboracion=fecha_elaboracion).exists()
+        
+        if historial_existente:
+            return Response({"error": "Ya existe un historial médico para este paciente en la fecha proporcionada."}, status=400)
+    
     serializer = HistorialMedicoSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
