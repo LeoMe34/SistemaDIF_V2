@@ -1077,6 +1077,21 @@ def get_historialesO_relacionadas(request):
         return Response(status=404)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def verificar_ficha_enfermeria_HO(request, ficha_enfermeria_id):
+    ficha_enfermeria = get_object_or_404(FichaTecnicaEnfermeria, id=ficha_enfermeria_id)    
+
+    existe_ficha_odonto= HistorialOdonto.objects.filter(
+        ficha_enfermeria=ficha_enfermeria, 
+    ).exists()
+
+    if existe_ficha_odonto:
+        return Response({"en_uso": True}, status=200)
+    
+    return Response({"en_uso": False}, status=200)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_historialO(request):

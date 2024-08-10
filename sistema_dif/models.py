@@ -161,6 +161,12 @@ class HistorialOdonto(models.Model):
         null=False,
         blank=False,
     )
+    ficha_enfermeria = models.ForeignKey(
+        FichaTecnicaEnfermeria,
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
 
 
 class NotaEvolucionOdonto(models.Model):

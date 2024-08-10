@@ -52,6 +52,21 @@ export function Parte1() {
         }
     }
 
+    const verificarFichaEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/verificar_enfermeria_odonto/${detalleEnfermeria.id}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return respuesta.data.en_uso;
+        } catch (error) {
+            console.error("Error al verificar la ficha de enfermería:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
+
     useEffect(() => {
         getNoEmpleado();
     }, [token]);
@@ -93,13 +108,18 @@ export function Parte1() {
             toast.error("En el campo de padecimiento solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         }
         else {
+            const enUso = await verificarFichaEnfermeria();
             if (detalleEnfermeria !== null) {
-                mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                    const historialOdonto = { ...data, noExpediente }
+                if (enUso) {
+                    toast.error("La ficha de enfermería ya está en uso.");
+                } else {
+                    mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                        const historialOdonto = { ...data, noExpediente }
 
-                    localStorage.setItem('historialO', JSON.stringify(historialOdonto))
-                    localStorage.setItem('noExp', JSON.stringify(noExpediente))
-                })
+                        localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+                        localStorage.setItem('noExp', JSON.stringify(noExpediente))
+                    })
+                }
             } else {
                 toast.error("Necesita haber una ficha de enfermería");
             }

@@ -132,6 +132,7 @@ export function Parte3() {
             formData.append('cuello_odont', data.cuello);
             formData.append('paciente', historialO.noExpediente);
             formData.append('empleado', noEmpleado);
+            formData.append('ficha_enfermeria', detalleEnfermeria.id);
 
             const url = "http://127.0.0.1:8000/api/registrar_histOdonto/"
             const respuesta = await axios.post(url, formData, {
@@ -186,6 +187,22 @@ export function Parte3() {
             console.error("Ocurrió un error", error);
         }
     }
+
+    const verificarFichaEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/verificar_enfermeria_odonto/${detalleEnfermeria.id}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return respuesta.data.en_uso;
+        } catch (error) {
+            console.error("Error al verificar la ficha de enfermería:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
+
 
     useEffect(() => {
         if (token) {
@@ -253,11 +270,17 @@ export function Parte3() {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de muscuesqueleto");
         }
         else {
-            mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
-                registrarHistOdonto(data)
-                localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
-            })
+            const enUso = await verificarFichaEnfermeria();
+
+            if (enUso) {
+                toast.error("La ficha de enfermería ya está en uso.");
+            } else {
+                mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                    generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
+                    registrarHistOdonto(data)
+                    localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+                })
+            }
         }
     })
 
