@@ -17,6 +17,7 @@ export function Parte1() {
     const [fechaActual, setFechaActual] = useState('')
     const [showReferencia, setShowReferencia] = useState(false)
     const [userGroup, setUserGroup] = useState(null);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
 
     const getNoEmpleado = async () => {
         try {
@@ -34,6 +35,23 @@ export function Parte1() {
         }
     };
 
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setDetalleEnfermeria(null)
+        }
+    }
+
     useEffect(() => {
         getNoEmpleado();
     }, [token]);
@@ -46,6 +64,10 @@ export function Parte1() {
         const formattedDate = `${year}-${month}-${day}`;
         setFechaActual(formattedDate);
     }, []);
+
+    useEffect(() => {
+        getDetallesEnfermeria();
+    }, [token, noExpediente, fechaActual]);
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,1000}$/
@@ -71,12 +93,17 @@ export function Parte1() {
             toast.error("En el campo de padecimiento solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         }
         else {
-            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                const historialOdonto = { ...data, noExpediente }
+            if (detalleEnfermeria !== null) {
+                mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                    const historialOdonto = { ...data, noExpediente }
 
-                localStorage.setItem('historialO', JSON.stringify(historialOdonto))
-                localStorage.setItem('noExp', JSON.stringify(noExpediente))
-            })
+                    localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+                    localStorage.setItem('noExp', JSON.stringify(noExpediente))
+                })
+            } else {
+                toast.error("Necesita haber una ficha de enfermería");
+            }
+
         }
 
     })
