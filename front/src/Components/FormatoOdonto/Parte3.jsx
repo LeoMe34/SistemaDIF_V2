@@ -22,6 +22,7 @@ export function Parte3() {
     const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
     const [fechaActual, setFechaActual] = useState('')
     const [noExpediente, setNoExpediente] = useState(null)
+    const [historiaDuplicado, setHistorialDuplicado] = useState(null);
 
     useEffect(() => {
         const today = new Date();
@@ -185,6 +186,7 @@ export function Parte3() {
 
         } catch (error) {
             console.error("Ocurrió un error", error);
+            setDetalleEnfermeria(null)
         }
     }
 
@@ -203,6 +205,22 @@ export function Parte3() {
         }
     };
 
+    const getHistorialDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setHistorialDuplicado(respuesta.data.fecha_elaboracion)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setHistorialDuplicado(null)
+        }
+    }
 
     useEffect(() => {
         if (token) {
@@ -213,6 +231,7 @@ export function Parte3() {
     useEffect(() => {
         getDetallesPaciente();
         getDetallesEnfermeria();
+        getHistorialDuplicado();
     }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
@@ -272,15 +291,24 @@ export function Parte3() {
         else {
             const enUso = await verificarFichaEnfermeria();
 
-            if (enUso) {
-                toast.error("La ficha de enfermería ya está en uso.");
+            if (detalleEnfermeria !== null) {
+                if (enUso) {
+                    toast.error("La ficha de enfermería ya está en uso.");
+                } else {
+                    if (historiaDuplicado === null) {
+                        mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
+                            generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
+                            registrarHistOdonto(data)
+                            localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
+                        })
+                    } else {
+                        toast.error("Este paciente ya tiene un historial del dia de hoy")
+                    }
+                }
             } else {
-                mensajeConfirmacionGuardar('l historial', userGroup, navegador, () => {
-                    generarPDF(detallePaciente, noExpediente, historialO, antecedentes, data, empleado, detalleEnfermeria, fechaActual)
-                    registrarHistOdonto(data)
-                    localStorage.setItem('noExp', JSON.stringify(historialO.noExpediente));
-                })
+                toast.error("Necesita haber una ficha de enfermería");
             }
+
         }
     })
 

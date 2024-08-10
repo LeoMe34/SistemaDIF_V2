@@ -18,6 +18,7 @@ export function Parte1() {
     const [showReferencia, setShowReferencia] = useState(false)
     const [userGroup, setUserGroup] = useState(null);
     const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [historiaDuplicado, setHistorialDuplicado] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -52,6 +53,23 @@ export function Parte1() {
         }
     }
 
+    const getHistorialDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setHistorialDuplicado(respuesta.data.fecha_elaboracion)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setHistorialDuplicado(null)
+        }
+    }
+
     const verificarFichaEnfermeria = async () => {
         try {
             const url = `http://127.0.0.1:8000/api/verificar_enfermeria_odonto/${detalleEnfermeria.id}`;
@@ -82,6 +100,7 @@ export function Parte1() {
 
     useEffect(() => {
         getDetallesEnfermeria();
+        getHistorialDuplicado()
     }, [token, noExpediente, fechaActual]);
 
     const validarTexto = (texto) => {
@@ -109,16 +128,21 @@ export function Parte1() {
         }
         else {
             const enUso = await verificarFichaEnfermeria();
+
             if (detalleEnfermeria !== null) {
                 if (enUso) {
                     toast.error("La ficha de enfermería ya está en uso.");
                 } else {
-                    mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                        const historialOdonto = { ...data, noExpediente }
+                    if (historiaDuplicado === null) {
+                        mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                            const historialOdonto = { ...data, noExpediente }
 
-                        localStorage.setItem('historialO', JSON.stringify(historialOdonto))
-                        localStorage.setItem('noExp', JSON.stringify(noExpediente))
-                    })
+                            localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+                            localStorage.setItem('noExp', JSON.stringify(noExpediente))
+                        })
+                    } else {
+                        toast.error("Este paciente ya tiene un historial del dia de hoy")
+                    }
                 }
             } else {
                 toast.error("Necesita haber una ficha de enfermería");
