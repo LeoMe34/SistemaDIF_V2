@@ -72,6 +72,7 @@ urlpatterns = [
     path("get_notaEvo_fecha/<str:noExp>/<str:fecha>/", views.detalle_notaEvolucion),
     path("get_notaEvo_Odonto/<int:id>", views.detalle_notaEvolucionO),
     path("get_fichaMed_Odonto/<int:id_notEvo>", views.detalle_fichaTecnicaMedOdonto),
+    path("get_fichaMed_odonto_fecha/<str:noExp>/<str:fecha>/", views.detalle_fichaTecnicaOdonto),
     path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
     # Rutas de apis graficos
     path("get_graficosEnfermeria/", views.get_graficosDatos_enfermeria),

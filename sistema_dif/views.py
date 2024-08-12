@@ -1333,6 +1333,20 @@ def detalle_fichaTecnicaMedOdonto(request, id_notEvo):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaOdonto(request, noExp, fecha):
+    try:
+        fichaTecnica = FichaTecnicaMedOdonto.objects.get(
+            notaEvo__histlOdonto__paciente__no_expediente=noExp, fecha=fecha
+        )
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnica)
+    return Response(serializer.data)
+
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def modificar_fichaTecnicaMedOdonto(request, pk):
