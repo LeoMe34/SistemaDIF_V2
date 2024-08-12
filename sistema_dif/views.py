@@ -833,16 +833,14 @@ def filtrar_ficha_pp_psicologia(request, fk):
 @permission_classes([IsAuthenticated])
 def get_FichaTecnica_indiv(request, noExp, fecha):
     try:
-        paciente = get_object_or_404(Paciente, no_expediente=noExp)
         fichaTecnicaP = FichaTecnicaPsicologia.objects.get(
-            paciente=paciente, fecha_visita=fecha
+            paciente__no_expediente=noExp, fecha_visita=fecha
         )
-    except (Paciente.DoesNotExist, FichaTecnicaPsicologia.DoesNotExist):
+    except FichaTecnicaPsicologia.DoesNotExist:
         return Response(status=404)
 
     serializer = FihaTecnicaPSerializer(fichaTecnicaP)
     return Response(serializer.data)
-
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
