@@ -1220,6 +1220,20 @@ def get_ultima_nota_evolucion(request):
         )
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_notaEvolucion(request, noExp, fecha):
+    try:
+        notaEvo = NotaEvolucionOdonto.objects.get(
+            histlOdonto__paciente__no_expediente=noExp, fecha=fecha
+        )
+    except NotaEvolucionOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaEvolucionOdontoSerializer(notaEvo)
+    return Response(serializer.data)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_notaEvolucionO(request):

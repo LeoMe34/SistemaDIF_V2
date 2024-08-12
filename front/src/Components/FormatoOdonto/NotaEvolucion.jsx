@@ -20,6 +20,7 @@ export function NotaEvolucion() {
     const [nombreE, setNombreE] = useState(null);
     const [cedula, setCedula] = useState(null);
     const [userGroup, setUserGroup] = useState(null);
+    const [notaDuplicado, setNotaDuplicado] = useState(null);
 
     const getNoExp = () => {
         const storedData = localStorage.getItem('noExp');
@@ -40,6 +41,38 @@ export function NotaEvolucion() {
             console.error("Ocurrió un error", error);
         }
     }
+
+    const getNotaDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_notaEvo_fecha/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setNotaDuplicado(respuesta.data.id)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setNotaDuplicado(null)
+        }
+    }
+
+    const verificarHistorialOcupado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_notaEvo_Odonto/${idHistOdonto}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error("Error al verificar el historial odontologico:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
 
     useEffect(() => {
         if (token) {
@@ -87,7 +120,7 @@ export function NotaEvolucion() {
 
     const getIdHistorialOdonto = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}`,
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}/`,
                 {
                     headers: {
                         Authorization: `Token ${token}`
@@ -97,6 +130,7 @@ export function NotaEvolucion() {
             console.log(idHistOdonto)
         } catch (error) {
             console.error('Error al obtener ID del historial:', error);
+            setHistOdonto(null)
         }
     }
 
@@ -105,6 +139,10 @@ export function NotaEvolucion() {
             getIdHistorialOdonto()
         }
     }, [noExpediente]);
+
+    useEffect(() => {
+        getNotaDuplicado()
+    }, [token, noExpediente, fechaActual]);
 
     const handlePacienteSeleccionado = (noExpediente) => {
         console.log("No exp", noExpediente);
@@ -117,7 +155,7 @@ export function NotaEvolucion() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_notaEvoOdont/"
             const respuesta = await axios.post(url, {
-                fecha: data.fecha,
+                fecha: fechaActual,
                 diagnostico: data.diagnostico,
                 tratamiento: data.tratamiento,
                 notas: data.notas,
@@ -160,10 +198,23 @@ export function NotaEvolucion() {
             toast.error("Ingrese solo caracteres alfanuméricos y caracteres especiales como:.-:,;()/ en el campo de resumen de la consulta");
         }
         else {
-            mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
-                registrarNotaEvoOdonto(data);
-                generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
-            })
+            const historialOcupado = await verificarHistorialOcupado();
+            if (idHistOdonto !== null) {
+                if (historialOcupado) {
+                    toast.error("El historial se ha ocupado previamente")
+                } else {
+                    if (notaDuplicado === null) {
+                        mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
+                            registrarNotaEvoOdonto(data);
+                            generarPDF(detallePaciente, noExpediente, data, nombreE, cedula, fechaActual)
+                        })
+                    } else {
+                        toast.error("Ya existe una nota en esta fecha")
+                    }
+                }
+            } else {
+                toast.error("Necesita haber un historial previo")
+            }
         }
 
     }
@@ -179,9 +230,9 @@ export function NotaEvolucion() {
                         </li>
                         <li className="breadcrumb-item custom-link" aria-current="page">
                             <a href="\historial_odontologico_p1">
-                            Historial clinico dental
+                                Historial clinico dental
                             </a>
-                        </li>                        
+                        </li>
                         <li className="breadcrumb-item pag-actual" aria-current="page">Nota evolución</li>
                     </ol>
                 </nav>
@@ -202,7 +253,7 @@ export function NotaEvolucion() {
                 <label htmlFor="fecha" className="etiqueta">Fecha </label>
                 <input id="fecha" type="date" className="entrada"
                     value={fechaActual} readOnly
-                    {...register("fecha", { required: true })} />
+                    {...register("fecha", { required: false })} />
             </div>
 
             <form onSubmit={handleSubmit(enviar)}>

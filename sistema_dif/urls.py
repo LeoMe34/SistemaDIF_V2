@@ -69,6 +69,7 @@ urlpatterns = [
     path("verificar_enfermeria_odonto/<str:ficha_enfermeria_id>", views.verificar_ficha_enfermeria_HO),
     path("registrar_ficha_medicaO/", views.crear_FichaTecnicaMedOdonto),
     path("get_hist_odonto/<str:noExp>/<str:fecha>/", views.detalle_historialO),
+    path("get_notaEvo_fecha/<str:noExp>/<str:fecha>/", views.detalle_notaEvolucion),
     path("get_notaEvo_Odonto/<int:id>", views.detalle_notaEvolucionO),
     path("get_fichaMed_Odonto/<int:id_notEvo>", views.detalle_fichaTecnicaMedOdonto),
     path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
