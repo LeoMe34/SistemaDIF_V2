@@ -89,7 +89,7 @@ export function Parte3() {
         };
 
         getFichaMedica();
-    }, [noExpediente]);
+    }, [noExpediente, fechaActual]);
 
 
     const registrarHistorial = async (data) => {
@@ -248,11 +248,13 @@ export function Parte3() {
             return false
             console.error("Ocurrió un error", error);
         }
-    }    
+    }
 
     useEffect(() => {
         getDetallesPaciente();
-        getDetallesEnfermeria();
+        if (noExpediente && fechaActual) {
+            getDetallesEnfermeria();
+        }
     }, [token, noExpediente, fechaActual]);
 
 
