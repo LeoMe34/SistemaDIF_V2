@@ -173,6 +173,7 @@ export function NotasMedicas() {
     useEffect(() => {
         if (noExpediente !== null && fechaActual) {
             getIdHistorialM()
+            getNotaDuplicado()
         }
     }, [noExpediente, fechaActual]);
 
