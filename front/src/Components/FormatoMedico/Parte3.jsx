@@ -87,8 +87,9 @@ export function Parte3() {
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
-
-        getFichaMedica();
+        if (noExpediente !== null && fechaActual) {
+            getFichaMedica();
+        }
     }, [noExpediente, fechaActual]);
 
 
