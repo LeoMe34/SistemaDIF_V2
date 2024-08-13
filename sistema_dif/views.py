@@ -1765,6 +1765,22 @@ def detalle_receta(request, fk):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_receta_medica(request, noExp, fecha):
+    try:
+        receta = Receta.objects.get(
+            notMed__histMedic__fichaMed__paciente=noExp, fecha=fecha
+        )
+    except Receta.DoesNotExist:
+        return Response({"error": "Nota médica no encontrada."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+    serializer = RecetaSerializer(receta)
+    return Response(serializer.data)
+
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def modificar_receta(request, pk):

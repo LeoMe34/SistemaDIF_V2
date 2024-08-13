@@ -41,7 +41,10 @@ urlpatterns = [
     path("get_historial_medico/<str:noExp>/<str:fecha>/", views.get_historialMedico),
     path("get_nota_medica/<str:noExp>/<str:fecha>/", views.get_notaMedica),
     path("get_historia_clinica/<int:fk>", views.get_historialClinico),
+
     path("get_receta/<int:fk>", views.detalle_receta),
+    path("get_receta_medica/<str:noExp>/<str:fecha>/", views.get_receta_medica),
+    
     path("get_ficha_psicologia/<str:noExp>/<str:fecha>/", views.get_FichaTecnica_indiv),
     path("filtrar_fichas_psicologia/<str:fk>", views.filtrar_ficha_pp_psicologia),
     path("buscar_usuario/", views.buscar_usuario),
