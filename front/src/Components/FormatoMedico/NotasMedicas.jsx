@@ -94,7 +94,7 @@ export function NotasMedicas() {
         }
     }
 
-    const getNotaOcupada = async () => {
+    const getHistoriaOcupada = async () => {
         try {
             const url = `http://127.0.0.1:8000/api/get_detalles_NM/${idHistorial}`
             const respuesta = await axios.get(url, {
@@ -201,8 +201,8 @@ export function NotasMedicas() {
         }
         else {
             if (idHistorial !== null) {
-                const notaOcupada = await getNotaOcupada();
-                if (!notaOcupada) {
+                const historialOcupado = await getHistoriaOcupada();
+                if (!historialOcupado) {
                     if (notaDuplicado === null) {
                         mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
                             registrarNota(data, idHistorial);
