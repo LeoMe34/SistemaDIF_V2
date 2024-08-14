@@ -10,6 +10,9 @@ export function TablaUsuarios() {
     const [detallesEmpleados, setDetalleEmpleado] = useState([])
     const navegador = useNavigate()
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const empleadosPorPagina = 10; // Número de empleados por página
+
     const getUsuario = async () => {
         try {
 
@@ -60,13 +63,30 @@ export function TablaUsuarios() {
         getEmpleados();
     }, [token]);
 
+    // Calcular los empleados para la página actual
+    const indexOfLastEmpleado = currentPage * empleadosPorPagina;
+    const indexOfFirstEmpleado = indexOfLastEmpleado - empleadosPorPagina;
+    const empleadosActuales = detallesEmpleados.slice(indexOfFirstEmpleado, indexOfLastEmpleado);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
+
             <div className="">
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fecha} readOnly />
                 <label className="etiqueta" htmlFor="nombre_admin">Administrador</label>
                 <input type="text" id="nombre_admin" name="nombre_admin" className="entrada" value={nombre} readOnly />
+               
+                <div className="pagination m-3 d-flex justify-content-end">
+                    {Array.from({ length: Math.ceil(detallesEmpleados.length / empleadosPorPagina) }, (_, index) => (
+                        <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
 
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
@@ -80,7 +100,7 @@ export function TablaUsuarios() {
                     </thead>
 
                     <tbody>
-                        {detallesEmpleados.map((empleados, index) => (
+                        {empleadosActuales.map((empleados, index) => (
                             <tr key={index} onClick={() => handleClick(empleados.usuario)}>
                                 <td className="etiqueta">{empleados.no_trabajador}</td>
                                 <td className="etiqueta">{empleados.nombre + " " + empleados.apellidoPaterno + " " + empleados.apellidoMaterno}</td>
@@ -92,6 +112,15 @@ export function TablaUsuarios() {
                     </tbody>
                 </table>
             </div>
+
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(detallesEmpleados.length / empleadosPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
         </div>
     );
 };

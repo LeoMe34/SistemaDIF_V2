@@ -268,8 +268,20 @@ export function MostrarExpedientes() {
 
     return (
         <div className="container">
-            <div className="mt-3 expediente-container">
+            <div className="mt-3">
                 <CardPaciente id={noExpediente}></CardPaciente>
+            </div>
+
+
+            <div className="pagination m-3 d-flex justify-content-end">
+                {Array.from({ length: Math.ceil(expedientes.length / expedientesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
+            <div className="mt-3 expediente-container">
 
                 {expedientesActuales.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
@@ -312,16 +324,16 @@ export function MostrarExpedientes() {
                             </div>
                         )}
                     </div>
-                ))}                
+                ))}
             </div>
 
-            <div className="pagination">
-                    {Array.from({ length: Math.ceil(expedientes.length / expedientesPorPagina) }, (_, index) => (
-                        <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(expedientes.length / expedientesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
