@@ -46,11 +46,13 @@ export function MostrarExpedientes() {
                     Authorization: `Token ${token}`
                 }
             });
-            setExpedientes(response.data);
+            const expedientesOrdenados = response.data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            setExpedientes(expedientesOrdenados);
         } catch (error) {
-            console.error('Error al obtener ID del historial médico:', error);
+            console.error('Error al obtener los expedientes:', error);
         }
     };
+    
 
     const toggleExpediente = (expediente) => {
         if (expedienteSeleccionado === expediente.id) {
