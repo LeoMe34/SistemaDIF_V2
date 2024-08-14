@@ -20,6 +20,9 @@ export function MostrarExpedientes() {
     const [notaEvolucion, setNotaEvolucion] = useState(null);
     const [receta, setReceta] = useState(null);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const expedientesPorPagina = 8;
+
     useEffect(() => {
         const getIdUser = async () => {
             try {
@@ -52,7 +55,7 @@ export function MostrarExpedientes() {
             console.error('Error al obtener los expedientes:', error);
         }
     };
-    
+
 
     const toggleExpediente = (expediente) => {
         if (expedienteSeleccionado === expediente.id) {
@@ -256,12 +259,19 @@ export function MostrarExpedientes() {
         }
     }, [notaMedica]);
 
+    const indexOfLastExpediente = currentPage * expedientesPorPagina;
+    const indexOfFirstExpediente = indexOfLastExpediente - expedientesPorPagina;
+    const expedientesActuales = expedientes.slice(indexOfFirstExpediente, indexOfLastExpediente);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
             <div className="mt-3 expediente-container">
                 <CardPaciente id={noExpediente}></CardPaciente>
 
-                {expedientes.map(expediente => (
+                {expedientesActuales.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
                         <div className="expediente-info" onClick={() => toggleExpediente(expediente)}>
                             <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder cursor-pointer`}></i>
@@ -302,8 +312,16 @@ export function MostrarExpedientes() {
                             </div>
                         )}
                     </div>
-                ))}
+                ))}                
             </div>
+
+            <div className="pagination">
+                    {Array.from({ length: Math.ceil(expedientes.length / expedientesPorPagina) }, (_, index) => (
+                        <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
         </div>
     );
 };
