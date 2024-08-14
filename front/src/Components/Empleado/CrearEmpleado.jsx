@@ -185,7 +185,7 @@ export function CrearEmpleado() {
             } else {
                 try {
                     console.log(data);
-                    mensajeConfirmacionGuardar('el empleado', null, navegador, async () => {
+                    mensajeConfirmacionGuardar('l empleado', null, navegador, async () => {
                         const usuario = await getUsuarioId();
                         if (!usuario) {
                             console.error("No se encontró el usuario o hubo un error");
@@ -205,7 +205,7 @@ export function CrearEmpleado() {
             setValue('cedula_profesional', 'N/A');
             try {
                 console.log(data);
-                mensajeConfirmacionGuardar('el empleado', navegador, async () => {
+                mensajeConfirmacionGuardar('l empleado', navegador, async () => {
                     const usuario = await getUsuarioId();
                     if (!usuario) {
                         console.error("No se encontró el usuario o hubo un error");
