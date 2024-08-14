@@ -842,16 +842,14 @@ def filtrar_ficha_pp_psicologia(request, fk):
 @permission_classes([IsAuthenticated])
 def get_FichaTecnica_indiv(request, noExp, fecha):
     try:
-        paciente = get_object_or_404(Paciente, no_expediente=noExp)
         fichaTecnicaP = FichaTecnicaPsicologia.objects.get(
-            paciente=paciente, fecha_visita=fecha
+            paciente__no_expediente=noExp, fecha_visita=fecha
         )
-    except (Paciente.DoesNotExist, FichaTecnicaPsicologia.DoesNotExist):
+    except FichaTecnicaPsicologia.DoesNotExist:
         return Response(status=404)
 
     serializer = FihaTecnicaPSerializer(fichaTecnicaP)
     return Response(serializer.data)
-
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -1093,6 +1091,21 @@ def get_historialesO_relacionadas(request):
         return Response(status=404)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def verificar_ficha_enfermeria_HO(request, ficha_enfermeria_id):
+    ficha_enfermeria = get_object_or_404(FichaTecnicaEnfermeria, id=ficha_enfermeria_id)    
+
+    existe_ficha_odonto= HistorialOdonto.objects.filter(
+        ficha_enfermeria=ficha_enfermeria, 
+    ).exists()
+
+    if existe_ficha_odonto:
+        return Response({"en_uso": True}, status=200)
+    
+    return Response({"en_uso": False}, status=200)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_historialO(request):
@@ -1219,6 +1232,20 @@ def get_ultima_nota_evolucion(request):
         )
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_notaEvolucion(request, noExp, fecha):
+    try:
+        notaEvo = NotaEvolucionOdonto.objects.get(
+            histlOdonto__paciente__no_expediente=noExp, fecha=fecha
+        )
+    except NotaEvolucionOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = NotaEvolucionOdontoSerializer(notaEvo)
+    return Response(serializer.data)
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_notaEvolucionO(request):
@@ -1314,6 +1341,20 @@ def detalle_fichaTecnicaMedOdonto(request, id_notEvo):
         return Response(status=404)
 
     serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def detalle_fichaTecnicaOdonto(request, noExp, fecha):
+    try:
+        fichaTecnica = FichaTecnicaMedOdonto.objects.get(
+            notaEvo__histlOdonto__paciente__no_expediente=noExp, fecha=fecha
+        )
+    except FichaTecnicaMedOdonto.DoesNotExist:
+        return Response(status=404)
+
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnica)
     return Response(serializer.data)
 
 
@@ -1739,6 +1780,22 @@ def detalle_receta(request, fk):
         receta = Receta.objects.get(notMed=fk)
     except RecetaSerializer.DoesNotExist:
         return Response(status=404)
+
+    serializer = RecetaSerializer(receta)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_receta_medica(request, noExp, fecha):
+    try:
+        receta = Receta.objects.get(
+            notMed__histMedic__fichaMed__paciente=noExp, fecha=fecha
+        )
+    except Receta.DoesNotExist:
+        return Response({"error": "Nota médica no encontrada."}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
 
     serializer = RecetaSerializer(receta)
     return Response(serializer.data)

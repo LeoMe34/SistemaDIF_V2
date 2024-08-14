@@ -87,9 +87,10 @@ export function Parte3() {
                 console.error('Error al obtener ID de empleado:', error);
             }
         };
-
-        getFichaMedica();
-    }, [noExpediente]);
+        if (noExpediente !== null && fechaActual) {
+            getFichaMedica();
+        }
+    }, [noExpediente, fechaActual]);
 
 
     const registrarHistorial = async (data) => {
@@ -248,11 +249,13 @@ export function Parte3() {
             return false
             console.error("Ocurrió un error", error);
         }
-    }    
+    }
 
     useEffect(() => {
         getDetallesPaciente();
-        getDetallesEnfermeria();
+        if (noExpediente && fechaActual) {
+            getDetallesEnfermeria();
+        }
     }, [token, noExpediente, fechaActual]);
 
 

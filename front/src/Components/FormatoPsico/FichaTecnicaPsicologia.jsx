@@ -19,6 +19,7 @@ export function FichaTecnicaPsicologia() {
     const [empleado, setEmpleado] = useState([]);
     const [userGroup, setUserGroup] = useState(null);
     const [fechaActual, setFechaActual] = useState('')
+    const [fichaDuplicada, setFichaDuplicada] = useState(null);
 
     const getDetallesPaciente = async () => {
         try {
@@ -32,6 +33,23 @@ export function FichaTecnicaPsicologia() {
 
         } catch (error) {
             console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getFichaDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_psicologia/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setFichaDuplicada(respuesta.data.id)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setFichaDuplicada(null)
         }
     }
 
@@ -57,6 +75,9 @@ export function FichaTecnicaPsicologia() {
 
         getNoEmpleado();
         getDetallesPaciente()
+        if(noExpediente && fechaActual){
+            getFichaDuplicado()
+        }
     }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
@@ -72,7 +93,7 @@ export function FichaTecnicaPsicologia() {
         try {
             const url = "http://127.0.0.1:8000/api/registrar_ficha_psicologia/"
             const respuesta = await axios.post(url, {
-                fecha_visita: data.fecha,
+                fecha_visita: fechaActual,
                 "visita": {
                     tipo_consulta: data.tipo_cons,
                     tipo_visita: data.visita,
@@ -153,10 +174,15 @@ export function FichaTecnicaPsicologia() {
             toast.error("Debe seleccionar un paciente");
         }
         else {
-            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                registrarFicha(data)
-                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
-            })
+            if (fichaDuplicada === null) {
+                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                    registrarFicha(data)
+                    generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
+                })
+            } else {
+                toast.error("Ya existe una ficha técnica en esta fecha")
+            }
+
         }
 
     })
@@ -190,7 +216,7 @@ export function FichaTecnicaPsicologia() {
                             <label className=' etiqueta' htmlFor="fecha">Fecha </label>
                             <input className="entrada" id='fecha' name='fecha' type="date"
                                 value={fechaActual} readOnly
-                                {...register("fecha", { required: true })} />
+                                {...register("fecha", { required: false })} />
                         </div>
 
                         <div className="mt-2 col">

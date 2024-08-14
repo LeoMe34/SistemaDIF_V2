@@ -21,6 +21,7 @@ export function FichaMedica() {
     const [userGroup, setUserGroup] = useState(null);
     const [idNota, setIdNota] = useState(null);
     const [fechaActual, setFechaActual] = useState('')
+    const [fichaDuplicada, setFichaDuplicada] = useState(null);
 
     useEffect(() => {
         const today = new Date();
@@ -72,8 +73,12 @@ export function FichaMedica() {
     }
 
     useEffect(() => {
-        getDetallesEnfermeria();
-        getDetallesPaciente();
+        if (noExpediente && fechaActual) {
+            getDetallesEnfermeria();
+            getDetallesPaciente();
+            getIdNota();
+            getFichaDuplicado()
+        }
     }, [token, noExpediente, fechaActual]);
 
     useEffect(() => {
@@ -107,7 +112,7 @@ export function FichaMedica() {
 
     const getIdNota = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/get_ultima_notaEvo/?no_expediente=${noExpediente}`,
+            const response = await axios.get(`http://127.0.0.1:8000/api/get_notaEvo_fecha/${noExpediente}/${fechaActual}`,
                 {
                     headers: {
                         Authorization: `Token ${token}`
@@ -116,9 +121,42 @@ export function FichaMedica() {
             setIdNota(response.data.id)
             console.log(response.data.id)
         } catch (error) {
+            setIdNota(null)
             console.error('Error al obtener ID del historial:', error);
         }
     }
+
+    const getFichaDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_fichaMed_odonto_fecha/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setFichaDuplicada(respuesta.data.id)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setFichaDuplicada(null)
+        }
+    }
+
+    const verificarNotaOcupado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_fichaMed_Odonto/${idNota}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error("Error al verificar la nota de evolución:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
 
     const registrarFicha = async (data) => {
         try {
@@ -143,12 +181,6 @@ export function FichaMedica() {
         getExp();
     }, []);
 
-    useEffect(() => {
-        if (noExpediente) {
-            getIdNota();
-        }
-    }, [noExpediente]);
-
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,1000}$/
 
@@ -167,12 +199,26 @@ export function FichaMedica() {
         } else if (!observacionValido) {
             toast.error("En el campo de observación solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         } else {
+            const notaOcupada = await verificarNotaOcupado();
             try {
-                mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
-                    generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
-                    registrarFicha(data)
-                    localStorage.removeItem("noExp")
-                })
+                if (idNota !== null) {
+                    if (!notaOcupada) {
+                        if (fichaDuplicada === null) {
+                            mensajeConfirmacionGuardar(' la ficha tecnica', userGroup, navegador, () => {
+                                generarPDF(detallePaciente, detalleEnfermeria, noExpediente, data, nombreE, cedula)
+                                registrarFicha(data)
+                                localStorage.removeItem("noExp")
+                            })
+                        } else {
+                            toast.error("Ya existe una ficha técnica en esta fecha")
+                        }
+                    } else {
+                        toast.error("La nota de evolución se ha ocupado previamente")
+                    }
+                } else {
+                    toast.error("Necesita haber una nota de evolución previa")
+                }
+
             } catch (error) {
                 console.error('Error al registrar la ficha:', error);
                 toast.error('Ocurrió un error al registrar la ficha. Por favor, inténtelo de nuevo.');

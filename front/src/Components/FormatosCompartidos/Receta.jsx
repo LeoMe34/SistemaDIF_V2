@@ -19,6 +19,7 @@ export function Receta() {
     const [empleado, setEmpleado] = useState([]);
     const [userGroup, setUserGroup] = useState(null);
     const navegador = useNavigate()
+    const [recetaDuplicada, setRecetaDuplicada] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -90,10 +91,44 @@ export function Receta() {
             console.log(respuesta.data)
             setIdNota(respuesta.data.id)
         } catch (error) {
+            setIdNota(null)
             console.error("Ocurrió un error", error);
         }
     }
 
+    const getNotaOcupada = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_receta/${idNota}`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return true
+            console.log(respuesta.data)
+
+        } catch (error) {
+            return false
+            console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getRecetaDuplicada = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_receta_medica/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setRecetaDuplicada(respuesta.data.id)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setRecetaDuplicada(null)
+        }
+    }
 
     const registrarReceta = async (data) => {
         try {
@@ -133,18 +168,32 @@ export function Receta() {
         } else if (!tratamientoValido) {
             toast.error("Ingrese solo caracteres alfanuméricos en el campo de tratamiento");
         } else {
-            mensajeConfirmacionGuardar(' la receta', userGroup, navegador, () => {
-                generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
-                registrarReceta(data)
-            })
+            const notaOcupada = await getNotaOcupada();
+            if (idNota !== null) {
+                if (!notaOcupada) {
+                    if (recetaDuplicada === null) {
+                        mensajeConfirmacionGuardar(' la receta', userGroup, navegador, () => {
+                            generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual)
+                            registrarReceta(data)
+                        })
+                    } else {
+                        toast.error("Ya existe una receta en esta fecha")
+                    }
+                } else {
+                    toast.error("La nota medica ya ha sido ocupada previamente");
+                }
+            } else {
+                toast.error("Necesita existir una nota previa")
+            }
         }
     })
 
     useEffect(() => {
-        if (noExpediente !== null) {
+        if (noExpediente !== null && fechaActual) {
             getIdNota();
+            getRecetaDuplicada()
         }
-    }, [noExpediente]);
+    }, [noExpediente, fechaActual]);
 
     return (
         <div>
@@ -202,6 +251,7 @@ export function Receta() {
                     </label>
                     <textarea id="tratamiento" placeholder="..." className="text-amplio" rows="10" cols="30"
                         {...register("tratamiento", { required: true })} />
+                    {errors.tratamiento && <span>Es necesario este campo</span>}
                 </div>
                 <div className='ml-10 mb-2 container'>
                     <div className='row'>

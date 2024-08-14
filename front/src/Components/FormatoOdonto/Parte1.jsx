@@ -17,6 +17,8 @@ export function Parte1() {
     const [fechaActual, setFechaActual] = useState('')
     const [showReferencia, setShowReferencia] = useState(false)
     const [userGroup, setUserGroup] = useState(null);
+    const [detalleEnfermeria, setDetalleEnfermeria] = useState([]);
+    const [historiaDuplicado, setHistorialDuplicado] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -34,6 +36,55 @@ export function Parte1() {
         }
     };
 
+    const getDetallesEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_ficha_enfermeria/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setDetalleEnfermeria(respuesta.data)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setDetalleEnfermeria(null)
+        }
+    }
+
+    const getHistorialDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_hist_odonto/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setHistorialDuplicado(respuesta.data.fecha_elaboracion)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setHistorialDuplicado(null)
+        }
+    }
+
+    const verificarFichaEnfermeria = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/verificar_enfermeria_odonto/${detalleEnfermeria.id}`;
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            return respuesta.data.en_uso;
+        } catch (error) {
+            console.error("Error al verificar la ficha de enfermería:", error);
+            return false; // Considerar que no está en uso en caso de error
+        }
+    };
+
     useEffect(() => {
         getNoEmpleado();
     }, [token]);
@@ -46,6 +97,11 @@ export function Parte1() {
         const formattedDate = `${year}-${month}-${day}`;
         setFechaActual(formattedDate);
     }, []);
+
+    useEffect(() => {
+        getDetallesEnfermeria();
+        getHistorialDuplicado()
+    }, [token, noExpediente, fechaActual]);
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,1000}$/
@@ -71,12 +127,27 @@ export function Parte1() {
             toast.error("En el campo de padecimiento solo se puede ingresar caracteres alfanuméricos y signos de puntuación como: .-:,;()/");
         }
         else {
-            mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
-                const historialOdonto = { ...data, noExpediente }
+            const enUso = await verificarFichaEnfermeria();
 
-                localStorage.setItem('historialO', JSON.stringify(historialOdonto))
-                localStorage.setItem('noExp', JSON.stringify(noExpediente))
-            })
+            if (detalleEnfermeria !== null) {
+                if (enUso) {
+                    toast.error("La ficha de enfermería ya está en uso.");
+                } else {
+                    if (historiaDuplicado === null) {
+                        mensajeConfirmacionSiguiente('antecedentes', userGroup, navegador, () => {
+                            const historialOdonto = { ...data, noExpediente }
+
+                            localStorage.setItem('historialO', JSON.stringify(historialOdonto))
+                            localStorage.setItem('noExp', JSON.stringify(noExpediente))
+                        })
+                    } else {
+                        toast.error("Este paciente ya tiene un historial del dia de hoy")
+                    }
+                }
+            } else {
+                toast.error("Necesita haber una ficha de enfermería");
+            }
+
         }
 
     })

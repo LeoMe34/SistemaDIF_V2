@@ -41,7 +41,10 @@ urlpatterns = [
     path("get_historial_medico/<str:noExp>/<str:fecha>/", views.get_historialMedico),
     path("get_nota_medica/<str:noExp>/<str:fecha>/", views.get_notaMedica),
     path("get_historia_clinica/<int:fk>", views.get_historialClinico),
+
     path("get_receta/<int:fk>", views.detalle_receta),
+    path("get_receta_medica/<str:noExp>/<str:fecha>/", views.get_receta_medica),
+    
     path("get_ficha_psicologia/<str:noExp>/<str:fecha>/", views.get_FichaTecnica_indiv),
     path("filtrar_fichas_psicologia/<str:fk>", views.filtrar_ficha_pp_psicologia),
     path("buscar_usuario/", views.buscar_usuario),
@@ -65,14 +68,21 @@ urlpatterns = [
     path("crear_receta/", views.crear_receta),
     path("registrar_ficha_medica/", views.crear_FichaTecnicaMed),
     path("getFichaMedica/", views.get_fichasTecnicasMed),
+<<<<<<< HEAD
     path(
         "verificar_enfermeria_medicina/<str:ficha_enfermeria_id>",
         views.verificar_ficha_enfermeria,
     ),
+=======
+    path("verificar_enfermeria_medicina/<str:ficha_enfermeria_id>", views.verificar_ficha_enfermeria),
+    path("verificar_enfermeria_odonto/<str:ficha_enfermeria_id>", views.verificar_ficha_enfermeria_HO),
+>>>>>>> d5a9015b7b8cf41da0065a90f0dc8d5902874def
     path("registrar_ficha_medicaO/", views.crear_FichaTecnicaMedOdonto),
     path("get_hist_odonto/<str:noExp>/<str:fecha>/", views.detalle_historialO),
+    path("get_notaEvo_fecha/<str:noExp>/<str:fecha>/", views.detalle_notaEvolucion),
     path("get_notaEvo_Odonto/<int:id>", views.detalle_notaEvolucionO),
     path("get_fichaMed_Odonto/<int:id_notEvo>", views.detalle_fichaTecnicaMedOdonto),
+    path("get_fichaMed_odonto_fecha/<str:noExp>/<str:fecha>/", views.detalle_fichaTecnicaOdonto),
     path("get_hist_odonto_doc/<int:id>/", views.obtener_documento),
     # Rutas de apis graficos
     path("get_graficosEnfermeria/", views.get_graficosDatos_enfermeria),

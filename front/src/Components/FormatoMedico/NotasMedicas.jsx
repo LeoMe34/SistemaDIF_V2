@@ -21,6 +21,7 @@ export function NotasMedicas() {
     const [horaActual, setHoraActual] = useState('');
     const [empleado, setEmpleado] = useState([]);
     const [userGroup, setUserGroup] = useState(null);
+    const [notaDuplicado, setNotaDuplicado] = useState(null);
 
     const getNoEmpleado = async () => {
         try {
@@ -93,7 +94,7 @@ export function NotasMedicas() {
         }
     }
 
-    const getNotaDuplicado = async () => {
+    const getHistoriaOcupada = async () => {
         try {
             const url = `http://127.0.0.1:8000/api/get_detalles_NM/${idHistorial}`
             const respuesta = await axios.get(url, {
@@ -107,6 +108,23 @@ export function NotasMedicas() {
         } catch (error) {
             return false
             console.error("Ocurrió un error", error);
+        }
+    }
+
+    const getNotaDuplicado = async () => {
+        try {
+            const url = `http://127.0.0.1:8000/api/get_notaEvo_fecha/${noExpediente}/${fechaActual}/`
+            const respuesta = await axios.get(url, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setNotaDuplicado(respuesta.data.id)
+            console.log(respuesta.data)
+
+        } catch (error) {
+            console.error("Ocurrió un error", error);
+            setNotaDuplicado(null)
         }
     }
 
@@ -153,10 +171,11 @@ export function NotasMedicas() {
     }, []);
 
     useEffect(() => {
-        if (noExpediente !== null) {
+        if (noExpediente !== null && fechaActual) {
             getIdHistorialM()
+            getNotaDuplicado()
         }
-    }, [noExpediente]);
+    }, [noExpediente, fechaActual]);
 
     const validarTexto = (texto) => {
         const textoRegex = /^[A-Za-zÁÉÍÓÚáéíóúüñÑ0-9\s.-:,;()/]{1,500}$/
@@ -182,18 +201,21 @@ export function NotasMedicas() {
         }
         else {
             if (idHistorial !== null) {
-                const notaDuplicado = await getNotaDuplicado();
-                if (!notaDuplicado) {
-                    mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
-                        registrarNota(data, idHistorial);
-                        localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
-                        generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual, horaActual)
-                        MensajeReceta(navegador)
-                    })
+                const historialOcupado = await getHistoriaOcupada();
+                if (!historialOcupado) {
+                    if (notaDuplicado === null) {
+                        mensajeConfirmacionGuardar(' la nota', userGroup, navegador, () => {
+                            registrarNota(data, idHistorial);
+                            localStorage.setItem('idHistorial', JSON.stringify(idHistorial));
+                            generarPDF(detallePaciente, noExpediente, data, empleado, fechaActual, horaActual)
+                            MensajeReceta(navegador)
+                        })
+                    } else {
+                        toast.error("Ya existe una nota en esta fecha")
+                    }
                 } else {
                     toast.error("Ya existe una nota del paciente con la fecha de hoy");
                 }
-
             } else {
                 toast.error("Necesita existir un historial previo")
             }
