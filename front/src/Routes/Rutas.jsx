@@ -63,7 +63,8 @@ import { V_GraficasPsico } from '../Views/Empleado/V_GraficasPsico'
 import { V_GraficoNutri } from '../Views/Empleado/V_GraficoNutri'
 import { V_GraficoOft } from '../Views/Empleado/V_GraficoOft'
 import { V_GraficoAud } from '../Views/Empleado/V_GraficoAud'
-
+import { V_PasswordRequest } from '../Views/Sesion/V_PasswordRequest'
+import { V_PasswordReset } from '../Views/Sesion/V_PasswordReset'
 import { PageNotFound } from '../Modales/PageNotFound'
 
 import React, { useEffect, useState } from 'react';
@@ -102,6 +103,8 @@ export function Rutas() {
                 <Routes>
                     <Route path='/' element={<V_Login />} />
                     <Route path='/usuario' element={<V_Usuario />} />
+                    <Route path='/password_request' element={<V_PasswordRequest />} />
+                    <Route path='/password_reset/:uidb64/:token' element={<V_PasswordReset />} />
                     <Route path='/pacientes' element={<ListaPacientes />} />
 
                     {idUser && (

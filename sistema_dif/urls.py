@@ -65,7 +65,10 @@ urlpatterns = [
     path("crear_receta/", views.crear_receta),
     path("registrar_ficha_medica/", views.crear_FichaTecnicaMed),
     path("getFichaMedica/", views.get_fichasTecnicasMed),
-    path("verificar_enfermeria_medicina/<str:ficha_enfermeria_id>", views.verificar_ficha_enfermeria),
+    path(
+        "verificar_enfermeria_medicina/<str:ficha_enfermeria_id>",
+        views.verificar_ficha_enfermeria,
+    ),
     path("registrar_ficha_medicaO/", views.crear_FichaTecnicaMedOdonto),
     path("get_hist_odonto/<str:noExp>/<str:fecha>/", views.detalle_historialO),
     path("get_notaEvo_Odonto/<int:id>", views.detalle_notaEvolucionO),
@@ -95,4 +98,7 @@ urlpatterns = [
     path("get_nota_odonto_fecha/", views.get_notaOdonto_fecha),
     path("get_ficha_odonto_fecha/", views.get_fichaOdonto_fecha),
     path("get_ficha_enfermeria_fecha/", views.get_fichaEnfermeria_fecha),
+    # URL para el cambio de contraseña
+    path("password_reset_request/", views.password_reset_request),
+    path("reset_password/<uidb64>/<token>/", views.reset_password),
 ]

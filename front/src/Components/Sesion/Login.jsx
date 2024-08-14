@@ -48,8 +48,8 @@ export function Login() {
         'Nutriologo': '/home_nutricion',
         'Recepcion': '/home_recepcion_medica',
         'recepcion_psico': '/home_recepcion_psicologia',
-        'oftalmologo' : '/home_oftalmologo',
-        'audiologo' : '/home_audiologo' 
+        'oftalmologo': '/home_oftalmologo',
+        'audiologo': '/home_audiologo'
     }
     /*
         const homes = () => {
@@ -147,8 +147,8 @@ export function Login() {
                                             {/*Editar el botón */}
                                             <div className="pt-1 mb-3">
                                                 <button className="btn btn-guardar btn-lg btn-block" type='submit'>Entrar</button>
+                                                <a className="links" href="/password_request" style={{ display: 'block' }}>¿Olvidaste tu contraseña?</a>
                                             </div>
-                                            <a className=" etiquetas text-muted" href="#!" style={{ display: 'block' }}>¿Olvidaste tu contraseña?</a>
 
                                             <a href="#!" className=" small etiquetas text-muted" style={{ display: 'block' }}>Terminos y condiciones </a>
                                             <a href="#!" className=" small etiquetas text-muted" style={{ display: 'block' }}>Política de privacidad</a>
