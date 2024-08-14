@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from django.core.mail import EmailMultiAlternatives
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -46,6 +46,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.admin.views.decorators import staff_member_required
 from datetime import date
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
+from django.utils.html import strip_tags
 
 
 @api_view(["POST"])
@@ -634,8 +641,7 @@ def filtrar_fichas_por_paciente(request, noExp):
         user_group = user.groups.first().name if user.groups.exists() else None
 
         if user_group == "Medico":
-            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
-                paciente=noExp)
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
             fichas_filtradas = []
 
             for ficha in fichas_medicas:
@@ -645,8 +651,7 @@ def filtrar_fichas_por_paciente(request, noExp):
                     fichas_filtradas.append(ficha)
 
         elif user_group == "Odontologo":
-            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(
-                paciente=noExp)
+            fichas_medicas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
             fichas_filtradas = []
 
             for ficha in fichas_medicas:
@@ -692,25 +697,29 @@ def crear_FichaTecnicaE(request):
 
     if not fecha:
         return Response({"error": "La fecha es requerida."}, status=400)
-    
+
     if not paciente_id:
         return Response({"error": "El ID del paciente es requerido."}, status=400)
 
     # Verificar si ya existe una ficha para el paciente en la misma fecha
     existe_ficha_en_la_misma_fecha = FichaTecnicaEnfermeria.objects.filter(
-        paciente=paciente_id,
-        fecha=fecha
+        paciente=paciente_id, fecha=fecha
     ).exists()
 
     if existe_ficha_en_la_misma_fecha:
-        return Response({"error": "Ya existe una ficha técnica registrada para este paciente en la misma fecha."}, status=400)
+        return Response(
+            {
+                "error": "Ya existe una ficha técnica registrada para este paciente en la misma fecha."
+            },
+            status=400,
+        )
 
     # Si no existe, procedemos a crear la nueva ficha técnica
     serializer = FichaTecnicaESerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
-        
+
     return Response(serializer.errors, status=400)
 
 
@@ -754,6 +763,7 @@ def eliminar_fichaTecnicaE(request, pk):
 
     fichaTecnicaE.delete()
     return Response(status=204)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -809,8 +819,7 @@ def get_fichasTP_relacionadas(request):
         print(usuario.empleado_set.all())
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
-        fichasT_psico = FichaTecnicaPsicologia.objects.filter(
-            empleado=empleado)
+        fichasT_psico = FichaTecnicaPsicologia.objects.filter(empleado=empleado)
         serializer = FihaTecnicaPSerializer(fichasT_psico, many=True)
         return Response(serializer.data)
     except FichaTecnicaPsicologia.DoesNotExist:
@@ -912,8 +921,7 @@ def get_fichasMed_relacionadas(request):
         # Obtener el primer empleado asociado al usuario
         empleado = usuario.empleado_set.first()
         hoy = date.today()
-        ficha_tecnica = FichaTecnicaMedica.objects.filter(
-            empleado=empleado, fecha=hoy)
+        ficha_tecnica = FichaTecnicaMedica.objects.filter(empleado=empleado, fecha=hoy)
         serializer = FichaTecnicaMedSerializer(ficha_tecnica, many=True)
         return Response(serializer.data)
     except FichaTecnicaMedica.DoesNotExist:
@@ -958,9 +966,11 @@ def crear_FichaTecnicaMed(request):
 
     if not fecha:
         return Response({"error": "La fecha es requerida."}, status=400)
-    
+
     if not ficha_enfermeria_id:
-        return Response({"error": "El ID de la ficha de enfermería es requerido."}, status=400)
+        return Response(
+            {"error": "El ID de la ficha de enfermería es requerido."}, status=400
+        )
 
     try:
         ficha_enfermeria = FichaTecnicaEnfermeria.objects.get(id=ficha_enfermeria_id)
@@ -968,22 +978,28 @@ def crear_FichaTecnicaMed(request):
         return Response({"error": "La ficha de enfermería no existe."}, status=404)
 
     empleado = Empleado.objects.get(no_trabajador=empleado_id)
-    rol_usuario = request.user.groups.first()  # Asumiendo que el usuario pertenece a un solo grupo
+    rol_usuario = (
+        request.user.groups.first()
+    )  # Asumiendo que el usuario pertenece a un solo grupo
 
     existe_ficha_med_mismo_rol = FichaTecnicaMedica.objects.filter(
-        ficha_enfermeria=ficha_enfermeria, 
-        empleado__usuario__groups=rol_usuario
+        ficha_enfermeria=ficha_enfermeria, empleado__usuario__groups=rol_usuario
     ).exists()
 
     if existe_ficha_med_mismo_rol:
-        return Response({"error": "Ya existe una ficha técnica médica vinculada a esta ficha de enfermería con el mismo rol."}, status=400)
+        return Response(
+            {
+                "error": "Ya existe una ficha técnica médica vinculada a esta ficha de enfermería con el mismo rol."
+            },
+            status=400,
+        )
 
     serializer = FichaTecnicaMedSerializer(data=request.data)
-    
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
-        
+
     return Response(serializer.errors, status=400)
 
 
@@ -991,17 +1007,18 @@ def crear_FichaTecnicaMed(request):
 @permission_classes([IsAuthenticated])
 def verificar_ficha_enfermeria(request, ficha_enfermeria_id):
     ficha_enfermeria = get_object_or_404(FichaTecnicaEnfermeria, id=ficha_enfermeria_id)
-    rol_usuario = request.user.groups.first()  # Asumiendo que el usuario pertenece a un solo grupo
+    rol_usuario = (
+        request.user.groups.first()
+    )  # Asumiendo que el usuario pertenece a un solo grupo
 
     # Verificar si ya existe una ficha médica vinculada con el mismo rol
     existe_ficha_med_mismo_rol = FichaTecnicaMedica.objects.filter(
-        ficha_enfermeria=ficha_enfermeria, 
-        empleado__usuario__groups=rol_usuario
+        ficha_enfermeria=ficha_enfermeria, empleado__usuario__groups=rol_usuario
     ).exists()
 
     if existe_ficha_med_mismo_rol:
-        return Response({"en_uso": True}, status=200) #Si se esta ocupando en otra
-    
+        return Response({"en_uso": True}, status=200)  # Si se esta ocupando en otra
+
     return Response({"en_uso": False}, status=200)
 
 
@@ -1009,8 +1026,7 @@ def verificar_ficha_enfermeria(request, ficha_enfermeria_id):
 @permission_classes([IsAuthenticated])
 def detalle_fichaTecnicaMed(request, noExp, fecha):
     try:
-        fichaTecnicaE = FichaTecnicaMedica.objects.get(
-            paciente=noExp, fecha=fecha)
+        fichaTecnicaE = FichaTecnicaMedica.objects.get(paciente=noExp, fecha=fecha)
     except FichaTecnicaMedica.DoesNotExist:
         return Response(status=404)
 
@@ -1162,8 +1178,7 @@ def get_notasEvolucionO(request):
             paciente__no_expediente=no_expediente
         )
         historiales_sin_nota = historiales_paciente.exclude(
-            id__in=NotaEvolucionOdonto.objects.values_list(
-                "histlOdonto_id", flat=True)
+            id__in=NotaEvolucionOdonto.objects.values_list("histlOdonto_id", flat=True)
         )
         serializer = HistorialOdontoSerializer(historiales_sin_nota, many=True)
         return Response(serializer.data)
@@ -1180,8 +1195,7 @@ def get_notasEvolucionO(request):
 def get_notasEvolucionO_relacionada(request, pk):
     try:
         historial = HistorialOdonto.objects.get(id=pk)
-        notas_historial = NotaEvolucionOdonto.objects.filter(
-            histlOdonto=historial)
+        notas_historial = NotaEvolucionOdonto.objects.filter(histlOdonto=historial)
         serializer = NotaEvolucionOdontoSerializer(notas_historial, many=True)
         return Response(serializer.data)
     except HistorialOdonto.DoesNotExist:
@@ -1262,8 +1276,7 @@ def modificar_notaEvolucionO(request, pk):
     except NotaEvolucionOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = NotaEvolucionOdontoSerializer(
-        notaEvolucionO, data=request.data)
+    serializer = NotaEvolucionOdontoSerializer(notaEvolucionO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1353,8 +1366,7 @@ def modificar_fichaTecnicaMedOdonto(request, pk):
     except FichaTecnicaMedOdonto.DoesNotExist:
         return Response(status=404)
 
-    serializer = FichaTecnicaMedOdontoSerializer(
-        fichaTecnicaMO, data=request.data)
+    serializer = FichaTecnicaMedOdontoSerializer(fichaTecnicaMO, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
@@ -1452,8 +1464,7 @@ def get_historialMedico(request, noExp, fecha):
 def get_historiales_relacionadas(request):
     try:
         usuario = request.user
-        ficha_medica = FichaTecnicaMedica.objects.filter(
-            empleado__usuario=usuario)
+        ficha_medica = FichaTecnicaMedica.objects.filter(empleado__usuario=usuario)
         hoy = date.today()
         historiales = HistorialMedico.objects.filter(
             fichaMed__in=ficha_medica, fecha_elaboracion=hoy
@@ -1485,16 +1496,23 @@ def get_historialClinico(request, fk):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_historialMedico(request):
-    noExp = request.data.get('noExp')
-    fecha_elaboracion = request.data.get('fecha_elaboracion')
-    
-    if noExp and fecha_elaboracion:        
+    noExp = request.data.get("noExp")
+    fecha_elaboracion = request.data.get("fecha_elaboracion")
+
+    if noExp and fecha_elaboracion:
         # Verificar si ya existe un historial médico para el paciente en la fecha dada
-        historial_existente = HistorialMedico.objects.filter(fichaMed__paciente=noExp, fecha_elaboracion=fecha_elaboracion).exists()
-        
+        historial_existente = HistorialMedico.objects.filter(
+            fichaMed__paciente=noExp, fecha_elaboracion=fecha_elaboracion
+        ).exists()
+
         if historial_existente:
-            return Response({"error": "Ya existe un historial médico para este paciente en la fecha proporcionada."}, status=400)
-    
+            return Response(
+                {
+                    "error": "Ya existe un historial médico para este paciente en la fecha proporcionada."
+                },
+                status=400,
+            )
+
     serializer = HistorialMedicoSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -1604,12 +1622,14 @@ def get_notaMedica(request, noExp, fecha):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def crear_notaMedica(request):
-    id_Historial = request.data.get('histMedic')
+    id_Historial = request.data.get("histMedic")
     if id_Historial:
-        historial_ocupado = NotaMedica.objects.filter(histMedic = id_Historial)
+        historial_ocupado = NotaMedica.objects.filter(histMedic=id_Historial)
         if historial_ocupado:
-            return Response({"error": "Ya existe una nota medica con ese historial"}, status=400)
-    
+            return Response(
+                {"error": "Ya existe una nota medica con ese historial"}, status=400
+            )
+
     serializer = NotaMedicaSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -1931,10 +1951,8 @@ def grafico_poblacion(request):
         queryset = queryset.filter(fecha__month=month)
 
     data = queryset.aggregate(
-        embarazada_true=Count(
-            Case(When(datosDemograficos__embarazada=True, then=1))),
-        adultoM_true=Count(
-            Case(When(datosDemograficos__adulto_mayor=True, then=1))),
+        embarazada_true=Count(Case(When(datosDemograficos__embarazada=True, then=1))),
+        adultoM_true=Count(Case(When(datosDemograficos__adulto_mayor=True, then=1))),
         discapacitado_true=Count(
             Case(When(datosDemograficos__discapacitado=True, then=1))
         ),
@@ -1973,8 +1991,7 @@ def grafico_odontAntH(request):
         cancer_true=Count(Case(When(antHerediPato__cancerH=True, then=1))),
         cardio_true=Count(Case(When(antHerediPato__cardioH=True, then=1))),
         asma_true=Count(Case(When(antHerediPato__asmaH=True, then=1))),
-        epilepsia_true=Count(
-            Case(When(antHerediPato__epilepsiaH=True, then=1))),
+        epilepsia_true=Count(Case(When(antHerediPato__epilepsiaH=True, then=1))),
     )
 
     return Response(data)
@@ -2108,12 +2125,9 @@ def grafico_odontAntP(request):
         tuber_true=Count(Case(When(antPersonPato__tuberculo=True, then=1))),
         cancer_true=Count(Case(When(antPersonPato__cancer=True, then=1))),
         trans_true=Count(Case(When(antPersonPato__transfusion=True, then=1))),
-        quirurgicos_true=Count(
-            Case(When(antPersonPato__quirurgicos=True, then=1))),
-        anestesicos_true=Count(
-            Case(When(antPersonPato__anestesicos=True, then=1))),
-        alergicos_true=Count(
-            Case(When(antPersonPato__alergicos=True, then=1))),
+        quirurgicos_true=Count(Case(When(antPersonPato__quirurgicos=True, then=1))),
+        anestesicos_true=Count(Case(When(antPersonPato__anestesicos=True, then=1))),
+        alergicos_true=Count(Case(When(antPersonPato__alergicos=True, then=1))),
         trauma_true=Count(Case(When(antPersonPato__trauma=True, then=1))),
     )
 
@@ -2176,12 +2190,9 @@ def get_graficosDatos_medHer(request):
         queryset = queryset.filter(fecha_elaboracion__month=month)
 
     data = queryset.aggregate(
-        diabetes_true=Count(
-            Case(When(antHerediPatM__diabetes="True", then=1))),
-        hipert_true=Count(
-            Case(When(antHerediPatM__hipertension="True", then=1))),
-        cardio_true=Count(
-            Case(When(antHerediPatM__cardiopatia="True", then=1))),
+        diabetes_true=Count(Case(When(antHerediPatM__diabetes="True", then=1))),
+        hipert_true=Count(Case(When(antHerediPatM__hipertension="True", then=1))),
+        cardio_true=Count(Case(When(antHerediPatM__cardiopatia="True", then=1))),
         cancer_true=Count(Case(When(antHerediPatM__cancer="True", then=1))),
     )
 
@@ -2231,8 +2242,7 @@ def get_graficosNutriologo(request):
     except ValueError:
         return Response({"error": "Invalid month or year"}, status=400)
 
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="Nutriologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="Nutriologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2244,8 +2254,7 @@ def get_graficosNutriologo(request):
     )
 
     data = [
-        {"age": item["paciente__datosPersonalesPacient__edad"],
-            "count": item["count"]}
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
         for item in age_counts
     ]
 
@@ -2264,8 +2273,7 @@ def get_sexo_graficosNutriologo(request):
         return Response({"error": "Invalid month or year"}, status=400)
 
     # Filtrar los datos por ocupación del empleado 'nutriologo'
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="Nutriologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="Nutriologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2279,8 +2287,7 @@ def get_sexo_graficosNutriologo(request):
 
     # Formatear los datos para la respuesta
     data = [
-        {"sexo": item["paciente__datosPersonalesPacient__sexo"],
-            "count": item["count"]}
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
         for item in sexo_counts
         if item["paciente__datosPersonalesPacient__sexo"] is not None
     ]
@@ -2299,8 +2306,7 @@ def get_graficosOftEdad(request):
     except ValueError:
         return Response({"error": "Invalid month or year"}, status=400)
 
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="oftalmologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="oftalmologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2312,8 +2318,7 @@ def get_graficosOftEdad(request):
     )
 
     data = [
-        {"age": item["paciente__datosPersonalesPacient__edad"],
-            "count": item["count"]}
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
         for item in age_counts
     ]
 
@@ -2331,8 +2336,7 @@ def get_GraficoOftSex(request):
     except ValueError:
         return Response({"error": "Invalid month or year"}, status=400)
 
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="oftalmologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="oftalmologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2344,8 +2348,7 @@ def get_GraficoOftSex(request):
     )
 
     data = [
-        {"sexo": item["paciente__datosPersonalesPacient__sexo"],
-            "count": item["count"]}
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
         for item in sexo_counts
         if item["paciente__datosPersonalesPacient__sexo"] is not None
     ]
@@ -2364,8 +2367,7 @@ def get_graficosAudioEdad(request):
     except ValueError:
         return Response({"error": "Invalid month or year"}, status=400)
 
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="audiologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="audiologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2377,8 +2379,7 @@ def get_graficosAudioEdad(request):
     )
 
     data = [
-        {"age": item["paciente__datosPersonalesPacient__edad"],
-            "count": item["count"]}
+        {"age": item["paciente__datosPersonalesPacient__edad"], "count": item["count"]}
         for item in age_counts
     ]
 
@@ -2396,8 +2397,7 @@ def get_GraficoAudioSex(request):
     except ValueError:
         return Response({"error": "Invalid month or year"}, status=400)
 
-    queryset = FichaTecnicaMedica.objects.filter(
-        empleado__ocupacion="audiologo")
+    queryset = FichaTecnicaMedica.objects.filter(empleado__ocupacion="audiologo")
 
     if year:
         queryset = queryset.filter(fecha__year=year)
@@ -2409,10 +2409,80 @@ def get_GraficoAudioSex(request):
     )
 
     data = [
-        {"sexo": item["paciente__datosPersonalesPacient__sexo"],
-            "count": item["count"]}
+        {"sexo": item["paciente__datosPersonalesPacient__sexo"], "count": item["count"]}
         for item in sexo_counts
         if item["paciente__datosPersonalesPacient__sexo"] is not None
     ]
 
     return Response(data)
+
+
+@api_view(["POST"])
+def password_reset_request(request):
+    email = request.data.get("email")
+
+    if not email:
+        return Response({"error": "El correo electrónico es requerido."}, status=400)
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response(
+            {"error": "No se encontró un usuario con este correo electrónico."},
+            status=404,
+        )
+
+    token = default_token_generator.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+    reset_link = f"http://localhost:5173/password_reset/{uid}/{token}/"  # La URL apunta a tu frontend en React
+
+    message = render_to_string(
+        "password_reset_email.html",
+        {
+            "user": user,
+            "reset_link": reset_link,
+        },
+    )
+
+    plain_message = strip_tags(message)
+
+    subject = "Restablecimiento de contraseña"
+    from_email = "DifCoatzaContra@outlook.com"
+    to_email = [email]
+
+    email_message = EmailMultiAlternatives(subject, plain_message, from_email, to_email)
+    email_message.attach_alternative(message, "text/html")
+    email_message.send()
+
+    return Response(
+        {
+            "success": "Se ha enviado un correo electrónico para restablecer la contraseña."
+        }
+    )
+
+
+@api_view(["POST"])
+def reset_password(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        new_password = request.data.get("new_password")
+        confirm_password = request.data.get("confirm_password")
+
+        if new_password != confirm_password:
+            return Response({"error": "Las contraseñas no coinciden."}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({"success": "La contraseña ha sido restablecida con éxito."})
+    else:
+        return Response(
+            {"error": "El enlace de restablecimiento de contraseña no es válido."},
+            status=400,
+        )

@@ -18,10 +18,14 @@ export function CrearEmpleado() {
     const [empleados, setEmpleados] = useState([]);
     const [noTrabajador, setNoTrabajador] = useState(null)
 
-    const registrarEmpleado = async (data) => {
-        console.log("El usuario es" + usuarioId)
+    const registrarEmpleado = async (data, usuarioId) => {
+        if (!usuarioId) {
+            console.error("El usuarioId es nulo o indefinido");
+            return null; // Detén la ejecución si usuarioId es nulo
+        }
+
         try {
-            const url = "http://127.0.0.1:8000/api/registrar_empleado/"
+            const url = "http://127.0.0.1:8000/api/registrar_empleado/";
             const respuesta = await axios.post(url, {
                 nombre: data.nombre,
                 apellidoPaterno: data.apellidoPaterno,
@@ -30,28 +34,31 @@ export function CrearEmpleado() {
                 cedula_profesional: data.cedula_profesional,
                 ocupacion: data.ocupacion,
                 telefono: data.telefono,
-                usuario: usuarioId
+                usuario: usuarioId // Se pasa el usuarioId recibido como parámetro
             }, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
-            })
-            const noTrabajadorRegistrado = respuesta.data
+            });
+
+            const noTrabajadorRegistrado = respuesta.data;
             if (noTrabajadorRegistrado) {
                 console.log("Usuario registrado correctamente");
-                localStorage.removeItem("noTrabajador")                
+                localStorage.removeItem("noTrabajador");
                 return {
                     usuarioID: noTrabajadorRegistrado.usuarioId,
                     ocupacionNombre: noTrabajadorRegistrado.ocupacion
-                }
+                };
             } else {
                 console.log("Usuario duplicado");
+                return null; // Devuelve null si el usuario es duplicado
             }
 
         } catch (error) {
             console.error("Ocurrió un error", error);
+            return null; // Devuelve null en caso de error
         }
-    }
+    };
 
     const unirUsuarioGrupo = (usuarioID, ocupacionNombre) => {
         axios.post(`http://127.0.0.1:8000/api/unir_grupo/${usuarioID}/${ocupacionNombre}/`)
@@ -139,12 +146,15 @@ export function CrearEmpleado() {
             if (response.data.length > 0) {
                 const usuario = response.data[0]; // Accede al primer objeto en el array
                 setUsuarioId(usuario.id);
+                return usuario; // Asegúrate de retornar el objeto de usuario
             } else {
                 console.log("No se encontró ningún usuario.");
                 toast.error("No se encontró ningún usuario con ese número de trabajador.");
+                return null; // Devuelve null si no hay usuario
             }
         } catch (error) {
             console.log("Ocurrió un error: " + error);
+            return null; // Devuelve null si hay un error
         }
     };
 
@@ -154,56 +164,65 @@ export function CrearEmpleado() {
         setValue("no_trabajador", noTrabajadorSeleccionado)
     };
 
-    const enviar = handleSubmit(async data => {
-        console.log(usuarioId)
-
-        const nombreValido = validarNombreCompleto(data.nombre)
-        const apellidoPValido = validarNombreCompleto(data.apellidoPaterno)
-        const apellidoMValido = validarNombreCompleto(data.apellidoMaterno)
-        const telefonoValido = validarTelefono(data.telefono)
-        let cedulaDuplicada = empleados.some((empleado) => empleado.cedula_profesional == data.cedula_profesional)
+    const enviar = handleSubmit(async (data) => {
+        const nombreValido = validarNombreCompleto(data.nombre);
+        const apellidoPValido = validarNombreCompleto(data.apellidoPaterno);
+        const apellidoMValido = validarNombreCompleto(data.apellidoMaterno);
+        const telefonoValido = validarTelefono(data.telefono);
+        let cedulaDuplicada = empleados.some((empleado) => empleado.cedula_profesional === data.cedula_profesional);
 
         if (!nombreValido) {
-            toast.error("Ingrese sólo letras en el nombre")
+            toast.error("Ingrese sólo letras en el nombre");
         } else if (!apellidoPValido) {
-            toast.error("Ingrese sólo letras en el apellido paterno")
+            toast.error("Ingrese sólo letras en el apellido paterno");
         } else if (!apellidoMValido) {
-            toast.error("Ingrese sólo letras en el apellido materno")
+            toast.error("Ingrese sólo letras en el apellido materno");
         } else if (!telefonoValido) {
-            toast.error('Recuerde sólo ocupar números y tienen que ser diez')
+            toast.error('Recuerde sólo ocupar números y tienen que ser diez');
         } else if (mostrarCedula) {
             if (cedulaDuplicada) {
-                toast.error('La cedula ya esta registrada en el sistema')
-            }
-            else {
+                toast.error('La cédula ya está registrada en el sistema');
+            } else {
                 try {
                     console.log(data);
-                    mensajeConfirmacionGuardar('l empleado', null, navegador, () => {
-                        const empleadoRegistrado = registrarEmpleado(data); // Espera a que se registre el empleado
-                        console.log(usuarioId, empleadoRegistrado.ocupacionNombre);                        
-                        unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado                    
-                    })
-
+                    mensajeConfirmacionGuardar('el empleado', null, navegador, async () => {
+                        const usuario = await getUsuarioId();
+                        if (!usuario) {
+                            console.error("No se encontró el usuario o hubo un error");
+                            return; // Sal de la función si no hay usuario
+                        }
+                        console.log("ID de usuario obtenido:", usuario.id);
+                        const empleadoRegistrado = await registrarEmpleado(data, usuario.id);
+                        if (empleadoRegistrado) {
+                            unirUsuarioGrupo(usuario.id, empleadoRegistrado.ocupacionNombre);
+                        }
+                    });
                 } catch (error) {
                     console.error('Error al registrar empleado:', error);
                 }
             }
         } else {
-            setValue('cedula_profesional', 'N/A')
+            setValue('cedula_profesional', 'N/A');
             try {
                 console.log(data);
-                mensajeConfirmacionGuardar('l empleado', navegador, () => {
-                    const empleadoRegistrado = registrarEmpleado(data); // Espera a que se registre el empleado
-                    console.log(usuarioId, empleadoRegistrado.ocupacionNombre);
-                    unirUsuarioGrupo(usuarioId, empleadoRegistrado.ocupacionNombre); // Llama a unirUsuarioGrupo con los datos del empleado registrado
-                })
-
+                mensajeConfirmacionGuardar('el empleado', navegador, async () => {
+                    const usuario = await getUsuarioId();
+                    if (!usuario) {
+                        console.error("No se encontró el usuario o hubo un error");
+                        return; // Sal de la función si no hay usuario
+                    }
+                    console.log("ID de usuario obtenido:", usuario.id);
+                    const empleadoRegistrado = await registrarEmpleado(data, usuario.id);
+                    if (empleadoRegistrado) {
+                        unirUsuarioGrupo(usuario.id, empleadoRegistrado.ocupacionNombre);
+                    }
+                });
             } catch (error) {
                 console.error('Error al registrar empleado:', error);
             }
         }
+    });
 
-    })
 
     return (
         <div className='container'>

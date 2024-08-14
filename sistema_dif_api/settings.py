@@ -61,10 +61,19 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "sistema_dif_api.urls"
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.office365.com"  # Utiliza tu proveedor de correo
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "DifCoatzaContra@outlook.com"
+EMAIL_HOST_PASSWORD = "D1f_C0ntr4_"
+DEFAULT_FROM_EMAIL = "DifCoatzaContra@outlook.com"
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

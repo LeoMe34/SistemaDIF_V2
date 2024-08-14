@@ -265,6 +265,14 @@ textarea {
   color: #ffffff;
 }
 
+.links {
+  color: #DF4D72;
+
+  &:hover {
+    color: #812A71;
+  }
+}
+
 .btn-cargar {
   background-color: #812A71;
   border-radius: 10px;
