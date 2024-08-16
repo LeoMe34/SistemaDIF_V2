@@ -13,6 +13,9 @@ export function TablaEnfermeria() {
     const [detallesPacientes, setDetallesPacientes] = useState([])
     const [fechaActual, setFechaActual] = useState('')
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const fichasPorPagina = 10;
+
     const getNoEmpleado = async () => {
         try {
 
@@ -114,14 +117,23 @@ export function TablaEnfermeria() {
         getFichasTecnicas()
     }, [token, noEmpleado]);
 
+    const indexOfLastFichas = currentPage * fichasPorPagina;
+    const indexOfFirstFichas = indexOfLastFichas - fichasPorPagina;
+    const fichasActuales = fichasTecnicas.slice(indexOfFirstFichas, indexOfLastFichas);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
-            <div className="">
+            <div>
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
                 <label className="etiqueta" htmlFor="nombre_enfermero">Enfermero(a) responsable: </label>
                 <input type="text" id="nombre_enfermero" name="nombre_enfermero" className="entrada" value={nombre} readOnly />
+            </div>
 
+            <div>
                 <button className="ml-10 btn btn-guardar btn-lg btn-block"
                     onClick={() => generarPDF(nombre, fichasTecnicas, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en PDF
@@ -131,7 +143,17 @@ export function TablaEnfermeria() {
                     onClick={() => generarExcel(nombre, fichasTecnicas, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en Excel
                 </button>
+            </div>
 
+            <div className="pagination m-3 d-flex justify-content-end">
+                {Array.from({ length: Math.ceil(fichasTecnicas.length / fichasPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
+            <div className="">
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
@@ -145,7 +167,7 @@ export function TablaEnfermeria() {
                     </thead>
 
                     <tbody>
-                        {fichasTecnicas.map((ficha, index) => (
+                        {fichasActuales.map((ficha, index) => (
                             <tr key={index}>
                                 <td className="etiqueta">{ficha.paciente}</td>
                                 <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
@@ -157,6 +179,14 @@ export function TablaEnfermeria() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(fichasTecnicas.length / fichasPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
             </div>
         </div>
     );
