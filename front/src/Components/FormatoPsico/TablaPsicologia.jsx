@@ -15,6 +15,8 @@ export function TablaPsicologia() {
     const [detallesPacientes, setDetallesPacientes] = useState([])
     const [fechaActual, setFechaActual] = useState('')
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const fichasPorPagina = 10;
 
     const getNoEmpleado = async () => {
         try {
@@ -132,17 +134,27 @@ export function TablaPsicologia() {
         getFichaPsico()
     }, [token, noEmpleado])
 
+    const indexOfLastFicha = currentPage * fichasPorPagina;
+    const indexOfFirstFicha = indexOfLastFicha - fichasPorPagina;
+    const fichasActuales = fichalPsico.slice(indexOfFirstFicha, indexOfLastFicha);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
             <BuscarPacientePsico isMostrarExp={true}></BuscarPacientePsico>
-            <div className="">
+
+            <div>
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
                 <label className="etiqueta" htmlFor="nombre_psico">Psicólogo(a): </label>
                 <input type="text" id="nombre_psico" name="nombre_psico" className="entrada" value={nombre} readOnly />
                 <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
                 <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
+            </div>
 
+            <div>
                 <button className="ml-10 btn btn-guardar btn-lg btn-block"
                     onClick={() => generarPDF(nombre, cedula, fichalPsico, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en PDF
@@ -152,8 +164,17 @@ export function TablaPsicologia() {
                     onClick={() => generarExcel(nombre, cedula, fichalPsico, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en Excel
                 </button>
+            </div>
 
+            <div className="pagination m-3 d-flex justify-content-end">
+                {Array.from({ length: Math.ceil(fichalPsico.length / fichasPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
 
+            <div className="">
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
@@ -169,7 +190,7 @@ export function TablaPsicologia() {
                     </thead>
 
                     <tbody>
-                        {fichalPsico.map((ficha, index) => (
+                        {fichasActuales.map((ficha, index) => (
                             <tr key={index}>
                                 <td className="etiqueta">{ficha.paciente}</td>
                                 <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
@@ -184,6 +205,15 @@ export function TablaPsicologia() {
                     </tbody>
                 </table>
             </div>
+
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(fichalPsico.length / fichasPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
         </div>
     );
 };
