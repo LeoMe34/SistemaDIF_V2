@@ -8,6 +8,9 @@ export function TablaPacienteGral() {
     const [detallesPacientes, setDetallesPacientes] = useState([]);
     const [fechaActual, setFechaActual] = useState('');
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pacientesPorPagina = 10;
+
     const getNoEmpleado = async () => {
         try {
             const response = await axios.get('http://127.0.0.1:8000/api/usuario/', {
@@ -49,14 +52,32 @@ export function TablaPacienteGral() {
         getDetallesPaciente();
     }, [token]);
 
+    const indexOfLastPaciente = currentPage * pacientesPorPagina;
+    const indexOfFirstPaciente = indexOfLastPaciente - pacientesPorPagina;
+    const pacientesActuales = detallesPacientes.slice(indexOfFirstPaciente, indexOfLastPaciente);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
-            <div className="">
+
+            <div>
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
                 <label className="etiqueta" htmlFor="nombre_recepcion">Recepcionista responsable: </label>
                 <input type="text" id="nombre_recepcion" name="nombre_recepcion" className="entrada" value={nombre} readOnly />
+            </div>
 
+            <div className="pagination m-3 d-flex justify-content-end">
+                {Array.from({ length: Math.ceil(detallesPacientes.length / pacientesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
+            <div className="">
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
@@ -73,7 +94,7 @@ export function TablaPacienteGral() {
                     </thead>
 
                     <tbody>
-                        {detallesPacientes.map((paciente, index) => (
+                        {pacientesActuales.map((paciente, index) => (
                             <tr key={index}>
                                 <td className="etiqueta">{paciente.no_expediente}</td>
                                 <td className="etiqueta">{paciente.curp}</td>
@@ -89,6 +110,15 @@ export function TablaPacienteGral() {
                     </tbody>
                 </table>
             </div>
+
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(detallesPacientes.length / pacientesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
         </div>
     );
 };
