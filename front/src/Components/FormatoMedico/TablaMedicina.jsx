@@ -15,6 +15,8 @@ export function TablaMedicina() {
     const [detallesPacientes, setDetallesPacientes] = useState([])
     const [fechaActual, setFechaActual] = useState('')
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const historialesPorPagina = 10;
 
     const getNoEmpleado = async () => {
         try {
@@ -111,10 +113,18 @@ export function TablaMedicina() {
         getHistorialClinico();
     }, [token, noEmpleado]);
 
+    const indexOfLastHistorial = currentPage * historialesPorPagina;
+    const indexOfFirstHistorial = indexOfLastHistorial - historialesPorPagina;
+    const historialesActuales = historialClinico.slice(indexOfFirstHistorial, indexOfLastHistorial);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="container">
             <BusquedaPaciente isMostrarExp={true}></BusquedaPaciente>
-            <div className="">
+
+            <div>
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />
                 <label className="etiqueta" htmlFor="nombre_medico">Nombre del medico</label>
@@ -122,7 +132,9 @@ export function TablaMedicina() {
                 <label className="etiqueta" htmlFor="cedula">Cedula profesional</label>
                 <input type="text" id="cedula" name="cedula" className="entrada" value={cedula} readOnly />
                 <label className="etiqueta">Localidad sede: Coatzacoalcos</label>
+            </div>
 
+            <div>
                 <button className="ml-10 btn btn-guardar btn-lg btn-block"
                     onClick={() => generarPDF(nombre, cedula, historialClinico, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en PDF
@@ -132,7 +144,17 @@ export function TablaMedicina() {
                     onClick={() => generarExcel(nombre, cedula, historialClinico, detallesPacientes, fechaActual)}>
                     Descargar hoja diaria en Excel
                 </button>
+            </div>
 
+            <div className="pagination m-3 d-flex justify-content-end">
+                {Array.from({ length: Math.ceil(historialClinico.length / historialesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+
+            <div className="">
                 <table className="mt-3 table table-bordered border-dark table-hover">
                     <thead className="">
                         <tr className="">
@@ -147,7 +169,7 @@ export function TablaMedicina() {
                     </thead>
 
                     <tbody>
-                        {historialClinico.map((historial, index) => (
+                        {historialesActuales.map((historial, index) => (
                             <tr key={index}>
                                 <td className="etiqueta">{detallesPacientes[index]?.datosPersonalesPacient.nombre + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoP + " " + detallesPacientes[index]?.datosPersonalesPacient.apellidoM}</td>
                                 <td className="etiqueta">{historial.no_expediente.no_expediente}</td>
@@ -160,6 +182,14 @@ export function TablaMedicina() {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            <div className="pagination m-3">
+                {Array.from({ length: Math.ceil(historialClinico.length / historialesPorPagina) }, (_, index) => (
+                    <button key={index + 1} onClick={() => paginate(index + 1)} className="page-link">
+                        {index + 1}
+                    </button>
+                ))}
             </div>
         </div>
     );
