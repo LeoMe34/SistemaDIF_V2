@@ -285,10 +285,18 @@ export function MostrarExpedientes() {
 
                 {expedientesActuales.map(expediente => (
                     <div key={expediente.id} className="expediente-item">
-                        <div className="expediente-info" onClick={() => toggleExpediente(expediente)}>
-                            <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder cursor-pointer`}></i>
-                            <p className="texto_1 cursor-pointer"> {expediente.fecha}</p>
-                        </div>
+                        {userGroup !== "Enfermero" ? (
+                            <div className="expediente-info" onClick={() => toggleExpediente(expediente)}>
+                                <i className={`bi bi-folder${expediente.id === expedienteSeleccionado ? "2-open" : ""} folder cursor-pointer`}></i>
+                                <p className="texto_1 cursor-pointer"> {expediente.fecha}</p>
+                            </div>
+                        ) : (
+                            <div className="expediente-info" onClick={() => handleEnfermeria(expediente.fecha)}>
+                                <i class="bi bi-file-earmark-text folder cursor-pointer"></i>
+                                <p className="texto_1 cursor-pointer"> {expediente.fecha}</p>
+                            </div>
+                        )}
+
                         {expediente.id === expedienteSeleccionado && (
                             <div className="">
                                 {userGroup == "Medico" && fichaMedica && (

@@ -129,6 +129,7 @@ export function Rutas() {
                             <Route path='/home_enfermeria' element={<V_HomeEnfermeria />} />,
                             <Route path='/ficha_tecnica_enfermeria' element={<V_FichaTecnicaEnfermeria />} />,
                             <Route path='/mostrar_expediente/:fecha' element={<V_MostrarFichaEnfermeria />} />
+                            <Route path='/mostrar_expediente' element={<V_MostrarExpedientes />} />,
                         </>
                     )}
 

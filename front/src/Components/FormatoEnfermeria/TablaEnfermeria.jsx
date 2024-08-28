@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useAuth } from '../../Contexto/AuthContext';
+import BusquedaPaciente from "../Paciente/BuscarPaciente"
 import generarPDF from "./HojaDiariaPDF";
 import generarExcel from "./HojaDiariaExcel";
 
@@ -126,6 +127,8 @@ export function TablaEnfermeria() {
 
     return (
         <div className="container">
+            <BusquedaPaciente isMostrarExp={true}></BusquedaPaciente>
+
             <div>
                 <label className="etiqueta" htmlFor="fecha_hoy">Fecha</label>
                 <input type="date" id="fecha_hoy" name="fecha_hoy" className="entrada" value={fechaActual} readOnly />

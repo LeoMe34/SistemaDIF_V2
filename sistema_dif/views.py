@@ -660,6 +660,10 @@ def filtrar_fichas_por_paciente(request, noExp):
                 ).exists():
                     fichas_filtradas.append(ficha)
 
+        elif user_group == "Enfermero":
+            fichas_filtradas = FichaTecnicaEnfermeria.objects.filter(paciente=noExp)
+
+
         else:
             return Response(
                 {"error": "No tiene permiso para acceder a estas fichas."},
